@@ -1,0 +1,33 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:随机抽取学号.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:Custom="using:Microsoft.UI.Xaml.Controls"
+    x:Class="随机抽取学号.Views.Page3"
+    mc:Ignorable="d" NavigationCacheMode="Enabled">
+    <Page.Background>
+        <AcrylicBrush BackgroundSource="HostBackdrop" TintOpacity="0.6"/>
+    </Page.Background>
+
+    <Grid>
+        <ToggleSwitch Header="ToggleSwitch" Margin="10,46,0,0" VerticalAlignment="Top"/>
+        <TextBlock HorizontalAlignment="Left" Margin="96,14,0,0" TextWrapping="Wrap" Text="有个嘚的帮助" VerticalAlignment="Top" Height="60" Width="125"/>
+        <RadioButton Content="RadioButton" Margin="10,115,0,0" VerticalAlignment="Top"/>
+        <Slider Width="100" Margin="10,160,1390,730"/>
+        <TimePicker Margin="17,215,0,0" VerticalAlignment="Top"/>
+        <DatePicker Margin="17,270,0,0" VerticalAlignment="Top"/>
+        <Grid>
+            <Custom:NavigationView Content="NavigationView" HorizontalAlignment="Left" Margin="380,39,0,0" VerticalAlignment="Top" Height="330" Width="720"/>
+            <Custom:SplitButton Content="SplitButton" Margin="53,435,0,0" VerticalAlignment="Top"/>
+            <Custom:ColorPicker HorizontalAlignment="Left" Height="576" Margin="510,129,0,0" VerticalAlignment="Top" Width="460"/>
+            <TextBox HorizontalAlignment="Left" Margin="165,635,0,0" TextWrapping="Wrap" Text="TextBox" VerticalAlignment="Top"/>
+            <TextBlock HorizontalAlignment="Left" Margin="337,491,0,0" TextWrapping="Wrap" Text="TextBlock" VerticalAlignment="Top"/>
+            <Custom:DropDownButton Content="DropDownButton" Height="185" Margin="385,623,0,0" VerticalAlignment="Top" Width="175"/>
+            <ComboBox Height="60" Margin="130,720,0,0" Width="264"/>
+            <CalendarDatePicker Height="145" Margin="130,830,0,0" VerticalAlignment="Top" Width="509"/>
+        </Grid>
+        <Button Content="Button" Margin="248,78,0,0" VerticalAlignment="Top"/>
+    </Grid>
+</Page>
