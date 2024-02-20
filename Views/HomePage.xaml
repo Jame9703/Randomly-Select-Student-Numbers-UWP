@@ -122,12 +122,8 @@
         </Style>
     </Page.Resources>
     <Grid>
-        <AppBarButton x:Name="StartorStopButton" Width="97" Margin="273,345,0,0" Label="开始" Background="#FFC0F2BC" Height="48" Click="StartorStopButton_Click" Icon="Play" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <ComboBox x:Name="ModeComboBox1" Margin="174,45,0,0" Width="160" SelectedIndex="0" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
-            <x:String>单人模式</x:String>
-            <x:String>多人模式</x:String>
-        </ComboBox>
-        <ComboBox x:Name="ModeComboBox3" Width="160" Margin="174,82,0,0" CornerRadius="4,4,4,4" SelectedIndex="0" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
+        <AppBarButton x:Name="StartorStopButton" Width="97" Margin="312,223,0,0" Label="开始" Background="#FFC0F2BC" Height="48" Click="StartorStopButton_Click" Icon="Play" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <ComboBox x:Name="ModeComboBox" Width="160" Margin="174,78,0,0" CornerRadius="4,4,4,4" SelectedIndex="0" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" RenderTransformOrigin="0.48,-0.737">
             <x:String>仅抽取学号</x:String>
             <x:String>仅抽取姓名</x:String>
             <x:String>抽取学号和姓名</x:String>
@@ -136,7 +132,7 @@
         </AppBarToggleButton>
         <TextBox x:Name="ResultTextBox" HorizontalAlignment="Left" Margin="273,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" Height="68" Width="232" FontSize="36" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
         <TextBlock HorizontalAlignment="Left" Margin="374,43,0,0" TextWrapping="Wrap" Text="抽取间隔：(单位毫秒)" VerticalAlignment="Top" FontSize="14" Height="19" Width="158" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <TextBlock x:Name="Text2" HorizontalAlignment="Left" Height="30" Margin="174,7,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="197" FontSize="18" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <TextBlock x:Name="Text2" HorizontalAlignment="Left" Height="30" Margin="374,8,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="133" FontSize="18" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
         <Grid x:Name="Selecting" Margin="273,126,1080,761" CornerRadius="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="331"/>
@@ -153,5 +149,16 @@
             <SymbolIcon Height="30" Width="23" Symbol="Edit"/>
             <HyperlinkButton x:Name="ClassNameHyperlinkButton" Content="我的班级"  Click="HyperlinkButton_Click" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Width="Auto" FontSize="16" Height="32"/>
         </StackPanel>
+        <muxc:NumberBox x:Name="Numbers" HorizontalAlignment="Left" Margin="174,39,0,0" VerticalAlignment="Top" Width="160" Height="30" Value="1" SpinButtonPlacementMode="Inline" SmallChange="1" Minimum="1" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <TextBlock HorizontalAlignment="Left" Margin="175,12,0,0" TextWrapping="Wrap" Text="人数:" VerticalAlignment="Top" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" />
+        <GridView x:Name="RandomNumbersGridView" Margin="174,333,1,0" >
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid x:Name="MaxItemsWrapGrid"
+                           MaximumRowsOrColumns="10"
+                           Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+        </GridView>
     </Grid>
 </Page>

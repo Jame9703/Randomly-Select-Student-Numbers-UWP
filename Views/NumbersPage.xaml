@@ -34,11 +34,19 @@
                 </TransitionCollection>
             </StackPanel.ChildrenTransitions>
         </StackPanel>-->
-        <Pivot Margin="0,131,0,0">
-            <PivotItem Header="网格">
-                <TextBlock Text="all emails go here." />
+        <Pivot Margin="0,131,0,0" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
+            <PivotItem Header="网格" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
+                <GridView x:Name="RandomNumbersGridView" >
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid x:Name="MaxItemsWrapGrid"
+                           MaximumRowsOrColumns="10"
+                           Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                </GridView>
             </PivotItem>
-            <PivotItem Header="列表">
+            <PivotItem Header="列表" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
                 <StackPanel x:Name="RandomNumbersListStackPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Height="Auto" Width="Auto" Margin="10,10,0,0">
                     <StackPanel.ChildrenTransitions>
                         <TransitionCollection>
@@ -47,7 +55,7 @@
                     </StackPanel.ChildrenTransitions>
                 </StackPanel>
             </PivotItem>
-            <PivotItem Header="文本">
+            <PivotItem Header="文本" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
                 <Grid x:Name="RandomNumbersTextBoxGrid" Height="Auto" Width="Auto" Margin="0,0,0,145">
                     <TextBox x:Name="txtRe" TextWrapping="Wrap" Text="" CornerRadius="4,4,4,4" IsReadOnly="True" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" RenderTransformOrigin="0.5,0.5" Margin="40,37,925,-3" Width="Auto"/>
                     <Slider x:Name="slider" HorizontalAlignment="Left" Margin="0,37,0,0" VerticalAlignment="Top" Width="35" Minimum="4" Orientation="Vertical" TickPlacement="Outside" Height="217" ValueChanged="Slider_ValueChanged" TickFrequency="10" Value="20"/>
