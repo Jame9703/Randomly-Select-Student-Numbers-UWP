@@ -30,7 +30,7 @@ namespace 随机抽取学号.Views
             // 初始化行号
             UpdateLineNumbers();
             LoadData();
-            lineNumberBorder.Background = Editor.Background;
+            //lineNumberBorder.Background = Editor.Background;
         }
         public List<string> names = new List<string>();
         private void LoadData()

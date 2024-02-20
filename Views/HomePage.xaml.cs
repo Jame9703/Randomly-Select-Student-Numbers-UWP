@@ -44,7 +44,7 @@ namespace 随机抽取学号.Views
         {
             CreateCheckBoxes();
             string ClassName = localSettings.Values[ClassNameKey] as string;
-            if (ClassName != null) ClassNameTextBox.Text = ClassName;
+            if (ClassName != null) ClassNameHyperlinkButton.Content = ClassName;
         }
         private void CreateCheckBoxes()
         {
@@ -232,7 +232,6 @@ namespace 随机抽取学号.Views
             UpdateLineNumbers();
             CreateCheckBoxes();
         }
-        private InfoBar infoBar;
         private void AcceptButton_Click(object sender, RoutedEventArgs e)
         {
             if (NumberBox.Text == string.Empty)
@@ -242,6 +241,11 @@ namespace 随机抽取学号.Views
             PopupNotice popupNotice = new PopupNotice("成功将抽取间隔设置为" + NumberBox.Text+"毫秒");
             popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
             popupNotice.ShowAPopup();
+        }
+
+        private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+        {
+            Frame.Navigate(typeof(ClassPage));
         }
     }
 }

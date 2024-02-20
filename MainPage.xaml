@@ -48,11 +48,11 @@
             </Frame>
             <!-- This control has a higher z-order than AppTitleBar, 
          so it receives user input. -->
-            <AutoSuggestBox QueryIcon="Find"
+            <!--<AutoSuggestBox QueryIcon="Find"
                     PlaceholderText="搜索"
                     HorizontalAlignment="Center"
                     Width="260" Height="32"
-                    AutoMaximizeSuggestionArea="True" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+                    AutoMaximizeSuggestionArea="True" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>-->
         </Grid>
         <muxc:NavigationView x:Name="NavView"
                          Loaded="NavView_Loaded"

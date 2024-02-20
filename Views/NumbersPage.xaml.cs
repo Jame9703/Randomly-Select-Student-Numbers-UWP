@@ -1,8 +1,10 @@
 ﻿using System;
 using System.Collections.Generic;
 using System.Linq;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -50,18 +52,41 @@ namespace 随机抽取学号.Views
 
                     // 取前几位数字
                     List<int> Result = numbers.Take(TakeCount).ToList();
+                    RandomNumbersListStackPanel.Children.Clear();
                     foreach (int result in Result)
                     {
-
-                        if (ComboBox1.SelectedItem.ToString() == "-- --")
+                        //列表
+                        Border border = new Border()
+                        {
+                            CornerRadius = new CornerRadius(8, 8, 8, 8),
+                            BorderBrush = new SolidColorBrush(Colors.LightBlue),
+                            BorderThickness = new Thickness(4),
+                            Margin = new Thickness(5),
+                            Height = 60,
+                            Child = new TextBlock
+                            {
+                                FontSize = 33,
+                                FontFamily = new FontFamily("Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"),
+                                //Width = 50,
+                                Height = 50,
+                                Margin = new Thickness(5),
+                                TextAlignment = TextAlignment.Center,
+                                HorizontalAlignment = HorizontalAlignment.Center,
+                                VerticalAlignment = VerticalAlignment.Center,
+                                Text = result.ToString(),
+                            }
+                        };
+                        RandomNumbersListStackPanel.Children.Add(border);
+                        //文本
+                        if (ComboBox2.SelectedItem.ToString() == "-- --")
                         {
                             txtRe.Text += "--" + result.ToString() + "--";
                         }
-                        else if (ComboBox1.SelectedItem.ToString() == "“ ”")
+                        else if (ComboBox2.SelectedItem.ToString() == "“ ”")
                         {
                             txtRe.Text += "“" + result.ToString() + "”";
                         }
-                        else if (ComboBox1.SelectedItem.ToString() == "‘ ’")
+                        else if (ComboBox2.SelectedItem.ToString() == "‘ ’")
                         {
                             txtRe.Text += "‘" + result.ToString() + "’";
                         }
@@ -81,9 +106,6 @@ namespace 随机抽取学号.Views
                 {int random = r.Next(x, y + 1);Set.Add(random);}
                 if (n != Set.Count)
                 {Set.Clear();goto re;}    */
-                
-
-
             }
         }
 
@@ -107,38 +129,5 @@ namespace 随机抽取学号.Views
                 txtRe.FontSize = slider.Value;
             }
         }
-
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            // Generate a list of numbers from 1 to 45
-            List<int> numbers = new List<int>();
-            for (int i = 1; i <= 45; i++)
-            {
-                numbers.Add(i);
-            }
-
-            // Shuffle the list
-            Random random = new Random();
-            for (int i = numbers.Count - 1; i > 0; i--)
-            {
-                int n = random.Next(i + 1);
-                int temp = numbers[i];
-                numbers[i] = numbers[n];
-                numbers[n] = temp;
-            }
-
-            // Take the first 5 numbers in order
-            List<int> selectedNumbers = numbers.Take(5).ToList();
-
-            // Clear the GridView of any previous items
-            RandomNumbersGridView.ItemsSource = null;
-
-            // Add the selected numbers to the GridView
-            RandomNumbersGridView.ItemsSource = selectedNumbers;
-
-            // Define the DataTemplate for the GridView items
-            //RandomNumbersGridView.ItemTemplate = (DataTemplate)this.Resources["NumberBoxDataTemplate"];
-        }
     }
-
 }

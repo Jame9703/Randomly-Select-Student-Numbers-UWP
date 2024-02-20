@@ -36,7 +36,7 @@
         Square150x150Logo="Assets\Logos\Square150x150Logo.png"
         Square44x44Logo="Assets\Logos\Square44x44Logo.png"
         Description="随机抽取学号"
-        BackgroundColor="white">
+        BackgroundColor="transparent">
         <uap:DefaultTile Wide310x150Logo="Assets\Logos\Wide310x150Logo.png" Square71x71Logo="Assets\Logos\SmallTile.png" Square310x310Logo="Assets\Logos\LargeTile.png"/>
         <uap:SplashScreen Image="Assets\Logos\SplashScreen.png" />
       </uap:VisualElements>

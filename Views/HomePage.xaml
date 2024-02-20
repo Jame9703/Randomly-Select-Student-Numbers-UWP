@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Class="随机抽取学号.Views.HomePage"
-    mc:Ignorable="d" NavigationCacheMode="Enabled" Loaded="Page_Loaded">
+    mc:Ignorable="d" Loaded="Page_Loaded">
     <Page.Resources>
         <Style TargetType="AppBarButton">
             <Setter Property="Background" Value="Transparent"/>
@@ -122,23 +122,22 @@
         </Style>
     </Page.Resources>
     <Grid>
-        <AppBarButton x:Name="StartorStopButton" Width="97" Margin="99,340,0,0" Label="开始" Background="#FFC0F2BC" Height="48" Click="StartorStopButton_Click" Icon="Play" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <ComboBox x:Name="ModeComboBox1" Margin="107,48,0,0" Width="160" SelectedIndex="0" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
+        <AppBarButton x:Name="StartorStopButton" Width="97" Margin="273,345,0,0" Label="开始" Background="#FFC0F2BC" Height="48" Click="StartorStopButton_Click" Icon="Play" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <ComboBox x:Name="ModeComboBox1" Margin="174,45,0,0" Width="160" SelectedIndex="0" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
             <x:String>单人模式</x:String>
             <x:String>多人模式</x:String>
         </ComboBox>
-        <ComboBox x:Name="ModeComboBox3" Width="160" Margin="107,90,0,0" CornerRadius="4,4,4,4" SelectedIndex="0" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
+        <ComboBox x:Name="ModeComboBox3" Width="160" Margin="174,82,0,0" CornerRadius="4,4,4,4" SelectedIndex="0" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
             <x:String>仅抽取学号</x:String>
             <x:String>仅抽取姓名</x:String>
             <x:String>抽取学号和姓名</x:String>
         </ComboBox>
-        <AppBarToggleButton x:Name="check" Label="不许偷看" Margin="19,91,0,0" CornerRadius="4,4,4,4" Background="{x:Null}" Icon="View" Height="62" Width="64" Checked="AppBarToggleButton_Checked" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
+        <AppBarToggleButton x:Name="check" Label="不许偷看" Margin="174,132,0,0" CornerRadius="4,4,4,4" Background="{x:Null}" Icon="View" Height="62" Width="64" Checked="AppBarToggleButton_Checked" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
         </AppBarToggleButton>
-        <TextBox x:Name="ResultTextBox" HorizontalAlignment="Left" Margin="101,127,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" Height="68" Width="232" FontSize="36" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <TextBlock x:Name="ClassNameTextBox" HorizontalAlignment="Left" Margin="11,13,0,0" TextWrapping="Wrap" Text="我的班级" VerticalAlignment="Top" FontSize="18" Height="24" Width="90" x:FieldModifier="Public" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <TextBlock HorizontalAlignment="Left" Margin="335,10,0,0" TextWrapping="Wrap" Text="抽取间隔：(单位毫秒)" VerticalAlignment="Top" FontSize="14" Height="19" Width="158" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <TextBlock x:Name="Text2" HorizontalAlignment="Left" Height="30" Margin="10,45,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="197" FontSize="18" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <Grid x:Name="Selecting" Margin="107,127,1246,760" CornerRadius="5">
+        <TextBox x:Name="ResultTextBox" HorizontalAlignment="Left" Margin="273,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" Height="68" Width="232" FontSize="36" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <TextBlock HorizontalAlignment="Left" Margin="374,43,0,0" TextWrapping="Wrap" Text="抽取间隔：(单位毫秒)" VerticalAlignment="Top" FontSize="14" Height="19" Width="158" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <TextBlock x:Name="Text2" HorizontalAlignment="Left" Height="30" Margin="174,7,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="197" FontSize="18" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <Grid x:Name="Selecting" Margin="273,126,1080,761" CornerRadius="5">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="331"/>
             </Grid.ColumnDefinitions>
@@ -146,9 +145,13 @@
             <muxc:ProgressBar Margin="0,64,110,0" IsIndeterminate="True" ShowPaused="False" ShowError="False" VerticalAlignment="Top" />
             <TextBlock HorizontalAlignment="Left" Margin="62,10,0,0" Text="抽取中" VerticalAlignment="Top" Width="94" Height="55" FontSize="30" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
         </Grid>
-        <muxc:NumberBox x:Name="NumberBox" HorizontalAlignment="Left" Height="32" Margin="331,45,0,0" VerticalAlignment="Top" Width="95" Text="10" Minimum="1" Maximum="10000" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <StackPanel x:Name="StackPanelCheckBoxes" HorizontalAlignment="Left" Height="Auto" Margin="353,154,0,0" VerticalAlignment="Top" Width="217"/>
-        <TextBlock x:Name="checkedCheckBoxesCount" HorizontalAlignment="Left" Margin="353,122,0,0" TextWrapping="Wrap" Text="未选择" VerticalAlignment="Top" Width="162" Height="27" FontSize="16" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <Button x:Name="Accept" Content="确定" Height="32" Margin="431,45,0,0" VerticalAlignment="Top" Width="55" Click="AcceptButton_Click" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <muxc:NumberBox x:Name="NumberBox" HorizontalAlignment="Left" Height="32" Margin="370,78,0,0" VerticalAlignment="Top" Width="95" Text="10" Minimum="1" Maximum="10000" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <StackPanel x:Name="StackPanelCheckBoxes" HorizontalAlignment="Left" Height="Auto" Margin="0,76,0,0" VerticalAlignment="Top" Width="175"/>
+        <TextBlock x:Name="checkedCheckBoxesCount" HorizontalAlignment="Left" Margin="0,37,0,0" TextWrapping="Wrap" Text="未选择" VerticalAlignment="Top" Width="162" Height="27" FontSize="16" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <Button x:Name="Accept" Content="确定" Height="32" Margin="470,78,0,0" VerticalAlignment="Top" Width="55" Click="AcceptButton_Click" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0">
+            <SymbolIcon Height="30" Width="23" Symbol="Edit"/>
+            <HyperlinkButton x:Name="ClassNameHyperlinkButton" Content="我的班级"  Click="HyperlinkButton_Click" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Width="Auto" FontSize="16" Height="32"/>
+        </StackPanel>
     </Grid>
 </Page>

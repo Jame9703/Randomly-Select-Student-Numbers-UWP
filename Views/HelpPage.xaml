@@ -9,12 +9,11 @@
     mc:Ignorable="d" NavigationCacheMode="Enabled">
 
     <Grid>
-        <Grid>
-            <TextBlock HorizontalAlignment="Left" Height="73" Margin="35,46,0,0" TextWrapping="Wrap" Text="公告:" VerticalAlignment="Top" Width="470" FontSize="22" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
-                <TextBlock.FocusVisualPrimaryBrush>
-                    <AcrylicBrush TintOpacity="0.6"/>
-                </TextBlock.FocusVisualPrimaryBrush>
-            </TextBlock>
-        </Grid>
+        <Image Source="/Assets/Logos/StoreLogo.scale-400.png"
+               HorizontalAlignment="Left"
+               Width="45"
+               Margin="9,6,0,1021"/>
+        <TextBlock HorizontalAlignment="Left" Margin="59,10,0,0" TextWrapping="Wrap" Text="随机抽取学号" VerticalAlignment="Top" Width="97" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <TextBlock HorizontalAlignment="Left" Margin="59,36,0,0" TextWrapping="Wrap" Text="Randomly Select Student Numbers" VerticalAlignment="Top" Width="225" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
     </Grid>
 </Page>
