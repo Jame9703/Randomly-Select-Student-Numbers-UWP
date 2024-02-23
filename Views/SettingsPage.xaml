@@ -14,8 +14,9 @@
         <HyperlinkButton Content="Jame9703" Margin="123,15,0,0" VerticalAlignment="Top" NavigateUri="Mailto:ncsb1213444@outlook.com" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
         <TextBlock HorizontalAlignment="Left" Margin="10,190,0,0" TextWrapping="Wrap" Text="©2024 Randomly Select Student Numbers，All rights reserved" VerticalAlignment="Top" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
         <HyperlinkButton Content="在Github中获取源代码" Margin="8,53,0,0" VerticalAlignment="Top" NavigateUri="https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP" Background="#FF6CC37B" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <TextBlock HorizontalAlignment="Left" Margin="8,96,0,0" TextWrapping="Wrap" Text="随机抽取学号Version1.0.8" VerticalAlignment="Top" Width="260" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <TextBlock HorizontalAlignment="Left" Height="20" Margin="10,130,0,0" TextWrapping="Wrap" Text="特别鸣谢下列参与测试的同学：" VerticalAlignment="Top" Width="214" FontSize="14" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <TextBlock HorizontalAlignment="Left" Height="31" Margin="10,154,0,0" TextWrapping="Wrap" Text="X.G.       L.Y." VerticalAlignment="Top" Width="125" FontSize="22" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <TextBlock HorizontalAlignment="Left" Margin="8,96,0,0" TextWrapping="Wrap" Text="随机抽取学号Version1.0.9" VerticalAlignment="Top" Width="260" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <TextBlock HorizontalAlignment="Left" Height="20" Margin="8,130,0,0" TextWrapping="Wrap" Text="特别鸣谢下列参与测试的同学：" VerticalAlignment="Top" Width="214" FontSize="14" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <TextBlock HorizontalAlignment="Left" Height="31" Margin="79,154,0,0" TextWrapping="Wrap" Text="X.G.      L.Y." VerticalAlignment="Top" Width="125" FontSize="22" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <TextBlock HorizontalAlignment="Left" Margin="8,160,0,0" TextWrapping="Wrap" Text="骐骥五班" VerticalAlignment="Top" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
     </Grid>
 </Page>

@@ -165,6 +165,12 @@ namespace 随机抽取学号.Views
             }
             else 
             {
+                //停止抽取
+                timer.Stop();
+                isRandomizing = false;
+                StartorStopButton.Label = "开始";
+                StartorStopButton.Icon = new SymbolIcon(Symbol.Play);
+                StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
                 List<int> checkedCheckBoxes = new List<int>();
                 checkedCheckBoxes.Clear();
                 RandomNumbersGridView.Items.Clear();
@@ -178,9 +184,20 @@ namespace 随机抽取学号.Views
                         if (checkBox[i].IsChecked == true)
                         {
                             checkedCheckBoxes.Add(i);
-                            Random random = new Random();
-                            int randomIndex = checkedCheckBoxes[random.Next(checkedCheckBoxes.Count)];
-                            //numbers = numbers.OrderBy(x => random.Next()).ToList();
+                        }
+                    }
+                    int a; bool success = int.TryParse(Numbers.Text, out a);
+                    if (success)
+                    {
+                        // 转换成功
+                        int TakeCount = int.Parse(Numbers.Text);
+                        //将checkedCheckBoxes打乱顺序
+                        Random random = new Random();
+                        checkedCheckBoxes = checkedCheckBoxes.OrderBy(x => random.Next()).ToList();
+                        // 取前几位数字
+                        List<int> Result = checkedCheckBoxes.Take(TakeCount).ToList();
+                        foreach (int randomIndex in Result)
+                        {
                             if (ModeComboBox.SelectedItem.ToString() == "仅抽取学号")
                             {
                                 Border border = new Border()
@@ -189,6 +206,7 @@ namespace 随机抽取学号.Views
                                     BorderBrush = new SolidColorBrush(Colors.LightBlue),
                                     BorderThickness = new Thickness(4),
                                     Margin = new Thickness(5),
+                                    Width = 100,
                                     Height = 60,
                                     Child = new TextBlock
                                     {
@@ -214,6 +232,7 @@ namespace 随机抽取学号.Views
                                     BorderBrush = new SolidColorBrush(Colors.LightBlue),
                                     BorderThickness = new Thickness(4),
                                     Margin = new Thickness(5),
+                                    Width = 150,
                                     Height = 60,
                                     Child = new TextBlock
                                     {
@@ -239,6 +258,7 @@ namespace 随机抽取学号.Views
                                     BorderBrush = new SolidColorBrush(Colors.LightBlue),
                                     BorderThickness = new Thickness(4),
                                     Margin = new Thickness(5),
+                                    Width = 195,
                                     Height = 60,
                                     Child = new TextBlock
                                     {
@@ -257,6 +277,11 @@ namespace 随机抽取学号.Views
                                 RandomNumbersGridView.Items.Add(border);
                             }
                         }
+                    }
+                    else
+                    {
+                        // 转换失败，NumberBox中的值不是有效的整数
+                        Numbers.Text = "10";
                     }
                 }
                 else

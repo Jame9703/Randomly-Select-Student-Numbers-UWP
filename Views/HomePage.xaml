@@ -149,13 +149,13 @@
             <SymbolIcon Height="30" Width="23" Symbol="Edit"/>
             <HyperlinkButton x:Name="ClassNameHyperlinkButton" Content="我的班级"  Click="HyperlinkButton_Click" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Width="Auto" FontSize="16" Height="32"/>
         </StackPanel>
-        <muxc:NumberBox x:Name="Numbers" HorizontalAlignment="Left" Margin="174,39,0,0" VerticalAlignment="Top" Width="160" Height="30" Value="1" SpinButtonPlacementMode="Inline" SmallChange="1" Minimum="1" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <muxc:NumberBox x:Name="Numbers" HorizontalAlignment="Left" Margin="174,36,0,0" VerticalAlignment="Top" Width="160" Height="35" Value="1" SpinButtonPlacementMode="Inline" SmallChange="1" Minimum="1" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
         <TextBlock HorizontalAlignment="Left" Margin="175,12,0,0" TextWrapping="Wrap" Text="人数:" VerticalAlignment="Top" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" />
-        <GridView x:Name="RandomNumbersGridView" Margin="174,333,1,0" >
+        <GridView x:Name="RandomNumbersGridView" Margin="151,333,1,0" >
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ItemsWrapGrid x:Name="MaxItemsWrapGrid"
-                           MaximumRowsOrColumns="10"
+                           MaximumRowsOrColumns="5"
                            Orientation="Horizontal"/>
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>

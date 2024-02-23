@@ -52,9 +52,15 @@ namespace 随机抽取学号.Views
 
                     // 取前几位数字
                     List<int> Result = numbers.Take(TakeCount).ToList();
+                    //清除旧的列表内容
                     RandomNumbersListStackPanel.Children.Clear();
                     // 清除旧的网格内容
                     RandomNumbersGridView.Items.Clear();
+                    //按需清除文本内容
+                    if (CheckBox.IsChecked != true)
+                    {
+                        txtRe.Text = "";
+                    }
                     foreach (int result in Result)
                     {
                         //列表
@@ -69,7 +75,7 @@ namespace 随机抽取学号.Views
                             {
                                 FontSize = 33,
                                 FontFamily = new FontFamily("Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"),
-                                //Width = 50,
+                                Width = 150,
                                 Height = 50,
                                 Margin = new Thickness(5),
                                 TextAlignment = TextAlignment.Center,
@@ -93,30 +99,6 @@ namespace 随机抽取学号.Views
                             txtRe.Text += "‘" + result.ToString() + "’";
                         }
                         //网格
-
-                        // 定义网格的大小
-                        int gridSize = (int)Math.Sqrt(TakeCount); // 假设网格是正方形的
-                        //// 创建一个新的网格布局
-                        //Grid grid = new Grid();
-                        //// 定义网格的行和列
-                        //for (int i = 0; i < gridSize; i++)
-                        //{
-                        //    grid.RowDefinitions.Add(new RowDefinition { Height = new GridLength(1, GridUnitType.Star) });
-                        //    grid.ColumnDefinitions.Add(new ColumnDefinition { Width = new GridLength(1, GridUnitType.Star) });
-                        //}
-                        //// 遍历网格的每一个单元格，并添加TextBlock
-                        //for (int row = 0; row < gridSize; row++)
-                        //{
-                        //    for (int col = 0; col < gridSize; col++)
-                        //    {
-                        //        int cellIndex = row * gridSize + col;
-
-                        //        // 如果cellIndex超出了需要的数字个数，则停止添加TextBlock
-                        //        if (cellIndex >= TakeCount)
-                        //        {
-                        //            break;
-                        //        }
-                        //        // 将TextBlock添加到对应的网格单元格中
                                 Border border2 = new Border()
                                 {
                                     CornerRadius = new CornerRadius(8, 8, 8, 8),
@@ -129,7 +111,7 @@ namespace 随机抽取学号.Views
                                         Name = "textBlock",
                                         FontSize = 33,
                                         FontFamily = new FontFamily("Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"),
-                                        //Width = 50,
+                                        Width = 150,
                                         Height = 50,
                                         Margin = new Thickness(5),
                                         TextAlignment = TextAlignment.Center,
@@ -139,23 +121,6 @@ namespace 随机抽取学号.Views
                                      }
                                 };
                         RandomNumbersGridView.Items.Add(border2);
-                                //Grid.SetRow(border2, row);
-                                //Grid.SetColumn(border2, col);
-
-                        //grid.Children.Add(border2);
-                        //// 如果已经添加了足够的TextBlock，则退出循环
-                        //if (grid.Children.Count >= TakeCount)
-                        //{
-                        //    break;
-                        //}
-                        //// 将新创建的网格添加到容器中
-                        //GridDigits.Children.Add(grid);
-                        //  }
-
-
-                        // }
-
-
                     }
                 }
                 else
@@ -185,6 +150,8 @@ namespace 随机抽取学号.Views
         private void 清空结果_Click(object sender, RoutedEventArgs e)
         {
             txtRe.Text = "";
+            RandomNumbersGridView.Items.Clear();
+            RandomNumbersListStackPanel.Children.Clear();
         }
 
         private void Slider_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
