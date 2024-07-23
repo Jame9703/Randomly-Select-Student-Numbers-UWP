@@ -1,0 +1,164 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:随机抽取学号.Views"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Class="随机抽取学号.Views.HomePage"
+    mc:Ignorable="d" Loaded="Page_Loaded">
+    <Page.Resources>
+        <Style TargetType="AppBarButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="UseSystemFocusVisuals" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="AppBarButton">
+                        <Grid x:Name="Root" CornerRadius="4,4,4,4"
+                              MinWidth="{TemplateBinding MinWidth}"
+                              MaxWidth="{TemplateBinding MaxWidth}"
+                              Background="{TemplateBinding Background}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="ApplicationViewStates">
+                                    <VisualState x:Name="FullSize"/>
+                                    <VisualState x:Name="Compact">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Overflow">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentRoot" Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="OverflowWithToggleButtons">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentRoot" Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <Storyboard>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Root" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightListLowBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Content" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Root" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightListMediumBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Content" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Content" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="InputModeStates">
+                                    <VisualState x:Name="InputModeDefault" />
+                                    <VisualState x:Name="TouchInputMode" >
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
+                            <StackPanel x:Name="ContentRoot" MinHeight="{ThemeResource AppBarThemeCompactHeight}" Orientation="Horizontal">
+                                <ContentPresenter x:Name="Content"
+                                                  Height="29"
+                                                  Margin="6,1,0,4"
+                                                  Content="{TemplateBinding Icon}"
+                                                  Foreground="{TemplateBinding Foreground}"
+                                                  AutomationProperties.AccessibilityView="Raw" Width="27"/>
+                                <TextBlock x:Name="TextLabel"
+                                           Text="{TemplateBinding Label}"
+                                           Foreground="{TemplateBinding Foreground}"
+                                           FontSize="20"
+                                           FontFamily="{TemplateBinding FontFamily}"
+                                           TextAlignment="Center"
+                                           TextWrapping="Wrap"
+                                           Height="31" Width="43"/>
+                            </StackPanel>
+
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    <Grid>
+        <AppBarButton x:Name="StartorStopButton" Width="97" Margin="312,223,0,0" Label="开始" Background="#FFC0F2BC" Height="48" Click="StartorStopButton_Click" Icon="Play" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <ComboBox x:Name="ModeComboBox" Width="160" Margin="174,78,0,0" CornerRadius="4,4,4,4" SelectedIndex="0" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" RenderTransformOrigin="0.48,-0.737">
+            <x:String>仅抽取学号</x:String>
+            <x:String>仅抽取姓名</x:String>
+            <x:String>抽取学号和姓名</x:String>
+        </ComboBox>
+        <AppBarToggleButton x:Name="check" Label="不许偷看" Margin="174,132,0,0" CornerRadius="4,4,4,4" Background="{x:Null}" Icon="View" Height="62" Width="64" Checked="AppBarToggleButton_Checked" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
+        </AppBarToggleButton>
+        <TextBox x:Name="ResultTextBox" HorizontalAlignment="Left" Margin="273,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" Height="68" Width="232" FontSize="36" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <TextBlock HorizontalAlignment="Left" Margin="374,43,0,0" TextWrapping="Wrap" Text="抽取间隔：(单位毫秒)" VerticalAlignment="Top" FontSize="14" Height="19" Width="158" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <TextBlock x:Name="Text2" HorizontalAlignment="Left" Height="30" Margin="374,8,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="133" FontSize="18" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <Grid x:Name="Selecting" Margin="273,126,1080,761" CornerRadius="5">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="331"/>
+            </Grid.ColumnDefinitions>
+            <muxc:ProgressRing  IsActive="True"    Margin="10,15,0,0" VerticalAlignment="Top" Height="30" Width="30" HorizontalAlignment="Left"/>
+            <muxc:ProgressBar Margin="0,64,110,0" IsIndeterminate="True" ShowPaused="False" ShowError="False" VerticalAlignment="Top" />
+            <TextBlock HorizontalAlignment="Left" Margin="62,10,0,0" Text="抽取中" VerticalAlignment="Top" Width="94" Height="55" FontSize="30" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        </Grid>
+        <muxc:NumberBox x:Name="NumberBox" HorizontalAlignment="Left" Height="32" Margin="370,78,0,0" VerticalAlignment="Top" Width="95" Text="10" Minimum="1" Maximum="10000" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <StackPanel x:Name="StackPanelCheckBoxes" HorizontalAlignment="Left" Height="Auto" Margin="0,76,0,0" VerticalAlignment="Top" Width="175"/>
+        <TextBlock x:Name="checkedCheckBoxesCount" HorizontalAlignment="Left" Margin="0,37,0,0" TextWrapping="Wrap" Text="未选择" VerticalAlignment="Top" Width="162" Height="27" FontSize="16" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <Button x:Name="Accept" Content="确定" Height="32" Margin="470,78,0,0" VerticalAlignment="Top" Width="55" Click="AcceptButton_Click" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0">
+            <SymbolIcon Height="30" Width="23" Symbol="Edit"/>
+            <HyperlinkButton x:Name="ClassNameHyperlinkButton" Content="我的班级"  Click="HyperlinkButton_Click" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Width="Auto" FontSize="16" Height="32"/>
+        </StackPanel>
+        <muxc:NumberBox x:Name="Numbers" HorizontalAlignment="Left" Margin="174,36,0,0" VerticalAlignment="Top" Width="160" Height="35" Value="1" SpinButtonPlacementMode="Inline" SmallChange="1" Minimum="1" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <TextBlock HorizontalAlignment="Left" Margin="175,12,0,0" TextWrapping="Wrap" Text="人数:" VerticalAlignment="Top" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" />
+        <GridView x:Name="RandomNumbersGridView" Margin="151,333,1,0" >
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid x:Name="MaxItemsWrapGrid"
+                           MaximumRowsOrColumns="5"
+                           Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+        </GridView>
+    </Grid>
+</Page>

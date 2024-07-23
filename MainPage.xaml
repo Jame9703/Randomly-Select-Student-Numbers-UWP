@@ -1,0 +1,94 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:随机抽取学号"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    x:Class="随机抽取学号.MainPage"
+    mc:Ignorable="d"
+    muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
+    <Page.Resources>
+        <!--This top margin is the height of the custom TitleBar-->
+        <Thickness x:Key="NavigationViewContentMargin">0,48,0,0</Thickness>
+    </Page.Resources>
+    <Grid>
+        <Grid>
+            <Grid.RowDefinitions>
+                <RowDefinition Height="48"/>
+                <RowDefinition/>
+            </Grid.RowDefinitions>
+            <Frame muxc:BackdropMaterial.ApplyToRootOrPageBackground="True">
+                <Grid x:Name="AppTitleBar" Background="Transparent">
+                    <!-- Width of the padding columns is set in LayoutMetricsChanged handler. -->
+                    <!-- Using padding columns instead of Margin ensures that the background
+             paints the area under the caption control buttons (for transparent buttons). -->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition x:Name="LeftPaddingColumn" Width="0"/>
+                        <ColumnDefinition/>
+                        <ColumnDefinition x:Name="RightPaddingColumn" Width="0"/>
+                    </Grid.ColumnDefinitions>
+                    <Image Source="Assets/Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png" 
+               Grid.Column="1"
+               HorizontalAlignment="Left"
+               Width="24" Height="24"
+               Margin="12,12"/>
+                    <TextBlock x:Name="AppTitleTextBlock_1"
+                   Text="随机抽取学号" 
+                   Style="{StaticResource CaptionTextBlockStyle}" 
+                   Grid.Column="1"
+                   VerticalAlignment="Top"
+                   Margin="59,13,-6,0" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" FontSize="12" Grid.ColumnSpan="2"/>
+                    <TextBlock x:Name="AppTitleTextBlock_2"
+                Text="Randomly Select Student Numbers" 
+                Style="{StaticResource CaptionTextBlockStyle}"
+                VerticalAlignment="Top"
+                Margin="59,27,9,0" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" FontSize="8" Grid.ColumnSpan="2"/>
+                </Grid>
+            </Frame>
+            <!-- This control has a higher z-order than AppTitleBar, 
+         so it receives user input. -->
+            <!--<AutoSuggestBox QueryIcon="Find"
+                    PlaceholderText="搜索"
+                    HorizontalAlignment="Center"
+                    Width="260" Height="32"
+                    AutoMaximizeSuggestionArea="True" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>-->
+        </Grid>
+        <muxc:NavigationView x:Name="NavView"
+                         Loaded="NavView_Loaded"
+                         ItemInvoked="NavView_ItemInvoked"
+                         BackRequested="NavView_BackRequested" AlwaysShowHeader="False" Header="   " x:FieldModifier="public" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
+            <muxc:NavigationView.MenuItems>
+                <muxc:NavigationViewItem Tag="home" Icon="Home" Content="主页 [ Home ]" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+                <muxc:NavigationViewItem Tag="class" Content="班级 [ Class ]" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
+                    <muxc:NavigationViewItem.Icon>
+                        <SymbolIcon Symbol="People"/>
+                    </muxc:NavigationViewItem.Icon>
+                </muxc:NavigationViewItem>
+                <muxc:NavigationViewItemSeparator/>
+                <muxc:NavigationViewItemHeader x:Name="MainPagesHeader" Content="其他页面" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+                <muxc:NavigationViewItem Tag="senior" Content="数字 [ Numbers ]" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
+                    <muxc:NavigationViewItem.Icon>
+                        <SymbolIcon Symbol="OutlineStar"/>
+                    </muxc:NavigationViewItem.Icon>
+                </muxc:NavigationViewItem>
+                <muxc:NavigationViewItem Tag="characters" Content="文字 [ Characters ]" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
+                    <muxc:NavigationViewItem.Icon>
+                        <SymbolIcon Symbol="Character"/>
+                    </muxc:NavigationViewItem.Icon>
+                </muxc:NavigationViewItem>
+                <muxc:NavigationViewItem Tag="games" Content="帮助 [ Help ]" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
+                    <muxc:NavigationViewItem.Icon>
+                        <SymbolIcon Symbol="Help"/>
+                    </muxc:NavigationViewItem.Icon>
+                </muxc:NavigationViewItem>
+            </muxc:NavigationView.MenuItems>
+            <ScrollViewer Background="Transparent">
+                <Frame x:Name="ContentFrame" Padding="12,0,12,24"
+                   NavigationFailed="ContentFrame_NavigationFailed" Width="1589" x:FieldModifier="public">
+                </Frame>
+            </ScrollViewer>
+        </muxc:NavigationView>
+
+    </Grid>
+</Page>
