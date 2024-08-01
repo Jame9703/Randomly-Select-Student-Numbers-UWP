@@ -19,20 +19,20 @@ namespace 随机抽取学号.Views
     /// </summary>
     public sealed partial class ClassPage : Page
     {
-        public static ClassPage classpage;
+        public List<string> names = new List<string>();
         private static readonly ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         private static readonly string NamesKey = "Names";
         private static readonly string ClassNameKey = "ClassName";
+        public delegate void TextChangedEventHandler(string Text);
+        public event TextChangedEventHandler TextChanged;
         public ClassPage()
         {
             this.InitializeComponent();
-            classpage = this;
             // 初始化行号
             UpdateLineNumbers();
             LoadData();
             //lineNumberBorder.Background = Editor.Background;
         }
-        public List<string> names = new List<string>();
         private void LoadData()
         {
             string Names = localSettings.Values[NamesKey] as string;
@@ -56,7 +56,19 @@ namespace 随机抽取学号.Views
         private void ClassNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             localSettings.Values[ClassNameKey] = ClassNameTextBox.Text;
+            //MainPage mainPage = new MainPage();
+            //mainPage.ClassNameHyperlinkButton.Content = localSettings.Values[ClassNameKey];
+            //if (TextChanged != null)
+            //{
+            //    TextChanged(ClassNameTextBox.Text);
+            //}
+            //else
+            //{
+            //    TextChanged("我的班级");
+            //}
         }
+
+
         private async void OpenFileButton_Click(object sender, RoutedEventArgs e)
         {
             var picker = new FileOpenPicker();
