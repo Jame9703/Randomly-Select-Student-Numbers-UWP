@@ -16,7 +16,7 @@
   <Properties>
     <DisplayName>随机抽取学号</DisplayName>
     <PublisherDisplayName>随机抽取学号</PublisherDisplayName>
-    <Logo>Assets\Logos\StoreLogo.png</Logo>
+    <Logo>Assets\RSSN_Logos\StoreLogo.png</Logo>
   </Properties>
 
   <Dependencies>
@@ -33,12 +33,12 @@
       EntryPoint="随机抽取学号.App">
       <uap:VisualElements
         DisplayName="随机抽取学号"
-        Square150x150Logo="Assets\Logos\Square150x150Logo.png"
-        Square44x44Logo="Assets\Logos\Square44x44Logo.png"
+        Square150x150Logo="Assets\RSSN_Logos\Square150x150Logo.png"
+        Square44x44Logo="Assets\RSSN_Logos\Square44x44Logo.png"
         Description="随机抽取学号"
         BackgroundColor="transparent">
-        <uap:DefaultTile Wide310x150Logo="Assets\Logos\Wide310x150Logo.png" Square71x71Logo="Assets\Logos\SmallTile.png" Square310x310Logo="Assets\Logos\LargeTile.png"/>
-        <uap:SplashScreen Image="Assets\Logos\SplashScreen.png" />
+        <uap:DefaultTile Wide310x150Logo="Assets\RSSN_Logos\Wide310x150Logo.png" Square71x71Logo="Assets\RSSN_Logos\SmallTile.png" Square310x310Logo="Assets\RSSN_Logos\LargeTile.png"/>
+        <uap:SplashScreen Image="Assets\RSSN_Logos\SplashScreen.png" />
       </uap:VisualElements>
     </Application>
   </Applications>
