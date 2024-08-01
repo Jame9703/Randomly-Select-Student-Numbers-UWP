@@ -163,6 +163,7 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
+    <Content Include="Assets\Photos\GithubLogo.png" />
     <Content Include="Assets\RSSN_Logos\LargeTile.scale-100.png" />
     <Content Include="Assets\RSSN_Logos\LargeTile.scale-125.png" />
     <Content Include="Assets\RSSN_Logos\LargeTile.scale-150.png" />
@@ -274,6 +275,7 @@
     <Content Include="Assets\Fonts\HarmonyOS_Sans_SC_Medium.ttf" />
     <None Include="随机抽取学号_TemporaryKey.pfx" />
   </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

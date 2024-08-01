@@ -32,7 +32,7 @@
             <controls:SettingsExpander Description="© 2022-2024. All rights reserved." FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"
                                            Header="Randomly Select Student Numbers" Margin="10,0,20,0">
                 <controls:SettingsExpander.HeaderIcon>
-                    <ui:BitmapIconExtension Source="ms-appx:///Assets/Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png"/>
+                    <ui:BitmapIconExtension Source="ms-appx:///Assets/RSSN_Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png"/>
                 </controls:SettingsExpander.HeaderIcon>
                 <!--win:IsTextSelectionEnabled="True"-->
                 <controls:SettingsExpander.Items>
@@ -53,7 +53,7 @@
             <controls:SettingsCard Description="https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP"
                 Margin="10,0,20,0"      Header="在Github中查看此项目源代码" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
                 <controls:SettingsCard.HeaderIcon>
-                    <ui:BitmapIconExtension Source="ms-appx:///Assets/Logos/GithubLogo.png"/>
+                    <ui:BitmapIconExtension Source="ms-appx:///Assets/Photos/GithubLogo.png"/>
                 </controls:SettingsCard.HeaderIcon>
                 <HyperlinkButton  NavigateUri="https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP">
                     <StackPanel Orientation="Horizontal" Width="116">
@@ -63,8 +63,8 @@
                 </HyperlinkButton>
 
             </controls:SettingsCard>
-            <controls:SettingsExpander Description="© 2022-2024. All rights reserved." FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"
-                                           Header="Randomly Select Student Numbers" Margin="10,0,20,0">
+            <controls:SettingsExpander Description="选择要显示的应用主题" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"
+                                           Header="应用程序主题" Margin="10,0,20,0">
                 <controls:SettingsExpander.HeaderIcon>
                     <ui:BitmapIconExtension Source="ms-appx:///Assets/Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png"/>
                 </controls:SettingsExpander.HeaderIcon>
