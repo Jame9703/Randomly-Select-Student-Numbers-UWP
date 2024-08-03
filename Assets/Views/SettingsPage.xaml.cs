@@ -16,7 +16,7 @@ namespace 随机抽取学号.Views
         public SettingsPage()
         {
             this.InitializeComponent();
-
+            AppearanceRadioButtons.SelectedIndex = (int)ApplicationData.Current.LocalSettings.Values["Theme"];
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {

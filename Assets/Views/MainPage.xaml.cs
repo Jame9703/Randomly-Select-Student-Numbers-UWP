@@ -304,7 +304,8 @@ namespace 随机抽取学号
         {
             if (SettingsPageButton.IsChecked == true)
             {
-                StartAnimation(SettingsPageButton);//为解决当窗口大小变化，SettingsPageButton位置改变，但MovingRectangle位置未改变的问题
+                //StartAnimation(SettingsPageButton);//为解决当窗口大小变化，SettingsPageButton位置改变，但MovingRectangle位置未改变的问题
+                MovingRectangle.Margin = SettingsPageButton.Margin;
             }
         }
 

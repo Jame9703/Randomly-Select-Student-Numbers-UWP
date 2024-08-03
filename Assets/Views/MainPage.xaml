@@ -356,7 +356,7 @@
     <Grid>
         <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="48"/>
+                <RowDefinition Height="40"/>
                 <!--<RowDefinition/>-->
             </Grid.RowDefinitions>
             <Grid.Background>
@@ -380,22 +380,22 @@
                     <Image Source="ms-appx:///Assets/RSSN_Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png" 
                Grid.Column="1"
                HorizontalAlignment="Left"
-               Width="26"
-               Margin="10,10,0,12"/>
+               Width="26" Height="26"
+               Margin="7,7,0,7"/>
                     <TextBlock x:Name="AppTitleTextBlock_1"
                    Text="随机抽取学号 2024" 
                    Style="{StaticResource CaptionTextBlockStyle}" 
                    Grid.Column="1"
                    VerticalAlignment="Top" HorizontalAlignment="Left"
-                   Margin="42,10" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" FontSize="12"/>
+                   Margin="40,5,0,0" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" FontSize="14"/>
                     <TextBlock x:Name="AppTitleTextBlock_2"
                 Text="Randomly Select Student Numbers" 
                 Style="{StaticResource CaptionTextBlockStyle}"
                 VerticalAlignment="Top" HorizontalAlignment="Left"
-                Margin="42,26,0,0" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" FontSize="8" Grid.ColumnSpan="2" Height="17" Width="130"/>
+                Margin="40,25,0,0" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" FontSize="8" Grid.ColumnSpan="2" Height="17" Width="136"/>
                 </Grid>
             </Frame>
-            <HyperlinkButton x:Name="ClassNameHyperlinkButton" Content="我的班级" Margin="186,0,0,0" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" x:FieldModifier="public" Click="ClassNameHyperlinkButton_Click">
+            <HyperlinkButton x:Name="ClassNameHyperlinkButton" Content="我的班级" Margin="180,0,0,0" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" x:FieldModifier="public" Click="ClassNameHyperlinkButton_Click" Height="30">
                 <HyperlinkButton.Background>
                     <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
                         <GradientStop Color="Black"/>
@@ -404,7 +404,7 @@
                 </HyperlinkButton.Background>
             </HyperlinkButton>
             <!-- 搜索框 -->
-            <AutoSuggestBox x:Name="MySearchBox" PlaceholderText="搜索..." HorizontalAlignment="Left" VerticalAlignment="Top" Margin="300,10,0,0" Width="200"/>
+            <AutoSuggestBox x:Name="MySearchBox" PlaceholderText="搜索..." HorizontalAlignment="Left" VerticalAlignment="Center" Margin="300,0,0,0" Width="200" />
 
             <!--<AutoSuggestBox QueryIcon="Find"
                     PlaceholderText="搜索"
@@ -421,14 +421,15 @@
                     <CompositeTransform />
                 </Rectangle.RenderTransform>
             </Rectangle>
+            <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="HomePageButton" Icon="Home" Label="主页" Width="65" Height="60" Click="HomePage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Margin="0,50,0,0" x:FieldModifier="public" CornerRadius="6,6,6,6"/>
+            <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="ClassPageButton" Icon="People" Label="班级" Width="65" Height="60" Click="ClassPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Margin="0,115,0,0" x:FieldModifier="public" CornerRadius="6,6,6,6"/>
+
+            <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="NumbersPageButton" Icon="OutlineStar" Label="数字" Width="65" Height="60" Click="NumbersPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Margin="0,180,0,0" x:FieldModifier="public" CornerRadius="6,6,6,6"/>
+            <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="CharactersPageButton" Icon="Character" Label="文字" Width="65" Height="60" Click="CharactersPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Margin="0,245,0,0" x:FieldModifier="public" CornerRadius="6,6,6,6"/>
+            <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="HelpPageButton" Icon="Help" Label="帮助" Width="65" Height="60" Click="HelpPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Margin="0,310,0,0" x:FieldModifier="public" CornerRadius="6,6,6,6"/>
+
+            <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="SettingsPageButton" Icon="Setting" Label="设置" Width="65" Height="60" Click="SettingsPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" x:FieldModifier="Public" CornerRadius="6,6,6,6" HorizontalAlignment="Center" Canvas.Top="940"/>
         </Canvas>
-        <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="HomePageButton" Icon="Home" Label="主页" Width="65" Height="60" Click="HomePage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Margin="0,50,0,0" x:FieldModifier="public" CornerRadius="6,6,6,6"/>
-        <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="ClassPageButton" Icon="People" Label="班级" Width="65" Height="60" Click="ClassPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Margin="0,115,0,0" x:FieldModifier="public" CornerRadius="6,6,6,6"/>
 
-        <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="NumbersPageButton" Icon="OutlineStar" Label="数字" Width="65" Height="60" Click="NumbersPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Margin="0,180,0,0" x:FieldModifier="public" CornerRadius="6,6,6,6"/>
-        <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="CharactersPageButton" Icon="Character" Label="文字" Width="65" Height="60" Click="CharactersPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Margin="0,245,0,0" x:FieldModifier="public" CornerRadius="6,6,6,6"/>
-        <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="HelpPageButton" Icon="Help" Label="帮助" Width="65" Height="60" Click="HelpPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Margin="0,310,0,0" x:FieldModifier="public" CornerRadius="6,6,6,6"/>
-
-        <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="SettingsPageButton" Icon="Setting" Label="设置" Width="65" Height="60" Click="SettingsPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" VerticalAlignment="Bottom" x:FieldModifier="Public" CornerRadius="6,6,6,6"/>
     </Grid>
 </Page>
