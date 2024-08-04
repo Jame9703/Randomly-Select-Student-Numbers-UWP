@@ -286,7 +286,7 @@ namespace 随机抽取学号
                 button.IsChecked = true; // 设置当前按钮为选中状态
 
                 // 获取目标位置
-                var targetPosition = button.TransformToVisual(Canvas).TransformPoint(new Point(button.ActualWidth / 2, (button.ActualHeight - 60) / 2));
+                var targetPosition = button.TransformToVisual(Canvas).TransformPoint(new Point(button.ActualWidth / 2, (button.ActualHeight +40) / 2));
 
                 // 设置Storyboard的动画值
                 if (doubleAnimation != null)
@@ -304,8 +304,10 @@ namespace 随机抽取学号
         {
             if (SettingsPageButton.IsChecked == true)
             {
-                //StartAnimation(SettingsPageButton);//为解决当窗口大小变化，SettingsPageButton位置改变，但MovingRectangle位置未改变的问题
-                MovingRectangle.Margin = SettingsPageButton.Margin;
+                StartAnimation(SettingsPageButton);//为解决当窗口大小变化，SettingsPageButton位置改变，但MovingRectangle位置未改变的问题
+
+                //double topMargin = SettingsPageButton.Margin.Top;
+                //MovingRectangle.Margin = new Thickness(0, topMargin, 0, 0);
             }
         }
 
@@ -313,6 +315,7 @@ namespace 随机抽取学号
         {
             ContentFrame.Navigate(typeof(ClassPage));
             StartAnimation(ClassPageButton);
+
         }
 
         private void AppTitleBar_Loaded(object sender, RoutedEventArgs e)

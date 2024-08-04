@@ -352,6 +352,19 @@
         </Style>
 
 
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="ContentFrameBackground" Color="White"/>
+                    <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="Transparent"/>
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="ContentFrameBackground" Color="#1E1E1E"/>
+                    <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="Transparent"/>
+                </ResourceDictionary>
+                <!--<ResourceDictionary x:Key="HighContrast">
+                   <SolidColorBrush x:Key="NavigationViewContentBackground" Color="{ThemeResource SystemColorWindowColor}" />
+                   <SolidColorBrush x:Key="NavigationViewExpandedPaneBackground" Color="{ThemeResource SystemColorWindowColor}" />
+               </ResourceDictionary>-->
+
     </Page.Resources>
     <Grid>
         <Grid>
@@ -413,23 +426,31 @@
                     AutoMaximizeSuggestionArea="True" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>-->
         </Grid>
 
-        <Frame x:Name="ContentFrame" Padding="12,0,12,24"
+        <Frame x:Name="ContentFrame" Padding="12,0,12,24" 
                    NavigationFailed="ContentFrame_NavigationFailed" x:FieldModifier="public" Margin="70,50,0,0" CornerRadius="16,0,0,0" BorderBrush="Transparent" BorderThickness="0" Grid.Column="1"/>
-        <Canvas x:Name="Canvas">
-            <Rectangle x:Name="MovingRectangle"  RadiusX="4" RadiusY="4" Fill="{ThemeResource AccentFillColorDefaultBrush}" Width="6" Height="50" HorizontalAlignment="Left" VerticalAlignment="Top" Canvas.Top="55" Margin="1,0,0,0">
-                <Rectangle.RenderTransform>
-                    <CompositeTransform />
-                </Rectangle.RenderTransform>
-            </Rectangle>
-            <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="HomePageButton" Icon="Home" Label="主页" Width="65" Height="60" Click="HomePage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Margin="0,50,0,0" x:FieldModifier="public" CornerRadius="6,6,6,6"/>
-            <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="ClassPageButton" Icon="People" Label="班级" Width="65" Height="60" Click="ClassPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Margin="0,115,0,0" x:FieldModifier="public" CornerRadius="6,6,6,6"/>
-
-            <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="NumbersPageButton" Icon="OutlineStar" Label="数字" Width="65" Height="60" Click="NumbersPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Margin="0,180,0,0" x:FieldModifier="public" CornerRadius="6,6,6,6"/>
-            <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="CharactersPageButton" Icon="Character" Label="文字" Width="65" Height="60" Click="CharactersPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Margin="0,245,0,0" x:FieldModifier="public" CornerRadius="6,6,6,6"/>
-            <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="HelpPageButton" Icon="Help" Label="帮助" Width="65" Height="60" Click="HelpPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Margin="0,310,0,0" x:FieldModifier="public" CornerRadius="6,6,6,6"/>
-
-            <AppBarToggleButton Style="{StaticResource AppBarToggleButtonStyle}" x:Name="SettingsPageButton" Icon="Setting" Label="设置" Width="65" Height="60" Click="SettingsPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" x:FieldModifier="Public" CornerRadius="6,6,6,6" HorizontalAlignment="Center" Canvas.Top="940"/>
-        </Canvas>
+        <Rectangle x:Name="MovingRectangle"  RadiusX="4" RadiusY="4" Fill="{ThemeResource AccentFillColorDefaultBrush}" Height="50" Width="6" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="1,50,0,0">
+            <Rectangle.RenderTransform>
+                <CompositeTransform />
+            </Rectangle.RenderTransform>
+        </Rectangle>
+        <Grid x:Name="Canvas" Width="65" Margin="0,45,0,0" HorizontalAlignment="Left">
+            <Grid.RowDefinitions>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="60"/>
+                <RowDefinition Height="*"/>
+                <RowDefinition Height="60"/>
+            </Grid.RowDefinitions>
+            <AppBarToggleButton Grid.Row="0" Style="{StaticResource AppBarToggleButtonStyle}" x:Name="HomePageButton" Icon="Home" Label="主页" Width="65" Height="60" Click="HomePage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" x:FieldModifier="public" CornerRadius="6,6,6,6" HorizontalAlignment="Center"/>
+            <AppBarToggleButton Grid.Row="1" Style="{StaticResource AppBarToggleButtonStyle}" x:Name="ClassPageButton" Icon="People" Label="班级" Width="65" Height="60" Click="ClassPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" x:FieldModifier="public" CornerRadius="6,6,6,6" HorizontalAlignment="Center" />
+            <AppBarToggleButton Grid.Row="2" Style="{StaticResource AppBarToggleButtonStyle}" x:Name="NumbersPageButton" Icon="OutlineStar" Label="数字" Width="65" Height="60" Click="NumbersPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" x:FieldModifier="public" CornerRadius="6,6,6,6" HorizontalAlignment="Center" />
+            <AppBarToggleButton Grid.Row="3" Style="{StaticResource AppBarToggleButtonStyle}" x:Name="CharactersPageButton" Icon="Character" Label="文字" Width="65" Height="60" Click="CharactersPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" x:FieldModifier="public" CornerRadius="6,6,6,6" HorizontalAlignment="Center"/>
+            <AppBarToggleButton Grid.Row="4" Style="{StaticResource AppBarToggleButtonStyle}" x:Name="HelpPageButton" Icon="Help" Label="帮助" Width="65" Height="60" Click="HelpPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" x:FieldModifier="public" CornerRadius="6,6,6,6" HorizontalAlignment="Center" />
+            <Grid Height="Auto" Grid.Row="5"></Grid>
+            <AppBarToggleButton Grid.Row="6" Style="{StaticResource AppBarToggleButtonStyle}" x:Name="SettingsPageButton" Icon="Setting" Label="设置" Width="65" Height="60" Click="SettingsPage_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" x:FieldModifier="Public" CornerRadius="6,6,6,6" VerticalAlignment="Bottom" />
+        </Grid>
 
     </Grid>
 </Page>
