@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.WinUI;
+using System;
 using System.Collections.Generic;
 using System.ComponentModel;
 using System.Linq;
@@ -11,10 +12,12 @@ using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Maps;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using Windows.UI.Xaml.Shapes;
 using 随机抽取学号.Views;
 using muxc = Microsoft.UI.Xaml.Controls;
 
@@ -286,14 +289,21 @@ namespace 随机抽取学号
                 button.IsChecked = true; // 设置当前按钮为选中状态
 
                 // 获取目标位置
-                var targetPosition = button.TransformToVisual(Canvas).TransformPoint(new Point(button.ActualWidth / 2, (button.ActualHeight +40) / 2));
+                //GeneralTransform transform1 = _lastSelectedButton.TransformToVisual(null); // 转换为相对于根视觉树的坐标
+                //Point point1 = transform1.TransformPoint(new Point(_lastSelectedButton.Margin.Left, _lastSelectedButton.Margin.Top));
 
+                //GeneralTransform transform2 = button.TransformToVisual(null);
+                //Point point2 = transform2.TransformPoint(new Point(button.Margin.Left, button.Margin.Top));
+                var targetPosition = button.TransformToVisual(Canvas).TransformPoint(new Point(button.ActualWidth / 2, (button.ActualHeight + 40) / 2));
+
+                //double a = point2.Y - point1.Y;
                 // 设置Storyboard的动画值
                 if (doubleAnimation != null)
                 {
                     doubleAnimation.To = targetPosition.Y - MovingRectangle.Height;
                 }
-
+                MovingRectangle.Visibility = Visibility.Visible;
+                rectangle.Visibility = Visibility.Collapsed;
                 // 开始Storyboard动画
                 MoveRectangleStoryboard.Begin();
 
@@ -304,13 +314,15 @@ namespace 随机抽取学号
         {
             if (SettingsPageButton.IsChecked == true)
             {
-                StartAnimation(SettingsPageButton);//为解决当窗口大小变化，SettingsPageButton位置改变，但MovingRectangle位置未改变的问题
+                //StartAnimation(SettingsPageButton);//为解决当窗口大小变化，SettingsPageButton位置改变，但MovingRectangle位置未改变的问题
 
-                //double topMargin = SettingsPageButton.Margin.Top;
-                //MovingRectangle.Margin = new Thickness(0, topMargin, 0, 0);
+                //MovingRectangle.SetValue(Grid.RowProperty, 0);
+                //double Height = SettingsPageButton.Margin.Top;
+                //MovingRectangle.Margin = new Thickness(0, 5, 0, 0);
+                MovingRectangle.Visibility = Visibility.Collapsed;
+                rectangle.Visibility = Visibility.Visible;
             }
         }
-
         private void ClassNameHyperlinkButton_Click(object sender, RoutedEventArgs e)
         {
             ContentFrame.Navigate(typeof(ClassPage));
@@ -321,6 +333,11 @@ namespace 随机抽取学号
         private void AppTitleBar_Loaded(object sender, RoutedEventArgs e)
         {
 
+        }
+
+        private void Canvas_SizeChanged(object sender, SizeChangedEventArgs e)
+        {
+            //MovingRectangle.SetValue(Grid.RowProperty, 1);
         }
     }
 }

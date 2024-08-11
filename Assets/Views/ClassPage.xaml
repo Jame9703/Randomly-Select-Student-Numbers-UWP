@@ -7,16 +7,62 @@
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     x:Class="随机抽取学号.Views.ClassPage"
     mc:Ignorable="d"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     NavigationCacheMode="Enabled">
 
     <Grid>
-        <Grid Margin="0,98,0,0" CornerRadius="8,8,8,8" BorderThickness="2">
+        <Grid MinWidth="400"
+          MinHeight="300">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto"/>
-                <ColumnDefinition/>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition  Width="*"/>
             </Grid.ColumnDefinitions>
 
-            <Border x:Name="lineNumberBorder" Background="{StaticResource SystemControlBackgroundBaseLowBrush}" CornerRadius="8,0,0,8">
+            <!--<Border x:Name="SomeContent"
+                MinWidth="200"
+                MaxWidth="600"
+                Background="{ThemeResource AccentFillColorDefaultBrush}" />-->
+            <Grid x:Name="NamesGrid"   CornerRadius="8,8,8,8"  MinWidth="100" MaxWidth="300">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+
+                <Border x:Name="lineNumberBorder" Background="{StaticResource SystemControlBackgroundBaseLowBrush}" CornerRadius="8,0,0,8" Grid.Column="0">
+                    <TextBlock x:Name="lineNumberTextBlock" Foreground="#FF787775"
+                   Margin="0,3"
+                   VerticalAlignment="Top"
+                   FontSize="16"
+                   FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"
+                   TextAlignment="Right"
+                   IsTextSelectionEnabled="False" />
+                </Border>
+
+                <TextBox x:Name="Editor"
+                    FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"
+                    FontSize="16"
+                     Grid.Column="1"
+                     AcceptsReturn="True"
+                     x:FieldModifier="public" TextChanged="Editor_TextChanged" Loaded="Editor_Loaded" CornerRadius="0,8,8,0" />
+            </Grid>
+            <controls:ContentSizer Grid.Column="1"
+                               Cursor="Hand"
+                               TargetControl="{x:Bind NamesGrid}" />
+        </Grid>
+
+        <!--<Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition Width="Auto" />
+            <ColumnDefinition />
+        </Grid.ColumnDefinitions>
+        <Grid x:Name="NamesGrid"   CornerRadius="8,8,8,8" >
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" MaxWidth="200"/>
+                <ColumnDefinition Width="*"/>
+            </Grid.ColumnDefinitions>
+
+            <Border x:Name="lineNumberBorder" Background="{StaticResource SystemControlBackgroundBaseLowBrush}" CornerRadius="8,0,0,8" Grid.Column="0">
                 <TextBlock x:Name="lineNumberTextBlock" Foreground="#FF787775"
                    Margin="0,3"
                    VerticalAlignment="Top"
@@ -32,8 +78,12 @@
                      Grid.Column="1"
                      Margin="0,-1,100,0"
                      AcceptsReturn="True"
-                     x:FieldModifier="public" TextChanged="Editor_TextChanged" Loaded="Editor_Loaded" CornerRadius="0,8,8,0"/>
+                     x:FieldModifier="public" TextChanged="Editor_TextChanged" Loaded="Editor_Loaded" CornerRadius="0,8,8,0" />
         </Grid>
+        <controls:ContentSizer Grid.Column="1"
+                               Cursor="Hand"
+                               TargetControl="{x:Bind NamesGrid}" />-->
+
         <AppBarButton x:Name="OpenFileButton" Height="59" Label="打开文件" Width="80" Icon="OpenLocal" Click="OpenFileButton_Click" Margin="186,17,0,0" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
         <AppBarButton x:Name="SaveFileButton" Height="59" Label="保存文件" Width="80" Icon="Save" Margin="272,17,0,0" Click="SaveFileButton_Click" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
         <TextBlock HorizontalAlignment="Left" Height="29" Margin="5,10,0,0" TextWrapping="Wrap" Text="班级名称：" VerticalAlignment="Top" Width="170" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
