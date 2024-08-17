@@ -8,6 +8,37 @@
     x:Class="随机抽取学号.Views.HomePage"
     mc:Ignorable="d" Loaded="Page_Loaded">
     <Page.Resources>
+        <Storyboard x:Name="Storyboard1">
+            <DoubleAnimation Storyboard.TargetName="A" Storyboard.TargetProperty="X" From="1650 " To="0" Duration="00:00:1">
+                <DoubleAnimation.EasingFunction>
+                    <QuadraticEase/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+
+        <Storyboard x:Name="Storyboard2">
+            <DoubleAnimation Storyboard.TargetName="B" Storyboard.TargetProperty="X" From="975" To="0" Duration="00:00:0.7">
+                <DoubleAnimation.EasingFunction>
+                    <PowerEase Power="1"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+
+        <Storyboard x:Name="Storyboard3">
+            <DoubleAnimation Storyboard.TargetName="C" Storyboard.TargetProperty="X" From="975" To="0" Duration="00:00:0.67">
+                <DoubleAnimation.EasingFunction>
+                    <PowerEase/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+
+        <Storyboard x:Name="Storyboard4">
+            <DoubleAnimation Storyboard.TargetName="D" Storyboard.TargetProperty="X" From="975" To="0" Duration="00:00:0.7">
+                <DoubleAnimation.EasingFunction>
+                    <SineEase/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
         <Style TargetType="AppBarButton">
             <Setter Property="Background" Value="Transparent"/>
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
@@ -122,35 +153,20 @@
         </Style>
     </Page.Resources>
     <Grid>
-        <AppBarButton x:Name="StartorStopButton" Width="97" Margin="312,223,0,0" Label="开始" Background="#FFC0F2BC" Height="48" Click="StartorStopButton_Click" Icon="Play" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <ComboBox x:Name="ModeComboBox" Width="160" Margin="174,78,0,0" CornerRadius="4,4,4,4" SelectedIndex="0" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" RenderTransformOrigin="0.48,-0.737">
-            <x:String>仅抽取学号</x:String>
-            <x:String>仅抽取姓名</x:String>
-            <x:String>抽取学号和姓名</x:String>
-        </ComboBox>
-        <AppBarToggleButton x:Name="check" Label="不许偷看" Margin="174,132,0,0" CornerRadius="4,4,4,4" Background="{x:Null}" Icon="View" Height="62" Width="64" Checked="AppBarToggleButton_Checked" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
-        </AppBarToggleButton>
-        <TextBox x:Name="ResultTextBox" HorizontalAlignment="Left" Margin="273,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" Height="68" Width="232" FontSize="36" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <TextBlock HorizontalAlignment="Left" Margin="374,43,0,0" TextWrapping="Wrap" Text="抽取间隔：(单位毫秒)" VerticalAlignment="Top" FontSize="14" Height="19" Width="158" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <TextBlock x:Name="Text2" HorizontalAlignment="Left" Height="30" Margin="374,8,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="133" FontSize="18" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <Grid x:Name="Selecting" Margin="273,126,1080,761" CornerRadius="5">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="331"/>
-            </Grid.ColumnDefinitions>
-            <muxc:ProgressRing  IsActive="True"    Margin="10,15,0,0" VerticalAlignment="Top" Height="30" Width="30" HorizontalAlignment="Left"/>
-            <muxc:ProgressBar Margin="0,64,110,0" IsIndeterminate="True" ShowPaused="False" ShowError="False" VerticalAlignment="Top" />
-            <TextBlock HorizontalAlignment="Left" Margin="62,10,0,0" Text="抽取中" VerticalAlignment="Top" Width="94" Height="55" FontSize="30" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        </Grid>
-        <muxc:NumberBox x:Name="NumberBox" HorizontalAlignment="Left" Height="32" Margin="370,78,0,0" VerticalAlignment="Top" Width="95" Text="10" Minimum="1" Maximum="10000" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <AppBarButton x:Name="StartorStopButton" Width="97" Margin="312,223,0,0" Label="开始" Background="#FFC0F2BC" Height="48" Click="StartorStopButton_Click" Icon="Play" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <TextBox x:Name="ResultTextBox" HorizontalAlignment="Left" Margin="273,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" Height="68" Width="232" FontSize="36" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="374,43,0,0" TextWrapping="Wrap" Text="滚动频率(Hz)：" VerticalAlignment="Top" FontSize="14" Height="19" Width="158" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <TextBlock x:Name="Text2" HorizontalAlignment="Left" Height="30" Margin="374,8,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="133" FontSize="18" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <muxc:NumberBox x:Name="NumberBox" HorizontalAlignment="Left" Height="32" Margin="370,78,0,0" VerticalAlignment="Top" Width="95" Text="10" Minimum="1" Maximum="10000" FontFamily="{StaticResource HarmonyOSSans}"/>
         <StackPanel x:Name="StackPanelCheckBoxes" HorizontalAlignment="Left" Height="Auto" Margin="0,76,0,0" VerticalAlignment="Top" Width="175"/>
-        <TextBlock x:Name="checkedCheckBoxesCount" HorizontalAlignment="Left" Margin="0,37,0,0" TextWrapping="Wrap" Text="未选择" VerticalAlignment="Top" Width="162" Height="27" FontSize="16" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <Button x:Name="Accept" Content="确定" Height="32" Margin="470,78,0,0" VerticalAlignment="Top" Width="55" Click="AcceptButton_Click" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <TextBlock x:Name="checkedCheckBoxesCount" HorizontalAlignment="Left" Margin="0,37,0,0" TextWrapping="Wrap" Text="未选择" VerticalAlignment="Top" Width="162" Height="27" FontSize="16" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <Button x:Name="Accept" Content="确定" Height="32" Margin="470,78,0,0" VerticalAlignment="Top" Width="55" Click="AcceptButton_Click" FontFamily="{StaticResource HarmonyOSSans}"/>
         <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0">
             <SymbolIcon Height="30" Width="23" Symbol="Edit"/>
-            <HyperlinkButton x:Name="ClassNameHyperlinkButton" Content="我的班级"  Click="HyperlinkButton_Click" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Width="Auto" FontSize="16" Height="32"/>
+            <HyperlinkButton x:Name="ClassNameHyperlinkButton" Content="我的班级"  Click="HyperlinkButton_Click" FontFamily="{StaticResource HarmonyOSSans}" Width="Auto" FontSize="16" Height="32"/>
         </StackPanel>
-        <muxc:NumberBox x:Name="Numbers" HorizontalAlignment="Left" Margin="174,36,0,0" VerticalAlignment="Top" Width="160" Height="35" Value="1" SpinButtonPlacementMode="Inline" SmallChange="1" Minimum="1" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <TextBlock HorizontalAlignment="Left" Margin="175,12,0,0" TextWrapping="Wrap" Text="人数:" VerticalAlignment="Top" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" />
+        <muxc:NumberBox x:Name="Numbers" HorizontalAlignment="Left" Margin="174,36,0,0" VerticalAlignment="Top" Width="160" Height="35" Value="1" SpinButtonPlacementMode="Inline" SmallChange="1" Minimum="1" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="175,12,0,0" TextWrapping="Wrap" Text="人数:" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}" />
         <GridView x:Name="RandomNumbersGridView" Margin="151,333,1,0" >
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
@@ -160,5 +176,33 @@
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
         </GridView>
+        <Grid HorizontalAlignment="Left" Height="286" Margin="825,78,0,0" VerticalAlignment="Top" Width="517" Background="White">
+            <Grid.Clip>
+                <RectangleGeometry Rect="0,0,1000,300"/>
+            </Grid.Clip>
+            <Image HorizontalAlignment="Left" Height="205" Margin="10,0,0,0" VerticalAlignment="Center" Width="174" Source="/Assets/RSSN_Logos/StoreLogo.scale-200.png">
+                <Image.RenderTransform>
+                    <TranslateTransform x:Name="A"/>
+                </Image.RenderTransform>
+                </Image>
+            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="39" Margin="223,56,0,0" VerticalAlignment="Top" Width="284" Background="LightBlue">
+                <Border.RenderTransform>
+                    <TranslateTransform x:Name="B"/>
+                </Border.RenderTransform>
+                <TextBlock Text="TextBlock" FontSize="20"></TextBlock>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="39" Margin="223,121,0,0" VerticalAlignment="Top" Width="284" Background="LightBlue">
+                <Border.RenderTransform>
+                    <TranslateTransform x:Name="C"/>
+                </Border.RenderTransform>
+                <TextBlock Text="TextBlock" FontSize="20"></TextBlock>
+            </Border>
+            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="39" Margin="223,191,0,0" VerticalAlignment="Top" Width="284" Background="LightBlue">
+                <Border.RenderTransform>
+                    <TranslateTransform x:Name="D"/>
+                </Border.RenderTransform>
+                <TextBlock Text="TextBlock" FontSize="20"></TextBlock>
+            </Border>
+        </Grid>
     </Grid>
 </Page>

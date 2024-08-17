@@ -90,7 +90,7 @@ namespace 随机抽取学号
         //    SystemNavigationManager.GetForCurrentView().BackRequested += System_BackRequested;
         //    var settings = (muxc.NavigationViewItem)NavView.SettingsItem;
         //    settings.Content = "设置 [ Settings ]";
-        //    settings.FontFamily = new FontFamily("ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC");
+        //    settings.FontFamily = new FontFamily("{StaticResource HarmonyOSSans}");
         //}
 
         //private void NavView_ItemInvoked(muxc.NavigationView sender,

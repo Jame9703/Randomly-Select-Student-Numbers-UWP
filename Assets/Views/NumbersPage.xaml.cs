@@ -74,7 +74,7 @@ namespace 随机抽取学号.Views
                             Child = new TextBlock
                             {
                                 FontSize = 33,
-                                FontFamily = new FontFamily("Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"),
+                                FontFamily = new FontFamily("{StaticResource HarmonyOSSans}"),
                                 Width = 150,
                                 Height = 50,
                                 Margin = new Thickness(5),
@@ -110,7 +110,7 @@ namespace 随机抽取学号.Views
                                     {
                                         Name = "textBlock",
                                         FontSize = 33,
-                                        FontFamily = new FontFamily("Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"),
+                                        FontFamily = new FontFamily("{StaticResource HarmonyOSSans}"),
                                         Width = 150,
                                         Height = 50,
                                         Margin = new Thickness(5),

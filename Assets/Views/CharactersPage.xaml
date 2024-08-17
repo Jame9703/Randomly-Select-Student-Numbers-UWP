@@ -8,9 +8,9 @@
     mc:Ignorable="d">
 
     <Grid>
-        <Button Content="生成" Margin="115,340,0,0" VerticalAlignment="Top" Click="Button_Click" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <Button Content="生成" Margin="115,340,0,0" VerticalAlignment="Top" Click="Button_Click" FontFamily="{StaticResource HarmonyOSSans}"/>
         <TextBox x:Name="TextBox" HorizontalAlignment="Left" TextAlignment="Center" FontFamily="楷体" FontSize="220" Margin="16,53,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="250"  Height="250" Style="{StaticResource ComboBoxTextBoxStyle}" IsReadOnly="True"/>
-        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="选取范围(Unicode):0x4E00 - 0x9FFF" VerticalAlignment="Top" Height="28" Width="271" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" FontSize="16"/>
+        <TextBlock HorizontalAlignment="Left" Margin="10,10,0,0" TextWrapping="Wrap" Text="选取范围(Unicode):0x4E00 - 0x9FFF" VerticalAlignment="Top" Height="28" Width="271" FontFamily="{StaticResource HarmonyOSSans}" FontSize="16"/>
 
     </Grid>
 </Page>

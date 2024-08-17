@@ -32,7 +32,6 @@ namespace 随机抽取学号.Views
             PopupNotice popupNotice = new PopupNotice("按“开始”键以开始抽取");
             popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
             popupNotice.ShowAPopup();
-            Selecting.Visibility = Visibility.Collapsed;
             timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;
             Text2.Text = System.DateTime.Now.ToString("M");
@@ -61,10 +60,10 @@ namespace 随机抽取学号.Views
                 checkBox.Margin = new Thickness(0); //设置边距以避免与其他元素重叠(设置了个寂寞)
                 checkBox.IsChecked = true;
                 StackPanelCheckBoxes.Children.Add(checkBox);
-                checkBox.FontFamily = new FontFamily("Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC");
+                checkBox.FontFamily = (FontFamily)Application.Current.Resources["HarmonyOSSans"]; ;
                 checkBox.FontSize = 16;
             }
-            checkedCheckBoxesCount.Text = "共" + lines.Length + "项,已选择" + lines.Length + "项";
+            checkedCheckBoxesCount.Text = "已选择" + lines.Length + "/" + lines.Length;
         }
 
         private void checkBox_Click(object sender, RoutedEventArgs e)
@@ -83,7 +82,7 @@ namespace 随机抽取学号.Views
                         checkedCheckBoxes.Add(i);
                     }
                 }
-                checkedCheckBoxesCount.Text = "共" + lines.Length + "项,已选择" + checkedCheckBoxes.Count.ToString() + "项";
+                checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + lines.Length;
             }
             else
             {
@@ -92,13 +91,18 @@ namespace 随机抽取学号.Views
         }
         private void StartorStopButton_Click(object sender, RoutedEventArgs e)
         {
+            Storyboard1.Begin();
+            Storyboard2.Begin();
+            Storyboard3.Begin();
+            Storyboard4.Begin();
             if (Numbers.Value == 1)
             {
-                int a; bool success = int.TryParse(NumberBox.Text, out a);
+                int a; bool success = int.TryParse(NumberBox.Text, out a);//注意:a或1不能为整数，否则会执行整数除法，只会保留整数部分
                 if (success)
                 {
                     // 转换成功,将NumberBox中的值作为抽取间隔
-                    timer.Interval = TimeSpan.FromMilliseconds(a);
+                    double frequency = 1.0/a;
+                    timer.Interval = TimeSpan.FromSeconds(frequency);
                 }
                 else
                 {
@@ -113,35 +117,7 @@ namespace 随机抽取学号.Views
                 }
                 else
                 {
-                    if (check.IsChecked == true)
-                    {
-                        if (!isRandomizing)
-                        {
-                            //开始抽取
-                            timer.Start();
-                            isRandomizing = true;
-                            StartorStopButton.Label = "停止";
-                            StartorStopButton.Icon = new SymbolIcon(Symbol.Pause);
-                            StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 236, G = 179, B = 1 });
-                            Selecting.Visibility = Visibility.Visible;
-                            ResultTextBox.Visibility = Visibility.Collapsed;
-                        }
-                        else if (isRandomizing)
-                        {
-                            //停止抽取
-                            timer.Stop();
-                            isRandomizing = false;
-                            StartorStopButton.Label = "开始";
-                            StartorStopButton.Icon = new SymbolIcon(Symbol.Play);
-                            StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
-                            Selecting.Visibility = Visibility.Collapsed;
-                            ResultTextBox.Visibility = Visibility.Visible;
-                        }
-                    }
-                    else
-                    {
                         ResultTextBox.Visibility = Visibility.Visible;
-                        Selecting.Visibility = Visibility.Collapsed;
                         if (!isRandomizing)
                         {
                             //开始抽取
@@ -161,7 +137,6 @@ namespace 随机抽取学号.Views
                             StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
                         }
                     }
-                }
             }
             else 
             {
@@ -198,7 +173,7 @@ namespace 随机抽取学号.Views
                         List<int> Result = checkedCheckBoxes.Take(TakeCount).ToList();
                         foreach (int randomIndex in Result)
                         {
-                            if (ModeComboBox.SelectedItem.ToString() == "仅抽取学号")
+                            //if (ModeComboBox.SelectedItem.ToString() == "仅抽取学号")
                             {
                                 Border border = new Border()
                                 {
@@ -212,7 +187,7 @@ namespace 随机抽取学号.Views
                                     {
                                         Name = "textBlock",
                                         FontSize = 33,
-                                        FontFamily = new FontFamily("Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"),
+                                        FontFamily = new FontFamily("{StaticResource HarmonyOSSans}"),
                                         //Width = 50,
                                         Height = 50,
                                         Margin = new Thickness(5),
@@ -224,7 +199,7 @@ namespace 随机抽取学号.Views
                                 };
                                 RandomNumbersGridView.Items.Add(border);
                             }
-                            else if (ModeComboBox.SelectedItem.ToString() == "仅抽取姓名")
+                            //else if (ModeComboBox.SelectedItem.ToString() == "仅抽取姓名")
                             {
                                 Border border = new Border()
                                 {
@@ -238,7 +213,7 @@ namespace 随机抽取学号.Views
                                     {
                                         Name = "textBlock",
                                         FontSize = 33,
-                                        FontFamily = new FontFamily("Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"),
+                                        FontFamily = new FontFamily("{StaticResource HarmonyOSSans}"),
                                         //Width = 50,
                                         Height = 50,
                                         Margin = new Thickness(5),
@@ -250,7 +225,7 @@ namespace 随机抽取学号.Views
                                 };
                                 RandomNumbersGridView.Items.Add(border);
                             }
-                            else if (ModeComboBox.SelectedItem.ToString() == "抽取学号和姓名")
+                            //else if (ModeComboBox.SelectedItem.ToString() == "抽取学号和姓名")
                             {
                                 Border border = new Border()
                                 {
@@ -264,7 +239,7 @@ namespace 随机抽取学号.Views
                                     {
                                         Name = "textBlock",
                                         FontSize = 33,
-                                        FontFamily = new FontFamily("Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"),
+                                        FontFamily = new FontFamily("{StaticResource HarmonyOSSans}"),
                                         //Width = 50,
                                         Height = 50,
                                         Margin = new Thickness(5),
@@ -309,15 +284,15 @@ namespace 随机抽取学号.Views
                         checkedCheckBoxes.Add(i);
                         Random random = new Random();
                         int randomIndex = checkedCheckBoxes[random.Next(checkedCheckBoxes.Count)];
-                        if (ModeComboBox.SelectedItem.ToString() == "仅抽取学号")
+                        //if (ModeComboBox.SelectedItem.ToString() == "仅抽取学号")
                         {
                             ResultTextBox.Text = (randomIndex + 1).ToString();
                         }
-                        else if (ModeComboBox.SelectedItem.ToString() == "仅抽取姓名")
+                        //else if (ModeComboBox.SelectedItem.ToString() == "仅抽取姓名")
                         {
                             ResultTextBox.Text = lines[randomIndex];
                         }
-                        else if (ModeComboBox.SelectedItem.ToString() == "抽取学号和姓名")
+                        //else if (ModeComboBox.SelectedItem.ToString() == "抽取学号和姓名")
                         {
                             ResultTextBox.Text = (randomIndex + 1) + "." + lines[randomIndex];
                         }
@@ -329,21 +304,6 @@ namespace 随机抽取学号.Views
                 PopupNotice popupNotice = new PopupNotice("请先填写班级信息");
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
                 popupNotice.ShowAPopup();
-            }
-        }
-        private void AppBarToggleButton_Checked(object sender, RoutedEventArgs e)
-        {
-            if (isRandomizing == true)
-            {
-                //当按下“开始”按钮后，显示“抽取中”
-                ResultTextBox.Visibility = Visibility.Collapsed;
-                Selecting.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                //当按下“停止”按钮后，显示抽取结果
-                ResultTextBox.Visibility = Visibility.Visible;
-                Selecting.Visibility = Visibility.Collapsed;
             }
         }
 

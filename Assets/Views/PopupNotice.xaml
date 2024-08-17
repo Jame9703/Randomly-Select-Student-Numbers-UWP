@@ -70,7 +70,7 @@
                 <TranslateTransform Y="-10"></TranslateTransform>
             </StackPanel.RenderTransform>
 
-            <muxc:InfoBar x:Name="PopupContent" FontFamily="Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Width="Auto" IsOpen="True" x:FieldModifier="public"></muxc:InfoBar>
+            <muxc:InfoBar x:Name="PopupContent" FontFamily="{StaticResource HarmonyOSSans}" Width="Auto" IsOpen="True" x:FieldModifier="public"></muxc:InfoBar>
 
         </StackPanel>
     </Grid>

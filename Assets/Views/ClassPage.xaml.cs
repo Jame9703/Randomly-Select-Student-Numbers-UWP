@@ -66,6 +66,7 @@ namespace 随机抽取学号.Views
             //{
             //    TextChanged("我的班级");
             //}
+
         }
 
 

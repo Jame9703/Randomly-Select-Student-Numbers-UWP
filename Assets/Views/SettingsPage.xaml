@@ -19,19 +19,19 @@
                          From="0" To="1" />
         </Storyboard>
         <Style TargetType="controls:SettingsExpander">
-            <Setter Property="FontFamily" Value="ma-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+            <Setter Property="FontFamily" Value="ma-appx:///Assets/{StaticResource HarmonyOSSans}"/>
         </Style>
     </Page.Resources>
 
     <Grid x:Name="Grid4">
-        <TextBlock HorizontalAlignment="Left" Height="25" Margin="54,861,0,0" TextWrapping="Wrap" Text="通过邮箱反馈问题:" VerticalAlignment="Top" Width="117" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <HyperlinkButton Content="Jame9703" Margin="435,865,0,0" VerticalAlignment="Top" NavigateUri="Mailto:ncsb1213444@outlook.com" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <TextBlock HorizontalAlignment="Left" Height="20" Margin="54,876,0,0" TextWrapping="Wrap" Text="特别鸣谢下列参与测试的同学：" VerticalAlignment="Top" Width="214" FontSize="14" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <TextBlock HorizontalAlignment="Left" Height="31" Margin="642,852,0,0" TextWrapping="Wrap" Text="X.G.      L.Y." VerticalAlignment="Top" Width="125" FontSize="22" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-        <TextBlock HorizontalAlignment="Left" Margin="206,900,0,0" TextWrapping="Wrap" Text="骐骥五班" VerticalAlignment="Top" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+        <TextBlock HorizontalAlignment="Left" Height="25" Margin="54,861,0,0" TextWrapping="Wrap" Text="通过邮箱反馈问题:" VerticalAlignment="Top" Width="117" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <HyperlinkButton Content="Jame9703" Margin="435,865,0,0" VerticalAlignment="Top" NavigateUri="Mailto:ncsb1213444@outlook.com" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <TextBlock HorizontalAlignment="Left" Height="20" Margin="54,876,0,0" TextWrapping="Wrap" Text="特别鸣谢下列参与测试的同学：" VerticalAlignment="Top" Width="214" FontSize="14" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <TextBlock HorizontalAlignment="Left" Height="31" Margin="642,852,0,0" TextWrapping="Wrap" Text="X.G.      L.Y." VerticalAlignment="Top" Width="125" FontSize="22" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="206,900,0,0" TextWrapping="Wrap" Text="骐骥五班" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}"/>
 
         <StackPanel x:Name ="SettingsPanel">
-            <controls:SettingsExpander Description="© 2022-2024. All rights reserved." FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"
+            <controls:SettingsExpander Description="© 2022-2024. All rights reserved." FontFamily="{StaticResource HarmonyOSSans}"
                                            Header="Randomly Select Student Numbers" Margin="10,0,20,0">
                 <controls:SettingsExpander.HeaderIcon>
                     <ui:BitmapIconExtension Source="ms-appx:///Assets/RSSN_Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png"/>
@@ -42,25 +42,25 @@
                                                ContentAlignment="Left">
                         <win:StackPanel Margin="-12,0,0,0"
                                         Orientation="Vertical">
-                            <win:TextBlock HorizontalAlignment="Left" Margin="0,5,0,0" TextWrapping="Wrap" Text="平台：Universal Windows Platform(通用Windows平台)" VerticalAlignment="Top" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-                            <win:TextBlock HorizontalAlignment="Left" Margin="0,10,0,0" TextWrapping="Wrap" Text="最低支持版本：Windows10，Version1809" VerticalAlignment="Top" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+                            <win:TextBlock HorizontalAlignment="Left" Margin="0,5,0,0" TextWrapping="Wrap" Text="平台：Universal Windows Platform(通用Windows平台)" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}"/>
+                            <win:TextBlock HorizontalAlignment="Left" Margin="0,10,0,0" TextWrapping="Wrap" Text="最低支持版本：Windows10，Version1809" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}"/>
                         </win:StackPanel>
                     </controls:SettingsCard>
                 </controls:SettingsExpander.Items>
 
-                <win:TextBlock Foreground="{win:ThemeResource TextFillColorSecondaryBrush}" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"
+                <win:TextBlock Foreground="{win:ThemeResource TextFillColorSecondaryBrush}" FontFamily="{StaticResource HarmonyOSSans}"
                                Text="Version 1.1.0   2024/7/20" />
 
             </controls:SettingsExpander>
             <controls:SettingsCard Description="https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP"
-                Margin="10,0,20,0"      Header="在Github中查看此项目源代码" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC">
+                Margin="10,0,20,0"      Header="在Github中查看此项目源代码" FontFamily="{StaticResource HarmonyOSSans}">
                 <controls:SettingsCard.HeaderIcon>
                     <ui:BitmapIconExtension Source="ms-appx:///Assets/Photos/GithubLogo.png"/>
                 </controls:SettingsCard.HeaderIcon>
                 <HyperlinkButton  NavigateUri="https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP">
                     <StackPanel Orientation="Horizontal" Width="116">
                         <win:FontIcon Glyph="&#xE8A7;" FontSize="12"/>
-                        <win:TextBlock Text="在浏览器中打开" FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC" Width="100" Margin="5,0,0,0"/>
+                        <win:TextBlock Text="在浏览器中打开" FontFamily="{StaticResource HarmonyOSSans}" Width="100" Margin="5,0,0,0"/>
                     </StackPanel>
                 </HyperlinkButton>
 
@@ -77,9 +77,9 @@
                         <win:StackPanel Margin="-12,0,0,0"
                                         Orientation="Vertical">
                             <muxc:RadioButtons x:Name="AppearanceRadioButtons" SelectionChanged="AppearanceRadioButtons_SelectionChanged">
-                                <RadioButton Content="浅色"  FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-                                <RadioButton Content="深色"  FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
-                                <RadioButton Content="使用系统设置"  FontFamily="ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC"/>
+                                <RadioButton Content="浅色"  FontFamily="{StaticResource HarmonyOSSans}"/>
+                                <RadioButton Content="深色"  FontFamily="{StaticResource HarmonyOSSans}"/>
+                                <RadioButton Content="使用系统设置"  FontFamily="{StaticResource HarmonyOSSans}"/>
                             </muxc:RadioButtons>
                         </win:StackPanel>
                     </controls:SettingsCard>

@@ -49,6 +49,8 @@ namespace 随机抽取学号
         /// <param name="e">有关启动请求和过程的详细信息。</param>
         protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
+            
+            ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 500, Height = 500 });//设置窗口最小尺寸
             Frame rootFrame = Window.Current.Content as Frame;
             // 不要在窗口已包含内容时重复应用程序初始化，
             // 只需确保窗口处于活动状态
