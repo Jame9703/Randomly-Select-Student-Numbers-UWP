@@ -9,7 +9,7 @@
   <Identity
     Name="40b9e659-a6b3-4127-9b7c-27f4cf5fee7d"
     Publisher="CN=随机抽取学号"
-    Version="1.0.9.0" />
+    Version="1.1.0.0" />
 
   <mp:PhoneIdentity PhoneProductId="40b9e659-a6b3-4127-9b7c-27f4cf5fee7d" PhonePublisherId="00000000-0000-0000-0000-000000000000"/>
 

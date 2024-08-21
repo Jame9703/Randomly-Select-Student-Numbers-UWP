@@ -159,8 +159,8 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <controls:Segmented
-                            SelectedIndex="0"
+        <controls:Segmented x:Name="segmented"
+                             SelectionChanged="segmented_SelectionChanged"
                             SelectionMode="Single" Margin="10,2,0,0" VerticalAlignment="Top" Grid.Column="2">
             <controls:SegmentedItem Content="单人模式" FontFamily="{StaticResource HarmonyOSSans}">
                 <controls:SegmentedItem.Icon>
@@ -192,27 +192,30 @@
             </GridView.ItemsPanel>
         </GridView>
         <Grid HorizontalAlignment="Left" Height="286" Margin="49,101,0,0" VerticalAlignment="Top" Width="517" Background="{ThemeResource MyBrush}" Grid.Column="2">
-            <Grid.Clip>
+            <!--<Grid.Clip>
                 <RectangleGeometry Rect="0,0,1000,300"/>
-            </Grid.Clip>
-            <Image HorizontalAlignment="Left" Height="205" Margin="10,0,0,0" VerticalAlignment="Center" Width="174" Source="/Assets/RSSN_Logos/StoreLogo.scale-200.png">
-                <Image.RenderTransform>
+            </Grid.Clip>-->
+            <Border CornerRadius="4,4,4,4" BorderThickness="2" BorderBrush="{ThemeResource AccentFillColorDefaultBrush}" Margin="10,38,321,38">
+                <Border.RenderTransform>
                     <TranslateTransform x:Name="A"/>
-                </Image.RenderTransform>
-            </Image>
-            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="39" Margin="223,56,0,0" VerticalAlignment="Top" Width="284" Background="LightBlue">
+                </Border.RenderTransform>
+                <Image HorizontalAlignment="Left" Height="205" VerticalAlignment="Center" Width="174" Source="/Assets/RSSN_Logos/StoreLogo.scale-200.png">
+
+                </Image>
+            </Border>
+            <Border  BorderThickness="2" BorderBrush="{ThemeResource AccentFillColorDefaultBrush}" HorizontalAlignment="Left" Height="39" Margin="223,56,0,0" VerticalAlignment="Top" Width="284" Background="LightBlue" CornerRadius="4,4,4,4">
                 <Border.RenderTransform>
                     <TranslateTransform x:Name="B"/>
                 </Border.RenderTransform>
                 <TextBlock Text="TextBlock" FontSize="20"></TextBlock>
             </Border>
-            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="39" Margin="223,121,0,0" VerticalAlignment="Top" Width="284" Background="LightBlue">
+            <Border BorderThickness="2" BorderBrush="{ThemeResource AccentFillColorDefaultBrush}" HorizontalAlignment="Left" Height="39" Margin="223,121,0,0" VerticalAlignment="Top" Width="284" Background="LightBlue" CornerRadius="4,4,4,4">
                 <Border.RenderTransform>
                     <TranslateTransform x:Name="C"/>
                 </Border.RenderTransform>
                 <TextBlock Text="TextBlock" FontSize="20"></TextBlock>
             </Border>
-            <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="39" Margin="223,191,0,0" VerticalAlignment="Top" Width="284" Background="LightBlue">
+            <Border  BorderThickness="2" BorderBrush="{ThemeResource AccentFillColorDefaultBrush}" HorizontalAlignment="Left" Height="39" Margin="223,191,0,0" VerticalAlignment="Top" Width="284" Background="LightBlue" CornerRadius="4,4,4,4">
                 <Border.RenderTransform>
                     <TranslateTransform x:Name="D"/>
                 </Border.RenderTransform>
@@ -220,7 +223,7 @@
             </Border>
         </Grid>
         <Grid x:Name="checkBoxesGrid" MinWidth="100" MaxWidth="300"  HorizontalAlignment="Left">
-            <CheckBox Content="全选" Margin="0,23,0,0" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}" Width="50" FontSize="16"/>
+            <CheckBox x:Name="SelectAllCheckBox" Content="全选" Margin="0,23,0,0" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}" Width="50" FontSize="16" Checked="SelectAllCheckBox_Checked" Unchecked="SelectAllCheckBox_Unchecked"/>
             <TextBlock x:Name="checkedCheckBoxesCount" HorizontalAlignment="Left" TextWrapping="Wrap" Text="未选择" VerticalAlignment="Top" Width="162" Height="27" FontSize="16" FontFamily="{StaticResource HarmonyOSSans}"/>
             <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Hidden" Margin="0,60,0,0" VerticalScrollMode="Enabled" ZoomMode="Enabled">
                 <StackPanel x:Name="StackPanelCheckBoxes" HorizontalAlignment="Left" Height="Auto" VerticalAlignment="Top" Width="175"/>
