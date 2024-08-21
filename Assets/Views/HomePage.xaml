@@ -6,7 +6,8 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Class="随机抽取学号.Views.HomePage"
-    mc:Ignorable="d" Loaded="Page_Loaded">
+    mc:Ignorable="d" Loaded="Page_Loaded"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls">
     <Page.Resources>
         <Storyboard x:Name="Storyboard1">
             <DoubleAnimation Storyboard.TargetName="A" Storyboard.TargetProperty="X" From="1650 " To="0" Duration="00:00:1">
@@ -153,21 +154,35 @@
         </Style>
     </Page.Resources>
     <Grid>
-        <AppBarButton x:Name="StartorStopButton" Width="97" Margin="312,223,0,0" Label="开始" Background="#FFC0F2BC" Height="48" Click="StartorStopButton_Click" Icon="Play" FontFamily="{StaticResource HarmonyOSSans}"/>
-        <TextBox x:Name="ResultTextBox" HorizontalAlignment="Left" Margin="273,126,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" Height="68" Width="232" FontSize="36" FontFamily="{StaticResource HarmonyOSSans}"/>
-        <TextBlock HorizontalAlignment="Left" Margin="374,43,0,0" TextWrapping="Wrap" Text="滚动频率(Hz)：" VerticalAlignment="Top" FontSize="14" Height="19" Width="158" FontFamily="{StaticResource HarmonyOSSans}"/>
-        <TextBlock x:Name="Text2" HorizontalAlignment="Left" Height="30" Margin="374,8,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="133" FontSize="18" FontFamily="{StaticResource HarmonyOSSans}"/>
-        <muxc:NumberBox x:Name="NumberBox" HorizontalAlignment="Left" Height="32" Margin="370,78,0,0" VerticalAlignment="Top" Width="95" Text="10" Minimum="1" Maximum="10000" FontFamily="{StaticResource HarmonyOSSans}"/>
-        <StackPanel x:Name="StackPanelCheckBoxes" HorizontalAlignment="Left" Height="Auto" Margin="0,76,0,0" VerticalAlignment="Top" Width="175"/>
-        <TextBlock x:Name="checkedCheckBoxesCount" HorizontalAlignment="Left" Margin="0,37,0,0" TextWrapping="Wrap" Text="未选择" VerticalAlignment="Top" Width="162" Height="27" FontSize="16" FontFamily="{StaticResource HarmonyOSSans}"/>
-        <Button x:Name="Accept" Content="确定" Height="32" Margin="470,78,0,0" VerticalAlignment="Top" Width="55" Click="AcceptButton_Click" FontFamily="{StaticResource HarmonyOSSans}"/>
-        <StackPanel Orientation="Horizontal" HorizontalAlignment="Left" VerticalAlignment="Top" Margin="0,0,0,0">
-            <SymbolIcon Height="30" Width="23" Symbol="Edit"/>
-            <HyperlinkButton x:Name="ClassNameHyperlinkButton" Content="我的班级"  Click="HyperlinkButton_Click" FontFamily="{StaticResource HarmonyOSSans}" Width="Auto" FontSize="16" Height="32"/>
-        </StackPanel>
-        <muxc:NumberBox x:Name="Numbers" HorizontalAlignment="Left" Margin="174,36,0,0" VerticalAlignment="Top" Width="160" Height="35" Value="1" SpinButtonPlacementMode="Inline" SmallChange="1" Minimum="1" FontFamily="{StaticResource HarmonyOSSans}"/>
-        <TextBlock HorizontalAlignment="Left" Margin="175,12,0,0" TextWrapping="Wrap" Text="人数:" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}" />
-        <GridView x:Name="RandomNumbersGridView" Margin="151,333,1,0" >
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+        <controls:Segmented
+                            SelectedIndex="0"
+                            SelectionMode="Single" Margin="10,2,0,0" VerticalAlignment="Top" Grid.Column="2">
+            <controls:SegmentedItem Content="单人模式" FontFamily="{StaticResource HarmonyOSSans}">
+                <controls:SegmentedItem.Icon>
+                    <SymbolIcon Symbol="Contact"/>
+                </controls:SegmentedItem.Icon>
+            </controls:SegmentedItem>
+            <controls:SegmentedItem Content="多人模式" FontFamily="{StaticResource HarmonyOSSans}">
+                <controls:SegmentedItem.Icon>
+                    <SymbolIcon Symbol="People"/>
+                </controls:SegmentedItem.Icon>
+            </controls:SegmentedItem>
+        </controls:Segmented>
+
+        <AppBarButton x:Name="StartorStopButton" Width="97" Margin="725,169,0,0" Label="开始" Background="#FFC0F2BC" Height="54" Click="StartorStopButton_Click" Icon="Play" FontFamily="{StaticResource HarmonyOSSans}" Grid.Column="2"/>
+        <TextBox x:Name="ResultTextBox" HorizontalAlignment="Left" Margin="725,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" Height="68" Width="232" FontSize="36" FontFamily="{StaticResource HarmonyOSSans}" Grid.Column="2"/>
+        <TextBlock HorizontalAlignment="Left" Margin="366,49,0,0" TextWrapping="Wrap" Text="滚动频率(Hz)：" VerticalAlignment="Top" FontSize="14" Height="19" Width="158" FontFamily="{StaticResource HarmonyOSSans}" Grid.Column="2"/>
+        <TextBlock x:Name="Text2" HorizontalAlignment="Left" Height="30" Margin="440,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="133" FontSize="18" FontFamily="{StaticResource HarmonyOSSans}" Grid.ColumnSpan="3"/>
+        <muxc:NumberBox x:Name="NumberBox" HorizontalAlignment="Left" Height="32" Margin="374,68,0,0" VerticalAlignment="Top" Width="95" Text="10" Minimum="1" Maximum="10000" FontFamily="{StaticResource HarmonyOSSans}" Grid.Column="2"/>
+        <Button x:Name="Accept" Content="确定" Height="32" Margin="446,79,0,0" VerticalAlignment="Top" Width="55" Click="AcceptButton_Click" FontFamily="{StaticResource HarmonyOSSans}" Grid.Column="2"/>
+        <muxc:NumberBox x:Name="Numbers" HorizontalAlignment="Left" Margin="507,20,0,0" VerticalAlignment="Top" Width="160" Height="35" Value="1" SpinButtonPlacementMode="Inline" SmallChange="1" Minimum="1" FontFamily="{StaticResource HarmonyOSSans}" Grid.ColumnSpan="3"/>
+        <TextBlock HorizontalAlignment="Left" Margin="20,160,0,0" TextWrapping="Wrap" Text="人数:" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}" Grid.Column="2" />
+        <GridView x:Name="RandomNumbersGridView" Margin="103,323,-727,10" Grid.Column="2" >
             <GridView.ItemsPanel>
                 <ItemsPanelTemplate>
                     <ItemsWrapGrid x:Name="MaxItemsWrapGrid"
@@ -176,7 +191,7 @@
                 </ItemsPanelTemplate>
             </GridView.ItemsPanel>
         </GridView>
-        <Grid HorizontalAlignment="Left" Height="286" Margin="825,78,0,0" VerticalAlignment="Top" Width="517" Background="White">
+        <Grid HorizontalAlignment="Left" Height="286" Margin="49,101,0,0" VerticalAlignment="Top" Width="517" Background="{ThemeResource MyBrush}" Grid.Column="2">
             <Grid.Clip>
                 <RectangleGeometry Rect="0,0,1000,300"/>
             </Grid.Clip>
@@ -184,7 +199,7 @@
                 <Image.RenderTransform>
                     <TranslateTransform x:Name="A"/>
                 </Image.RenderTransform>
-                </Image>
+            </Image>
             <Border BorderBrush="Black" BorderThickness="1" HorizontalAlignment="Left" Height="39" Margin="223,56,0,0" VerticalAlignment="Top" Width="284" Background="LightBlue">
                 <Border.RenderTransform>
                     <TranslateTransform x:Name="B"/>
@@ -204,5 +219,35 @@
                 <TextBlock Text="TextBlock" FontSize="20"></TextBlock>
             </Border>
         </Grid>
+        <Grid x:Name="checkBoxesGrid" MinWidth="100" MaxWidth="300"  HorizontalAlignment="Left">
+            <CheckBox Content="全选" Margin="0,23,0,0" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}" Width="50" FontSize="16"/>
+            <TextBlock x:Name="checkedCheckBoxesCount" HorizontalAlignment="Left" TextWrapping="Wrap" Text="未选择" VerticalAlignment="Top" Width="162" Height="27" FontSize="16" FontFamily="{StaticResource HarmonyOSSans}"/>
+            <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Hidden" Margin="0,60,0,0" VerticalScrollMode="Enabled" ZoomMode="Enabled">
+                <StackPanel x:Name="StackPanelCheckBoxes" HorizontalAlignment="Left" Height="Auto" VerticalAlignment="Top" Width="175"/>
+            </ScrollViewer>
+
+            <Button Content="快速选择" Margin="60,22,0,0" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}">
+                <Button.Flyout>
+                    <Flyout>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="开始值：" Margin="0,6,0,0" FontFamily="{StaticResource HarmonyOSSans}"  Grid.Row="0"/>
+                            <TextBlock Text="结束值：" Margin="0,8,0,0" FontFamily="{StaticResource HarmonyOSSans}" Grid.Row="1"/>
+                            <muxc:NumberBox HorizontalAlignment="Left" Margin="55,0,0,0" VerticalAlignment="Top" Height="30" SpinButtonPlacementMode="Inline"  SmallChange="1" Value="1" Minimum="1" Grid.Row="0"/>
+                            <muxc:NumberBox HorizontalAlignment="Left" Margin="55,5,0,0" VerticalAlignment="Top" Height="30" SpinButtonPlacementMode="Inline"  SmallChange="1" Minimum="1" Grid.Row="1"/>
+                            <Button x:Name="changeCheckBoxes"  Click="changeCheckBoxes_Click" FontFamily="{StaticResource HarmonyOSSans}" Content="确定" Grid.Row="2" HorizontalAlignment="Center" Margin="0,5,0,0" Height="30"/>
+                        </Grid>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
+        </Grid>
+        <controls:ContentSizer Grid.Column="1"
+                               Cursor="Hand"
+                               TargetControl="{x:Bind checkBoxesGrid}" />
+
     </Grid>
 </Page>

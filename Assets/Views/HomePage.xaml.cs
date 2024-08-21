@@ -43,7 +43,6 @@ namespace 随机抽取学号.Views
         {
             CreateCheckBoxes();
             string ClassName = localSettings.Values[ClassNameKey] as string;
-            if (ClassName != null) ClassNameHyperlinkButton.Content = ClassName;
         }
         private void CreateCheckBoxes()
         {
@@ -60,7 +59,7 @@ namespace 随机抽取学号.Views
                 checkBox.Margin = new Thickness(0); //设置边距以避免与其他元素重叠(设置了个寂寞)
                 checkBox.IsChecked = true;
                 StackPanelCheckBoxes.Children.Add(checkBox);
-                checkBox.FontFamily = (FontFamily)Application.Current.Resources["HarmonyOSSans"]; ;
+                checkBox.FontFamily = (FontFamily)Application.Current.Resources["HarmonyOSSans"]; 
                 checkBox.FontSize = 16;
             }
             checkedCheckBoxesCount.Text = "已选择" + lines.Length + "/" + lines.Length;
@@ -334,9 +333,23 @@ namespace 随机抽取学号.Views
             popupNotice.ShowAPopup();
         }
 
-        private void HyperlinkButton_Click(object sender, RoutedEventArgs e)
+
+
+        private void segmented_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            Frame.Navigate(typeof(ClassPage));
+            //if (segmented.SelectedIndex == 0)//单人模式
+            //{
+            //    ResultTextBox.Text = "dan";
+            //}
+            //else//多人模式
+            //{
+
+            //}
+        }
+
+        private void changeCheckBoxes_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 }

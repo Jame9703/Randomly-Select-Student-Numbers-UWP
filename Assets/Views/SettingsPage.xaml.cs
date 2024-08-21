@@ -1,4 +1,6 @@
 ﻿using Windows.Storage;
+using Windows.UI;
+using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
@@ -36,6 +38,7 @@ namespace 随机抽取学号.Views
             //         1           Dark
 
             //         2           Default(Use system settings)
+
             ApplicationData.Current.LocalSettings.Values["Theme"] = AppearanceRadioButtons.SelectedIndex;
             (Window.Current.Content as Frame).RequestedTheme = AppearanceRadioButtons.SelectedIndex switch
             {
@@ -43,6 +46,27 @@ namespace 随机抽取学号.Views
                 1 => ElementTheme.Dark,
                 _ => ElementTheme.Default
             };
+            ////设置应用的主题
+            //var view = ApplicationView.GetForCurrentView();
+            //if (Application.Current.RequestedTheme == ApplicationTheme.Dark)
+            //{
+            //    //Application.Current.Resources.ThemeDictionaries["Light"] = Application.Current.Resources.ThemeDictionaries["Dark"];
+            //    view.TitleBar.ButtonForegroundColor = Colors.White;
+            //}
+            //else if (Application.Current.RequestedTheme == ApplicationTheme.Light)
+            //{
+            //    view.TitleBar.ButtonForegroundColor = Colors.Black;
+            //    //Application.Current.Resources.ThemeDictionaries["Dark"] = Application.Current.Resources.ThemeDictionaries["Light"];
+            //}
+            var view = ApplicationView.GetForCurrentView();
+            if (AppearanceRadioButtons.SelectedIndex == 0)
+            {
+                view.TitleBar.ButtonForegroundColor = ((Color)Application.Current.Resources["SystemAccentColor"]);
+            }
+            else if (AppearanceRadioButtons.SelectedIndex == 1)
+            {
+                view.TitleBar.ButtonForegroundColor = Colors.White;
+            }
         }
     }
 }

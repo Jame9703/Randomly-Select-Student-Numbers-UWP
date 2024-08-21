@@ -417,13 +417,13 @@
         </Grid>
 
         <Frame x:Name="ContentFrame" Padding="12,0,12,24" 
-                   NavigationFailed="ContentFrame_NavigationFailed" x:FieldModifier="public" Margin="70,50,0,0" CornerRadius="16,0,0,0" BorderBrush="Transparent" BorderThickness="0" Grid.Column="1" Grid.Row="0"/>
+                   NavigationFailed="ContentFrame_NavigationFailed" x:FieldModifier="public" Margin="70,50,0,0" CornerRadius="16,0,0,0" BorderBrush="Transparent" BorderThickness="0" Grid.Column="1" Grid.Row="0" Background="{ThemeResource ContentFrameBackground}"/>
         <Rectangle x:Name="MovingRectangle"  RadiusX="4" RadiusY="4" Fill="{ThemeResource AccentFillColorDefaultBrush}" Height="50" Width="6" VerticalAlignment="Top" HorizontalAlignment="Left"  Margin="0,50,0,0">
             <Rectangle.RenderTransform>
                 <CompositeTransform />
             </Rectangle.RenderTransform>
         </Rectangle>
-        <Grid x:Name="Canvas" Width="65" Margin="0,45,0,0" HorizontalAlignment="Left" SizeChanged="Canvas_SizeChanged">
+        <Grid x:Name="Canvas" Width="65" Margin="0,45,0,0" HorizontalAlignment="Left">
             <Grid.RowDefinitions>
                 <RowDefinition Height="60"/>
                 <RowDefinition Height="60"/>

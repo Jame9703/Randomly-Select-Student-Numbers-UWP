@@ -39,10 +39,21 @@ namespace 随机抽取学号
             // 隐藏系统标题栏并设置新的标题栏
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
+            var view = ApplicationView.GetForCurrentView();
+            if ((int)ApplicationData.Current.LocalSettings.Values["Theme"]==0)
+            {
+                view.TitleBar.ButtonForegroundColor = ((Color)Application.Current.Resources["SystemAccentColor"]);
+            }
+            else if ((int)ApplicationData.Current.LocalSettings.Values["Theme"] == 1)
+            {
+                view.TitleBar.ButtonForegroundColor = Colors.White;
+            }
+            view.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             Window.Current.SetTitleBar(AppTitleBar);
             //将标题栏右上角的3个按钮改为透明（显示Mica）
             ApplicationViewTitleBar formattableTitleBar = ApplicationView.GetForCurrentView().TitleBar;
             formattableTitleBar.ButtonBackgroundColor = Colors.Transparent;
+
             ContentFrame.Navigate(typeof(HomePage));
             HomePageButton.IsChecked = true;
             this.SizeChanged += MainPage_SizeChanged;
@@ -335,10 +346,6 @@ namespace 随机抽取学号
 
         }
 
-        private void Canvas_SizeChanged(object sender, SizeChangedEventArgs e)
-        {
-            //MovingRectangle.SetValue(Grid.RowProperty, 1);
-        }
     }
 }
 
