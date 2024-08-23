@@ -6,7 +6,7 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Class="随机抽取学号.Views.HomePage"
-    mc:Ignorable="d" Loaded="Page_Loaded"
+    mc:Ignorable="d"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls">
     <Page.Resources>
         <Storyboard x:Name="Storyboard1">
@@ -159,20 +159,7 @@
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="*"/>
         </Grid.ColumnDefinitions>
-        <controls:Segmented x:Name="segmented"
-                             SelectionChanged="segmented_SelectionChanged"
-                            SelectionMode="Single" Margin="10,2,0,0" VerticalAlignment="Top" Grid.Column="2">
-            <controls:SegmentedItem Content="单人模式" FontFamily="{StaticResource HarmonyOSSans}">
-                <controls:SegmentedItem.Icon>
-                    <SymbolIcon Symbol="Contact"/>
-                </controls:SegmentedItem.Icon>
-            </controls:SegmentedItem>
-            <controls:SegmentedItem Content="多人模式" FontFamily="{StaticResource HarmonyOSSans}">
-                <controls:SegmentedItem.Icon>
-                    <SymbolIcon Symbol="People"/>
-                </controls:SegmentedItem.Icon>
-            </controls:SegmentedItem>
-        </controls:Segmented>
+
 
         <AppBarButton x:Name="StartorStopButton" Width="97" Margin="725,169,0,0" Label="开始" Background="#FFC0F2BC" Height="54" Click="StartorStopButton_Click" Icon="Play" FontFamily="{StaticResource HarmonyOSSans}" Grid.Column="2"/>
         <TextBox x:Name="ResultTextBox" HorizontalAlignment="Left" Margin="725,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" Height="68" Width="232" FontSize="36" FontFamily="{StaticResource HarmonyOSSans}" Grid.Column="2"/>
@@ -223,10 +210,16 @@
             </Border>
         </Grid>
         <Grid x:Name="checkBoxesGrid" MinWidth="100" MaxWidth="300"  HorizontalAlignment="Left">
-            <CheckBox x:Name="SelectAllCheckBox" Content="全选" Margin="0,23,0,0" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}" Width="50" FontSize="16" Checked="SelectAllCheckBox_Checked" Unchecked="SelectAllCheckBox_Unchecked"/>
+            <CheckBox x:Name="SelectAllCheckBox" Content="全选" Margin="0,23,0,0" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}" Width="50" FontSize="16" Checked="SelectAllCheckBox_Checked" Unchecked="SelectAllCheckBox_Unchecked" Click="SelectAllCheckBox_Click" IsThreeState="True"/>
             <TextBlock x:Name="checkedCheckBoxesCount" HorizontalAlignment="Left" TextWrapping="Wrap" Text="未选择" VerticalAlignment="Top" Width="162" Height="27" FontSize="16" FontFamily="{StaticResource HarmonyOSSans}"/>
             <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Hidden" Margin="0,60,0,0" VerticalScrollMode="Enabled" ZoomMode="Enabled">
-                <StackPanel x:Name="StackPanelCheckBoxes" HorizontalAlignment="Left" Height="Auto" VerticalAlignment="Top" Width="175"/>
+                <StackPanel x:Name="StackPanelCheckBoxes" HorizontalAlignment="Left" Height="Auto" VerticalAlignment="Top" Width="175">
+                    <StackPanel.ChildrenTransitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition IsStaggeringEnabled="True" />
+                        </TransitionCollection>
+                    </StackPanel.ChildrenTransitions>
+                </StackPanel>
             </ScrollViewer>
 
             <Button Content="快速选择" Margin="60,22,0,0" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}">
@@ -240,8 +233,8 @@
                             </Grid.RowDefinitions>
                             <TextBlock Text="开始值：" Margin="0,6,0,0" FontFamily="{StaticResource HarmonyOSSans}"  Grid.Row="0"/>
                             <TextBlock Text="结束值：" Margin="0,8,0,0" FontFamily="{StaticResource HarmonyOSSans}" Grid.Row="1"/>
-                            <muxc:NumberBox HorizontalAlignment="Left" Margin="55,0,0,0" VerticalAlignment="Top" Height="30" SpinButtonPlacementMode="Inline"  SmallChange="1" Value="1" Minimum="1" Grid.Row="0"/>
-                            <muxc:NumberBox HorizontalAlignment="Left" Margin="55,5,0,0" VerticalAlignment="Top" Height="30" SpinButtonPlacementMode="Inline"  SmallChange="1" Minimum="1" Grid.Row="1"/>
+                            <muxc:NumberBox x:Name="BeginNumberBox" HorizontalAlignment="Left" Margin="55,0,0,0" VerticalAlignment="Top" Height="30" SpinButtonPlacementMode="Inline"  SmallChange="1" Value="1" Minimum="1" Grid.Row="0" ValueChanged="BeginNumberBox_ValueChanged"/>
+                            <muxc:NumberBox x:Name="EndNumberBox" HorizontalAlignment="Left" Margin="55,5,0,0" VerticalAlignment="Top" Height="30" SpinButtonPlacementMode="Inline"  SmallChange="1" Minimum="1" Grid.Row="1" ValueChanged="EndNumberBox_ValueChanged"/>
                             <Button x:Name="changeCheckBoxes"  Click="changeCheckBoxes_Click" FontFamily="{StaticResource HarmonyOSSans}" Content="确定" Grid.Row="2" HorizontalAlignment="Center" Margin="0,5,0,0" Height="30"/>
                         </Grid>
                     </Flyout>
@@ -251,6 +244,19 @@
         <controls:ContentSizer Grid.Column="1"
                                Cursor="Hand"
                                TargetControl="{x:Bind checkBoxesGrid}" />
-
+        <controls:Segmented x:Name="segmented"
+                            SelectionChanged="segmented_SelectionChanged" SelectedIndex="0"
+                            SelectionMode="Single" Margin="10,2,0,0" VerticalAlignment="Top" Grid.Column="2">
+            <controls:SegmentedItem Content="单人模式" FontFamily="{StaticResource HarmonyOSSans}">
+                <controls:SegmentedItem.Icon>
+                    <SymbolIcon Symbol="Contact"/>
+                </controls:SegmentedItem.Icon>
+            </controls:SegmentedItem>
+            <controls:SegmentedItem Content="多人模式" FontFamily="{StaticResource HarmonyOSSans}">
+                <controls:SegmentedItem.Icon>
+                    <SymbolIcon Symbol="People"/>
+                </controls:SegmentedItem.Icon>
+            </controls:SegmentedItem>
+        </controls:Segmented>
     </Grid>
 </Page>

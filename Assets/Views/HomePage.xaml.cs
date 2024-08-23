@@ -14,6 +14,7 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Shapes;
 using muxc = Microsoft.UI.Xaml.Controls;
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -24,60 +25,103 @@ namespace 随机抽取学号.Views
         ClassPage classpage = new ClassPage();
         public DispatcherTimer timer;
         private bool isRandomizing = false;
-        private static readonly ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-        private static readonly string ClassNameKey = "ClassName";
+        List<int> checkedCheckBoxes = new List<int>();
         public HomePage()
         {
             this.InitializeComponent();
+            CreateCheckBoxes();
             PopupNotice popupNotice = new PopupNotice("按“开始”键以开始抽取");
             popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
             popupNotice.ShowAPopup();
             timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;
             Text2.Text = System.DateTime.Now.ToString("M");
-            // 初始化行号
-            UpdateLineNumbers();
-            segmented.SelectedIndex = 0;//在xaml中设置会导致控件未加载就被调用//System.NullReferenceException:“Object reference not set to an instance of an object.”
+            string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+            EndNumberBox.Value = lines.Length;
+            BeginNumberBox.Maximum = lines.Length;
+            EndNumberBox.Maximum = lines.Length;
+            //segmented.SelectedIndex = 0;//在xaml中设置会导致控件未加载就被调用//System.NullReferenceException:“Object reference not set to an instance of an object.”
         }
 
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            CreateCheckBoxes();
-            string ClassName = localSettings.Values[ClassNameKey] as string;
-        }
         private void CreateCheckBoxes()
         {
-            StackPanelCheckBoxes.Children.Clear();//将曾经的CheckBox删去（如果有）
-            var lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-            StackPanelCheckBoxes.Orientation = Orientation.Vertical; //设置为竖直布局
-            //创建CheckBox并在“StackPanelCheckBoxes”中显示
-            for (int i = 0; i < lines.Length; i++)//此次i指Index
+            //从应用设置加载checkedCheckBoxes
+            var localSettings = ApplicationData.Current.LocalSettings;
+            if (localSettings.Values["checkedCheckBoxesString"] != null)
             {
-                if (lines[i] != String.Empty)//手动删除空项
+                string checkedCheckBoxesString = (string)localSettings.Values["checkedCheckBoxesString"];
+                if (checkedCheckBoxesString != String.Empty)
                 {
-                    var checkBox = new CheckBox();
-                    checkBox.Click += checkBox_Click;
-                    string line = lines[i];
-                    checkBox.Content = i+1 + "." + line;//遍历Editor中的每一行，用来生成CheckBox集合
-                    checkBox.Margin = new Thickness(0); //设置边距以避免与其他元素重叠(设置了个寂寞)
-                    checkBox.IsChecked = true;
-                    StackPanelCheckBoxes.Children.Add(checkBox);
-                    checkBox.FontFamily = (FontFamily)Application.Current.Resources["HarmonyOSSans"];
-                    checkBox.FontSize = 16;
+                    checkedCheckBoxes = checkedCheckBoxesString.Split(',').Select(int.Parse).ToList();
+                }
+                else
+                {
+                    checkedCheckBoxes = new List<int>();
                 }
             }
+            else 
+            {
+                string checkedCheckBoxesString = string.Join(",", checkedCheckBoxes);
+                localSettings.Values["checkedCheckBoxesString"] = checkedCheckBoxesString;
+            }
+            StackPanelCheckBoxes.Children.Clear();//将曾经的CheckBox删去（如果有）
+            var lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
             var _lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            checkedCheckBoxesCount.Text = "已选择" + _lines.Length + "/" + _lines.Length;
+            StackPanelCheckBoxes.Orientation = Orientation.Vertical; //设置为竖直布局
+                                                                     //创建CheckBox并在“StackPanelCheckBoxes”中显示
+            for (int i = 0; i < lines.Length; i++)//此次i指Index
+            {
+                var checkBox = new CheckBox();
+                string line = lines[i];
+                checkBox.Content = i + 1 + "." + line;//遍历Editor中的每一行，用来生成CheckBox集合
+                checkBox.Click += checkBox_Click;
+                checkBox.Margin = new Thickness(0); //设置边距以避免与其他元素重叠(设置了个寂寞)
+                checkBox.IsChecked = true;
+                StackPanelCheckBoxes.Children.Add(checkBox);
+                checkBox.FontFamily = (FontFamily)Application.Current.Resources["HarmonyOSSans"];
+                checkBox.FontSize = 16;
+                if (lines[i] != String.Empty)
+                {
+                    checkBox.IsEnabled = true;
+                    if (checkedCheckBoxes.Contains(i) == true)
+                    {
+                        checkBox.IsChecked = true;
+                    }
+                    else
+                    {
+                        checkBox.IsChecked = false;
+                    }
+                }
+                else
+                {
+                    checkBox.IsChecked = false;
+                    checkBox.IsEnabled = false;
+                }
+
+            }
+            if(checkedCheckBoxes.Count.ToString()==_lines.Length.ToString())
+            {
+                SelectAllCheckBox.IsChecked = true;
+            }
+            else if (checkedCheckBoxes.Count==0)
+            {
+                SelectAllCheckBox.IsChecked = false;
+            }
+            else
+            {
+                SelectAllCheckBox.IsChecked = null;
+            }
+            checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + _lines.Length.ToString();
         }
 
         private void checkBox_Click(object sender, RoutedEventArgs e)
         {
-            List<int> checkedCheckBoxes = new List<int>();
             checkedCheckBoxes.Clear();
-            string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            if (lines.Length > 0)
+            string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+            string[] _lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            if (_lines.Length > 0)
             {
-                for (int i = 0; i < lines.Length; i++)//此处i指Index
+                for (int i = 0; i < lines.Length; i++)//此次i指Index
                 {
                     // 遍历所有CheckBox并检查它们的IsChecked属性
                     var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();
@@ -86,11 +130,27 @@ namespace 随机抽取学号.Views
                         checkedCheckBoxes.Add(i);
                     }
                 }
-                checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + lines.Length;
+                //将checkBoxes转换为string存入应用设置
+                string checkedCheckBoxesString = string.Join(",", checkedCheckBoxes);
+                var localSettings = ApplicationData.Current.LocalSettings;
+                localSettings.Values["checkedCheckBoxesString"] = checkedCheckBoxesString;
+                checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + _lines.Length.ToString();
             }
             else
             {
                 checkedCheckBoxesCount.Text = "未选择";
+            }
+            if (checkedCheckBoxes.Count == _lines.Length)
+            {
+                SelectAllCheckBox.IsChecked = true;
+            }
+            else if (checkedCheckBoxes.Count == 0)
+            {
+                SelectAllCheckBox.IsChecked = false;
+            }
+            else
+            {
+                SelectAllCheckBox.IsChecked = null;
             }
         }
         private void StartorStopButton_Click(object sender, RoutedEventArgs e)
@@ -150,7 +210,6 @@ namespace 随机抽取学号.Views
                 StartorStopButton.Label = "开始";
                 StartorStopButton.Icon = new SymbolIcon(Symbol.Play);
                 StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
-                List<int> checkedCheckBoxes = new List<int>();
                 checkedCheckBoxes.Clear();
                 RandomNumbersGridView.Items.Clear();
                 string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
@@ -274,7 +333,6 @@ namespace 随机抽取学号.Views
         }
         private void Timer_Tick(object sender, object e)
         {
-            List<int> checkedCheckBoxes = new List<int>();
             checkedCheckBoxes.Clear();
             string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             if (lines.Length > 0)
@@ -310,23 +368,6 @@ namespace 随机抽取学号.Views
                 popupNotice.ShowAPopup();
             }
         }
-
-        public void UpdateLineNumbers()
-        {
-            string text = classpage.Editor.Text;
-            string[] lines = text.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.RemoveEmptyEntries);
-            //lineNumberTextBlock.Text = string.Empty;
-
-            for (int i = 0; i < lines.Length; i++)
-            {
-                //lineNumberTextBlock.Text += $"{i + 1}\n";
-            }
-        }
-        public void Editor_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            UpdateLineNumbers();
-            CreateCheckBoxes();
-        }
         private void AcceptButton_Click(object sender, RoutedEventArgs e)
         {
             if (NumberBox.Text == string.Empty)
@@ -355,37 +396,138 @@ namespace 随机抽取学号.Views
 
         private void changeCheckBoxes_Click(object sender, RoutedEventArgs e)
         {
+            checkedCheckBoxes.Clear();
+            var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
+            string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+            string[] _lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            for(int i=0;i<lines.Length;i++)
+            {
+                checkBox[i].IsChecked = false;
+            }
+            if (lines.Length > 0)
+            {
+                int beginnum;int endnum;
+                if (int.TryParse(BeginNumberBox.Text,out beginnum)==true&& int.TryParse(EndNumberBox.Text, out endnum)==true)
+                {
+                    // 转换成功
+                    for (int i = beginnum; i <= endnum; i++)//此处i指Index
+                    {
 
+                        if (checkBox[i - 1].IsEnabled == true)
+                        {
+                            checkBox[i - 1].IsChecked = true;
+                            checkedCheckBoxes.Add(i - 1);
+
+                        }
+
+                    }
+                    if (checkedCheckBoxes.Count == _lines.Length)
+                    {
+                        SelectAllCheckBox.IsChecked = true;
+                    }
+                    else if (checkedCheckBoxes.Count == 0)
+                    {
+                        SelectAllCheckBox.IsChecked = false;
+                    }
+                    else
+                    {
+                        SelectAllCheckBox.IsChecked = null;
+                    }
+                    PopupNotice popupNotice = new PopupNotice("成功应用更改");
+                    popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
+                    popupNotice.ShowAPopup();
+                    checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + _lines.Length.ToString();
+                }
+                else
+                {
+                    if(!int.TryParse(BeginNumberBox.Text, out beginnum))
+                    {
+                        BeginNumberBox.Value = 1;
+                    }
+                    if (!int.TryParse(EndNumberBox.Text, out endnum))
+                    {
+                        EndNumberBox.Value = lines.Length;
+                    }
+                    PopupNotice popupNotice = new PopupNotice("请输入范围内整数");
+                    popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                    popupNotice.ShowAPopup();
+
+                }
+
+            }
         }
 
         private void SelectAllCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            List<int> checkedCheckBoxes = new List<int>();
             checkedCheckBoxes.Clear();
-            string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+            string[] _lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             if (lines.Length > 0)
             {
                 for (int i = 0; i < lines.Length; i++)//此处i指Index
                 {
                     var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
-                    checkBox[i].IsChecked = true;
-                    checkedCheckBoxes.Add(i);
+                    if (checkBox[i].IsEnabled==true)
+                    {
+                        checkBox[i].IsChecked = true;
+                        checkedCheckBoxes.Add(i);
+                    }
+
                 }
+                checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + _lines.Length.ToString();
             }
         }
 
         private void SelectAllCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            List<int> checkedCheckBoxes = new List<int>();
             checkedCheckBoxes.Clear();
-            string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+            string[] _lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             if (lines.Length > 0)
             {
                 for (int i = 0; i < lines.Length; i++)//此处i指Index
                 {
                     var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
-                    checkBox[i].IsChecked = false;
+                    if (checkBox[i].IsEnabled == true)
+                    {
+                        checkBox[i].IsChecked = false;
+                    }
+
                 }
+                checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + _lines.Length.ToString();
+            }
+        }
+
+        private void SelectAllCheckBox_Click(object sender, RoutedEventArgs e)
+        {
+            if(SelectAllCheckBox.IsChecked==null)
+            {
+                SelectAllCheckBox.IsChecked = false;
+            }
+        }
+
+        private void BeginNumberBox_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
+        {
+            if (int.TryParse(BeginNumberBox.Text, out int result))
+            {
+                // 转换成功，‌不做任何操作
+            }
+            else
+            {
+                BeginNumberBox.Value = 1;
+            }
+        }
+
+        private void EndNumberBox_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
+        {
+            string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+            if (int.TryParse(BeginNumberBox.Text, out int result))
+            {
+                // 转换成功，‌不做任何操作
+            }
+            else
+            {
+                EndNumberBox.Value = lines.Length;
             }
         }
     }
