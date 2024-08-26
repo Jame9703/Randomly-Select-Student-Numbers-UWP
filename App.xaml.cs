@@ -1,21 +1,12 @@
 ﻿using System;
-using System.Collections.Generic;
-using System.IO;
-using System.Linq;
 using System.Reflection;
-using System.Runtime.InteropServices.WindowsRuntime;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
-using Windows.Foundation.Collections;
 using Windows.Storage;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Data;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 namespace 随机抽取学号
@@ -59,12 +50,18 @@ namespace 随机抽取学号
                 // 创建要充当导航上下文的框架，并导航到第一页
                 rootFrame = new Frame();
                 rootFrame.NavigationFailed += OnNavigationFailed;
-                rootFrame.RequestedTheme = (int)ApplicationData.Current.LocalSettings.Values["Theme"] switch
+                ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+                if (localSettings.Values["Theme"] != null)
                 {
-                    0 => ElementTheme.Light,
-                    1 => ElementTheme.Dark,
-                    _ => ElementTheme.Default
-                };
+                    rootFrame.RequestedTheme = (int)localSettings.Values["Theme"] switch
+                    {
+                        0 => ElementTheme.Light,
+                        1 => ElementTheme.Dark,
+                        _ => ElementTheme.Default
+                    };
+                }
+
+
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     //TODO: 从之前挂起的应用程序加载状态

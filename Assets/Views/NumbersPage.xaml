@@ -7,7 +7,7 @@
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     x:Class="随机抽取学号.Views.NumbersPage"
     mc:Ignorable="d" NavigationCacheMode="Enabled">
-    <Grid>
+    <Grid Background="{ThemeResource GridBackground}">
         <TextBox x:Name="txtFrom" HorizontalAlignment="Left" Margin="0,29,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="100" CornerRadius="4,4,4,4" FontSize="16" FontFamily="{StaticResource HarmonyOSSans}"/>
         <TextBlock HorizontalAlignment="Left" Margin="0,4,0,0" TextWrapping="Wrap" Text="开始值：" VerticalAlignment="Top" FontSize="16" Width="67" FontFamily="{StaticResource HarmonyOSSans}"/>
         <TextBlock HorizontalAlignment="Left" Margin="121,4,0,0" TextWrapping="Wrap" Text="结束值：" VerticalAlignment="Top" FontSize="16" FontFamily="{StaticResource HarmonyOSSans}"/>

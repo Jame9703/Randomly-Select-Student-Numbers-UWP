@@ -1,14 +1,11 @@
 ﻿using Microsoft.UI.Xaml.Controls;
-using Microsoft.UI.Xaml.CustomAttributes;
 using System;
 using System.Collections.Generic;
 using System.Linq;
 using Windows.Storage;
 using Windows.Storage.Pickers;
-using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using muxc = Microsoft.UI.Xaml.Controls;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -19,15 +16,16 @@ namespace 随机抽取学号.Views
     /// </summary>
     public sealed partial class ClassPage : Page
     {
+        public static ClassPage Current;
         public List<string> names = new List<string>();
         private static readonly ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         private static readonly string NamesKey = "Names";
         private static readonly string ClassNameKey = "ClassName";
         public delegate void TextChangedEventHandler(string Text);
-        public event TextChangedEventHandler TextChanged;
         public ClassPage()
         {
             this.InitializeComponent();
+            Current = this;
             // 初始化行号
             UpdateLineNumbers();
             LoadData();
@@ -153,6 +151,10 @@ namespace 随机抽取学号.Views
             UpdateLineNumbers();
         }
 
+        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        {
+
+        }
     }
 
 }

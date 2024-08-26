@@ -1,25 +1,14 @@
-﻿using CommunityToolkit.WinUI;
-using System;
-using System.Collections.Generic;
-using System.ComponentModel;
-using System.Linq;
+﻿using System;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Storage;
-using Windows.System;
 using Windows.UI;
-using Windows.UI.Core;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Maps;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-using Windows.UI.Xaml.Shapes;
 using 随机抽取学号.Views;
-using muxc = Microsoft.UI.Xaml.Controls;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
 
@@ -30,24 +19,32 @@ namespace 随机抽取学号
     /// </summary>
     public sealed partial class MainPage : Page
     {
+        public static MainPage Current;
         private AppBarToggleButton _lastSelectedButton;
-        private static readonly ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+        ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         private static readonly string ClassNameKey = "ClassName";
         public MainPage()
         {
             this.InitializeComponent();
+            Current = this;
             // 隐藏系统标题栏并设置新的标题栏
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
+            //设置标题栏边距
+            CoreApplication.GetCurrentView().TitleBar.LayoutMetricsChanged += (s, e) => UpdateAppTitle(s);
             var view = ApplicationView.GetForCurrentView();
-            if ((int)ApplicationData.Current.LocalSettings.Values["Theme"]==0)
+            if (localSettings.Values["Theme"] !=null)
             {
-                view.TitleBar.ButtonForegroundColor = ((Color)Application.Current.Resources["SystemAccentColor"]);
+                if ((int)localSettings.Values["Theme"] == 0)
+                {
+                    view.TitleBar.ButtonForegroundColor = ((Color)Application.Current.Resources["SystemAccentColor"]);
+                }
+                else if ((int)localSettings.Values["Theme"] == 1)
+                {
+                    view.TitleBar.ButtonForegroundColor = Colors.White;
+                }
             }
-            else if ((int)ApplicationData.Current.LocalSettings.Values["Theme"] == 1)
-            {
-                view.TitleBar.ButtonForegroundColor = Colors.White;
-            }
+
             view.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             Window.Current.SetTitleBar(AppTitleBar);
             //将标题栏右上角的3个按钮改为透明（显示Mica）
@@ -60,10 +57,24 @@ namespace 随机抽取学号
             _lastSelectedButton = HomePageButton;//确保开始时_lastSelectedButton不为null
             string ClassName = localSettings.Values[ClassNameKey] as string;
             if (ClassName != null) ClassNameHyperlinkButton.Content = ClassName;
+            ChangeOpacityRequested += MainPage_ChangeOpacityRequested;
         }
-
-        //private double NavViewCompactModeThresholdWidth { get { return NavView.CompactModeThresholdWidth; } }
-
+        public event EventHandler<double> ChangeOpacityRequested;
+        void UpdateAppTitle(CoreApplicationViewTitleBar coreTitleBar)
+        {
+            //ensure the custom title bar does not overlap window caption controls
+            Thickness currMargin = AppTitleBar.Margin;
+            AppTitleBar.Margin = new Thickness(currMargin.Left, currMargin.Top, coreTitleBar.SystemOverlayRightInset, currMargin.Bottom);
+        }
+        public  void OnChangeOpacityRequested(double opacity)
+        {
+            ChangeOpacityRequested?.Invoke(this, opacity);
+        }
+        private void MainPage_ChangeOpacityRequested(object sender, double opacity)
+        {
+            // 设置 MainPage 的透明度
+            MainGrid.Opacity = opacity;
+        }
         private void ContentFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)
         {
             throw new Exception("页面加载失败:" + e.SourcePageType.FullName);

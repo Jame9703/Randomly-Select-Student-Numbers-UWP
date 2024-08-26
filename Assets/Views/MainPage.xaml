@@ -356,18 +356,19 @@
                </ResourceDictionary>-->
 
     </Page.Resources>
-    <Grid>
+    <Grid x:Name="MainGrid">
+        <Grid.Background>
+            <media:BackdropMicaBrush
+        BackgroundSource="WallpaperBackdrop"
+        FallbackColor="{ThemeResource SolidBackgroundFillColorBase}"
+        TintColor="{ThemeResource SolidBackgroundFillColorBase}" TintOpacity="0.4" />
+        </Grid.Background>
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
                 <!--<RowDefinition/>-->
             </Grid.RowDefinitions>
-            <Grid.Background>
-                <media:BackdropMicaBrush
-        BackgroundSource="WallpaperBackdrop"
-        FallbackColor="{ThemeResource SolidBackgroundFillColorBase}"
-        TintColor="{ThemeResource SolidBackgroundFillColorBase}" />
-            </Grid.Background>
+
 
 
             <Frame muxc:BackdropMaterial.ApplyToRootOrPageBackground="False" >
@@ -407,17 +408,17 @@
                 </HyperlinkButton.Background>
             </HyperlinkButton>
             <!-- 搜索框 -->
-            <AutoSuggestBox x:Name="MySearchBox" PlaceholderText="搜索..." HorizontalAlignment="Left" VerticalAlignment="Center" Margin="300,0,0,0" Width="200" />
+            <!--<AutoSuggestBox x:Name="MySearchBox" PlaceholderText="搜索..." HorizontalAlignment="Left" VerticalAlignment="Center" Margin="300,0,0,0" Width="200" />-->
 
-            <!--<AutoSuggestBox QueryIcon="Find"
+            <AutoSuggestBox QueryIcon="Find"
                     PlaceholderText="搜索"
                     HorizontalAlignment="Center"
-                    Width="260" Height="32"
-                    AutoMaximizeSuggestionArea="True" FontFamily="{StaticResource HarmonyOSSans}"/>-->
+                    MinWidth="200" MaxWidth="350" Height="32"
+                    AutoMaximizeSuggestionArea="True" FontFamily="{StaticResource HarmonyOSSans}"/>
         </Grid>
 
-        <Frame x:Name="ContentFrame" Padding="12,0,12,24" 
-                   NavigationFailed="ContentFrame_NavigationFailed" x:FieldModifier="public" Margin="70,50,0,0" CornerRadius="16,0,0,0" BorderBrush="Transparent" BorderThickness="0" Grid.Column="1" Grid.Row="0" Background="{ThemeResource ContentFrameBackground}">
+        <Frame x:Name="ContentFrame" Padding="12,0,12,24"
+                   NavigationFailed="ContentFrame_NavigationFailed" x:FieldModifier="public" Margin="60,50,-10,-20" CornerRadius="16,0,0,0" BorderBrush="Transparent" BorderThickness="0" Grid.Row="0" >
             <Frame.ContentTransitions>
                 <TransitionCollection>
                     <NavigationThemeTransition/>

@@ -1,11 +1,4 @@
-﻿//本页使用的名称及变量:
-//Selecting:当选中“不许偷看”后显示的Grid,装载了一个ProgressRing和一个Text为“抽取中”的TextBlock
-//isRandomizing:声明的bool类型，用于判断是否已经开始抽取
-//StackPanelCheckBoxes:用于装载CheckBox集合（用于选择抽取对象）
-//StartorStopButton:控制抽取的开始和停止
-//ResultTextBox:最终输出结果的TextBox
-
-using Microsoft.UI.Xaml.Controls;
+﻿using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -14,35 +7,34 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Shapes;
-using muxc = Microsoft.UI.Xaml.Controls;
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
 namespace 随机抽取学号.Views
 {
     public sealed partial class HomePage : Page
     {
-        ClassPage classpage = new ClassPage();
+
         public DispatcherTimer timer;
         private bool isRandomizing = false;
         List<int> checkedCheckBoxes = new List<int>();
+        ClassPage ClassPage = new ClassPage();
+        string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+        string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
         public HomePage()
         {
             this.InitializeComponent();
+        }
+        private void Page_Loaded(object sender, RoutedEventArgs e)
+        {
             CreateCheckBoxes();
-            PopupNotice popupNotice = new PopupNotice("按“开始”键以开始抽取");
-            popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
-            popupNotice.ShowAPopup();
             timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;
             Text2.Text = System.DateTime.Now.ToString("M");
-            string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
             EndNumberBox.Value = lines.Length;
             BeginNumberBox.Maximum = lines.Length;
             EndNumberBox.Maximum = lines.Length;
-            //segmented.SelectedIndex = 0;//在xaml中设置会导致控件未加载就被调用//System.NullReferenceException:“Object reference not set to an instance of an object.”
+            segmented.SelectedIndex = 0;//在xaml中设置会导致后面的控件未加载就被调用//System.NullReferenceException:“Object reference not set to an instance of an object.”
         }
-
         private void CreateCheckBoxes()
         {
             //从应用设置加载checkedCheckBoxes
@@ -65,8 +57,6 @@ namespace 随机抽取学号.Views
                 localSettings.Values["checkedCheckBoxesString"] = checkedCheckBoxesString;
             }
             StackPanelCheckBoxes.Children.Clear();//将曾经的CheckBox删去（如果有）
-            var lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-            var _lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             StackPanelCheckBoxes.Orientation = Orientation.Vertical; //设置为竖直布局
                                                                      //创建CheckBox并在“StackPanelCheckBoxes”中显示
             for (int i = 0; i < lines.Length; i++)//此次i指Index
@@ -117,8 +107,6 @@ namespace 随机抽取学号.Views
         private void checkBox_Click(object sender, RoutedEventArgs e)
         {
             checkedCheckBoxes.Clear();
-            string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-            string[] _lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             if (_lines.Length > 0)
             {
                 for (int i = 0; i < lines.Length; i++)//此次i指Index
@@ -173,7 +161,7 @@ namespace 随机抽取学号.Views
                     // 转换失败，NumberBox中的值不是有效的整数，自动更改为默认值
                     NumberBox.Text = "10";
                 }
-                if (classpage.Editor.Text == string.Empty)
+                if (ClassPage.Current.Editor.Text == string.Empty)
                 {
                     PopupNotice popupNotice = new PopupNotice("请先填写班级信息");
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
@@ -212,7 +200,6 @@ namespace 随机抽取学号.Views
                 StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
                 checkedCheckBoxes.Clear();
                 RandomNumbersGridView.Items.Clear();
-                string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
                 if (lines.Length > 0)
                 {
                     for (int i = 0; i < lines.Length; i++)
@@ -334,10 +321,9 @@ namespace 随机抽取学号.Views
         private void Timer_Tick(object sender, object e)
         {
             checkedCheckBoxes.Clear();
-            string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            if (lines.Length > 0)
+            if (_lines.Length > 0)
             {
-                for (int i = 0; i < lines.Length; i++)
+                for (int i = 0; i < _lines.Length; i++)
                 {
                     // 遍历所有CheckBox并检查它们的IsChecked属性
                     var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();
@@ -385,12 +371,11 @@ namespace 随机抽取学号.Views
         {
             if (segmented.SelectedIndex == 0)//单人模式
             {
-                //ResultTextBox.Text = "dan";
-                StartorStopButton.Background = new SolidColorBrush(Colors.Blue);
+
             }
             else//多人模式
             {
-                StartorStopButton.Background = new SolidColorBrush(Colors.Blue);
+
             }
         }
 
@@ -398,8 +383,6 @@ namespace 随机抽取学号.Views
         {
             checkedCheckBoxes.Clear();
             var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
-            string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-            string[] _lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             for(int i=0;i<lines.Length;i++)
             {
                 checkBox[i].IsChecked = false;
@@ -460,8 +443,6 @@ namespace 随机抽取学号.Views
         private void SelectAllCheckBox_Checked(object sender, RoutedEventArgs e)
         {
             checkedCheckBoxes.Clear();
-            string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-            string[] _lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             if (lines.Length > 0)
             {
                 for (int i = 0; i < lines.Length; i++)//此处i指Index
@@ -481,8 +462,6 @@ namespace 随机抽取学号.Views
         private void SelectAllCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
             checkedCheckBoxes.Clear();
-            string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-            string[] _lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             if (lines.Length > 0)
             {
                 for (int i = 0; i < lines.Length; i++)//此处i指Index
@@ -506,29 +485,5 @@ namespace 随机抽取学号.Views
             }
         }
 
-        private void BeginNumberBox_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
-        {
-            if (int.TryParse(BeginNumberBox.Text, out int result))
-            {
-                // 转换成功，‌不做任何操作
-            }
-            else
-            {
-                BeginNumberBox.Value = 1;
-            }
-        }
-
-        private void EndNumberBox_ValueChanged(NumberBox sender, NumberBoxValueChangedEventArgs args)
-        {
-            string[] lines = classpage.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-            if (int.TryParse(BeginNumberBox.Text, out int result))
-            {
-                // 转换成功，‌不做任何操作
-            }
-            else
-            {
-                EndNumberBox.Value = lines.Length;
-            }
-        }
     }
 }

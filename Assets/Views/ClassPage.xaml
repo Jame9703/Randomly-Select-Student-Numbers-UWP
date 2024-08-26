@@ -8,9 +8,9 @@
     x:Class="随机抽取学号.Views.ClassPage"
     mc:Ignorable="d"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
-    NavigationCacheMode="Enabled">
+    NavigationCacheMode="Enabled" Unloaded="Page_Unloaded">
 
-    <Grid>
+    <Grid Background="{ThemeResource GridBackground}">
         <Grid MinWidth="400"
           MinHeight="300">
             <Grid.ColumnDefinitions>
@@ -28,7 +28,7 @@
 
                     <Border x:Name="lineNumberBorder" Background="{StaticResource SystemControlBackgroundBaseLowBrush}" CornerRadius="8,0,0,8" Grid.Column="0">
                         <TextBlock x:Name="lineNumberTextBlock" Foreground="#FF787775"
-                   Margin="0,3"
+                   Margin="0,5"
                    VerticalAlignment="Top"
                    FontSize="16"
                    FontFamily="{StaticResource HarmonyOSSans}"

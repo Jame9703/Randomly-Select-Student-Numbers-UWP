@@ -8,7 +8,7 @@
     x:Class="随机抽取学号.Views.HelpPage"
     mc:Ignorable="d" NavigationCacheMode="Enabled">
 
-    <Grid>
+    <Grid Background="{ThemeResource GridBackground}">
         <Image Source="/Assets/Logos/StoreLogo.scale-400.png"
                HorizontalAlignment="Left"
                Width="45"

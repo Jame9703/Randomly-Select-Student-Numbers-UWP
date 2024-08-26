@@ -16,7 +16,7 @@
                         <ResourceDictionary x:Key="Light">
                             <!-- 定义浅色主题资源 -->
                             <SolidColorBrush x:Key="MyBrush" Color="Yellow"/>
-                            <SolidColorBrush x:Key="ContentFrameBackground" Color="White" Opacity="0.6"/>
+                            <SolidColorBrush x:Key="GridBackground" Color="White" Opacity="0.6"/>
                             <Color x:Key="ButtonForegroundColor">Green</Color>
                         </ResourceDictionary>
                         <ResourceDictionary x:Key="Dark">

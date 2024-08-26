@@ -7,7 +7,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     x:Class="随机抽取学号.Views.HomePage"
     mc:Ignorable="d"
-    xmlns:controls="using:CommunityToolkit.WinUI.Controls">
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls" Loaded="Page_Loaded" NavigationCacheMode="Required">
     <Page.Resources>
         <Storyboard x:Name="Storyboard1">
             <DoubleAnimation Storyboard.TargetName="A" Storyboard.TargetProperty="X" From="1650 " To="0" Duration="00:00:1">
@@ -153,7 +153,7 @@
             </Setter>
         </Style>
     </Page.Resources>
-    <Grid>
+    <Grid Background="{ThemeResource GridBackground}">
         <Grid.ColumnDefinitions>
             <ColumnDefinition Width="Auto"/>
             <ColumnDefinition Width="Auto"/>
@@ -233,8 +233,8 @@
                             </Grid.RowDefinitions>
                             <TextBlock Text="开始值：" Margin="0,6,0,0" FontFamily="{StaticResource HarmonyOSSans}"  Grid.Row="0"/>
                             <TextBlock Text="结束值：" Margin="0,8,0,0" FontFamily="{StaticResource HarmonyOSSans}" Grid.Row="1"/>
-                            <muxc:NumberBox x:Name="BeginNumberBox" HorizontalAlignment="Left" Margin="55,0,0,0" VerticalAlignment="Top" Height="30" SpinButtonPlacementMode="Inline"  SmallChange="1" Value="1" Minimum="1" Grid.Row="0" ValueChanged="BeginNumberBox_ValueChanged"/>
-                            <muxc:NumberBox x:Name="EndNumberBox" HorizontalAlignment="Left" Margin="55,5,0,0" VerticalAlignment="Top" Height="30" SpinButtonPlacementMode="Inline"  SmallChange="1" Minimum="1" Grid.Row="1" ValueChanged="EndNumberBox_ValueChanged"/>
+                            <muxc:NumberBox x:Name="BeginNumberBox" HorizontalAlignment="Left" Margin="55,0,0,0" VerticalAlignment="Top" Height="30" SpinButtonPlacementMode="Inline"  SmallChange="1" Value="1" Minimum="1" Grid.Row="0" />
+                            <muxc:NumberBox x:Name="EndNumberBox" HorizontalAlignment="Left" Margin="55,5,0,0" VerticalAlignment="Top" Height="30" SpinButtonPlacementMode="Inline"  SmallChange="1" Minimum="1" Grid.Row="1" />
                             <Button x:Name="changeCheckBoxes"  Click="changeCheckBoxes_Click" FontFamily="{StaticResource HarmonyOSSans}" Content="确定" Grid.Row="2" HorizontalAlignment="Center" Margin="0,5,0,0" Height="30"/>
                         </Grid>
                     </Flyout>
@@ -245,7 +245,7 @@
                                Cursor="Hand"
                                TargetControl="{x:Bind checkBoxesGrid}" />
         <controls:Segmented x:Name="segmented"
-                            SelectionChanged="segmented_SelectionChanged" SelectedIndex="0"
+                            SelectionChanged="segmented_SelectionChanged"
                             SelectionMode="Single" Margin="10,2,0,0" VerticalAlignment="Top" Grid.Column="2">
             <controls:SegmentedItem Content="单人模式" FontFamily="{StaticResource HarmonyOSSans}">
                 <controls:SegmentedItem.Icon>
