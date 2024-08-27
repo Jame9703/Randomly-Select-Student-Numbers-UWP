@@ -1,0 +1,262 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:随机抽取学号.Views"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    x:Class="随机抽取学号.Views.HomePage"
+    mc:Ignorable="d"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls" Loaded="Page_Loaded" NavigationCacheMode="Required">
+    <Page.Resources>
+        <Storyboard x:Name="Storyboard1">
+            <DoubleAnimation Storyboard.TargetName="A" Storyboard.TargetProperty="X" From="1650 " To="0" Duration="00:00:1">
+                <DoubleAnimation.EasingFunction>
+                    <QuadraticEase/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+
+        <Storyboard x:Name="Storyboard2">
+            <DoubleAnimation Storyboard.TargetName="B" Storyboard.TargetProperty="X" From="975" To="0" Duration="00:00:0.7">
+                <DoubleAnimation.EasingFunction>
+                    <PowerEase Power="1"/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+
+        <Storyboard x:Name="Storyboard3">
+            <DoubleAnimation Storyboard.TargetName="C" Storyboard.TargetProperty="X" From="975" To="0" Duration="00:00:0.67">
+                <DoubleAnimation.EasingFunction>
+                    <PowerEase/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+
+        <Storyboard x:Name="Storyboard4">
+            <DoubleAnimation Storyboard.TargetName="D" Storyboard.TargetProperty="X" From="975" To="0" Duration="00:00:0.7">
+                <DoubleAnimation.EasingFunction>
+                    <SineEase/>
+                </DoubleAnimation.EasingFunction>
+            </DoubleAnimation>
+        </Storyboard>
+        <Style TargetType="AppBarButton">
+            <Setter Property="Background" Value="Transparent"/>
+            <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}"/>
+            <Setter Property="HorizontalAlignment" Value="Left"/>
+            <Setter Property="VerticalAlignment" Value="Top"/>
+            <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}"/>
+            <Setter Property="FontWeight" Value="Normal"/>
+            <Setter Property="UseSystemFocusVisuals" Value="True" />
+            <Setter Property="Template">
+                <Setter.Value>
+                    <ControlTemplate TargetType="AppBarButton">
+                        <Grid x:Name="Root" CornerRadius="4,4,4,4"
+                              MinWidth="{TemplateBinding MinWidth}"
+                              MaxWidth="{TemplateBinding MaxWidth}"
+                              Background="{TemplateBinding Background}">
+                            <VisualStateManager.VisualStateGroups>
+                                <VisualStateGroup x:Name="ApplicationViewStates">
+                                    <VisualState x:Name="FullSize"/>
+                                    <VisualState x:Name="Compact">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Overflow">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentRoot" Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="OverflowWithToggleButtons">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentRoot" Storyboard.TargetProperty="Visibility">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="Collapsed"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="CommonStates">
+                                    <VisualState x:Name="Normal">
+                                        <Storyboard>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="PointerOver">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Root" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightListLowBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Content" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Pressed">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Root" Storyboard.TargetProperty="Background">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightListMediumBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Content" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                    <VisualState x:Name="Disabled">
+                                        <Storyboard>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="Content" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                            <ObjectAnimationUsingKeyFrames Storyboard.TargetName="TextLabel" Storyboard.TargetProperty="Foreground">
+                                                <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlDisabledBaseMediumLowBrush}"/>
+                                            </ObjectAnimationUsingKeyFrames>
+                                        </Storyboard>
+                                    </VisualState>
+                                </VisualStateGroup>
+                                <VisualStateGroup x:Name="InputModeStates">
+                                    <VisualState x:Name="InputModeDefault" />
+                                    <VisualState x:Name="TouchInputMode" >
+                                    </VisualState>
+                                </VisualStateGroup>
+                            </VisualStateManager.VisualStateGroups>
+
+                            <StackPanel x:Name="ContentRoot" MinHeight="{ThemeResource AppBarThemeCompactHeight}" Orientation="Horizontal">
+                                <ContentPresenter x:Name="Content"
+                                                  Height="29"
+                                                  Margin="6,1,0,4"
+                                                  Content="{TemplateBinding Icon}"
+                                                  Foreground="{TemplateBinding Foreground}"
+                                                  AutomationProperties.AccessibilityView="Raw" Width="27"/>
+                                <TextBlock x:Name="TextLabel"
+                                           Text="{TemplateBinding Label}"
+                                           Foreground="{TemplateBinding Foreground}"
+                                           FontSize="20"
+                                           FontFamily="{TemplateBinding FontFamily}"
+                                           TextAlignment="Center"
+                                           TextWrapping="Wrap"
+                                           Height="31" Width="43"/>
+                            </StackPanel>
+
+                        </Grid>
+                    </ControlTemplate>
+                </Setter.Value>
+            </Setter>
+        </Style>
+    </Page.Resources>
+    <Grid Background="{ThemeResource GridBackground}">
+        <Grid.ColumnDefinitions>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="Auto"/>
+            <ColumnDefinition Width="*"/>
+        </Grid.ColumnDefinitions>
+
+
+        <AppBarButton x:Name="StartorStopButton" Width="97" Margin="725,169,0,0" Label="开始" Background="#FFC0F2BC" Height="54" Click="StartorStopButton_Click" Icon="Play" FontFamily="{StaticResource HarmonyOSSans}" Grid.Column="2"/>
+        <TextBox x:Name="ResultTextBox" HorizontalAlignment="Left" Margin="725,79,0,0" TextWrapping="Wrap" VerticalAlignment="Top" IsReadOnly="True" Height="68" Width="232" FontSize="36" FontFamily="{StaticResource HarmonyOSSans}" Grid.Column="2"/>
+        <TextBlock HorizontalAlignment="Left" Margin="366,49,0,0" TextWrapping="Wrap" Text="滚动频率(Hz)：" VerticalAlignment="Top" FontSize="14" Height="19" Width="158" FontFamily="{StaticResource HarmonyOSSans}" Grid.Column="2"/>
+        <TextBlock x:Name="Text2" HorizontalAlignment="Left" Height="30" Margin="440,10,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="133" FontSize="18" FontFamily="{StaticResource HarmonyOSSans}" Grid.ColumnSpan="3"/>
+        <muxc:NumberBox x:Name="NumberBox" HorizontalAlignment="Left" Height="32" Margin="374,68,0,0" VerticalAlignment="Top" Width="95" Text="10" Minimum="1" Maximum="10000" FontFamily="{StaticResource HarmonyOSSans}" Grid.Column="2"/>
+        <Button x:Name="Accept" Content="确定" Height="32" Margin="446,79,0,0" VerticalAlignment="Top" Width="55" Click="AcceptButton_Click" FontFamily="{StaticResource HarmonyOSSans}" Grid.Column="2"/>
+        <muxc:NumberBox x:Name="Numbers" HorizontalAlignment="Left" Margin="507,20,0,0" VerticalAlignment="Top" Width="160" Height="35" Value="1" SpinButtonPlacementMode="Inline" SmallChange="1" Minimum="1" FontFamily="{StaticResource HarmonyOSSans}" Grid.ColumnSpan="3"/>
+        <TextBlock HorizontalAlignment="Left" Margin="20,160,0,0" TextWrapping="Wrap" Text="人数:" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}" Grid.Column="2" />
+        <GridView x:Name="RandomNumbersGridView" Margin="103,323,-727,10" Grid.Column="2" >
+            <GridView.ItemsPanel>
+                <ItemsPanelTemplate>
+                    <ItemsWrapGrid x:Name="MaxItemsWrapGrid"
+                           MaximumRowsOrColumns="5"
+                           Orientation="Horizontal"/>
+                </ItemsPanelTemplate>
+            </GridView.ItemsPanel>
+        </GridView>
+        <Grid HorizontalAlignment="Left" Height="286" Margin="49,101,0,0" VerticalAlignment="Top" Width="517" Background="{ThemeResource MyBrush}" Grid.Column="2">
+            <!--<Grid.Clip>
+                <RectangleGeometry Rect="0,0,1000,300"/>
+            </Grid.Clip>-->
+            <Border CornerRadius="4,4,4,4" BorderThickness="2" BorderBrush="{ThemeResource AccentFillColorDefaultBrush}" Margin="10,38,321,38">
+                <Border.RenderTransform>
+                    <TranslateTransform x:Name="A"/>
+                </Border.RenderTransform>
+                <Image HorizontalAlignment="Left" Height="205" VerticalAlignment="Center" Width="174" Source="/Assets/RSSN_Logos/StoreLogo.scale-200.png">
+
+                </Image>
+            </Border>
+            <Border  BorderThickness="2" BorderBrush="{ThemeResource AccentFillColorDefaultBrush}" HorizontalAlignment="Left" Height="39" Margin="223,56,0,0" VerticalAlignment="Top" Width="284" Background="LightBlue" CornerRadius="4,4,4,4">
+                <Border.RenderTransform>
+                    <TranslateTransform x:Name="B"/>
+                </Border.RenderTransform>
+                <TextBlock Text="TextBlock" FontSize="20"></TextBlock>
+            </Border>
+            <Border BorderThickness="2" BorderBrush="{ThemeResource AccentFillColorDefaultBrush}" HorizontalAlignment="Left" Height="39" Margin="223,121,0,0" VerticalAlignment="Top" Width="284" Background="LightBlue" CornerRadius="4,4,4,4">
+                <Border.RenderTransform>
+                    <TranslateTransform x:Name="C"/>
+                </Border.RenderTransform>
+                <TextBlock Text="TextBlock" FontSize="20"></TextBlock>
+            </Border>
+            <Border  BorderThickness="2" BorderBrush="{ThemeResource AccentFillColorDefaultBrush}" HorizontalAlignment="Left" Height="39" Margin="223,191,0,0" VerticalAlignment="Top" Width="284" Background="LightBlue" CornerRadius="4,4,4,4">
+                <Border.RenderTransform>
+                    <TranslateTransform x:Name="D"/>
+                </Border.RenderTransform>
+                <TextBlock Text="TextBlock" FontSize="20"></TextBlock>
+            </Border>
+        </Grid>
+        <Grid x:Name="checkBoxesGrid" MinWidth="100" MaxWidth="300"  HorizontalAlignment="Left">
+            <CheckBox x:Name="SelectAllCheckBox" Content="全选" Margin="0,23,0,0" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}" Width="50" FontSize="16" Checked="SelectAllCheckBox_Checked" Unchecked="SelectAllCheckBox_Unchecked" Click="SelectAllCheckBox_Click" IsThreeState="True"/>
+            <TextBlock x:Name="checkedCheckBoxesCount" HorizontalAlignment="Left" TextWrapping="Wrap" Text="未选择" VerticalAlignment="Top" Width="162" Height="27" FontSize="16" FontFamily="{StaticResource HarmonyOSSans}"/>
+            <ScrollViewer VerticalScrollBarVisibility="Visible" HorizontalScrollBarVisibility="Hidden" Margin="0,60,0,0" VerticalScrollMode="Enabled" ZoomMode="Enabled">
+                <StackPanel x:Name="StackPanelCheckBoxes" HorizontalAlignment="Left" Height="Auto" VerticalAlignment="Top" Width="175">
+                    <StackPanel.ChildrenTransitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition IsStaggeringEnabled="True" />
+                        </TransitionCollection>
+                    </StackPanel.ChildrenTransitions>
+                </StackPanel>
+            </ScrollViewer>
+
+            <Button Content="快速选择" Margin="60,22,0,0" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}">
+                <Button.Flyout>
+                    <Flyout>
+                        <Grid>
+                            <Grid.RowDefinitions>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                                <RowDefinition Height="Auto"/>
+                            </Grid.RowDefinitions>
+                            <TextBlock Text="开始值：" Margin="0,6,0,0" FontFamily="{StaticResource HarmonyOSSans}"  Grid.Row="0"/>
+                            <TextBlock Text="结束值：" Margin="0,8,0,0" FontFamily="{StaticResource HarmonyOSSans}" Grid.Row="1"/>
+                            <muxc:NumberBox x:Name="BeginNumberBox" HorizontalAlignment="Left" Margin="55,0,0,0" VerticalAlignment="Top" Height="30" SpinButtonPlacementMode="Inline"  SmallChange="1" Value="1" Minimum="1" Grid.Row="0" />
+                            <muxc:NumberBox x:Name="EndNumberBox" HorizontalAlignment="Left" Margin="55,5,0,0" VerticalAlignment="Top" Height="30" SpinButtonPlacementMode="Inline"  SmallChange="1" Minimum="1" Grid.Row="1" />
+                            <Button x:Name="changeCheckBoxes"  Click="changeCheckBoxes_Click" FontFamily="{StaticResource HarmonyOSSans}" Content="确定" Grid.Row="2" HorizontalAlignment="Center" Margin="0,5,0,0" Height="30"/>
+                        </Grid>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
+        </Grid>
+        <controls:ContentSizer Grid.Column="1"
+                               Cursor="Hand"
+                               TargetControl="{x:Bind checkBoxesGrid}" />
+        <controls:Segmented x:Name="segmented"
+                            SelectionChanged="segmented_SelectionChanged"
+                            SelectionMode="Single" Margin="10,2,0,0" VerticalAlignment="Top" Grid.Column="2">
+            <controls:SegmentedItem Content="单人模式" FontFamily="{StaticResource HarmonyOSSans}">
+                <controls:SegmentedItem.Icon>
+                    <SymbolIcon Symbol="Contact"/>
+                </controls:SegmentedItem.Icon>
+            </controls:SegmentedItem>
+            <controls:SegmentedItem Content="多人模式" FontFamily="{StaticResource HarmonyOSSans}">
+                <controls:SegmentedItem.Icon>
+                    <SymbolIcon Symbol="People"/>
+                </controls:SegmentedItem.Icon>
+            </controls:SegmentedItem>
+        </controls:Segmented>
+    </Grid>
+</Page>

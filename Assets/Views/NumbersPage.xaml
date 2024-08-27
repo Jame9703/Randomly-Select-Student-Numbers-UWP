@@ -1,0 +1,73 @@
+﻿<Page
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:local="using:随机抽取学号.Views"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    x:Class="随机抽取学号.Views.NumbersPage"
+    mc:Ignorable="d" NavigationCacheMode="Enabled">
+    <Grid Background="{ThemeResource GridBackground}">
+        <TextBox x:Name="txtFrom" HorizontalAlignment="Left" Margin="0,29,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="100" CornerRadius="4,4,4,4" FontSize="16" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="0,4,0,0" TextWrapping="Wrap" Text="开始值：" VerticalAlignment="Top" FontSize="16" Width="67" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="121,4,0,0" TextWrapping="Wrap" Text="结束值：" VerticalAlignment="Top" FontSize="16" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <TextBox x:Name="txtTo" HorizontalAlignment="Left" Margin="121,29,0,0" TextWrapping="Wrap" Text="" VerticalAlignment="Top" Width="100" CornerRadius="4,4,4,4" FontSize="16" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <TextBlock HorizontalAlignment="Left" Margin="248,4,0,0" TextWrapping="Wrap" Text="选取个数：" VerticalAlignment="Top" FontSize="16" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <Button Content="生成" Margin="5,83,0,0" VerticalAlignment="Top" Click="btnStart_Click" Width="75" CornerRadius="4,4,4,4" FontFamily="{StaticResource HarmonyOSSans}"/>
+
+        <Button Content="清空结果" Margin="121,83,0,0" VerticalAlignment="Top" Click="清空结果_Click" CornerRadius="4,4,4,4" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <Button Content="全部重置" Margin="249,83,0,0" VerticalAlignment="Top" Click="btnReset_Click" CornerRadius="4,4,4,4" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <!--<TextBlock HorizontalAlignment="Left" Margin="188,1,0,0" TextWrapping="Wrap" Text="分隔符：" VerticalAlignment="Top" FontSize="16" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <Grid x:Name="RandomNumbersTextBoxGrid" Height="Auto" Width="Auto" Margin="5,188,1061,633" Visibility="Collapsed">
+            <Slider RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" ValueChanged="Slider_ValueChanged" Minimum="4" Value="18" d:LayoutRounding="Auto" Margin="-55,90,714,91" TickPlacement="Outside">
+                <Slider.RenderTransform>
+                    <CompositeTransform Rotation="-89.864"/>
+                </Slider.RenderTransform>
+            </Slider>
+            <TextBox x:Name="txtRe" TextWrapping="Wrap" Text="" CornerRadius="4,4,4,4" IsReadOnly="True" FontFamily="{StaticResource HarmonyOSSans}" RenderTransformOrigin="0.5,0.5" Margin="44,10,10,1"/>
+        </Grid>-->
+        <muxc:NumberBox x:Name="txtQuan" HorizontalAlignment="Left" Margin="248,29,0,0" VerticalAlignment="Top" Width="100" Maximum="10000" Minimum="0" FontFamily="{StaticResource HarmonyOSSans}" FontSize="16"/>
+        <!--<StackPanel x:Name="RandomNumbersListStackPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Height="Auto" Width="Auto" Margin="197,366,0,0" Visibility="Collapsed">
+            <StackPanel.ChildrenTransitions>
+                <TransitionCollection>
+                    <EntranceThemeTransition IsStaggeringEnabled="True" />
+                </TransitionCollection>
+            </StackPanel.ChildrenTransitions>
+        </StackPanel>-->
+        <Pivot Margin="0,131,0,0" FontFamily="{StaticResource HarmonyOSSans}">
+            <PivotItem Header="网格" FontFamily="{StaticResource HarmonyOSSans}">
+                <GridView x:Name="RandomNumbersGridView" >
+                    <GridView.ItemsPanel>
+                        <ItemsPanelTemplate>
+                            <ItemsWrapGrid x:Name="MaxItemsWrapGrid"
+                           MaximumRowsOrColumns="5"
+                           Orientation="Horizontal"/>
+                        </ItemsPanelTemplate>
+                    </GridView.ItemsPanel>
+                </GridView>
+            </PivotItem>
+            <PivotItem Header="列表" FontFamily="{StaticResource HarmonyOSSans}">
+                <StackPanel x:Name="RandomNumbersListStackPanel" Orientation="Vertical" HorizontalAlignment="Left" VerticalAlignment="Top" Height="Auto" Width="Auto" Margin="0,1,0,0">
+                    <StackPanel.ChildrenTransitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition IsStaggeringEnabled="True" />
+                        </TransitionCollection>
+                    </StackPanel.ChildrenTransitions>
+                </StackPanel>
+            </PivotItem>
+            <PivotItem Header="文本" FontFamily="{StaticResource HarmonyOSSans}">
+                <Grid x:Name="RandomNumbersTextBoxGrid" Height="Auto" Width="Auto" Margin="0,0,0,145">
+                    <TextBox x:Name="txtRe" TextWrapping="Wrap" Text="" CornerRadius="4,4,4,4" IsReadOnly="True" FontFamily="{StaticResource HarmonyOSSans}" RenderTransformOrigin="0.5,0.5" Margin="40,37,925,-3" Width="Auto"/>
+                    <Slider x:Name="slider" HorizontalAlignment="Left" Margin="0,37,0,0" VerticalAlignment="Top" Width="35" Minimum="4" Orientation="Vertical" TickPlacement="Outside" Height="217" ValueChanged="Slider_ValueChanged" TickFrequency="10" Value="20"/>
+                    <ComboBox x:Name="ComboBox2" Width="147" CornerRadius="4,4,4,4" SelectedIndex="0" FontFamily="{StaticResource HarmonyOSSans}" Margin="80,1,0,0">
+                        <x:String>-- --</x:String>
+                        <x:String>“ ”</x:String>
+                        <x:String>‘ ’</x:String>
+                    </ComboBox>
+                    <TextBlock HorizontalAlignment="Left" Margin="10,6,0,0" TextWrapping="Wrap" Text="分隔符:" VerticalAlignment="Top" FontFamily="{StaticResource HarmonyOSSans}" FontSize="16"/>
+                    <CheckBox  x:Name="CheckBox" Content="保留历史文本" FontFamily="{StaticResource HarmonyOSSans}" Margin="255,1,0,0" VerticalAlignment="Top" IsChecked="True" FontSize="16"/>
+                </Grid>
+            </PivotItem>
+        </Pivot>
+    </Grid>
+</Page>
