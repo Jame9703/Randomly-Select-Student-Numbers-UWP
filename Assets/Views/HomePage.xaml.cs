@@ -7,6 +7,7 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
 namespace 随机抽取学号.Views
@@ -18,8 +19,8 @@ namespace 随机抽取学号.Views
         private bool isRandomizing = false;
         List<int> checkedCheckBoxes = new List<int>();
         ClassPage ClassPage = new ClassPage();
-        string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-        string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+        //string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+        //string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
         public HomePage()
         {
             this.InitializeComponent();
@@ -30,6 +31,7 @@ namespace 随机抽取学号.Views
             timer = new DispatcherTimer();
             timer.Tick += Timer_Tick;
             Text2.Text = System.DateTime.Now.ToString("M");
+            string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
             EndNumberBox.Value = lines.Length;
             BeginNumberBox.Maximum = lines.Length;
             EndNumberBox.Maximum = lines.Length;
@@ -37,6 +39,8 @@ namespace 随机抽取学号.Views
         }
         private void CreateCheckBoxes()
         {
+            string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+            string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             //从应用设置加载checkedCheckBoxes
             var localSettings = ApplicationData.Current.LocalSettings;
             if (localSettings.Values["checkedCheckBoxesString"] != null)
@@ -106,6 +110,8 @@ namespace 随机抽取学号.Views
 
         private void checkBox_Click(object sender, RoutedEventArgs e)
         {
+            string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+            string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             checkedCheckBoxes.Clear();
             if (_lines.Length > 0)
             {
@@ -200,6 +206,8 @@ namespace 随机抽取学号.Views
                 StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
                 checkedCheckBoxes.Clear();
                 RandomNumbersGridView.Items.Clear();
+                string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+                string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
                 if (lines.Length > 0)
                 {
                     for (int i = 0; i < lines.Length; i++)
@@ -320,6 +328,8 @@ namespace 随机抽取学号.Views
         }
         private void Timer_Tick(object sender, object e)
         {
+            string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+            string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             checkedCheckBoxes.Clear();
             if (_lines.Length > 0)
             {
@@ -381,6 +391,8 @@ namespace 随机抽取学号.Views
 
         private void changeCheckBoxes_Click(object sender, RoutedEventArgs e)
         {
+            string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+            string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             checkedCheckBoxes.Clear();
             var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
             for(int i=0;i<lines.Length;i++)
@@ -442,6 +454,8 @@ namespace 随机抽取学号.Views
 
         private void SelectAllCheckBox_Checked(object sender, RoutedEventArgs e)
         {
+            string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+            string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             checkedCheckBoxes.Clear();
             if (lines.Length > 0)
             {
@@ -461,6 +475,8 @@ namespace 随机抽取学号.Views
 
         private void SelectAllCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
+            string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+            string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             checkedCheckBoxes.Clear();
             if (lines.Length > 0)
             {

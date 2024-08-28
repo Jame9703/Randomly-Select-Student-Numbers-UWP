@@ -1,4 +1,5 @@
-﻿using System;
+﻿using CommunityToolkit.WinUI;
+using System;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Storage;
@@ -6,6 +7,7 @@ using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using 随机抽取学号.Views;
@@ -33,18 +35,6 @@ namespace 随机抽取学号
             //设置标题栏边距
             CoreApplication.GetCurrentView().TitleBar.LayoutMetricsChanged += (s, e) => UpdateAppTitle(s);
             var view = ApplicationView.GetForCurrentView();
-            if (localSettings.Values["Theme"] !=null)
-            {
-                if ((int)localSettings.Values["Theme"] == 0)
-                {
-                    view.TitleBar.ButtonForegroundColor = ((Color)Application.Current.Resources["SystemAccentColor"]);
-                }
-                else if ((int)localSettings.Values["Theme"] == 1)
-                {
-                    view.TitleBar.ButtonForegroundColor = Colors.White;
-                }
-            }
-
             view.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             Window.Current.SetTitleBar(AppTitleBar);
             //将标题栏右上角的3个按钮改为透明（显示Mica）
@@ -58,13 +48,48 @@ namespace 随机抽取学号
             string ClassName = localSettings.Values[ClassNameKey] as string;
             if (ClassName != null) ClassNameHyperlinkButton.Content = ClassName;
             ChangeOpacityRequested += MainPage_ChangeOpacityRequested;
+            if (localSettings.Values["Theme"] !=null)
+            {
+                if ((int)localSettings.Values["Theme"] == 0)
+                {
+                    view.TitleBar.ButtonForegroundColor = ((Color)Application.Current.Resources["SystemAccentColor"]);
+                }
+                else if ((int)localSettings.Values["Theme"] == 1)
+                {
+                    view.TitleBar.ButtonForegroundColor = Colors.White;
+                }
+            }
+            else
+            {
+                //找不到值，第一次启动，显示欢迎界面
+                ContentDialog dialog = new ContentDialog();
+                dialog.Title = AddText(24,"欢迎使用随机抽取学号");
+                dialog.Content = AddText(12, "随机抽取学号是一款使用C#编写，基于Random()伪随机数生成器，免费￥、开源的通用Windows平台应用程序(UWP)。\r\n \r\n随机抽取学号不会将您的隐私数据发送到服务器(姓名，性别，照片等)，同时应用数据会在卸载时自动删除，以下为随机抽取学号的开源许可:\r\n\r\nMIT License\r\n\r\nCopyright (c) 2022-2024 Randomly Select Student Numbers\r\n\r\nPermission is hereby granted, free of charge, to any person obtaining a copy\r\nof this software and associated documentation files (the \"Software\"), to deal\r\nin the Software without restriction, including without limitation the rights\r\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\r\ncopies of the Software, and to permit persons to whom the Software is\r\nfurnished to do so, subject to the following conditions:\r\n\r\nThe above copyright notice and this permission notice shall be included in all\r\ncopies or substantial portions of the Software.\r\n\r\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.");
+                dialog.PrimaryButtonText = "同意并继续";
+                dialog.DefaultButton = ContentDialogButton.Primary;
+                dialog.PrimaryButtonClick += (sender, args) => dialog.Hide();
+                TextBlock AddText(int newFontSize,string newText)
+                {
+                    TextBlock textBlock = new TextBlock()
+                    {
+                        TextWrapping= TextWrapping.Wrap,
+                        Text = newText,
+                        FontFamily = (FontFamily)Application.Current.Resources["HarmonyOSSans"],
+                        FontSize = newFontSize,
+                    };
+
+                    return textBlock;
+                }
+                _ = dialog.ShowAsync();
+                localSettings.Values["Theme"] = 2;//确保下次打开不显示欢迎界面
+            }
+
         }
         public event EventHandler<double> ChangeOpacityRequested;
         void UpdateAppTitle(CoreApplicationViewTitleBar coreTitleBar)
         {
             //ensure the custom title bar does not overlap window caption controls
-            Thickness currMargin = AppTitleBar.Margin;
-            AppTitleBar.Margin = new Thickness(currMargin.Left, currMargin.Top, coreTitleBar.SystemOverlayRightInset, currMargin.Bottom);
+            AppTitleBar.Margin = new Thickness(0, 0, coreTitleBar.SystemOverlayRightInset, 0);
         }
         public  void OnChangeOpacityRequested(double opacity)
         {
@@ -79,181 +104,6 @@ namespace 随机抽取学号
         {
             throw new Exception("页面加载失败:" + e.SourcePageType.FullName);
         }
-
-
-        //private void NavView_Loaded(object sender, RoutedEventArgs e)
-        //{
-        //    // You can also add items in code.
-        //    NavView.MenuItems.Add(new muxc.NavigationViewItemSeparator());
-        //    //NavView.MenuItems.Add(new muxc.NavigationViewItem
-        //    //{
-        //        //Content = "My content",
-        //        //Icon = new SymbolIcon((Symbol)0xF1AD),
-        //        //Tag = "content"
-        //    //});
-        //    _pages.Add(("content", typeof(HomePage)));
-
-        //    // Add handler for ContentFrame navigation.
-        //    ContentFrame.Navigated += On_Navigated;
-
-        //    // NavView doesn't load any page by default, so load home page.
-        //    NavView.SelectedItem = NavView.MenuItems[0];
-        //    // If navigation occurs on SelectionChanged, this isn't needed.
-        //    // Because we use ItemInvoked to navigate, we need to call Navigate
-        //    // here to load the home page.
-        //    NavView_Navigate("home", new Windows.UI.Xaml.Media.Animation.EntranceNavigationTransitionInfo());
-
-        //    // Listen to the window directly so the app responds
-        //    // to accelerator keys regardless of which element has focus.
-        //    Window.Current.CoreWindow.Dispatcher.AcceleratorKeyActivated +=CoreDispatcher_AcceleratorKeyActivated;
-
-        //    Window.Current.CoreWindow.PointerPressed += CoreWindow_PointerPressed;
-
-        //    SystemNavigationManager.GetForCurrentView().BackRequested += System_BackRequested;
-        //    var settings = (muxc.NavigationViewItem)NavView.SettingsItem;
-        //    settings.Content = "设置 [ Settings ]";
-        //    settings.FontFamily = new FontFamily("{StaticResource HarmonyOSSans}");
-        //}
-
-        //private void NavView_ItemInvoked(muxc.NavigationView sender,
-        //                                 muxc.NavigationViewItemInvokedEventArgs args)
-        //{
-        //    if (args.IsSettingsInvoked == true)
-        //    {
-        //        NavView_Navigate("settings", args.RecommendedNavigationTransitionInfo);
-        //    }
-        //    else if (args.InvokedItemContainer != null)
-        //    {
-        //        var navItemTag = args.InvokedItemContainer.Tag.ToString();
-        //        NavView_Navigate(navItemTag, args.RecommendedNavigationTransitionInfo);
-        //    }
-        //}
-
-        // NavView_SelectionChanged is not used in this example, but is shown for completeness.
-        // You will typically handle either ItemInvoked or SelectionChanged to perform navigation,
-        // but not both.
-        //private void NavView_SelectionChanged(muxc.NavigationView sender,
-        //                                      muxc.NavigationViewSelectionChangedEventArgs args)
-        //{
-        //    if (args.IsSettingsSelected == true)
-        //    {
-        //        NavView_Navigate("settings", args.RecommendedNavigationTransitionInfo);
-        //    }
-        //    else if (args.SelectedItemContainer != null)
-        //    {
-        //        var navItemTag = args.SelectedItemContainer.Tag.ToString();
-        //        NavView_Navigate(navItemTag, args.RecommendedNavigationTransitionInfo);
-        //    }
-        //}
-        //private void NavigationView_SelectionChanged(muxc.NavigationView sender,
-        //                              muxc.NavigationViewSelectionChangedEventArgs args)
-        //{
-        //    if (args.IsSettingsSelected == true)
-        //    {
-        //        NavView_Navigate("settings", args.RecommendedNavigationTransitionInfo);
-        //    }
-        //    else if (args.SelectedItemContainer != null)
-        //    {
-        //        var navItemTag = args.SelectedItemContainer.Tag.ToString();
-        //        NavView_Navigate(navItemTag, args.RecommendedNavigationTransitionInfo);
-        //    }
-        //}
-        //private void NavView_Navigate(
-        //    string navItemTag,
-        //    Windows.UI.Xaml.Media.Animation.NavigationTransitionInfo transitionInfo)
-        //{
-        //    Type _page = null;
-        //    if (navItemTag == "settings")
-        //    {
-        //        _page = typeof(SettingsPage);
-        //    }
-        //    else
-        //    {
-        //        var item = _pages.FirstOrDefault(p => p.Tag.Equals(navItemTag));
-        //        _page = item.Page;
-        //    }
-        //    // Get the page type before navigation so you can prevent duplicate
-        //    // entries in the backstack.
-        //    var preNavPageType = ContentFrame.CurrentSourcePageType;
-
-        //    // Only navigate if the selected page isn't currently loaded.
-        //    if (!(_page is null) && !Type.Equals(preNavPageType, _page))
-        //    {
-        //        ContentFrame.Navigate(_page, null, transitionInfo);
-        //    }
-        //}
-
-        //private void NavView_BackRequested(muxc.NavigationView sender,
-        //                                   muxc.NavigationViewBackRequestedEventArgs args)
-        //{
-        //    TryGoBack();
-        //}
-
-        //private void CoreDispatcher_AcceleratorKeyActivated(CoreDispatcher sender, AcceleratorKeyEventArgs e)
-        //{
-        //    // When Alt+Left are pressed navigate back
-        //    if (e.EventType == CoreAcceleratorKeyEventType.SystemKeyDown
-        //        && e.VirtualKey == VirtualKey.Left
-        //        && e.KeyStatus.IsMenuKeyDown == true
-        //        && !e.Handled)
-        //    {
-        //        e.Handled = TryGoBack();
-        //    }
-        //}
-
-        //private void System_BackRequested(object sender, BackRequestedEventArgs e)
-        //{
-        //    if (!e.Handled)
-        //    {
-        //        e.Handled = TryGoBack();
-        //    }
-        //}
-
-        //private void CoreWindow_PointerPressed(CoreWindow sender, PointerEventArgs e)
-        //{
-        //    // Handle mouse back button.
-        //    if (e.CurrentPoint.Properties.IsXButton1Pressed)
-        //    {
-        //        e.Handled = TryGoBack();
-        //    }
-        //}
-
-        //private bool TryGoBack()
-        //{
-        //    if (!ContentFrame.CanGoBack)
-        //        return false;
-
-        //    // Don't go back if the nav pane is overlayed.
-        //    if (NavView.IsPaneOpen &&
-        //        (NavView.DisplayMode == muxc.NavigationViewDisplayMode.Compact ||
-        //         NavView.DisplayMode == muxc.NavigationViewDisplayMode.Minimal))
-        //        return false;
-
-        //    ContentFrame.GoBack();
-        //    return true;
-        //}
-
-        //private void On_Navigated(object sender, NavigationEventArgs e)
-        //{
-        //    NavView.IsBackEnabled = ContentFrame.CanGoBack;
-
-        //    if (ContentFrame.SourcePageType == typeof(SettingsPage))
-        //    {
-        //        // SettingsItem is not part of NavView.MenuItems, and doesn't have a Tag.
-        //        NavView.SelectedItem = (muxc.NavigationViewItem)NavView.SettingsItem;
-        //    }
-        //    else if (ContentFrame.SourcePageType != null)
-        //    {
-        //        var item = _pages.FirstOrDefault(p => p.Page == e.SourcePageType);
-
-        //        NavView.SelectedItem = NavView.MenuItems
-        //            .OfType<muxc.NavigationViewItem>()
-        //            .First(n => n.Tag.Equals(item.Tag));
-
-        //        //NavView.Header =
-        //            //((muxc.NavigationViewItem)NavView.SelectedItem)?.Content?.ToString();
-        //    }
-        //}
         private void HomePage_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as AppBarToggleButton;
@@ -274,16 +124,13 @@ namespace 随机抽取学号
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-                ContentFrame.Navigate(typeof(NumbersPage));
-
-
+            ContentFrame.Navigate(typeof(NumbersPage));
         }
         private void CharactersPage_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-
-                ContentFrame.Navigate(typeof(CharactersPage));
+            ContentFrame.Navigate(typeof(CharactersPage));
 
 
 
@@ -292,8 +139,7 @@ namespace 随机抽取学号
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-
-                ContentFrame.Navigate(typeof(HelpPage));
+            ContentFrame.Navigate(typeof(HelpPage));
 
 
 
@@ -302,8 +148,7 @@ namespace 随机抽取学号
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-
-                ContentFrame.Navigate(typeof(SettingsPage), null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
+            ContentFrame.Navigate(typeof(SettingsPage), null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
 
 
 
@@ -360,11 +205,6 @@ namespace 随机抽取学号
         {
             ContentFrame.Navigate(typeof(ClassPage));
             StartAnimation(ClassPageButton);
-
-        }
-
-        private void AppTitleBar_Loaded(object sender, RoutedEventArgs e)
-        {
 
         }
 

@@ -366,59 +366,44 @@
         <Grid>
             <Grid.RowDefinitions>
                 <RowDefinition Height="40"/>
-                <!--<RowDefinition/>-->
             </Grid.RowDefinitions>
 
-
-
-            <Frame muxc:BackdropMaterial.ApplyToRootOrPageBackground="False" >
-                <Grid x:Name="AppTitleBar" Background="Transparent" Loaded="AppTitleBar_Loaded">
-                    <!-- Width of the padding columns is set in LayoutMetricsChanged handler. -->
-                    <!-- Using padding columns instead of Margin ensures that the background
-             paints the area under the caption control buttons (for transparent buttons). -->
-                    <Grid.ColumnDefinitions>
-                        <ColumnDefinition x:Name="LeftPaddingColumn" Width="0"/>
-                        <ColumnDefinition/>
-                        <ColumnDefinition x:Name="RightPaddingColumn" Width="0"/>
-                    </Grid.ColumnDefinitions>
-                    <Image Source="ms-appx:///Assets/RSSN_Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png" 
-               Grid.Column="1"
+            <!--muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"-->
+            <Grid x:Name="AppTitleBar" Background="Transparent">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto"/>
+                    <ColumnDefinition Width="*"/>
+                </Grid.ColumnDefinitions>
+                <Image Source="ms-appx:///Assets/RSSN_Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png" 
                HorizontalAlignment="Left"
                Width="26" Height="26"
                Margin="7,7,0,7"/>
-                    <TextBlock x:Name="AppTitleTextBlock_1"
+                <TextBlock x:Name="AppTitleTextBlock_1"
                    Text="随机抽取学号 2024" 
                    Style="{StaticResource CaptionTextBlockStyle}" 
-                   Grid.Column="1"
                    VerticalAlignment="Top" HorizontalAlignment="Left"
                    Margin="40,5,0,0" FontFamily="{StaticResource HarmonyOSSans}" FontSize="14"/>
-                    <TextBlock x:Name="AppTitleTextBlock_2"
+                <TextBlock x:Name="AppTitleTextBlock_2"
                 Text="Randomly Select Student Numbers" 
                 Style="{StaticResource CaptionTextBlockStyle}"
                 VerticalAlignment="Top" HorizontalAlignment="Left"
                 Margin="40,25,0,0" FontFamily="{StaticResource HarmonyOSSans}" FontSize="8" Grid.ColumnSpan="2" Height="17" Width="136"/>
-                </Grid>
-            </Frame>
-            <HyperlinkButton x:Name="ClassNameHyperlinkButton" Content="我的班级" Margin="180,0,0,0" FontFamily="{StaticResource HarmonyOSSans}" x:FieldModifier="public" Click="ClassNameHyperlinkButton_Click" Height="30">
-                <HyperlinkButton.Background>
-                    <LinearGradientBrush EndPoint="0.5,1" StartPoint="0.5,0">
-                        <GradientStop Color="Black"/>
-                        <GradientStop Color="White" Offset="1"/>
-                    </LinearGradientBrush>
-                </HyperlinkButton.Background>
-            </HyperlinkButton>
+            </Grid>
+            <HyperlinkButton x:Name="ClassNameHyperlinkButton" Grid.Column="0" Content="我的班级" Margin="175,2,0,2" FontFamily="{StaticResource HarmonyOSSans}" x:FieldModifier="public" Click="ClassNameHyperlinkButton_Click" Height="36" FontSize="16" Width="Auto" BorderBrush="{ThemeResource SystemAccentColorDark2 }" BorderThickness="2"/>
+
             <!-- 搜索框 -->
             <!--<AutoSuggestBox x:Name="MySearchBox" PlaceholderText="搜索..." HorizontalAlignment="Left" VerticalAlignment="Center" Margin="300,0,0,0" Width="200" />-->
 
-            <AutoSuggestBox QueryIcon="Find"
+            <!--<AutoSuggestBox QueryIcon="Find"
                     PlaceholderText="搜索"
                     HorizontalAlignment="Center"
-                    MinWidth="200" MaxWidth="350" Height="32"
-                    AutoMaximizeSuggestionArea="True" FontFamily="{StaticResource HarmonyOSSans}"/>
+                    MinWidth="200" MaxWidth="350" Height="32" Grid.Column="1"
+                    AutoMaximizeSuggestionArea="True" FontFamily="{StaticResource HarmonyOSSans}"/>-->
+
         </Grid>
 
-        <Frame x:Name="ContentFrame" Padding="12,0,12,24"
-                   NavigationFailed="ContentFrame_NavigationFailed" x:FieldModifier="public" Margin="60,50,-10,-20" CornerRadius="16,0,0,0" BorderBrush="Transparent" BorderThickness="0" Grid.Row="0" >
+        <Frame x:Name="ContentFrame" 
+                   NavigationFailed="ContentFrame_NavigationFailed" x:FieldModifier="public" Margin="70,45,-10,-20" CornerRadius="8,0,0,0" BorderBrush="Transparent" BorderThickness="0" Grid.Row="0" >
             <Frame.ContentTransitions>
                 <TransitionCollection>
                     <NavigationThemeTransition/>

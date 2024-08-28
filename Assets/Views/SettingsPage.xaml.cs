@@ -21,7 +21,10 @@ namespace 随机抽取学号.Views
             {
                 AppearanceRadioButtons.SelectedIndex = (int)ApplicationData.Current.LocalSettings.Values["Theme"];
             }
-
+            else
+            {
+                AppearanceRadioButtons.SelectedIndex = 2;
+            }
             // 开始进入动画
             var enterPageStoryboard = this.Resources["EnterPageStoryboard"] as Storyboard;
             enterPageStoryboard?.Begin();
@@ -58,18 +61,7 @@ namespace 随机抽取学号.Views
                 1 => ElementTheme.Dark,
                 _ => ElementTheme.Default
             };
-            ////设置应用的主题
-            //var view = ApplicationView.GetForCurrentView();
-            //if (Application.Current.RequestedTheme == ApplicationTheme.Dark)
-            //{
-            //    //Application.Current.Resources.ThemeDictionaries["Light"] = Application.Current.Resources.ThemeDictionaries["Dark"];
-            //    view.TitleBar.ButtonForegroundColor = Colors.White;
-            //}
-            //else if (Application.Current.RequestedTheme == ApplicationTheme.Light)
-            //{
-            //    view.TitleBar.ButtonForegroundColor = Colors.Black;
-            //    //Application.Current.Resources.ThemeDictionaries["Dark"] = Application.Current.Resources.ThemeDictionaries["Light"];
-            //}
+
             var view = ApplicationView.GetForCurrentView();
             if (AppearanceRadioButtons.SelectedIndex == 0)
             {
@@ -78,6 +70,17 @@ namespace 随机抽取学号.Views
             else if (AppearanceRadioButtons.SelectedIndex == 1)
             {
                 view.TitleBar.ButtonForegroundColor = Colors.White;
+            }
+            else
+            {
+                if (Application.Current.RequestedTheme == ApplicationTheme.Dark)
+                {
+                    view.TitleBar.ButtonForegroundColor = Colors.White;
+                }
+                else if (Application.Current.RequestedTheme == ApplicationTheme.Light)
+                {
+                    view.TitleBar.ButtonForegroundColor = ((Color)Application.Current.Resources["SystemAccentColor"]);
+                }
             }
         }
 

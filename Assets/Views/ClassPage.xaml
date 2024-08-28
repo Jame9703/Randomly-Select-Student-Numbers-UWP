@@ -26,8 +26,8 @@
                         <ColumnDefinition Width="*"/>
                     </Grid.ColumnDefinitions>
 
-                    <Border x:Name="lineNumberBorder" Background="{StaticResource SystemControlBackgroundBaseLowBrush}" CornerRadius="8,0,0,8" Grid.Column="0">
-                        <TextBlock x:Name="lineNumberTextBlock" Foreground="#FF787775"
+                    <Border x:Name="lineNumberBorder" CornerRadius="8,0,0,8" Grid.Column="0">
+                        <TextBlock x:Name="lineNumberTextBlock" Foreground="{ThemeResource LineNumberForeground}"
                    Margin="0,5"
                    VerticalAlignment="Top"
                    FontSize="16"
