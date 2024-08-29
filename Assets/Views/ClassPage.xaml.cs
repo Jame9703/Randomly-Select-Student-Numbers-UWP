@@ -1,16 +1,30 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
+using System.IO;
 using System.Linq;
+using System.Text;
+using Windows.Foundation;
+using Windows.Graphics.Imaging;
 using Windows.Storage;
+using Windows.Storage.AccessCache;
+using Windows.Storage.FileProperties;
 using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Media.Imaging;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
 namespace 随机抽取学号.Views
 {
+    public class ImageTextItem
+    {
+        public BitmapImage Photos { get; set; }
+        public string Names { get; set; }
+    }
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
@@ -18,10 +32,10 @@ namespace 随机抽取学号.Views
     {
         public static ClassPage Current;
         public List<string> names = new List<string>();
-        private static readonly ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-        private static readonly string NamesKey = "Names";
-        private static readonly string ClassNameKey = "ClassName";
+        ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         public delegate void TextChangedEventHandler(string Text);
+        List<ImageTextItem> imageTextItems = new List<ImageTextItem>();
+
         public ClassPage()
         {
             this.InitializeComponent();
@@ -30,13 +44,40 @@ namespace 随机抽取学号.Views
             UpdateLineNumbers();
             LoadData();
             //lineNumberBorder.Background = Editor.Background;
+            if (localSettings.Values["Names"] != null) Editor.Text = (string)localSettings.Values["Names"];
+            if (localSettings.Values["ClassName"] != null) ClassNameTextBox.Text = (string)localSettings.Values["ClassName"];
+            if (localSettings.Values["PhotosLocation"] != null)
+            {
+                PhotosLocationTextBlock.Text = (string)localSettings.Values["PhotosLocation"];
+                    //imageTextItems.Clear();
+                    //PhotosGridView.ItemsSource = null;
+                    //PhotosGridView.ItemsPanel = null;
+                    //IReadOnlyList<StorageFile> files = folder.GetFilesAsync();
+                    //foreach (StorageFile file in files)
+                    //{
+                    //    BitmapImage bitmapImage = new BitmapImage();
+
+
+                    //    using (IRandomAccessStream fileStream =  file.OpenAsync(FileAccessMode.Read))
+                    //    {
+                    //        ImageProperties properties =  file.Properties.GetImagePropertiesAsync();
+                    //        bitmapImage.DecodePixelWidth = (int)properties.Width;
+                    //        bitmapImage.DecodePixelHeight = (int)properties.Height;
+                    //         bitmapImage.SetSourceAsync(fileStream);
+                    //    }
+
+                    //    var item = new ImageTextItem { Photos = bitmapImage, Names = file.Name };
+                    //    imageTextItems.Add(item);
+                    //}
+
+                    //PhotosGridView.ItemsSource = imageTextItems;
+                    //localSettings.Values["PhotosLocation"] = folder.Path;
+
+            }
         }
         private void LoadData()
         {
-            string Names = localSettings.Values[NamesKey] as string;
-            if (Names != null) Editor.Text = Names;
-            string ClassName = localSettings.Values[ClassNameKey] as string;
-            if (ClassName != null) ClassNameTextBox.Text = ClassName;
+
         }
 
         public void UpdateLineNumbers()
@@ -53,7 +94,7 @@ namespace 随机抽取学号.Views
 
         private void ClassNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            localSettings.Values[ClassNameKey] = ClassNameTextBox.Text;
+            localSettings.Values["ClassName"] = ClassNameTextBox.Text;
             //MainPage mainPage = new MainPage();
             //mainPage.ClassNameHyperlinkButton.Content = localSettings.Values[ClassNameKey];
             //if (TextChanged != null)
@@ -81,7 +122,7 @@ namespace 随机抽取学号.Views
                     string text = await FileIO.ReadTextAsync(file);
                     Editor.Text = text;
                     ClassNameTextBox.Text = System.IO.Path.GetFileNameWithoutExtension(file.Name);
-                    localSettings.Values[NamesKey] = Editor.Text;
+                    localSettings.Values["Names"] = Editor.Text;
 
                     PopupNotice popupNotice = new PopupNotice("成功打开文件: " + file.Name);
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
@@ -140,7 +181,7 @@ namespace 随机抽取学号.Views
         }
         public void Editor_TextChanged(object sender, TextChangedEventArgs e)
         {
-            localSettings.Values[NamesKey] = Editor.Text;
+            localSettings.Values["Names"] = Editor.Text;
             UpdateLineNumbers();
             string text = Editor.Text;
             names = text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -151,9 +192,42 @@ namespace 随机抽取学号.Views
             UpdateLineNumbers();
         }
 
-        private void Page_Unloaded(object sender, RoutedEventArgs e)
+        private async void FolderPickerButton_Click(object sender, RoutedEventArgs e)
         {
+            FolderPicker folderPicker = new FolderPicker();
+            folderPicker.FileTypeFilter.Add(".jpg");
+            folderPicker.FileTypeFilter.Add(".jpeg");
+            folderPicker.FileTypeFilter.Add(".png");
+            folderPicker.FileTypeFilter.Add(".bmp");
 
+            StorageFolder folder = await folderPicker.PickSingleFolderAsync();
+            if (folder != null)
+            {
+                imageTextItems.Clear();
+                PhotosGridView.ItemsSource = null;
+
+                IReadOnlyList<StorageFile> files = await folder.GetFilesAsync();
+                foreach (StorageFile file in files)
+                {
+                    BitmapImage bitmapImage = new BitmapImage();
+
+
+                    using (IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.Read))
+                    {
+                        ImageProperties properties = await file.Properties.GetImagePropertiesAsync();
+                        bitmapImage.DecodePixelWidth = (int)properties.Width;
+                        bitmapImage.DecodePixelHeight = (int)properties.Height;
+                        await bitmapImage.SetSourceAsync(fileStream);
+                    }
+
+                    var item = new ImageTextItem { Photos = bitmapImage, Names = file.Name };
+                    imageTextItems.Add(item);
+                }
+
+                PhotosGridView.ItemsSource = imageTextItems;
+                PhotosLocationTextBlock.Text = folder.Path;
+                localSettings.Values["PhotosLocation"] = folder.Path;
+            }
         }
     }
 

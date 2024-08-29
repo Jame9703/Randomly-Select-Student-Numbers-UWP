@@ -403,7 +403,7 @@
         </Grid>
 
         <Frame x:Name="ContentFrame" 
-                   NavigationFailed="ContentFrame_NavigationFailed" x:FieldModifier="public" Margin="70,45,-10,-20" CornerRadius="8,0,0,0" BorderBrush="Transparent" BorderThickness="0" Grid.Row="0" >
+                   NavigationFailed="ContentFrame_NavigationFailed" x:FieldModifier="public" Margin="70,45,0,0" CornerRadius="8,0,0,0" BorderBrush="Transparent" BorderThickness="0" Grid.Row="0" >
             <Frame.ContentTransitions>
                 <TransitionCollection>
                     <NavigationThemeTransition/>
