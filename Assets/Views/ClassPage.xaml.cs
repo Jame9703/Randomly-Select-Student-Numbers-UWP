@@ -15,6 +15,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Shapes;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -49,30 +50,6 @@ namespace 随机抽取学号.Views
             if (localSettings.Values["PhotosLocation"] != null)
             {
                 PhotosLocationTextBlock.Text = (string)localSettings.Values["PhotosLocation"];
-                    //imageTextItems.Clear();
-                    //PhotosGridView.ItemsSource = null;
-                    //PhotosGridView.ItemsPanel = null;
-                    //IReadOnlyList<StorageFile> files = folder.GetFilesAsync();
-                    //foreach (StorageFile file in files)
-                    //{
-                    //    BitmapImage bitmapImage = new BitmapImage();
-
-
-                    //    using (IRandomAccessStream fileStream =  file.OpenAsync(FileAccessMode.Read))
-                    //    {
-                    //        ImageProperties properties =  file.Properties.GetImagePropertiesAsync();
-                    //        bitmapImage.DecodePixelWidth = (int)properties.Width;
-                    //        bitmapImage.DecodePixelHeight = (int)properties.Height;
-                    //         bitmapImage.SetSourceAsync(fileStream);
-                    //    }
-
-                    //    var item = new ImageTextItem { Photos = bitmapImage, Names = file.Name };
-                    //    imageTextItems.Add(item);
-                    //}
-
-                    //PhotosGridView.ItemsSource = imageTextItems;
-                    //localSettings.Values["PhotosLocation"] = folder.Path;
-
             }
         }
         private void LoadData()
@@ -203,9 +180,16 @@ namespace 随机抽取学号.Views
             StorageFolder folder = await folderPicker.PickSingleFolderAsync();
             if (folder != null)
             {
+                GridView PhotosGridView = new GridView();
+                PhotosGridView.ItemTemplate = (DataTemplate)Resources["GridViewItemTemplate"];
+                PhotosGridView.Style = (Style)Resources["GridViewStyle"];
+                PhotosGridView.CanReorderItems = true;
+                PhotosGridView.CanDragItems = true;
+                PhotosGridView.IsItemClickEnabled = true;
+                PhotosGridView.AllowDrop = true;
+                PhotosGrid.Children.Clear();
+                PhotosGrid.Children.Add(PhotosGridView);
                 imageTextItems.Clear();
-                PhotosGridView.ItemsSource = null;
-
                 IReadOnlyList<StorageFile> files = await folder.GetFilesAsync();
                 foreach (StorageFile file in files)
                 {
@@ -215,8 +199,8 @@ namespace 随机抽取学号.Views
                     using (IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.Read))
                     {
                         ImageProperties properties = await file.Properties.GetImagePropertiesAsync();
-                        bitmapImage.DecodePixelWidth = (int)properties.Width;
-                        bitmapImage.DecodePixelHeight = (int)properties.Height;
+                        //bitmapImage.DecodePixelWidth = (int)properties.Width;
+                        //bitmapImage.DecodePixelHeight = (int)properties.Height;
                         await bitmapImage.SetSourceAsync(fileStream);
                     }
 

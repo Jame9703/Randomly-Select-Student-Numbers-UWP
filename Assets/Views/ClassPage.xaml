@@ -8,7 +8,7 @@
     x:Class="随机抽取学号.Views.ClassPage"
     mc:Ignorable="d"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
-    NavigationCacheMode="Enabled">
+    NavigationCacheMode="Disabled">
     <Page.Resources>
         <Style x:Key="GridViewStyle" TargetType="GridView">
             <Setter Property="Padding" Value="0,0,0,0"/>
@@ -32,7 +32,7 @@
                         <AddDeleteThemeTransition/>
                         <ContentThemeTransition/>
                         <ReorderThemeTransition/>
-                        <EntranceThemeTransition IsStaggeringEnabled="True" FromVerticalOffset="250"/>
+                        <EntranceThemeTransition IsStaggeringEnabled="True" FromVerticalOffset="150"/>
                     </TransitionCollection>
                 </Setter.Value>
             </Setter>
@@ -57,6 +57,9 @@
         </Style>
         <DataTemplate x:Key="GridViewItemTemplate" x:DataType="local:ImageTextItem">
             <StackPanel Width="225" Height="Auto" Orientation="Vertical">
+                <StackPanel.ChildrenTransitions>
+                    <EntranceThemeTransition IsStaggeringEnabled="True" FromVerticalOffset="200"></EntranceThemeTransition>
+                </StackPanel.ChildrenTransitions>
                 <Image Stretch="UniformToFill" Source="{x:Bind Photos}" Width="225" Height="300"/>
                 <TextBlock Text="{x:Bind Names}" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="{StaticResource HarmonyOSSans}" FontSize="16"/>
             </StackPanel>
@@ -105,7 +108,19 @@
             <TextBox x:Name="ClassNameTextBox" Grid.Column="2" HorizontalAlignment="Left" Height="30" Margin="75,0,0,0" TextWrapping="Wrap" Text="我的班级" VerticalAlignment="Top" Width="164" TextChanged="ClassNameTextBox_TextChanged" FontFamily="{StaticResource HarmonyOSSans}"/>
             <Button x:Name="FolderPickerButton"  Grid.Column="2" Content="Button" Height="34" Margin="417,38,0,0" VerticalAlignment="Top" Width="83" Click="FolderPickerButton_Click"/>
             <TextBlock x:Name="PhotosLocationTextBlock" TextWrapping="Wrap" Text="TextBox" Margin="150,40,0,0" Width="200" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="2"/>
-            <GridView x:Name="PhotosGridView" Grid.Column="2"  Style="{StaticResource GridViewStyle}"  Margin="0,80,0,0" ItemTemplate="{StaticResource GridViewItemTemplate}"/>
+            <!--<GridView x:Name="PhotosGridView" Grid.Column="2"  Style="{StaticResource GridViewStyle}"  Margin="0,80,0,0" ItemTemplate="{StaticResource GridViewItemTemplate}" CanReorderItems="True">
+                <GridView.ItemContainerTransitions>
+                    <TransitionCollection>
+                        <AddDeleteThemeTransition/>
+                        <ContentThemeTransition/>
+                        <ReorderThemeTransition/>
+                        <EntranceThemeTransition IsStaggeringEnabled="True" FromVerticalOffset="300"/>
+                    </TransitionCollection>
+                </GridView.ItemContainerTransitions>
+            </GridView>-->
+            <Grid x:Name="PhotosGrid" Grid.Column="2" Margin="0,80,0,0">
+                
+            </Grid>
         </Grid>
 
         <AppBarButton x:Name="OpenFileButton" Height="59" Label="打开文件" Width="80" Icon="OpenLocal" Click="OpenFileButton_Click" Margin="99,19,0,0" FontFamily="{StaticResource HarmonyOSSans}"/>

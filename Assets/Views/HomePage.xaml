@@ -216,7 +216,7 @@
                 <StackPanel x:Name="StackPanelCheckBoxes" HorizontalAlignment="Left" Height="Auto" VerticalAlignment="Top" Width="175">
                     <StackPanel.ChildrenTransitions>
                         <TransitionCollection>
-                            <EntranceThemeTransition IsStaggeringEnabled="True" FromHorizontalOffset="50"/>
+                            <EntranceThemeTransition IsStaggeringEnabled="True"/>
                         </TransitionCollection>
                     </StackPanel.ChildrenTransitions>
                 </StackPanel>

@@ -467,8 +467,11 @@ namespace 随机抽取学号.Views
                         checkBox[i].IsChecked = true;
                         checkedCheckBoxes.Add(i);
                     }
-
                 }
+                //将checkBoxes转换为string存入应用设置
+                string checkedCheckBoxesString = string.Join(",", checkedCheckBoxes);
+                var localSettings = ApplicationData.Current.LocalSettings;
+                localSettings.Values["checkedCheckBoxesString"] = checkedCheckBoxesString;
                 checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + _lines.Length.ToString();
             }
         }
@@ -487,8 +490,11 @@ namespace 随机抽取学号.Views
                     {
                         checkBox[i].IsChecked = false;
                     }
-
                 }
+                //将checkBoxes转换为string存入应用设置
+                string checkedCheckBoxesString = string.Join(",", checkedCheckBoxes);
+                var localSettings = ApplicationData.Current.LocalSettings;
+                localSettings.Values["checkedCheckBoxesString"] = checkedCheckBoxesString;
                 checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + _lines.Length.ToString();
             }
         }
