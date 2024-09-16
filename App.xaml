@@ -2,30 +2,36 @@
     x:Class="随机抽取学号.App"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:随机抽取学号"
-    xmlns:controls="using:Microsoft.UI.Xaml.Controls">
+    xmlns:controls="using:Microsoft.UI.Xaml.Controls"
+    xmlns:local="using:随机抽取学号">
     <Application.Resources>
         <controls:XamlControlsResources>
             <controls:XamlControlsResources.MergedDictionaries>
-                <!-- Other app resources here -->
+                <!--  Other app resources here  -->
                 <ResourceDictionary>
                     <FontFamily x:Key="HarmonyOSSans">ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC</FontFamily>
                 </ResourceDictionary>
                 <ResourceDictionary>
                     <ResourceDictionary.ThemeDictionaries>
                         <ResourceDictionary x:Key="Light">
-                            <!-- 定义浅色主题资源 -->
-                            <SolidColorBrush x:Key="MyBrush" Color="Yellow"/>
-                            <SolidColorBrush x:Key="GridBackground" Color="White" Opacity="0.6"/>
-                            <SolidColorBrush x:Key="LineNumberForeground" Color="#E42B91AF"/>
+                            <!--  定义浅色主题资源  -->
+                            <SolidColorBrush x:Key="MyBrush" Color="Yellow" />
+                            <SolidColorBrush
+                                x:Key="GridBackground"
+                                Opacity="0.6"
+                                Color="White" />
+                            <SolidColorBrush x:Key="LineNumberForeground" Color="#E42B91AF" />
                             <Color x:Key="ButtonForegroundColor">Green</Color>
-                            
+
                         </ResourceDictionary>
                         <ResourceDictionary x:Key="Dark">
-                            <!-- 定义深色主题资源 -->
-                            <SolidColorBrush x:Key="MyBrush" Color="Green"/>
-                            <SolidColorBrush x:Key="GridBackground" Color="Black" Opacity="0.2"/>
-                            <SolidColorBrush x:Key="LineNumberForeground" Color="#E4858585"/>
+                            <!--  定义深色主题资源  -->
+                            <SolidColorBrush x:Key="MyBrush" Color="Green" />
+                            <SolidColorBrush
+                                x:Key="GridBackground"
+                                Opacity="0.2"
+                                Color="Black" />
+                            <SolidColorBrush x:Key="LineNumberForeground" Color="#E4858585" />
                             <Color x:Key="ButtonForegroundColor">yellow</Color>
                         </ResourceDictionary>
                     </ResourceDictionary.ThemeDictionaries>

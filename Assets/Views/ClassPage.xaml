@@ -1,54 +1,79 @@
 ﻿<Page
+    x:Class="随机抽取学号.Views.ClassPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
-    xmlns:local="using:随机抽取学号.Views"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:local="using:随机抽取学号.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-    x:Class="随机抽取学号.Views.ClassPage"
-    mc:Ignorable="d"
-    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
-    NavigationCacheMode="Disabled">
+    NavigationCacheMode="Enabled"
+    mc:Ignorable="d">
     <Page.Resources>
         <Style x:Key="GridViewStyle" TargetType="GridView">
-            <Setter Property="Padding" Value="0,0,0,0"/>
-            <Setter Property="IsTabStop" Value="False"/>
-            <Setter Property="TabNavigation" Value="Once"/>
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled"/>
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto"/>
-            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Disabled"/>
-            <Setter Property="ScrollViewer.IsHorizontalRailEnabled" Value="False"/>
-            <Setter Property="ScrollViewer.VerticalScrollMode" Value="Enabled"/>
-            <Setter Property="ScrollViewer.IsVerticalRailEnabled" Value="True"/>
-            <Setter Property="ScrollViewer.ZoomMode" Value="Disabled"/>
-            <Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="False"/>
-            <Setter Property="ScrollViewer.BringIntoViewOnFocusChange" Value="True"/>
-            <Setter Property="IsSwipeEnabled" Value="True"/>
-            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}"/>
-            <Setter Property="FocusVisualMargin" Value="-2"/>
+            <Setter Property="Padding" Value="0,0,0,0" />
+            <Setter Property="IsTabStop" Value="False" />
+            <Setter Property="TabNavigation" Value="Once" />
+            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
+            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
+            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Disabled" />
+            <Setter Property="ScrollViewer.IsHorizontalRailEnabled" Value="False" />
+            <Setter Property="ScrollViewer.VerticalScrollMode" Value="Enabled" />
+            <Setter Property="ScrollViewer.IsVerticalRailEnabled" Value="True" />
+            <Setter Property="ScrollViewer.ZoomMode" Value="Disabled" />
+            <Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="False" />
+            <Setter Property="ScrollViewer.BringIntoViewOnFocusChange" Value="True" />
+            <Setter Property="IsSwipeEnabled" Value="True" />
+            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}" />
+            <Setter Property="FocusVisualMargin" Value="-2" />
             <Setter Property="ItemContainerTransitions">
                 <Setter.Value>
                     <TransitionCollection>
-                        <AddDeleteThemeTransition/>
-                        <ContentThemeTransition/>
-                        <ReorderThemeTransition/>
-                        <EntranceThemeTransition IsStaggeringEnabled="True" FromVerticalOffset="150"/>
+                        <AddDeleteThemeTransition />
+                        <ContentThemeTransition />
+                        <ReorderThemeTransition />
+                        <EntranceThemeTransition FromVerticalOffset="150" IsStaggeringEnabled="True" />
                     </TransitionCollection>
                 </Setter.Value>
             </Setter>
             <Setter Property="ItemsPanel">
                 <Setter.Value>
                     <ItemsPanelTemplate>
-                        <ItemsWrapGrid Orientation="Horizontal"/>
+                        <ItemsWrapGrid Orientation="Horizontal" />
                     </ItemsPanelTemplate>
                 </Setter.Value>
             </Setter>
             <Setter Property="Template">
                 <Setter.Value>
                     <ControlTemplate TargetType="GridView">
-                        <Border Background="{TemplateBinding Background}" BorderBrush="{TemplateBinding BorderBrush}" BorderThickness="{TemplateBinding BorderThickness}" CornerRadius="{TemplateBinding CornerRadius}">
-                            <ScrollViewer x:Name="ScrollViewer" AutomationProperties.AccessibilityView="Raw" BringIntoViewOnFocusChange="{TemplateBinding ScrollViewer.BringIntoViewOnFocusChange}" HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}" HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}" IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}" IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}" IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}" IsHorizontalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsHorizontalScrollChainingEnabled}" IsVerticalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsVerticalScrollChainingEnabled}" TabNavigation="{TemplateBinding TabNavigation}" VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}" VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}" ZoomMode="{TemplateBinding ScrollViewer.ZoomMode}">
-                                <ItemsPresenter Footer="{TemplateBinding Footer}" FooterTemplate="{TemplateBinding FooterTemplate}" FooterTransitions="{TemplateBinding FooterTransitions}" HeaderTemplate="{TemplateBinding HeaderTemplate}" HeaderTransitions="{TemplateBinding HeaderTransitions}" Header="{TemplateBinding Header}" Padding="{TemplateBinding Padding}"/>
+                        <Border
+                            Background="{TemplateBinding Background}"
+                            BorderBrush="{TemplateBinding BorderBrush}"
+                            BorderThickness="{TemplateBinding BorderThickness}"
+                            CornerRadius="{TemplateBinding CornerRadius}">
+                            <ScrollViewer
+                                x:Name="ScrollViewer"
+                                AutomationProperties.AccessibilityView="Raw"
+                                BringIntoViewOnFocusChange="{TemplateBinding ScrollViewer.BringIntoViewOnFocusChange}"
+                                HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}"
+                                IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}"
+                                IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}"
+                                IsHorizontalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsHorizontalScrollChainingEnabled}"
+                                IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}"
+                                IsVerticalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsVerticalScrollChainingEnabled}"
+                                TabNavigation="{TemplateBinding TabNavigation}"
+                                VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}"
+                                ZoomMode="{TemplateBinding ScrollViewer.ZoomMode}">
+                                <ItemsPresenter
+                                    Padding="{TemplateBinding Padding}"
+                                    Footer="{TemplateBinding Footer}"
+                                    FooterTemplate="{TemplateBinding FooterTemplate}"
+                                    FooterTransitions="{TemplateBinding FooterTransitions}"
+                                    Header="{TemplateBinding Header}"
+                                    HeaderTemplate="{TemplateBinding HeaderTemplate}"
+                                    HeaderTransitions="{TemplateBinding HeaderTransitions}" />
                             </ScrollViewer>
                         </Border>
                     </ControlTemplate>
@@ -56,75 +81,162 @@
             </Setter>
         </Style>
         <DataTemplate x:Key="GridViewItemTemplate" x:DataType="local:ImageTextItem">
-            <StackPanel Width="225" Height="Auto" Orientation="Vertical">
+            <StackPanel
+                Width="225"
+                Height="Auto"
+                Orientation="Vertical">
                 <StackPanel.ChildrenTransitions>
-                    <EntranceThemeTransition IsStaggeringEnabled="True" FromVerticalOffset="200"></EntranceThemeTransition>
+                    <TransitionCollection>
+                        <EntranceThemeTransition
+                            FromHorizontalOffset="-250"
+                            FromVerticalOffset="-250"
+                            IsStaggeringEnabled="True" />
+                    </TransitionCollection>
                 </StackPanel.ChildrenTransitions>
-                <Image Stretch="UniformToFill" Source="{x:Bind Photos}" Width="225" Height="300"/>
-                <TextBlock Text="{x:Bind Names}" VerticalAlignment="Center" HorizontalAlignment="Center" FontFamily="{StaticResource HarmonyOSSans}" FontSize="16"/>
+                <Image
+                    Width="225"
+                    Height="300"
+                    Source="{x:Bind Photos}"
+                    Stretch="UniformToFill" />
+                <TextBlock
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="{StaticResource HarmonyOSSans}"
+                    FontSize="16"
+                    Text="{x:Bind Names}" />
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
 
     <Grid Background="{ThemeResource GridBackground}">
-        <Grid MinWidth="400"
-          MinHeight="300">
+        <Grid MinWidth="400" MinHeight="300">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="Auto" />
-                <ColumnDefinition  Width="*"/>
+                <ColumnDefinition Width="*" />
             </Grid.ColumnDefinitions>
 
-            <ScrollViewer VerticalScrollMode="Enabled" VerticalScrollBarVisibility="Auto">
-                <Grid x:Name="NamesGrid"   CornerRadius="0,0,0,0"  MinWidth="100" MaxWidth="300">
+            <ScrollViewer VerticalScrollBarVisibility="Auto" VerticalScrollMode="Enabled">
+                <Grid
+                    x:Name="NamesGrid"
+                    MinWidth="100"
+                    MaxWidth="300"
+                    CornerRadius="0,0,0,0">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"/>
-                        <ColumnDefinition Width="*"/>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
 
-                    <Border x:Name="lineNumberBorder" CornerRadius="8,0,0,8" Grid.Column="0">
-                        <TextBlock x:Name="lineNumberTextBlock" Foreground="{ThemeResource LineNumberForeground}"
-                   Margin="0,5"
-                   VerticalAlignment="Top"
-                   FontSize="16"
-                   FontFamily="{StaticResource HarmonyOSSans}"
-                   TextAlignment="Right"
-                   IsTextSelectionEnabled="False" />
+                    <Border
+                        x:Name="lineNumberBorder"
+                        Grid.Column="0"
+                        CornerRadius="8,0,0,8">
+                        <TextBlock
+                            x:Name="lineNumberTextBlock"
+                            Margin="0,5"
+                            VerticalAlignment="Top"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="16"
+                            Foreground="{ThemeResource LineNumberForeground}"
+                            IsTextSelectionEnabled="False"
+                            TextAlignment="Right" />
                     </Border>
 
-                    <TextBox x:Name="Editor"
-                    FontFamily="{StaticResource HarmonyOSSans}"
-                    FontSize="16"
-                     Grid.Column="1"
-                     AcceptsReturn="True"
-                     x:FieldModifier="public" TextChanged="Editor_TextChanged" Loaded="Editor_Loaded" CornerRadius="0,0,0,0" />
+                    <TextBox
+                        x:Name="Editor"
+                        Grid.Column="1"
+                        x:FieldModifier="public"
+                        AcceptsReturn="True"
+                        CornerRadius="0,0,0,0"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        FontSize="16"
+                        Loaded="Editor_Loaded"
+                        TextChanged="Editor_TextChanged" />
 
                 </Grid>
             </ScrollViewer>
-            <controls:ContentSizer Grid.Column="1"
-                               Cursor="Hand"
-                               TargetControl="{x:Bind NamesGrid}" />
-            <TextBlock Grid.Column="1" HorizontalAlignment="Left" Height="29" Margin="10,4,0,0" TextWrapping="Wrap" Text="班级名称：" VerticalAlignment="Top" Width="70" FontFamily="{StaticResource HarmonyOSSans}" Grid.ColumnSpan="2"/>
-            <TextBox x:Name="ClassNameTextBox" Grid.Column="2" HorizontalAlignment="Left" Height="30" Margin="75,0,0,0" TextWrapping="Wrap" Text="我的班级" VerticalAlignment="Top" Width="164" TextChanged="ClassNameTextBox_TextChanged" FontFamily="{StaticResource HarmonyOSSans}"/>
-            <Button x:Name="FolderPickerButton"  Grid.Column="2" Content="Button" Height="34" Margin="417,38,0,0" VerticalAlignment="Top" Width="83" Click="FolderPickerButton_Click"/>
-            <TextBlock x:Name="PhotosLocationTextBlock" TextWrapping="Wrap" Text="TextBox" Margin="150,40,0,0" Width="200" Height="30" VerticalAlignment="Top" HorizontalAlignment="Left" Grid.Column="2"/>
-            <!--<GridView x:Name="PhotosGridView" Grid.Column="2"  Style="{StaticResource GridViewStyle}"  Margin="0,80,0,0" ItemTemplate="{StaticResource GridViewItemTemplate}" CanReorderItems="True">
-                <GridView.ItemContainerTransitions>
+            <controls:ContentSizer
+                Grid.Column="1"
+                Cursor="Hand"
+                TargetControl="{x:Bind NamesGrid}" />
+            <TextBlock
+                Grid.Column="1"
+                Grid.ColumnSpan="2"
+                Width="70"
+                Height="29"
+                Margin="10,4,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                FontFamily="{StaticResource HarmonyOSSans}"
+                Text="班级名称："
+                TextWrapping="Wrap" />
+            <TextBox
+                x:Name="ClassNameTextBox"
+                Grid.Column="2"
+                Width="164"
+                Height="30"
+                Margin="75,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                FontFamily="{StaticResource HarmonyOSSans}"
+                Text="我的班级"
+                TextChanged="ClassNameTextBox_TextChanged"
+                TextWrapping="Wrap" />
+            <Button
+                x:Name="FolderPickerButton"
+                Grid.Column="2"
+                Width="83"
+                Height="34"
+                Margin="417,38,0,0"
+                VerticalAlignment="Top"
+                Click="FolderPickerButton_Click"
+                Content="Button" />
+            <TextBlock
+                x:Name="PhotosLocationTextBlock"
+                Grid.Column="2"
+                Width="200"
+                Height="30"
+                Margin="150,40,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                Text="TextBox"
+                TextWrapping="Wrap" />
+            <!--<GridView x:Name="PhotosGridView" Grid.Column="2"  Style="{StaticResource GridViewStyle}"  Margin="0,80,0,0" ItemTemplate="{StaticResource GridViewItemTemplate}" CanReorderItems="True" AllowDrop="True">
+            -->
+            <!--<GridView.ItemContainerTransitions>
                     <TransitionCollection>
                         <AddDeleteThemeTransition/>
                         <ContentThemeTransition/>
                         <ReorderThemeTransition/>
-                        <EntranceThemeTransition IsStaggeringEnabled="True" FromVerticalOffset="300"/>
+                        <EntranceThemeTransition IsStaggeringEnabled="True" FromVerticalOffset="200"/>
                     </TransitionCollection>
-                </GridView.ItemContainerTransitions>
+                </GridView.ItemContainerTransitions>-->
+            <!--
             </GridView>-->
-            <Grid x:Name="PhotosGrid" Grid.Column="2" Margin="0,80,0,0">
-                
-            </Grid>
+            <Grid
+                x:Name="PhotosGrid"
+                Grid.Column="2"
+                Margin="0,80,0,0" />
         </Grid>
 
-        <AppBarButton x:Name="OpenFileButton" Height="59" Label="打开文件" Width="80" Icon="OpenLocal" Click="OpenFileButton_Click" Margin="99,19,0,0" FontFamily="{StaticResource HarmonyOSSans}"/>
-        <AppBarButton x:Name="SaveFileButton" Height="59" Label="保存文件" Width="80" Icon="Save" Margin="179,26,0,0" Click="SaveFileButton_Click" FontFamily="{StaticResource HarmonyOSSans}"/>
+        <AppBarButton
+            x:Name="OpenFileButton"
+            Width="80"
+            Height="59"
+            Margin="99,19,0,0"
+            Click="OpenFileButton_Click"
+            FontFamily="{StaticResource HarmonyOSSans}"
+            Icon="OpenLocal"
+            Label="打开文件" />
+        <AppBarButton
+            x:Name="SaveFileButton"
+            Width="80"
+            Height="59"
+            Margin="179,26,0,0"
+            Click="SaveFileButton_Click"
+            FontFamily="{StaticResource HarmonyOSSans}"
+            Icon="Save"
+            Label="保存文件" />
 
 
 

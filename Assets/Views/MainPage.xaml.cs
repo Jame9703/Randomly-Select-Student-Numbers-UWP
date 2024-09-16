@@ -108,15 +108,14 @@ namespace 随机抽取学号
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-                ContentFrame.Navigate(typeof(HomePage), null, new DrillInNavigationTransitionInfo());
+            ContentFrame.Navigate(typeof(HomePage), null, new DrillInNavigationTransitionInfo());
 
         }
         private void ClassPage_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-
-                ContentFrame.Navigate(typeof(ClassPage));
+            ContentFrame.Navigate(typeof(ClassPage));
 
         }
 
@@ -141,16 +140,12 @@ namespace 随机抽取学号
             StartAnimation(button);
             ContentFrame.Navigate(typeof(HelpPage));
 
-
-
         }
         private void SettingsPage_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
             ContentFrame.Navigate(typeof(SettingsPage), null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
-
-
 
         }
 

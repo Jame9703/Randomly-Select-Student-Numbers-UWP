@@ -1,9 +1,12 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.IO;
 using System.Linq;
 using System.Text;
+using Windows.ApplicationModel.DataTransfer;
+using Windows.Devices.Enumeration;
 using Windows.Foundation;
 using Windows.Graphics.Imaging;
 using Windows.Storage;
@@ -15,6 +18,7 @@ using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
+using Windows.UI.Xaml.Navigation;
 using Windows.UI.Xaml.Shapes;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
@@ -35,15 +39,13 @@ namespace 随机抽取学号.Views
         public List<string> names = new List<string>();
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         public delegate void TextChangedEventHandler(string Text);
-        List<ImageTextItem> imageTextItems = new List<ImageTextItem>();
-
+        ObservableCollection<ImageTextItem> imageTextItems = new ObservableCollection<ImageTextItem>();
         public ClassPage()
         {
             this.InitializeComponent();
             Current = this;
             // 初始化行号
             UpdateLineNumbers();
-            LoadData();
             //lineNumberBorder.Background = Editor.Background;
             if (localSettings.Values["Names"] != null) Editor.Text = (string)localSettings.Values["Names"];
             if (localSettings.Values["ClassName"] != null) ClassNameTextBox.Text = (string)localSettings.Values["ClassName"];
@@ -52,11 +54,10 @@ namespace 随机抽取学号.Views
                 PhotosLocationTextBlock.Text = (string)localSettings.Values["PhotosLocation"];
             }
         }
-        private void LoadData()
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
-
+            GC.Collect();
         }
-
         public void UpdateLineNumbers()
         {
             string text = Editor.Text;
@@ -180,15 +181,10 @@ namespace 随机抽取学号.Views
             StorageFolder folder = await folderPicker.PickSingleFolderAsync();
             if (folder != null)
             {
-                GridView PhotosGridView = new GridView();
-                PhotosGridView.ItemTemplate = (DataTemplate)Resources["GridViewItemTemplate"];
-                PhotosGridView.Style = (Style)Resources["GridViewStyle"];
-                PhotosGridView.CanReorderItems = true;
-                PhotosGridView.CanDragItems = true;
-                PhotosGridView.IsItemClickEnabled = true;
-                PhotosGridView.AllowDrop = true;
+                //GridView PhotosGridView = new GridView();
+
                 PhotosGrid.Children.Clear();
-                PhotosGrid.Children.Add(PhotosGridView);
+
                 imageTextItems.Clear();
                 IReadOnlyList<StorageFile> files = await folder.GetFilesAsync();
                 foreach (StorageFile file in files)
@@ -207,11 +203,51 @@ namespace 随机抽取学号.Views
                     var item = new ImageTextItem { Photos = bitmapImage, Names = file.Name };
                     imageTextItems.Add(item);
                 }
-
+               GridView PhotosGridView = new();
+                PhotosGrid.Children.Add(PhotosGridView);
+                PhotosGridView.ItemTemplate = (DataTemplate)Resources["GridViewItemTemplate"];
+                PhotosGridView.Style = (Style)Resources["GridViewStyle"];
+                PhotosGridView.CanReorderItems = true;
+                //PhotosGridView.CanDragItems = true;
+                //PhotosGridView.IsItemClickEnabled = true;
+                PhotosGridView.AllowDrop = true;
+                PhotosGridView.DragOver += PhotosGridView_DragOver;
+                PhotosGridView.Drop += PhotosGridView_Drop;
                 PhotosGridView.ItemsSource = imageTextItems;
                 PhotosLocationTextBlock.Text = folder.Path;
                 localSettings.Values["PhotosLocation"] = folder.Path;
             }
+        }
+
+        private async void PhotosGridView_Drop(object sender, DragEventArgs e)
+        {
+            var PhotosGridView = sender as GridView;
+            var items = await e.DataView.GetStorageItemsAsync();
+            foreach (var item in items)
+            {
+                if (item is StorageFile file)
+                {
+                    BitmapImage bitmapImage = new BitmapImage();
+                    using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.Read))
+                    {
+                        await bitmapImage.SetSourceAsync(stream);
+                    }
+                    var _item = new ImageTextItem { Photos = bitmapImage, Names = file.Name };
+                    imageTextItems.Add(_item);
+                    //Items.Add(bitmapImage); // 添加到GridView的数据源
+                }
+            }
+            PhotosGridView.ItemsSource = imageTextItems;
+            //var item = new ImageTextItem { Photos = bitmapImage, Names = "1" };
+            //PhotosGridView.Items.Add();
+        }
+
+        private void PhotosGridView_DragOver(object sender, DragEventArgs e)
+        {
+            var PhotosGridView = sender as GridView;
+            PhotosGridView.CanDragItems = true;
+            e.AcceptedOperation = DataPackageOperation.Copy;
+            e.DragUIOverride.Caption = "拖放此处即可添加文件 o(^▽^)o";
         }
     }
 

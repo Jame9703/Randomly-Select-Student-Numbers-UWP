@@ -1,9 +1,11 @@
-﻿using Windows.Storage;
+﻿using System;
+using Windows.Storage;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -28,6 +30,10 @@ namespace 随机抽取学号.Views
             // 开始进入动画
             var enterPageStoryboard = this.Resources["EnterPageStoryboard"] as Storyboard;
             enterPageStoryboard?.Begin();
+        }
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            GC.Collect();
         }
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         private void ChangeMainPageOpacity(double opacity)

@@ -37,6 +37,12 @@ namespace 随机抽取学号.Views
             EndNumberBox.Maximum = lines.Length;
             segmented.SelectedIndex = 0;//在xaml中设置会导致后面的控件未加载就被调用//System.NullReferenceException:“Object reference not set to an instance of an object.”
         }
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            timer.Stop();
+            GC.Collect();
+        }
+
         private void CreateCheckBoxes()
         {
             string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
