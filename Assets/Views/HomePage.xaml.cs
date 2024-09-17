@@ -155,24 +155,14 @@ namespace 随机抽取学号.Views
         }
         private void StartorStopButton_Click(object sender, RoutedEventArgs e)
         {
-            Storyboard1.Begin();
-            Storyboard2.Begin();
-            Storyboard3.Begin();
-            Storyboard4.Begin();
+            timer.Start();
+            //Storyboard1.Begin();
+            //Storyboard2.Begin();
+            //Storyboard3.Begin();
+            //Storyboard4.Begin();
             if (Numbers.Value == 1)
             {
-                int a; bool success = int.TryParse(NumberBox.Text, out a);//注意:a或1不能为整数，否则会执行整数除法，只会保留整数部分
-                if (success)
-                {
-                    // 转换成功,将NumberBox中的值作为抽取间隔
-                    double frequency = 1.0/a;
-                    timer.Interval = TimeSpan.FromSeconds(frequency);
-                }
-                else
-                {
-                    // 转换失败，NumberBox中的值不是有效的整数，自动更改为默认值
-                    NumberBox.Text = "10";
-                }
+
                 if (ClassPage.Current.Editor.Text == string.Empty)
                 {
                     PopupNotice popupNotice = new PopupNotice("请先填写班级信息");
@@ -332,51 +322,54 @@ namespace 随机抽取学号.Views
 
             }
         }
+        int a = 0;
+        private void Timer1_Tick(object sender, object e)
+        {
+
+        }
         private void Timer_Tick(object sender, object e)
         {
-            string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-            string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            checkedCheckBoxes.Clear();
-            if (_lines.Length > 0)
-            {
-                for (int i = 0; i < _lines.Length; i++)
-                {
-                    // 遍历所有CheckBox并检查它们的IsChecked属性
-                    var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();
-                    if (checkBox[i].IsChecked == true)
-                    {
-                        checkedCheckBoxes.Add(i);
-                        Random random = new Random();
-                        int randomIndex = checkedCheckBoxes[random.Next(checkedCheckBoxes.Count)];
-                        //if (ModeComboBox.SelectedItem.ToString() == "仅抽取学号")
-                        {
-                            ResultTextBox.Text = (randomIndex + 1).ToString();
-                        }
-                        //else if (ModeComboBox.SelectedItem.ToString() == "仅抽取姓名")
-                        {
-                            ResultTextBox.Text = lines[randomIndex];
-                        }
-                        //else if (ModeComboBox.SelectedItem.ToString() == "抽取学号和姓名")
-                        {
-                            ResultTextBox.Text = (randomIndex + 1) + "." + lines[randomIndex];
-                        }
-                    }
-                }
-            }
-            else
+            a++;
+            PopupNotice popupNotice1 = new PopupNotice(a.ToString());
+            popupNotice1.PopupContent.Severity = InfoBarSeverity.Success;
+            popupNotice1.ShowAPopup();
+            if (ClassPage.Current.Editor.Text == string.Empty)
             {
                 PopupNotice popupNotice = new PopupNotice("请先填写班级信息");
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
                 popupNotice.ShowAPopup();
             }
+            else
+            {
+                string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+                Random random = new Random();
+                int randomIndex = checkedCheckBoxes[random.Next(checkedCheckBoxes.Count)];
+                ResultTextBox.Text = (randomIndex + 1).ToString() + "." + lines[randomIndex];
+            }
         }
         private void AcceptButton_Click(object sender, RoutedEventArgs e)
         {
-            if (NumberBox.Text == string.Empty)
+            int a; bool success = int.TryParse(NumberBox.Text, out a);
+            if (success)
             {
-                NumberBox.Text = "10";
+                // 转换成功,将NumberBox中的值作为抽取间隔
+                double frequency = 1.0 / a;
+                //timer.Interval = TimeSpan.FromSeconds(frequency);
+                timer.Interval = TimeSpan.FromMilliseconds(100);
+                
             }
-            PopupNotice popupNotice = new PopupNotice("成功将抽取间隔设置为" + NumberBox.Text+"毫秒");
+            else
+            {
+                // 转换失败，NumberBox中的值不是有效的整数，自动更改为默认值
+                NumberBox.Text = "50";
+                timer.Interval = TimeSpan.FromMilliseconds(20);
+                
+            }
+            //if (NumberBox.Text == string.Empty)
+            //{
+            //    NumberBox.Text = "10";
+            //}
+            PopupNotice popupNotice = new PopupNotice("成功将滚动频率设置为" + NumberBox.Text+"Hz");
             popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
             popupNotice.ShowAPopup();
         }

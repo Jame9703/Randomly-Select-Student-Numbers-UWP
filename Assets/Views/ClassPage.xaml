@@ -151,7 +151,8 @@
                         FontFamily="{StaticResource HarmonyOSSans}"
                         FontSize="16"
                         Loaded="Editor_Loaded"
-                        TextChanged="Editor_TextChanged" />
+                        TextChanged="Editor_TextChanged" >
+                    </TextBox>
 
                 </Grid>
             </ScrollViewer>
