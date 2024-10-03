@@ -25,9 +25,9 @@
             <DoubleAnimation
                 Storyboard.TargetName="PopupContainer"
                 Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
-                From="-10"
-                To="-100"
-                Duration="00:00:00.5">
+                From="0"
+                To="-200"
+                Duration="00:00:0.5">
                 <DoubleAnimation.EasingFunction>
                     <PowerEase EasingMode="EaseOut" />
                 </DoubleAnimation.EasingFunction>
@@ -48,9 +48,9 @@
             <DoubleAnimation
                 Storyboard.TargetName="PopupContainer"
                 Storyboard.TargetProperty="(UIElement.RenderTransform).(TranslateTransform.Y)"
-                From="-100"
-                To="-10"
-                Duration="00:00:00.5">
+                From="-200"
+                To="0"
+                Duration="00:00:0.5">
                 <DoubleAnimation.EasingFunction>
                     <PowerEase EasingMode="EaseOut" />
                 </DoubleAnimation.EasingFunction>
@@ -62,8 +62,8 @@
         <StackPanel
             Name="PopupContainer"
             Width="Auto"
-            Height="131"
-            Margin="0,225,0,0"
+            Height="Auto"
+            Margin="0,0,0,100"
             Padding="10"
             HorizontalAlignment="Center"
             VerticalAlignment="Bottom"
@@ -81,7 +81,7 @@
                 Width="Auto"
                 x:FieldModifier="public"
                 FontFamily="{StaticResource HarmonyOSSans}"
-                IsOpen="True"/>
+                IsOpen="True" />
 
         </StackPanel>
     </Grid>

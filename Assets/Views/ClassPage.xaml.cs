@@ -2,34 +2,18 @@
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
 using System.Linq;
-using System.Text;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.Devices.Enumeration;
-using Windows.Foundation;
-using Windows.Graphics.Imaging;
 using Windows.Storage;
-using Windows.Storage.AccessCache;
-using Windows.Storage.FileProperties;
 using Windows.Storage.Pickers;
-using Windows.Storage.Streams;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-using Windows.UI.Xaml.Shapes;
-
-// https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
+using 随机抽取学号.Classes;
 
 namespace 随机抽取学号.Views
 {
-    public class ImageTextItem
-    {
-        public BitmapImage Photos { get; set; }
-        public string Names { get; set; }
-    }
     /// <summary>
     /// 可用于自身或导航至 Frame 内部的空白页。
     /// </summary>
@@ -38,21 +22,45 @@ namespace 随机抽取学号.Views
         public static ClassPage Current;
         public List<string> names = new List<string>();
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
+        StorageFolder localFolder = ApplicationData.Current.LocalFolder;
         public delegate void TextChangedEventHandler(string Text);
-        ObservableCollection<ImageTextItem> imageTextItems = new ObservableCollection<ImageTextItem>();
+        ObservableCollection<Student> studentList = new ObservableCollection<Student>();
+        GridView PhotosGridView = new GridView();
+        StudentManager studentManager = new StudentManager();
+
         public ClassPage()
         {
             this.InitializeComponent();
+            //dbHelper = new DatabaseHelper();
+            //LoadStudents();
             Current = this;
             // 初始化行号
             UpdateLineNumbers();
-            //lineNumberBorder.Background = Editor.Background;
             if (localSettings.Values["Names"] != null) Editor.Text = (string)localSettings.Values["Names"];
             if (localSettings.Values["ClassName"] != null) ClassNameTextBox.Text = (string)localSettings.Values["ClassName"];
             if (localSettings.Values["PhotosLocation"] != null)
             {
                 PhotosLocationTextBlock.Text = (string)localSettings.Values["PhotosLocation"];
             }
+        }
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            //读取学生信息
+            studentList = await studentManager.LoadStudentsAsync();
+            PhotosGridView.ItemsSource = studentList;
+            PhotosGrid.Children.Add(PhotosGridView);
+            PhotosGridView.ItemTemplate = (DataTemplate)Resources["GridViewItemTemplate"];
+            PhotosGridView.Style = (Style)Resources["GridViewStyle"];
+            PhotosGridView.CanReorderItems = true;
+            //PhotosGridView.CanDragItems = true;
+            //PhotosGridView.IsItemClickEnabled = true;
+            PhotosGridView.AllowDrop = true;
+            PhotosGridView.DragOver += PhotosGridView_DragOver;
+            PhotosGridView.Drop += PhotosGridView_Drop;
+            PhotosGridView.ItemsSource = studentList;
+            PhotosLocationTextBlock.Text = localFolder.Path;
+            localSettings.Values["PhotosLocation"] = localFolder.Path;
+
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
@@ -63,7 +71,6 @@ namespace 随机抽取学号.Views
             string text = Editor.Text;
             string[] lines = text.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
             lineNumberTextBlock.Text = string.Empty;
-
             for (int i = 0; i < lines.Length; i++)
             {
                 lineNumberTextBlock.Text += $"{i + 1}\n";
@@ -104,20 +111,20 @@ namespace 随机抽取学号.Views
 
                     PopupNotice popupNotice = new PopupNotice("成功打开文件: " + file.Name);
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
-                    popupNotice.ShowAPopup();
+                    popupNotice.ShowPopup();
                 }
                 catch (Exception)
                 {
                     PopupNotice popupNotice = new PopupNotice("打开文件失败");
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
-                    popupNotice.ShowAPopup();
+                    popupNotice.ShowPopup();
                 }
             }
             else
             {
                 PopupNotice popupNotice = new PopupNotice("打开操作已取消");
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
-                popupNotice.ShowAPopup();
+                popupNotice.ShowPopup();
             }
         }
         private async void SaveFileButton_Click(object sender, RoutedEventArgs e)
@@ -141,25 +148,34 @@ namespace 随机抽取学号.Views
                 {
                     PopupNotice popupNotice = new PopupNotice(file.Name + " 保存成功");
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
-                    popupNotice.ShowAPopup();
+                    popupNotice.ShowPopup();
                 }
                 else
                 {
                     PopupNotice popupNotice = new PopupNotice(file.Name + " 保存失败");
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
-                    popupNotice.ShowAPopup();
+                    popupNotice.ShowPopup();
                 }
             }
             else
             {
                 PopupNotice popupNotice = new PopupNotice("保存操作已取消");
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
-                popupNotice.ShowAPopup();
+                popupNotice.ShowPopup();
             }
         }
         public void Editor_TextChanged(object sender, TextChangedEventArgs e)
         {
-            localSettings.Values["Names"] = Editor.Text;
+            try
+            {
+                localSettings.Values["Names"] = Editor.Text;
+            }
+            catch (Exception)
+            {
+                PopupNotice popupNotice = new PopupNotice("保存失败，请删除部分名字后重试");
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.ShowPopup();
+            }
             UpdateLineNumbers();
             string text = Editor.Text;
             names = text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
@@ -185,35 +201,30 @@ namespace 随机抽取学号.Views
 
                 PhotosGrid.Children.Clear();
 
-                imageTextItems.Clear();
+                studentList.Clear();
                 IReadOnlyList<StorageFile> files = await folder.GetFilesAsync();
-                foreach (StorageFile file in files)
+                int studentListCount = studentList.Count;//提前记录循环前studentList的长度
+                for (int i = 0; i < files.Count; i++)
                 {
-                    BitmapImage bitmapImage = new BitmapImage();
-
-
-                    using (IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.Read))
-                    {
-                        ImageProperties properties = await file.Properties.GetImagePropertiesAsync();
-                        //bitmapImage.DecodePixelWidth = (int)properties.Width;
-                        //bitmapImage.DecodePixelHeight = (int)properties.Height;
-                        await bitmapImage.SetSourceAsync(fileStream);
-                    }
-
-                    var item = new ImageTextItem { Photos = bitmapImage, Names = file.Name };
-                    imageTextItems.Add(item);
+                    var localFile = await localFolder.CreateFileAsync(files[i].Name, CreationCollisionOption.ReplaceExisting);
+                    await files[i].CopyAndReplaceAsync(localFile);
+                    StorageFile photoFile = await localFolder.GetFileAsync(files[i].Name);
+                    var item = new Student { Id = studentListCount+i+1, PhotoPath = photoFile.Path, Name = files[i].Name };//Id表示学号，从1开始
+                    studentList.Add(item);
                 }
-               GridView PhotosGridView = new();
+                await studentManager.SaveStudentsAsync(studentList);
+                //GridView PhotosGridView = new();
+                PhotosGrid.Children.Clear();
                 PhotosGrid.Children.Add(PhotosGridView);
                 PhotosGridView.ItemTemplate = (DataTemplate)Resources["GridViewItemTemplate"];
                 PhotosGridView.Style = (Style)Resources["GridViewStyle"];
-                PhotosGridView.CanReorderItems = true;
+                //PhotosGridView.CanReorderItems = true;
                 //PhotosGridView.CanDragItems = true;
                 //PhotosGridView.IsItemClickEnabled = true;
                 PhotosGridView.AllowDrop = true;
                 PhotosGridView.DragOver += PhotosGridView_DragOver;
                 PhotosGridView.Drop += PhotosGridView_Drop;
-                PhotosGridView.ItemsSource = imageTextItems;
+                PhotosGridView.ItemsSource = studentList;
                 PhotosLocationTextBlock.Text = folder.Path;
                 localSettings.Values["PhotosLocation"] = folder.Path;
             }
@@ -221,25 +232,31 @@ namespace 随机抽取学号.Views
 
         private async void PhotosGridView_Drop(object sender, DragEventArgs e)
         {
-            var PhotosGridView = sender as GridView;
-            var items = await e.DataView.GetStorageItemsAsync();
-            foreach (var item in items)
+            if(e.DataView.Contains(StandardDataFormats.StorageItems))
             {
-                if (item is StorageFile file)
-                {
-                    BitmapImage bitmapImage = new BitmapImage();
-                    using (IRandomAccessStream stream = await file.OpenAsync(FileAccessMode.Read))
+                var items = await e.DataView.GetStorageItemsAsync();
+                if (items.Any())
+                { 
+                    for(int i= 0; i < items.Count; i++)//支持同时拖入多个文件
                     {
-                        await bitmapImage.SetSourceAsync(stream);
+                        var storageFile = items[i] as StorageFile;
+                        var contentType = storageFile.ContentType;
+                        StorageFolder folder = ApplicationData.Current.LocalFolder;
+                        BitmapImage bitmapImage = new BitmapImage();
+                        using (var stream = await storageFile.OpenAsync(FileAccessMode.Read))
+                        {
+                            bitmapImage.SetSource(stream);
+                        }
+                        if (contentType == "image/jpg"|| contentType == "image/jpeg" || contentType == "image/png" || contentType == "image/bmp")
+                        {
+                            StorageFile newFile = await storageFile.CopyAsync(folder, storageFile.Name, NameCollisionOption.ReplaceExisting);
+                            var item = new Student { PhotoPath = items[i].Path, Name = storageFile.Name };
+                            studentList.Add(item);
+                            PhotosGridView.ItemsSource = studentList;
+                        }
                     }
-                    var _item = new ImageTextItem { Photos = bitmapImage, Names = file.Name };
-                    imageTextItems.Add(_item);
-                    //Items.Add(bitmapImage); // 添加到GridView的数据源
                 }
             }
-            PhotosGridView.ItemsSource = imageTextItems;
-            //var item = new ImageTextItem { Photos = bitmapImage, Names = "1" };
-            //PhotosGridView.Items.Add();
         }
 
         private void PhotosGridView_DragOver(object sender, DragEventArgs e)

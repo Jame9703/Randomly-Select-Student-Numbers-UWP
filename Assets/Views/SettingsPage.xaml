@@ -8,8 +8,6 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:ui="using:CommunityToolkit.WinUI"
-    xmlns:win="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
-    NavigationCacheMode="Enabled"
     mc:Ignorable="d">
 
     <Page.Resources>
@@ -70,7 +68,7 @@
         <StackPanel x:Name="SettingsPanel">
             <TextBlock
                 Margin="15,0,20,0"
-                FontFamily="{win:StaticResource HarmonyOSSans}"
+                FontFamily="{StaticResource HarmonyOSSans}"
                 FontSize="16"
                 Text="外观"
                 TextWrapping="Wrap" />
@@ -78,85 +76,85 @@
             <controls:SettingsExpander
                 Margin="10,0,20,0"
                 Description="选择要显示的应用主题"
-                FontFamily="{win:StaticResource HarmonyOSSans}"
+                FontFamily="{StaticResource HarmonyOSSans}"
                 Header="应用程序主题"
                 IsTabStop="True">
                 <controls:SettingsExpander.HeaderIcon>
-                    <win:FontIcon Glyph="&#xE790;" />
+                    <FontIcon Glyph="&#xE790;" />
                 </controls:SettingsExpander.HeaderIcon>
-                <!--  win:IsTextSelectionEnabled="True"  -->
+                <!--  IsTextSelectionEnabled="True"  -->
                 <controls:SettingsExpander.Items>
                     <controls:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
-                        <win:StackPanel Margin="-12,0,0,0" Orientation="Vertical">
+                        <StackPanel Margin="-12,0,0,0" Orientation="Vertical">
                             <muxc:RadioButtons x:Name="AppearanceRadioButtons" SelectionChanged="AppearanceRadioButtons_SelectionChanged">
-                                <win:RadioButton Content="浅色" FontFamily="{win:StaticResource HarmonyOSSans}" />
-                                <win:RadioButton Content="深色" FontFamily="{win:StaticResource HarmonyOSSans}" />
-                                <win:RadioButton Content="使用系统设置" FontFamily="{win:StaticResource HarmonyOSSans}" />
+                                <RadioButton Content="浅色" FontFamily="{StaticResource HarmonyOSSans}" />
+                                <RadioButton Content="深色" FontFamily="{StaticResource HarmonyOSSans}" />
+                                <RadioButton Content="使用系统设置" FontFamily="{StaticResource HarmonyOSSans}" />
                             </muxc:RadioButtons>
-                        </win:StackPanel>
+                        </StackPanel>
                     </controls:SettingsCard>
                 </controls:SettingsExpander.Items>
             </controls:SettingsExpander>
             <TextBlock
                 Margin="15,0,20,0"
-                FontFamily="{win:StaticResource HarmonyOSSans}"
+                FontFamily="{StaticResource HarmonyOSSans}"
                 FontSize="16"
                 Text="关于"
                 TextWrapping="Wrap" />
             <controls:SettingsExpander
                 Margin="10,0,20,0"
                 Description="© 2022-2024. All rights reserved."
-                FontFamily="{win:StaticResource HarmonyOSSans}"
+                FontFamily="{StaticResource HarmonyOSSans}"
                 Header="Randomly Select Student Numbers">
                 <controls:SettingsExpander.HeaderIcon>
                     <ui:BitmapIconExtension Source="ms-appx:///Assets/RSSN_Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png" />
                 </controls:SettingsExpander.HeaderIcon>
-                <!--  win:IsTextSelectionEnabled="True"  -->
+                <!--  IsTextSelectionEnabled="True"  -->
                 <controls:SettingsExpander.Items>
                     <controls:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
-                        <win:StackPanel Margin="-12,0,0,0" Orientation="Vertical">
-                            <win:TextBlock
+                        <StackPanel Margin="-12,0,0,0" Orientation="Vertical">
+                            <TextBlock
                                 Margin="0,5,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
-                                FontFamily="{win:StaticResource HarmonyOSSans}"
+                                FontFamily="{StaticResource HarmonyOSSans}"
                                 Text="平台：Universal Windows Platform(通用Windows平台)"
                                 TextWrapping="Wrap" />
-                            <win:TextBlock
+                            <TextBlock
                                 Margin="0,10,0,0"
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Top"
-                                FontFamily="{win:StaticResource HarmonyOSSans}"
+                                FontFamily="{StaticResource HarmonyOSSans}"
                                 Text="最低支持版本：Windows10，Version1809"
                                 TextWrapping="Wrap" />
-                        </win:StackPanel>
+                        </StackPanel>
                     </controls:SettingsCard>
                 </controls:SettingsExpander.Items>
 
-                <win:TextBlock
-                    FontFamily="{win:StaticResource HarmonyOSSans}"
-                    Foreground="{win:ThemeResource TextFillColorSecondaryBrush}"
-                    Text="Version 1.1.0   2024/7/20" />
+                <TextBlock
+                    FontFamily="{StaticResource HarmonyOSSans}"
+                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                    Text="Version 1.1.0   2024/10/7" />
 
             </controls:SettingsExpander>
             <controls:SettingsCard
                 Margin="10,0,20,0"
                 Description="https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP"
-                FontFamily="{win:StaticResource HarmonyOSSans}"
+                FontFamily="{StaticResource HarmonyOSSans}"
                 Header="在Github中查看此项目源代码">
                 <controls:SettingsCard.HeaderIcon>
                     <ui:BitmapIconExtension Source="ms-appx:///Assets/Photos/GithubLogo.png" />
                 </controls:SettingsCard.HeaderIcon>
-                <win:HyperlinkButton NavigateUri="https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP">
-                    <win:StackPanel Width="116" Orientation="Horizontal">
-                        <win:FontIcon FontSize="12" Glyph="&#xE8A7;" />
-                        <win:TextBlock
+                <HyperlinkButton NavigateUri="https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP">
+                    <StackPanel Width="116" Orientation="Horizontal">
+                        <FontIcon FontSize="12" Glyph="&#xE8A7;" />
+                        <TextBlock
                             Width="100"
                             Margin="5,0,0,0"
-                            FontFamily="{win:StaticResource HarmonyOSSans}"
+                            FontFamily="{StaticResource HarmonyOSSans}"
                             Text="在浏览器中打开" />
-                    </win:StackPanel>
-                </win:HyperlinkButton>
+                    </StackPanel>
+                </HyperlinkButton>
             </controls:SettingsCard>
 
         </StackPanel>

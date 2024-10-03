@@ -4,12 +4,19 @@
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
-    xmlns:local="using:随机抽取学号.Views"
+    xmlns:classes="using:随机抽取学号.Classes"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
-    NavigationCacheMode="Enabled"
+    Loaded="Page_Loaded"
+    NavigationCacheMode="Disabled"
     mc:Ignorable="d">
     <Page.Resources>
+        <DataTemplate x:Key="StudentTemplate">
+            <StackPanel Orientation="Vertical">
+                <TextBlock Text="{Binding Names}" />
+                <Image Source="{Binding Photo, Converter={StaticResource ByteArrayToImageConverter}}" Width="100" Height="100" />
+            </StackPanel>
+        </DataTemplate>
         <Style x:Key="GridViewStyle" TargetType="GridView">
             <Setter Property="Padding" Value="0,0,0,0" />
             <Setter Property="IsTabStop" Value="False" />
@@ -80,7 +87,7 @@
                 </Setter.Value>
             </Setter>
         </Style>
-        <DataTemplate x:Key="GridViewItemTemplate" x:DataType="local:ImageTextItem">
+        <DataTemplate x:Key="GridViewItemTemplate" x:DataType="classes:Student">
             <StackPanel
                 Width="225"
                 Height="Auto"
@@ -96,14 +103,15 @@
                 <Image
                     Width="225"
                     Height="300"
-                    Source="{x:Bind Photos}"
+                    Source="{x:Bind PhotoPath}"
                     Stretch="UniformToFill" />
                 <TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
                     FontFamily="{StaticResource HarmonyOSSans}"
                     FontSize="16"
-                    Text="{x:Bind Names}" />
+                    Text="{x:Bind Name}" />
+
             </StackPanel>
         </DataTemplate>
     </Page.Resources>
@@ -151,8 +159,7 @@
                         FontFamily="{StaticResource HarmonyOSSans}"
                         FontSize="16"
                         Loaded="Editor_Loaded"
-                        TextChanged="Editor_TextChanged" >
-                    </TextBox>
+                        TextChanged="Editor_TextChanged" />
 
                 </Grid>
             </ScrollViewer>
@@ -183,23 +190,15 @@
                 Text="我的班级"
                 TextChanged="ClassNameTextBox_TextChanged"
                 TextWrapping="Wrap" />
-            <Button
-                x:Name="FolderPickerButton"
-                Grid.Column="2"
-                Width="83"
-                Height="34"
-                Margin="417,38,0,0"
-                VerticalAlignment="Top"
-                Click="FolderPickerButton_Click"
-                Content="Button" />
             <TextBlock
                 x:Name="PhotosLocationTextBlock"
                 Grid.Column="2"
-                Width="200"
+                Width="499"
                 Height="30"
                 Margin="150,40,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
+                FontFamily="{StaticResource HarmonyOSSans}"
                 Text="TextBox"
                 TextWrapping="Wrap" />
             <!--<GridView x:Name="PhotosGridView" Grid.Column="2"  Style="{StaticResource GridViewStyle}"  Margin="0,80,0,0" ItemTemplate="{StaticResource GridViewItemTemplate}" CanReorderItems="True" AllowDrop="True">
@@ -217,14 +216,26 @@
             <Grid
                 x:Name="PhotosGrid"
                 Grid.Column="2"
-                Margin="0,80,0,0" />
+                Margin="0,80,0,0" >
+                <Image Source="C:\Users\蒋怡鑫\Pictures\1.bmp"/>
+            </Grid>
+            <Button
+                x:Name="FolderPickerButton"
+                Grid.Column="2"
+                Width="83"
+                Height="34"
+                Margin="417,38,0,0"
+                VerticalAlignment="Top"
+                Click="FolderPickerButton_Click"
+                Content="Button"
+                FontFamily="{StaticResource HarmonyOSSans}" />
         </Grid>
 
         <AppBarButton
             x:Name="OpenFileButton"
             Width="80"
-            Height="59"
-            Margin="99,19,0,0"
+            Height="52"
+            Margin="99,26,0,0"
             Click="OpenFileButton_Click"
             FontFamily="{StaticResource HarmonyOSSans}"
             Icon="OpenLocal"
@@ -232,13 +243,32 @@
         <AppBarButton
             x:Name="SaveFileButton"
             Width="80"
-            Height="59"
+            Height="52"
             Margin="179,26,0,0"
             Click="SaveFileButton_Click"
             FontFamily="{StaticResource HarmonyOSSans}"
             Icon="Save"
             Label="保存文件" />
+        <!--<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
+            --><!--<StackPanel Visibility="Collapsed">
+                <TextBox Name="Input_Box"></TextBox>
+                <Button Click="AddData">Add</Button>
+                <ListView Name="Output">
+                    <ListView.ItemTemplate>
+                        <DataTemplate>
+                            <TextBlock Text="{Binding}"/>
+                        </DataTemplate>
+                    </ListView.ItemTemplate>
+                </ListView>
+            </StackPanel>--><!--
+            <StackPanel>
+                <TextBox x:Name="NameTextBox" PlaceholderText="Enter student name" />
+                <Button Content="Add Student" Click="AddStudentButton_Click" />
+                <Button Content="Delete Student" Click="DeleteStudentButton_Click" />
+                <GridView x:Name="StudentsGridView" ItemTemplate="{StaticResource GridViewItemTemplate}" />
+            </StackPanel>
 
+        </Grid>-->
 
 
     </Grid>

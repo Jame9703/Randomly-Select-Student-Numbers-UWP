@@ -37,7 +37,7 @@ namespace 随机抽取学号.Views
             if (txtFrom.Text == "" | txtTo.Text == "" | txtQuan.Text == "")
             {
                 PopupNotice popupNotice = new PopupNotice("请输入完整信息");
-                popupNotice.ShowAPopup();
+                popupNotice.ShowPopup();
             }
             else
             {
@@ -133,15 +133,6 @@ namespace 随机抽取学号.Views
                     // 转换失败，NumberBox中的值不是有效的整数
                     txtQuan.Text = "10";
                 }
-
-                /* Guid temp = Guid.NewGuid();
-                int guidseed = BitConverter.ToInt32(temp.ToByteArray(), 1);
-                Random r = new Random(guidseed);
-                HashSet<int> Set = new HashSet<int>();
-                re: for (int i = 1; i <= n; i++)
-                {int random = r.Next(x, y + 1);Set.Add(random);}
-                if (n != Set.Count)
-                {Set.Clear();goto re;}    */
             }
         }
 

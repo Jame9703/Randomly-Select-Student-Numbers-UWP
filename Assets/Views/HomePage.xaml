@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     Loaded="Page_Loaded"
-    NavigationCacheMode="Enabled"
+    NavigationCacheMode="Disabled"
     mc:Ignorable="d">
     <Page.Resources>
         <Storyboard x:Name="Storyboard1">
@@ -186,111 +186,30 @@
             <ColumnDefinition Width="Auto" />
             <ColumnDefinition Width="*" />
         </Grid.ColumnDefinitions>
-
-
-        <AppBarButton
-            x:Name="StartorStopButton"
-            Grid.Column="2"
-            Width="97"
-            Height="54"
-            Margin="725,169,0,0"
-            Background="#FFC0F2BC"
-            Click="StartorStopButton_Click"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            Icon="Play"
-            Label="开始" />
-        <TextBox
-            x:Name="ResultTextBox"
-            Grid.Column="2"
-            Width="232"
-            Height="68"
-            Margin="725,79,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            FontSize="36"
-            IsReadOnly="True"
-            TextWrapping="Wrap" />
-        <TextBlock
-            Grid.Column="2"
-            Width="158"
-            Height="19"
-            Margin="366,49,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            FontSize="14"
-            Text="滚动频率(Hz)："
-            TextWrapping="Wrap" />
-        <TextBlock
-            x:Name="Text2"
-            Grid.ColumnSpan="3"
-            Width="133"
-            Height="30"
-            Margin="440,10,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            FontSize="18"
-            Text=""
-            TextWrapping="Wrap" />
-        <muxc:NumberBox
-            x:Name="NumberBox"
-            Grid.Column="2"
-            Width="95"
-            Height="32"
-            Margin="374,68,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            Maximum="10000"
-            Minimum="1"
-            Text="10" />
-        <Button
-            x:Name="Accept"
-            Grid.Column="2"
-            Width="55"
-            Height="32"
-            Margin="446,79,0,0"
-            VerticalAlignment="Top"
-            Click="AcceptButton_Click"
-            Content="确定"
-            FontFamily="{StaticResource HarmonyOSSans}" />
         <muxc:NumberBox
             x:Name="Numbers"
-            Grid.ColumnSpan="3"
+            Grid.Column="2"
             Width="160"
             Height="35"
-            Margin="507,20,0,0"
+            Margin="214,37,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             FontFamily="{StaticResource HarmonyOSSans}"
+            IsEnabled="False"
             Minimum="1"
             SmallChange="1"
             SpinButtonPlacementMode="Inline"
             Value="1" />
         <TextBlock
             Grid.Column="2"
-            Margin="20,160,0,0"
+            Margin="177,47,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             FontFamily="{StaticResource HarmonyOSSans}"
             Text="人数:"
             TextWrapping="Wrap" />
-        <GridView
-            x:Name="RandomNumbersGridView"
-            Grid.Column="2"
-            Margin="103,323,-727,10">
-            <GridView.ItemsPanel>
-                <ItemsPanelTemplate>
-                    <ItemsWrapGrid
-                        x:Name="MaxItemsWrapGrid"
-                        MaximumRowsOrColumns="5"
-                        Orientation="Horizontal" />
-                </ItemsPanelTemplate>
-            </GridView.ItemsPanel>
-        </GridView>
-        <Grid
+
+        <!--<Grid
             Grid.Column="2"
             Width="517"
             Height="286"
@@ -298,9 +217,6 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             Background="{ThemeResource MyBrush}">
-            <!--<Grid.Clip>
-                <RectangleGeometry Rect="0,0,1000,300"/>
-            </Grid.Clip>-->
             <Border
                 Margin="10,38,321,38"
                 BorderBrush="{ThemeResource AccentFillColorDefaultBrush}"
@@ -361,7 +277,7 @@
                 </Border.RenderTransform>
                 <TextBlock FontSize="20" Text="TextBlock" />
             </Border>
-        </Grid>
+        </Grid>-->
         <Grid
             x:Name="checkBoxesGrid"
             MinWidth="100"
@@ -403,7 +319,10 @@
                     VerticalAlignment="Top">
                     <StackPanel.ChildrenTransitions>
                         <TransitionCollection>
-                            <EntranceThemeTransition IsStaggeringEnabled="True" />
+                            <EntranceThemeTransition
+                                FromHorizontalOffset="50"
+                                FromVerticalOffset="50"
+                                IsStaggeringEnabled="True" />
                         </TransitionCollection>
                     </StackPanel.ChildrenTransitions>
                 </StackPanel>
@@ -489,5 +408,72 @@
                 </controls:SegmentedItem.Icon>
             </controls:SegmentedItem>
         </controls:Segmented>
+        <Button
+            x:Name="FrequencySelectorButton"
+            Grid.Column="2"
+            Margin="20,40,0,0"
+            VerticalAlignment="Top"
+            Content="滚动频率:50Hz"
+            FontFamily="{StaticResource HarmonyOSSans}">
+            <Button.Flyout>
+                <Flyout>
+                    <Grid>
+                        <controls:RadialGauge
+                            x:Name="FrequencySelector"
+                            Maximum="100"
+                            Minimum="0"
+                            NeedleLength="60"
+                            NeedleWidth="5"
+                            ScaleWidth="20"
+                            StepSize="1"
+                            TickLength="10"
+                            TickSpacing="10"
+                            TickWidth="5"
+                            ValueChanged="FrequencySelector_ValueChanged"
+                            Value="50" />
+                    </Grid>
+                </Flyout>
+            </Button.Flyout>
+        </Button>
+        <Grid x:Name="SingleModeGrid" Grid.Column="2">
+            <AppBarButton
+                x:Name="StartorStopButton"
+                Width="97"
+                Height="54"
+                Margin="27,360,0,0"
+                Background="#FFC0F2BC"
+                Click="StartorStopButton_Click"
+                FontFamily="{StaticResource HarmonyOSSans}"
+                Icon="Play"
+                Label="开始" />
+            <TextBox
+                x:Name="ResultTextBox"
+                Width="232"
+                Height="68"
+                Margin="27,287,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top"
+                FontFamily="{StaticResource HarmonyOSSans}"
+                FontSize="36"
+                IsReadOnly="True"
+                TextWrapping="Wrap" />
+            <Image x:Name="StudentPhoto"  HorizontalAlignment="Left" Height="194" Margin="27,89,0,0" VerticalAlignment="Top" Width="178"/>
+        </Grid>
+        <Grid
+            x:Name="MultipleModeGrid"
+            Grid.Column="2"
+            Visibility="Collapsed">
+            <GridView x:Name="RandomNumbersGridView" Margin="12,146,0,10">
+                <GridView.ItemsPanel>
+                    <ItemsPanelTemplate>
+                        <ItemsWrapGrid
+                            x:Name="MaxItemsWrapGrid"
+                            MaximumRowsOrColumns="5"
+                            Orientation="Horizontal" />
+                    </ItemsPanelTemplate>
+                </GridView.ItemsPanel>
+            </GridView>
+            <Button x:Name="GenerateButton"  Content="生成" FontFamily="{StaticResource HarmonyOSSans}" Margin="37,109,0,0" VerticalAlignment="Top" Click="GenerateButton_Click"/>
+        </Grid>
     </Grid>
 </Page>

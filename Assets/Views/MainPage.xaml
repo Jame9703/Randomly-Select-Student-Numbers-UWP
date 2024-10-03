@@ -150,7 +150,7 @@
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
                                     </VisualState>
-                                    <VisualState x:Name="LabelOnRight">
+                                    <!--<VisualState x:Name="LabelOnRight">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentViewbox" Storyboard.TargetProperty="Margin">
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource AppBarButtonContentViewboxMargin}" />
@@ -171,7 +171,7 @@
                                                 <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource AppBarToggleButtonTextLabelOnRightMargin}" />
                                             </ObjectAnimationUsingKeyFrames>
                                         </Storyboard>
-                                    </VisualState>
+                                    </VisualState>-->
                                     <VisualState x:Name="LabelCollapsed">
                                         <Storyboard>
                                             <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentRoot" Storyboard.TargetProperty="MinHeight">

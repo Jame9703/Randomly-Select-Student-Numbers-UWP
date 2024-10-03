@@ -34,7 +34,7 @@ namespace 随机抽取学号.Views
             //popupContentString:弹出消息内容
             _popupContent = popupContentString;
         }
-        public void ShowAPopup()
+        public void ShowPopup()
         {
             //显示弹窗
             _popup.IsOpen = true;

@@ -8,7 +8,7 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-
+using 随机抽取学号.Classes;
 namespace 随机抽取学号
 {
     /// <summary>
@@ -24,6 +24,7 @@ namespace 随机抽取学号
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            //Student.InitializeDatabase();
         }
         public static TEnum GetEnum<TEnum>(string text) where TEnum : struct
         {
