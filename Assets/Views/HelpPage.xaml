@@ -9,59 +9,8 @@
     mc:Ignorable="d">
 
     <Grid Background="{ThemeResource GridBackground}">
-        <Image
-            Width="45"
-            Margin="9,6,0,1021"
-            HorizontalAlignment="Left"
-            Source="/Assets/Logos/StoreLogo.scale-400.png" />
         <TextBlock
-            Width="97"
-            Margin="58,15,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            FontSize="16"
-            Text="随机抽取学号"
-            TextWrapping="Wrap" />
-        <TextBlock
-            Width="225"
-            Margin="59,36,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            Text="Randomly Select Student Numbers"
-            TextWrapping="Wrap" />
-        <TextBlock
-            Margin="10,130,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            Text="版本：V1.0.9,最后生成日期2024/2/23"
-            TextWrapping="Wrap" />
-        <TextBlock
-            Margin="10,93,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            Text="平台：Universal Windows Platform(通用Windows平台)"
-            TextWrapping="Wrap" />
-        <TextBlock
-            Margin="10,66,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            FontSize="20"
-            Text="信息："
-            TextWrapping="Wrap" />
-        <TextBlock
-            Margin="10,111,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            Text="最低支持版本：Windows10，Version1809"
-            TextWrapping="Wrap" />
-        <TextBlock
-            Margin="10,181,0,0"
+            Margin="10,13,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             FontFamily="{StaticResource HarmonyOSSans}"
@@ -69,35 +18,32 @@
             Text="帮助：如何使用?"
             TextWrapping="Wrap" />
         <TextBlock
-            Margin="10,212,0,0"
+            Margin="10,44,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             FontFamily="{StaticResource HarmonyOSSans}"
-            Text="1.在班级[Class]页面中填写班级名称，按学号顺序填写学生姓名"
-            TextWrapping="Wrap" />
+            TextWrapping="Wrap" Width="656" ><Run Text="1.在班级页面中填写班级名称，按学号顺序填写学生姓名"/><Run Text="(选填学生照片)，"/><Run Text="空行表示该学生不存在"/></TextBlock>
         <TextBlock
-            Margin="10,236,0,0"
+            Margin="10,68,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             FontFamily="{StaticResource HarmonyOSSans}"
-            Text="2.填写完成后回到主页[Home]页面，在左侧勾选框中选择本次要抽取的范围"
-            TextWrapping="Wrap" />
+            TextWrapping="Wrap" ><Run Text="2.填写完成后回到主页页面，在左侧勾选框中选择本次要抽取的"/><Run Text="学生"/><Run Text="范围"/></TextBlock>
         <TextBlock
-            Margin="10,259,0,0"
+            Margin="10,91,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             FontFamily="{StaticResource HarmonyOSSans}"
-            Text="3.选择本次抽取的人数，选择本次要抽取学号还是姓名"
+            Text="3.选择本次抽取的人数"
             TextWrapping="Wrap" />
         <TextBlock
-            Margin="10,283,0,0"
+            Margin="10,115,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             FontFamily="{StaticResource HarmonyOSSans}"
-            Text="4.设置抽取间隔。抽取间隔即显示结果的文本框刷新要用多少ms(具体取决于当前帧率)"
-            TextWrapping="Wrap" />
+            TextWrapping="Wrap" ><Run Text="4.设置"/><Run Text="滚动频率(仅为理论值，实际40Hz就不错了)"/></TextBlock>
         <TextBlock
-            Margin="10,306,0,0"
+            Margin="10,138,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             FontFamily="{StaticResource HarmonyOSSans}"

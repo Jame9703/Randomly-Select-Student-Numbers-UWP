@@ -19,5 +19,6 @@ namespace 随机抽取学号.Views
         {
             GC.Collect();
         }
+
     }
 }

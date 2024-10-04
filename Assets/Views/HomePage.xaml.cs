@@ -23,8 +23,10 @@ namespace 随机抽取学号.Views
         private bool isRandomizing = false;
         List<int> checkedCheckBoxes = new List<int>();
         ClassPage ClassPage = new ClassPage();
-        ObservableCollection<Student> studentList = new ObservableCollection<Student>();
+        ObservableCollection<Student> studentList = new ObservableCollection<Student>();//记录所有学生
+        ObservableCollection<Student> selectedStudentList = new ObservableCollection<Student>();//记录多选模式下选中的学生
         StudentManager studentManager = new StudentManager();
+        private GridView PhotosGridView;
         //string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
         //string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
         public HomePage()
@@ -50,6 +52,7 @@ namespace 随机抽取学号.Views
             EndNumberBox.Value = lines.Length;
             BeginNumberBox.Maximum = lines.Length;
             EndNumberBox.Maximum = lines.Length;
+            Numbers.Maximum = checkedCheckBoxes.Count;
             segmented.SelectedIndex = 0;//在xaml中设置会导致后面的控件未加载就被调用//System.NullReferenceException:“Object reference not set to an instance of an object.”
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -57,7 +60,15 @@ namespace 随机抽取学号.Views
             timer.Stop();
             GC.Collect();
         }
-
+        private void LoadPhotosGridView()//多人模式下加载PhotosGridView
+        {
+            PhotosGrid.Children.Clear();
+            PhotosGridView = new();
+            PhotosGrid.Children.Add(PhotosGridView);
+            PhotosGridView.ItemTemplate = (DataTemplate)Resources["GridViewItemTemplate"];
+            PhotosGridView.Style = (Style)Resources["GridViewStyle"];
+            PhotosGridView.ItemsSource = selectedStudentList;
+        }
         private void CreateCheckBoxes()
         {
             string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
@@ -150,6 +161,7 @@ namespace 随机抽取学号.Views
                 var localSettings = ApplicationData.Current.LocalSettings;
                 localSettings.Values["checkedCheckBoxesString"] = checkedCheckBoxesString;
                 checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + _lines.Length.ToString();
+                Numbers.Maximum = checkedCheckBoxes.Count;
             }
             else
             {
@@ -203,14 +215,8 @@ namespace 随机抽取学号.Views
                 }
             }
         }
-        int a = 0;
         private void Timer_Tick(object sender, object e)
         {
-            //a++;
-            //PopupNotice popupNotice1 = new PopupNotice(a.ToString());
-            //popupNotice1.PopupContent.Severity = InfoBarSeverity.Success;
-            //popupNotice1.ShowPopup();
-
             string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
             Random random = new Random();
             int randomIndex = checkedCheckBoxes[random.Next(checkedCheckBoxes.Count)];
@@ -379,117 +385,42 @@ namespace 随机抽取学号.Views
             StartorStopButton.Label = "开始";
             StartorStopButton.Icon = new SymbolIcon(Symbol.Play);
             StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
-            checkedCheckBoxes.Clear();
-            RandomNumbersGridView.Items.Clear();
             string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
             string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             if (lines.Length > 0)
             {
-                for (int i = 0; i < lines.Length; i++)
-                {
-                    // 遍历所有CheckBox并检查它们的IsChecked属性
-                    var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();
-                    if (checkBox[i].IsChecked == true)
-                    {
-                        checkedCheckBoxes.Add(i);
-                    }
-                }
                 int a; bool success = int.TryParse(Numbers.Text, out a);
                 if (success)
                 {
                     // 转换成功
-                    int TakeCount = int.Parse(Numbers.Text);
-                    //将checkedCheckBoxes打乱顺序
-                    Random random = new Random();
-                    checkedCheckBoxes = checkedCheckBoxes.OrderBy(x => random.Next()).ToList();
-                    // 取前几位数字
-                    List<int> Result = checkedCheckBoxes.Take(TakeCount).ToList();
-                    foreach (int randomIndex in Result)
+                    if (a <= checkedCheckBoxes.Count)
                     {
-                        //if (ModeComboBox.SelectedItem.ToString() == "仅抽取学号")
+                        //将checkedCheckBoxes打乱顺序
+                        Random random = new Random();
+                        checkedCheckBoxes = checkedCheckBoxes.OrderBy(x => random.Next()).ToList();
+                        // 取前几位数字
+                        List<int> Result = checkedCheckBoxes.Take(a).ToList();
+                        selectedStudentList.Clear();
+                        for (int i = 0; i < Result.Count; i++)
                         {
-                            Border border = new Border()
-                            {
-                                CornerRadius = new CornerRadius(8, 8, 8, 8),
-                                BorderBrush = new SolidColorBrush(Colors.LightBlue),
-                                BorderThickness = new Thickness(4),
-                                Margin = new Thickness(5),
-                                Width = 100,
-                                Height = 60,
-                                Child = new TextBlock
-                                {
-                                    Name = "textBlock",
-                                    FontSize = 33,
-                                    FontFamily = new FontFamily("{StaticResource HarmonyOSSans}"),
-                                    //Width = 50,
-                                    Height = 50,
-                                    Margin = new Thickness(5),
-                                    TextAlignment = TextAlignment.Center,
-                                    HorizontalAlignment = HorizontalAlignment.Center,
-                                    VerticalAlignment = VerticalAlignment.Center,
-                                    Text = (randomIndex + 1).ToString(),
-                                }
-                            };
-                            RandomNumbersGridView.Items.Add(border);
+                            int randomIndex = Result[i];
+                            var item = new Student { Id = randomIndex + 1, PhotoPath = studentList[randomIndex].PhotoPath, Name = studentList[randomIndex].Name };//Id表示学号，从1开始
+                            selectedStudentList.Add(item);
                         }
-                        //else if (ModeComboBox.SelectedItem.ToString() == "仅抽取姓名")
-                        {
-                            Border border = new Border()
-                            {
-                                CornerRadius = new CornerRadius(8, 8, 8, 8),
-                                BorderBrush = new SolidColorBrush(Colors.LightBlue),
-                                BorderThickness = new Thickness(4),
-                                Margin = new Thickness(5),
-                                Width = 150,
-                                Height = 60,
-                                Child = new TextBlock
-                                {
-                                    Name = "textBlock",
-                                    FontSize = 33,
-                                    FontFamily = new FontFamily("{StaticResource HarmonyOSSans}"),
-                                    //Width = 50,
-                                    Height = 50,
-                                    Margin = new Thickness(5),
-                                    TextAlignment = TextAlignment.Center,
-                                    HorizontalAlignment = HorizontalAlignment.Center,
-                                    VerticalAlignment = VerticalAlignment.Center,
-                                    Text = lines[randomIndex],
-                                }
-                            };
-                            RandomNumbersGridView.Items.Add(border);
-                        }
-                        //else if (ModeComboBox.SelectedItem.ToString() == "抽取学号和姓名")
-                        {
-                            Border border = new Border()
-                            {
-                                CornerRadius = new CornerRadius(8, 8, 8, 8),
-                                BorderBrush = new SolidColorBrush(Colors.LightBlue),
-                                BorderThickness = new Thickness(4),
-                                Margin = new Thickness(5),
-                                Width = 195,
-                                Height = 60,
-                                Child = new TextBlock
-                                {
-                                    Name = "textBlock",
-                                    FontSize = 33,
-                                    FontFamily = new FontFamily("{StaticResource HarmonyOSSans}"),
-                                    //Width = 50,
-                                    Height = 50,
-                                    Margin = new Thickness(5),
-                                    TextAlignment = TextAlignment.Center,
-                                    HorizontalAlignment = HorizontalAlignment.Center,
-                                    VerticalAlignment = VerticalAlignment.Center,
-                                    Text = (randomIndex + 1) + "." + lines[randomIndex],
-                                }
-                            };
-                            RandomNumbersGridView.Items.Add(border);
-                        }
+                        LoadPhotosGridView();
                     }
+                    else
+                    {
+                        PopupNotice popupNotice = new PopupNotice("抽取人数不能大于能抽到的人数，请更改左侧勾选框后重试");
+                        popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                        popupNotice.ShowPopup();
+                    }
+
                 }
                 else
                 {
                     // 转换失败，NumberBox中的值不是有效的整数
-                    //NumberBox.Text = "50";
+                    Numbers.Text = "1";
                 }
             }
             else

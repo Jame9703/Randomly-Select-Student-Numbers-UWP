@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Collections.ObjectModel;
 using System.IO;
+using System.Linq.Expressions;
 using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -38,7 +39,14 @@ namespace 随机抽取学号.Classes
                 using (var stream = await file.OpenStreamForReadAsync())
                 {
                     var serializer = new DataContractJsonSerializer(typeof(ObservableCollection<Student>));
-                    return (ObservableCollection<Student>)serializer.ReadObject(stream);
+                    try
+                    {
+                        return (ObservableCollection<Student>)serializer.ReadObject(stream);
+                    }
+                    catch (Exception)
+                    {
+                        return new ObservableCollection<Student>();
+                    }
                 }
             }
             catch (FileNotFoundException)

@@ -29,7 +29,7 @@ namespace 随机抽取学号.Views
             }
             // 开始进入动画
             var enterPageStoryboard = this.Resources["EnterPageStoryboard"] as Storyboard;
-            enterPageStoryboard?.Begin();
+            enterPageStoryboard.Begin();
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
