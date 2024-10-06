@@ -189,7 +189,18 @@
             <Grid
                 x:Name="PhotosGrid"
                 Grid.Column="2"
-                Margin="0,80,0,0" />
+                Margin="0,80,0,0">
+                <ListView
+                    
+                    x:Name="StudentListView"
+                    AllowDrop="True"
+                    DragOver="StudentListView_DragOver"
+                    Drop="StudentListView_Drop"
+                    ItemTemplate="{StaticResource StudentListTemplate}"
+                    ItemsSource="{x:Bind studentList}"
+                    SelectionChanged="StudentListView_SelectionChanged"
+                    SelectionMode="Single" />
+            </Grid>
             <AppBarButton
                 x:Name="DeleteItemButton"
                 Grid.Column="2"

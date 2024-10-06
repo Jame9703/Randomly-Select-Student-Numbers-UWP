@@ -33,7 +33,7 @@ namespace 随机抽取学号.Views
             ResultTextBox.Text = "";
             RangeToNumberBox.Text = "";
         }
-        private async void StartButton_Click(object sender, RoutedEventArgs e)
+        private void StartButton_Click(object sender, RoutedEventArgs e)
         {
             if (RangeFromNumberBox.Text == "" | RangeToNumberBox.Text == "" | SelectCountNumberBox.Text == "")
             {
