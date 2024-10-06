@@ -8,8 +8,6 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Input;
-using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using 随机抽取学号.Classes;
 
@@ -24,9 +22,8 @@ namespace 随机抽取学号.Views
         public List<string> names = new List<string>();
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-        public delegate void TextChangedEventHandler(string Text);
         ObservableCollection<Student> studentList = new ObservableCollection<Student>();
-        private GridView PhotosGridView;
+        private ListView StudentListView;
         StudentManager studentManager = new StudentManager();
 
         public ClassPage()
@@ -38,15 +35,72 @@ namespace 随机抽取学号.Views
             if (localSettings.Values["Names"] != null) Editor.Text = (string)localSettings.Values["Names"];
             if (localSettings.Values["ClassName"] != null) ClassNameTextBox.Text = (string)localSettings.Values["ClassName"];
         }
+
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             //读取学生信息
             studentList = await studentManager.LoadStudentsAsync();
-            LoadPhotosGridView();
+            LoadStudentListView();
         }
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
+
+        //private async void StudentList_CollectionChanged(object sender, N e)
+        //{
+        //    //当发生交换时，重新保存学生信息
+        //    await studentManager.SaveStudentsAsync(studentList);
+
+        //}
+
+        protected async override void OnNavigatedFrom(NavigationEventArgs e)
         {
             GC.Collect();
+            /*简介
+             * 步骤1：将在Editor中做的更改用于刷新StudentListView(比如Editor有3行，但StudentListView只有2项)
+             * 步骤2：保存对StudentListView的更改(通过保存studentList)
+             */
+            string[] lines = Editor.Text.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            ObservableCollection<Student> newStudentList = new ObservableCollection<Student>();
+            var studentListCount = studentList.Count;//记录清空前学生人数
+            //studentList.Clear();
+            for (int i = 0; i < lines.Length; i++)//将在Editor中做的更改用于刷新StudentListView
+            {
+                if (lines[i].Length > 0)
+                {
+                    if (i < studentList.Count)
+                    {
+                        var item = StudentListView.Items[i] as Student;
+                        var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = item.PhotoPath };//Id表示学号，从1开始
+                        newStudentList.Add(student);
+                    }
+                    else
+                    {
+                        var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = "ms-appx:///Assets/RSSN_Logos/StoreLogo.scale-400.png" };//Id表示学号，从1开始
+                        newStudentList.Add(student);
+                    }
+                }
+                else//空行
+                {
+                    var student = new Student { Id = i + 1, Name = "未知", PhotoPath = "ms-appx:///Assets/RSSN_Logos/StoreLogo.scale-400.png" };//Id表示学号，从1开始
+                    newStudentList.Add(student);
+                }
+            }//到此时，newStudentList已经包含了所有学生
+            StudentListView.ItemsSource = newStudentList;//手动刷新StudentListView
+            studentList.Clear();//清空studentList
+            for (int i = 0; i < newStudentList.Count; i++)//以下为保存StudentListView
+            {
+                var _item = StudentListView.Items[i] as Student;
+                if (_item.PhotoPath != null)
+                {
+                    var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = _item.PhotoPath };//Id表示学号，从1开始
+                    studentList.Add(student);
+                }
+                else//未更改照片，使用的是默认照片
+                {
+                    var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = "ms-appx:///Assets/RSSN_Logos/StoreLogo.scale-400.png" };//Id表示学号，从1开始
+                    studentList.Add(student);
+                }
+            }
+            await studentManager.SaveStudentsAsync(studentList);
+            LoadStudentListView();
         }
         public void UpdateLineNumbers()
         {
@@ -62,17 +116,6 @@ namespace 随机抽取学号.Views
         private void ClassNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             localSettings.Values["ClassName"] = ClassNameTextBox.Text;
-            //MainPage mainPage = new MainPage();
-            //mainPage.ClassNameHyperlinkButton.Content = localSettings.Values[ClassNameKey];
-            //if (TextChanged != null)
-            //{
-            //    TextChanged(ClassNameTextBox.Text);
-            //}
-            //else
-            //{
-            //    TextChanged("我的班级");
-            //}
-
         }
 
 
@@ -159,8 +202,7 @@ namespace 随机抽取学号.Views
                 popupNotice.ShowPopup();
             }
             UpdateLineNumbers();
-            string text = Editor.Text;
-            names = text.Split(new[] { Environment.NewLine }, StringSplitOptions.RemoveEmptyEntries).ToList();
+
         }
 
         private void Editor_Loaded(object sender, RoutedEventArgs e)
@@ -179,96 +221,207 @@ namespace 随机抽取学号.Views
             StorageFolder folder = await folderPicker.PickSingleFolderAsync();
             if (folder != null)
             {
-                //GridView PhotosGridView = new GridView();
-
-                PhotosGrid.Children.Clear();
-
-                studentList.Clear();
+                //PhotosGrid.Children.Clear();
+                //studentList.Clear();
                 IReadOnlyList<StorageFile> files = await folder.GetFilesAsync();
-                int studentListCount = studentList.Count;//提前记录循环前studentList的长度
-                for (int i = 0; i < files.Count; i++)
+                //int studentListCount = studentList.Count;//提前记录循环前studentList的长度
+                //for (int i = 0; i < files.Count; i++)
+                //{
+                //    var localFile = await localFolder.CreateFileAsync(files[i].Name, CreationCollisionOption.ReplaceExisting);
+                //    await files[i].CopyAndReplaceAsync(localFile);
+                //    StorageFile photoFile = await localFolder.GetFileAsync(files[i].Name);
+                //    var student = new Student { Id = studentListCount+i+1, PhotoPath = photoFile.Path, Name = files[i].Name };//Id表示学号，从1开始
+                //    studentList.Add(student);
+                //}
+                for (int i = 0; i < files.Count; i++)//支持同时拖入多个文件
                 {
-                    var localFile = await localFolder.CreateFileAsync(files[i].Name, CreationCollisionOption.ReplaceExisting);
-                    await files[i].CopyAndReplaceAsync(localFile);
-                    StorageFile photoFile = await localFolder.GetFileAsync(files[i].Name);
-                    var item = new Student { Id = studentListCount+i+1, PhotoPath = photoFile.Path, Name = files[i].Name };//Id表示学号，从1开始
-                    studentList.Add(item);
+                    var selectedItem = StudentListView.SelectedItem as Student;
+                    var file = files[i] as StorageFile;
+                    var contentType = file.ContentType;
+                    if (contentType == "image/jpg" || contentType == "image/jpeg" || contentType == "image/png" || contentType == "image/bmp")
+                    {
+                        var localFile = await localFolder.CreateFileAsync(files[i].Name, CreationCollisionOption.ReplaceExisting);
+                        await file.CopyAndReplaceAsync(localFile);
+                        StorageFile photoFile = await localFolder.GetFileAsync(file.Name);
+                        if (StudentListView.Items.Count > StudentListView.SelectedIndex + 1)//超出部分不填充
+                        {
+                            selectedItem.PhotoPath = photoFile.Path;
+                            StudentListView.SelectedItem = StudentListView.Items[StudentListView.SelectedIndex + 1];
+                        }
+
+                    }
                 }
                 await studentManager.SaveStudentsAsync(studentList);
-                LoadPhotosGridView();
+                LoadStudentListView();
             }
         }
-        private void LoadPhotosGridView()//加载PhotosGridView
+        private void LoadStudentListView()//加载StudentListView
         {
             PhotosGrid.Children.Clear();
-            PhotosGridView = new();
-            PhotosGrid.Children.Add(PhotosGridView);
-            PhotosGridView.ItemTemplate = (DataTemplate)Resources["GridViewItemTemplate"];
-            PhotosGridView.Style = (Style)Resources["GridViewStyle"];
-            PhotosGridView.CanReorderItems = true;
-            PhotosGridView.AllowDrop = true;
-            PhotosGridView.DragOver += PhotosGridView_DragOver;
-            PhotosGridView.Drop += PhotosGridView_Drop;
-            PhotosGridView.ItemsSource = studentList;
+            StudentListView = new();
+            PhotosGrid.Children.Add(StudentListView);
+            StudentListView.ItemTemplate = (DataTemplate)Resources["StudentListTemplate"];
+            //StudentListView.CanReorderItems = true;
+            StudentListView.AllowDrop = true;
+            StudentListView.SelectionMode = ListViewSelectionMode.Single;
+            StudentListView.DragOver += StudentListView_DragOver;
+            StudentListView.Drop += StudentListView_Drop;
+            StudentListView.SelectionChanged += StudentListView_SelectionChanged;
+            StudentListView.ItemsSource = studentList;
         }
 
-
-        private async void PhotosGridView_Drop(object sender, DragEventArgs e)
+        private void StudentListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(e.DataView.Contains(StandardDataFormats.StorageItems))
+            if (StudentListView.SelectedItem != null)
             {
-                var items = await e.DataView.GetStorageItemsAsync();
-                if (items.Any())
-                {
-                    int studentListCount = studentList.Count;//提前记录循环前studentList的长度
-                    for (int i= 0; i < items.Count; i++)//支持同时拖入多个文件
-                    {
-                        var file = items[i] as StorageFile;
-                        var contentType = file.ContentType;
-                        if (contentType == "image/jpg"|| contentType == "image/jpeg" || contentType == "image/png" || contentType == "image/bmp")
-                        {
-                            //StorageFile newFile = await storageFile.CopyAsync(folder, storageFile.Name, NameCollisionOption.ReplaceExisting);
-                            var localFile = await localFolder.CreateFileAsync(items[i].Name, CreationCollisionOption.ReplaceExisting);
-                            await file.CopyAndReplaceAsync(localFile);
-                            StorageFile photoFile = await localFolder.GetFileAsync(file.Name);
-                            var item = new Student { Id = studentListCount + i + 1, PhotoPath = photoFile.Path, Name = file.Name };//Id表示学号，从1开始
-                            studentList.Add(item);
-                        }
-                    }
-                    await studentManager.SaveStudentsAsync(studentList);
-                    LoadPhotosGridView();
-                }
+                CurrentSelectionTextBlock.Text = "当前选择项:"+(StudentListView.SelectedIndex+1).ToString();
+            }
+            else
+            {
+                CurrentSelectionTextBlock.Text = "当前选择项:无";
             }
         }
 
-        private void PhotosGridView_DragOver(object sender, DragEventArgs e)
+        private async void StudentListView_Drop(object sender, DragEventArgs e)
         {
-            var PhotosGridView = sender as GridView;
-            PhotosGridView.CanDragItems = true;
+            if (StudentListView.SelectedItem != null)
+            {
+                if (e.DataView.Contains(StandardDataFormats.StorageItems))
+                {
+                    var items = await e.DataView.GetStorageItemsAsync();
+                    if (items.Any())
+                    {
+                        for (int i = 0; i < items.Count; i++)//支持同时拖入多个文件
+                        {
+                            var selectedItem = StudentListView.SelectedItem as Student;
+                            var file = items[i] as StorageFile;
+                            var contentType = file.ContentType;
+                            if (contentType == "image/jpg" || contentType == "image/jpeg" || contentType == "image/png" || contentType == "image/bmp")
+                            {
+                                var localFile = await localFolder.CreateFileAsync(items[i].Name, CreationCollisionOption.ReplaceExisting);
+                                await file.CopyAndReplaceAsync(localFile);
+                                StorageFile photoFile = await localFolder.GetFileAsync(file.Name);
+                                if(StudentListView.Items.Count > StudentListView.SelectedIndex+1)//超出部分不填充
+                                {
+                                    selectedItem.PhotoPath = photoFile.Path;
+                                    StudentListView.SelectedItem = StudentListView.Items[StudentListView.SelectedIndex + 1];
+                                }
+
+                            }
+                        }
+                        await studentManager.SaveStudentsAsync(studentList);
+                        LoadStudentListView();
+                    }
+                }
+            }
+            else
+            {
+                PopupNotice popupNotice = new PopupNotice("请先选择要填充的项");
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Warning;
+                popupNotice.ShowPopup();
+            }
+
+        }
+
+        private void StudentListView_DragOver(object sender, DragEventArgs e)
+        {
+            var StudentListView = sender as ListView;
+            StudentListView.CanDragItems = true;
             e.AcceptedOperation = DataPackageOperation.Copy;
-            e.DragUIOverride.Caption = "拖放此处即可添加文件 o(^▽^)o";
+            e.DragUIOverride.Caption = "替换被选择项的照片";
         }
 
         private async void DeleteItemButton_Click(object sender, RoutedEventArgs e)
         {
-            if (PhotosGridView.SelectedItem != null)
+            if (StudentListView.SelectedItem != null)
             {
-                var selectedItem = PhotosGridView.SelectedItem as Student;
+                var selectedIndex = StudentListView.SelectedIndex;
+                string[] lines = Editor.Text.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+                lines = lines.Where((line, index) => index != selectedIndex).ToArray();//仅删除被删除的那一行
+                // 将剩余的行重新组合成文本，并更新TextBox
+                Editor.Text = string.Join("\r\n", lines);
+                var selectedItem = StudentListView.SelectedItem as Student;
                 studentList.Remove(selectedItem);
-                StorageFile file = await StorageFile.GetFileFromPathAsync(selectedItem.PhotoPath);//一并删除存入LocalFolder的照片
-                await file.DeleteAsync(StorageDeleteOption.Default);
+                try
+                {
+                    StorageFile file = await StorageFile.GetFileFromPathAsync(selectedItem.PhotoPath);//一并删除存入LocalFolder的照片
+                    await file.DeleteAsync(StorageDeleteOption.Default);
+                }
+                catch (Exception)
+                {
+                    //使用的是默认照片
+                }
+
                 for (int i = 0; i < studentList.Count; i++)
                 {
                     studentList[i].Id = i + 1;//重新更改学号
                 }
                 await studentManager.SaveStudentsAsync(studentList);
+                LoadStudentListView() ;
+                if(selectedIndex < StudentListView.Items.Count)
+                {
+                    StudentListView.SelectedItem = StudentListView.Items[selectedIndex];//默认选择被删除项的下一项
+                }
+
             }
             else
             {
                 PopupNotice popupNotice = new PopupNotice("请先选择要删除的项");
-                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Warning;
                 popupNotice.ShowPopup();
             }
+        }
+
+        private async void RefreshButton_Click(object sender, RoutedEventArgs e)
+        {
+            /*简介
+             * 步骤1：将在Editor中做的更改用于刷新StudentListView(比如Editor有3行，但StudentListView只有2项)
+             * 步骤2：保存对StudentListView的更改(通过保存studentList)
+             */
+            string[] lines = Editor.Text.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
+            ObservableCollection<Student> newStudentList = new ObservableCollection<Student>();
+            var studentListCount = studentList.Count;//记录清空前学生人数
+            //studentList.Clear();
+            for (int i = 0; i < lines.Length; i++)//将在Editor中做的更改用于刷新StudentListView
+            {
+                if (lines[i].Length > 0)
+                {
+                    if(i < studentList.Count)
+                    {
+                        var item = StudentListView.Items[i] as Student;
+                        var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = item.PhotoPath };//Id表示学号，从1开始
+                        newStudentList.Add(student);
+                    }
+                    else
+                    {
+                        var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = "ms-appx:///Assets/RSSN_Logos/StoreLogo.scale-400.png" };//Id表示学号，从1开始
+                        newStudentList.Add(student);
+                    }
+                }
+                else//空行
+                {
+                    var student = new Student { Id = i + 1, Name = "未知", PhotoPath = "ms-appx:///Assets/RSSN_Logos/StoreLogo.scale-400.png" };//Id表示学号，从1开始
+                    newStudentList.Add(student);
+                }
+            }//到此时，newStudentList已经包含了所有学生
+            StudentListView.ItemsSource = newStudentList;//手动刷新StudentListView
+            studentList.Clear();//清空studentList
+            for(int i = 0;i < newStudentList.Count;i++)//以下为保存StudentListView
+            {
+                var _item = StudentListView.Items[i] as Student;
+                if (_item.PhotoPath != null)
+                {
+                    var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = _item.PhotoPath };//Id表示学号，从1开始
+                    studentList.Add(student);
+                }
+                else//未更改照片，使用的是默认照片
+                {
+                    var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = "ms-appx:///Assets/RSSN_Logos/StoreLogo.scale-400.png" };//Id表示学号，从1开始
+                    studentList.Add(student);
+                }
+            }
+            await studentManager.SaveStudentsAsync(studentList);
+            LoadStudentListView();
         }
     }
 

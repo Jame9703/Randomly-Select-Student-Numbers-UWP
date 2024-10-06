@@ -533,10 +533,7 @@
                 </Flyout>
             </Button.Flyout>
         </Button>
-        <Grid
-            x:Name="SingleModeGrid"
-            Grid.Column="2"
-            >
+        <Grid x:Name="SingleModeGrid" Grid.Column="2">
             <AppBarButton
                 x:Name="StartorStopButton"
                 Width="97"
@@ -548,24 +545,33 @@
                 FontFamily="{StaticResource HarmonyOSSans}"
                 Icon="Play"
                 Label="开始" />
-            <TextBox
+            <TextBlock
                 x:Name="ResultTextBox"
-                Width="232"
-                Height="68"
-                Margin="27,394,0,0"
+                Width="Auto"
+                Height="Auto"
+                Margin="30,400,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 FontFamily="{StaticResource HarmonyOSSans}"
                 FontSize="36"
-                IsReadOnly="True"
-                TextWrapping="Wrap" />
-            <Image
-                x:Name="StudentPhoto"
+                IsTextSelectionEnabled="True"
+                Text="抽取结果"
+                TextWrapping="NoWrap" />
+            <Border
                 Width="225"
                 Height="300"
-                Margin="27,89,0,0"
+                Margin="30,90,0,0"
                 HorizontalAlignment="Left"
-                VerticalAlignment="Top" />
+                VerticalAlignment="Top"
+                BorderBrush="{ThemeResource SystemAccentColor}"
+                BorderThickness="4"
+                CornerRadius="8,8,8,8">
+                <Image
+                    x:Name="StudentPhoto"
+                    Width="225"
+                    Height="300"
+                    Source="ms-appx:///Assets/RSSN_Logos/StoreLogo.scale-400.png" />
+            </Border>
         </Grid>
         <Grid
             x:Name="MultipleModeGrid"

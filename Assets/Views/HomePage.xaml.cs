@@ -1,6 +1,4 @@
-﻿//尚未解决的Bug
-//ClassPage中Editor行数减少，可能造成Index超出范围
-using Microsoft.UI.Xaml.Controls;
+﻿using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -52,7 +50,11 @@ namespace 随机抽取学号.Views
             EndNumberBox.Value = lines.Length;
             BeginNumberBox.Maximum = lines.Length;
             EndNumberBox.Maximum = lines.Length;
-            Numbers.Maximum = checkedCheckBoxes.Count;
+            if(checkedCheckBoxes.Count > 0)
+            {
+                Numbers.Maximum = checkedCheckBoxes.Count;
+            }
+            Numbers.Minimum = 1;
             segmented.SelectedIndex = 0;//在xaml中设置会导致后面的控件未加载就被调用//System.NullReferenceException:“Object reference not set to an instance of an object.”
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -120,12 +122,35 @@ namespace 随机抽取学号.Views
                 }
                 else
                 {
+                    checkBox.Content += "未知";
                     checkBox.IsChecked = false;
                     checkBox.IsEnabled = false;
                 }
 
             }
-            if(checkedCheckBoxes.Count.ToString()==_lines.Length.ToString())
+            checkedCheckBoxes.Clear();
+            if (_lines.Length > 0)
+            {
+                for (int i = 0; i < lines.Length; i++)//此次i指Index
+                {
+                    // 遍历所有CheckBox并检查它们的IsChecked属性
+                    var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();
+                    if (checkBox[i].IsChecked == true)
+                    {
+                        checkedCheckBoxes.Add(i);
+                    }
+                }
+                //将checkBoxes转换为string存入应用设置
+                string checkedCheckBoxesString = string.Join(",", checkedCheckBoxes);
+                localSettings.Values["checkedCheckBoxesString"] = checkedCheckBoxesString;
+                checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + _lines.Length.ToString();
+                Numbers.Maximum = checkedCheckBoxes.Count;
+            }
+            else
+            {
+                checkedCheckBoxesCount.Text = "未选择";
+            }
+            if (checkedCheckBoxes.Count.ToString()==_lines.Length.ToString())
             {
                 SelectAllCheckBox.IsChecked = true;
             }
@@ -142,6 +167,10 @@ namespace 随机抽取学号.Views
 
         private void checkBox_Click(object sender, RoutedEventArgs e)
         {
+            if (checkedCheckBoxes.Count > 0)//重新设置最大抽取人数
+            {
+                Numbers.Maximum = checkedCheckBoxes.Count;
+            }
             string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
             string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             checkedCheckBoxes.Clear();
@@ -217,11 +246,26 @@ namespace 随机抽取学号.Views
         }
         private void Timer_Tick(object sender, object e)
         {
-            string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-            Random random = new Random();
-            int randomIndex = checkedCheckBoxes[random.Next(checkedCheckBoxes.Count)];
-            StudentPhoto.Source = new BitmapImage(new Uri(studentList[randomIndex].PhotoPath));
-            ResultTextBox.Text = (randomIndex + 1).ToString() + "." + lines[randomIndex];
+            if(checkedCheckBoxes .Count != 0)
+            {
+                string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+                Random random = new Random();
+                int randomIndex = checkedCheckBoxes[random.Next(checkedCheckBoxes.Count)];
+                StudentPhoto.Source = new BitmapImage(new Uri(studentList[randomIndex].PhotoPath));
+                ResultTextBox.Text = (randomIndex + 1).ToString() + "." + lines[randomIndex];
+            }
+            else
+            {
+                PopupNotice popupNotice = new PopupNotice("请至少选择一个学生样本");
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Warning;
+                popupNotice.ShowPopup();
+                //停止本次抽取
+                ((DispatcherTimer)sender).Stop();
+                isRandomizing = false;
+                StartorStopButton.Label = "开始";
+                StartorStopButton.Icon = new SymbolIcon(Symbol.Play);
+                StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
+            }
 
         }
         int peopleCount = 1;//peopleCount用于记录在多选模式下的抽取人数

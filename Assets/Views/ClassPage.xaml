@@ -11,102 +11,50 @@
     NavigationCacheMode="Disabled"
     mc:Ignorable="d">
     <Page.Resources>
-        <Style x:Key="GridViewStyle" TargetType="GridView">
-            <Setter Property="Padding" Value="0,0,0,0" />
-            <Setter Property="IsTabStop" Value="False" />
-            <Setter Property="TabNavigation" Value="Once" />
-            <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Disabled" />
-            <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Auto" />
-            <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Disabled" />
-            <Setter Property="ScrollViewer.IsHorizontalRailEnabled" Value="False" />
-            <Setter Property="ScrollViewer.VerticalScrollMode" Value="Enabled" />
-            <Setter Property="ScrollViewer.IsVerticalRailEnabled" Value="True" />
-            <Setter Property="ScrollViewer.ZoomMode" Value="Disabled" />
-            <Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="False" />
-            <Setter Property="ScrollViewer.BringIntoViewOnFocusChange" Value="True" />
-            <Setter Property="IsSwipeEnabled" Value="True" />
-            <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}" />
-            <Setter Property="FocusVisualMargin" Value="-2" />
-            <Setter Property="ItemContainerTransitions">
-                <Setter.Value>
-                    <TransitionCollection>
-                        <AddDeleteThemeTransition />
-                        <ContentThemeTransition />
-                        <ReorderThemeTransition />
-                        <EntranceThemeTransition
-                            FromHorizontalOffset="-250"
-                            FromVerticalOffset="-250"
-                            IsStaggeringEnabled="True" />
-                    </TransitionCollection>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="ItemsPanel">
-                <Setter.Value>
-                    <ItemsPanelTemplate>
-                        <ItemsWrapGrid Orientation="Horizontal" />
-                    </ItemsPanelTemplate>
-                </Setter.Value>
-            </Setter>
-            <Setter Property="Template">
-                <Setter.Value>
-                    <ControlTemplate TargetType="GridView">
-                        <Border
-                            Background="{TemplateBinding Background}"
-                            BorderBrush="{TemplateBinding BorderBrush}"
-                            BorderThickness="{TemplateBinding BorderThickness}"
-                            CornerRadius="{TemplateBinding CornerRadius}">
-                            <ScrollViewer
-                                x:Name="ScrollViewer"
-                                AutomationProperties.AccessibilityView="Raw"
-                                BringIntoViewOnFocusChange="{TemplateBinding ScrollViewer.BringIntoViewOnFocusChange}"
-                                HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
-                                HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}"
-                                IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}"
-                                IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}"
-                                IsHorizontalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsHorizontalScrollChainingEnabled}"
-                                IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}"
-                                IsVerticalScrollChainingEnabled="{TemplateBinding ScrollViewer.IsVerticalScrollChainingEnabled}"
-                                TabNavigation="{TemplateBinding TabNavigation}"
-                                VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
-                                VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}"
-                                ZoomMode="{TemplateBinding ScrollViewer.ZoomMode}">
-                                <ItemsPresenter
-                                    Padding="{TemplateBinding Padding}"
-                                    Footer="{TemplateBinding Footer}"
-                                    FooterTemplate="{TemplateBinding FooterTemplate}"
-                                    FooterTransitions="{TemplateBinding FooterTransitions}"
-                                    Header="{TemplateBinding Header}"
-                                    HeaderTemplate="{TemplateBinding HeaderTemplate}"
-                                    HeaderTransitions="{TemplateBinding HeaderTransitions}" />
-                            </ScrollViewer>
-                        </Border>
-                    </ControlTemplate>
-                </Setter.Value>
-            </Setter>
-        </Style>
-        <DataTemplate x:Key="GridViewItemTemplate" x:DataType="classes:Student">
-            <StackPanel
-                Width="225"
-                Height="Auto"
-                Orientation="Vertical">
-                <StackPanel.ChildrenTransitions>
-                    <TransitionCollection>
-                        <EntranceThemeTransition FromVerticalOffset="-1000" IsStaggeringEnabled="True" />
-                    </TransitionCollection>
-                </StackPanel.ChildrenTransitions>
-                <Image
-                    Width="225"
-                    Height="300"
-                    Source="{x:Bind PhotoPath}"
-                    Stretch="UniformToFill" />
-                <TextBlock
-                    HorizontalAlignment="Center"
-                    VerticalAlignment="Center"
-                    FontFamily="{StaticResource HarmonyOSSans}"
-                    FontSize="16"
-                    Text="{x:Bind Name}" />
-
-            </StackPanel>
+        <DataTemplate x:Key="StudentListTemplate" x:DataType="classes:Student">
+            <Grid Margin="0,12,0,12">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Border
+                    BorderBrush="{ThemeResource SystemAccentColorLight2}"
+                    BorderThickness="2"
+                    CornerRadius="4,4,4,4">
+                    <Image
+                        Width="75"
+                        Height="100"
+                        Source="{x:Bind PhotoPath}"
+                        Stretch="UniformToFill" />
+                </Border>
+                <StackPanel
+                    Grid.Column="1"
+                    Margin="12,0,0,0"
+                    Orientation="Vertical">
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+                            Margin="0,5,0,0"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="14"
+                            Text="学号:" />
+                        <TextBlock
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="20"
+                            Foreground="{ThemeResource SystemAccentColorLight2}"
+                            Text="{x:Bind Id}" />
+                    </StackPanel>
+                    <StackPanel Orientation="Horizontal">
+                        <TextBlock
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="14"
+                            Text="姓名:" />
+                        <TextBlock
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="14"
+                            Text="{x:Bind Name}" />
+                    </StackPanel>
+                </StackPanel>
+            </Grid>
         </DataTemplate>
     </Page.Resources>
 
@@ -208,7 +156,7 @@
                 Grid.ColumnSpan="2"
                 Width="70"
                 Height="29"
-                Margin="10,4,0,0"
+                Margin="30,6,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 FontFamily="{StaticResource HarmonyOSSans}"
@@ -219,7 +167,7 @@
                 Grid.Column="2"
                 Width="164"
                 Height="30"
-                Margin="75,0,0,0"
+                Margin="85,0,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 FontFamily="{StaticResource HarmonyOSSans}"
@@ -242,52 +190,64 @@
                 x:Name="PhotosGrid"
                 Grid.Column="2"
                 Margin="0,80,0,0" />
-            <Button
-                x:Name="FolderPickerButton"
-                Grid.Column="2"
-                Width="97"
-                Height="34"
-                Margin="103,40,0,0"
-                VerticalAlignment="Top"
-                Click="FolderPickerButton_Click"
-                Content="打开文件夹"
-                FontFamily="{StaticResource HarmonyOSSans}" />
             <AppBarButton
                 x:Name="DeleteItemButton"
                 Grid.Column="2"
                 Width="75"
                 Height="60"
-                Margin="0,28,0,0"
+                Margin="0,25,0,0"
                 Click="DeleteItemButton_Click"
                 FontFamily="{StaticResource HarmonyOSSans}"
                 Foreground="#FFFC5665"
                 Icon="Delete"
-                Label="删除" />
+                Label="删除当前项" />
+            <AppBarButton
+                x:Name="RefreshButton"
+                Grid.Column="2"
+                Width="75"
+                Height="60"
+                Margin="75,25,0,0"
+                Click="RefreshButton_Click"
+                FontFamily="{StaticResource HarmonyOSSans}"
+                Icon="Refresh"
+                Label="保存并刷新" />
+            <TextBlock
+                x:Name="CurrentSelectionTextBlock"
+                Grid.Column="2"
+                Height="30"
+                Margin="230,40,0,0"
+                VerticalAlignment="Top"
+                FontFamily="{StaticResource HarmonyOSSans}"
+                Text="当前选择项:无" />
+            <TextBlock
+                Grid.Column="2"
+                Height="30"
+                Margin="230,55,0,0"
+                VerticalAlignment="Top"
+                FontFamily="{StaticResource HarmonyOSSans}"
+                Text="Tips:可以直接拖动一个或多个图片从当前被选择项开始填充" />
+            <AppBarButton
+                x:Name="FolderPickerButton"
+                Grid.Column="2"
+                Width="75"
+                Height="60"
+                Margin="150,25,0,0"
+                FontFamily="{StaticResource HarmonyOSSans}"
+                Icon="OpenLocal"
+                Label="打开文件夹">
+                <AppBarButton.Flyout>
+                    <Flyout>
+                        <StackPanel Orientation="Vertical">
+                            <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="选择一个文件夹，将文件夹下所有图片从当前被选择的项开始填充" />
+                            <Button
+                                Click="FolderPickerButton_Click"
+                                Content="确定"
+                                FontFamily="{StaticResource HarmonyOSSans}" />
+                        </StackPanel>
+                    </Flyout>
+                </AppBarButton.Flyout>
+            </AppBarButton>
         </Grid>
-
-
-        <!--<Grid Background="{ThemeResource ApplicationPageBackgroundThemeBrush}">
-        -->
-        <!--<StackPanel Visibility="Collapsed">
-                <TextBox Name="Input_Box"></TextBox>
-                <Button Click="AddData">Add</Button>
-                <ListView Name="Output">
-                    <ListView.ItemTemplate>
-                        <DataTemplate>
-                            <TextBlock Text="{Binding}"/>
-                        </DataTemplate>
-                    </ListView.ItemTemplate>
-                </ListView>
-            </StackPanel>-->
-        <!--
-            <StackPanel>
-                <TextBox x:Name="NameTextBox" PlaceholderText="Enter student name" />
-                <Button Content="Add Student" Click="AddStudentButton_Click" />
-                <Button Content="Delete Student" Click="DeleteStudentButton_Click" />
-                <GridView x:Name="StudentsGridView" ItemTemplate="{StaticResource GridViewItemTemplate}" />
-            </StackPanel>
-
-        </Grid>-->
 
 
     </Grid>
