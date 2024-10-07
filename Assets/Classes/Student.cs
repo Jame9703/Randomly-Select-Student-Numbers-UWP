@@ -2,7 +2,6 @@
 using System;
 using System.Collections.ObjectModel;
 using System.IO;
-using System.Linq.Expressions;
 using System.Runtime.Serialization.Json;
 using System.Threading.Tasks;
 using Windows.Storage;
@@ -16,11 +15,12 @@ namespace 随机抽取学号.Classes
         public string Name { get; set; }//姓名
         public string  PhotoPath { get; set; }//图片路径
     }
-    public class StudentManager
+    public static class StudentManager
     {
+        public static ObservableCollection<Student> StudentList { get; set; } = new ObservableCollection<Student>();
         private const string FileName = "students.json";
 
-        public async Task SaveStudentsAsync(ObservableCollection<Student> students)
+        public static async Task SaveStudentsAsync(ObservableCollection<Student> students)
         {
             try
             {
@@ -42,7 +42,7 @@ namespace 随机抽取学号.Classes
 
         }
 
-        public async Task<ObservableCollection<Student>> LoadStudentsAsync()
+        public static async Task<ObservableCollection<Student>> LoadStudentsAsync()
         {
             var localFolder = ApplicationData.Current.LocalFolder;
             try

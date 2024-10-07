@@ -21,9 +21,7 @@ namespace 随机抽取学号.Views
         private bool isRandomizing = false;
         List<int> checkedCheckBoxes = new List<int>();
         ClassPage ClassPage = new ClassPage();
-        ObservableCollection<Student> studentList = new ObservableCollection<Student>();//记录所有学生
         ObservableCollection<Student> selectedStudentList = new ObservableCollection<Student>();//记录多选模式下选中的学生
-        StudentManager studentManager = new StudentManager();
         private GridView PhotosGridView;
         //string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
         //string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -40,10 +38,8 @@ namespace 随机抽取学号.Views
             // 停止计时器，避免重复加载
             ((DispatcherTimer)sender).Stop();
         }
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            //读取学生信息
-            studentList = await studentManager.LoadStudentsAsync();
             timer.Interval = TimeSpan.FromMilliseconds(50);
             timer.Tick += Timer_Tick;
             string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
@@ -251,7 +247,7 @@ namespace 随机抽取学号.Views
                 string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
                 Random random = new Random();
                 int randomIndex = checkedCheckBoxes[random.Next(checkedCheckBoxes.Count)];
-                StudentPhoto.Source = new BitmapImage(new Uri(studentList[randomIndex].PhotoPath));
+                StudentPhoto.Source = new BitmapImage(new Uri(StudentManager.StudentList[randomIndex].PhotoPath));
                 ResultTextBox.Text = (randomIndex + 1).ToString() + "." + lines[randomIndex];
             }
             else
@@ -448,7 +444,7 @@ namespace 随机抽取学号.Views
                         for (int i = 0; i < Result.Count; i++)
                         {
                             int randomIndex = Result[i];
-                            var item = new Student { Id = randomIndex + 1, PhotoPath = studentList[randomIndex].PhotoPath, Name = studentList[randomIndex].Name };//Id表示学号，从1开始
+                            var item = new Student { Id = randomIndex + 1, PhotoPath = StudentManager.StudentList[randomIndex].PhotoPath, Name = StudentManager.StudentList[randomIndex].Name };//Id表示学号，从1开始
                             selectedStudentList.Add(item);
                         }
                         LoadPhotosGridView();

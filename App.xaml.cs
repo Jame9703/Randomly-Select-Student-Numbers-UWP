@@ -24,7 +24,6 @@ namespace 随机抽取学号
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
-            //Student.InitializeDatabase();
         }
         public static TEnum GetEnum<TEnum>(string text) where TEnum : struct
         {
@@ -39,9 +38,10 @@ namespace 随机抽取学号
         /// 将在启动应用程序以打开特定文件等情况下使用。
         /// </summary>
         /// <param name="e">有关启动请求和过程的详细信息。</param>
-        protected override void OnLaunched(LaunchActivatedEventArgs e)
+        protected async override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            
+            //在App初始化时加载学生信息，确保不重复加载
+            StudentManager.StudentList = await StudentManager.LoadStudentsAsync();
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 500, Height = 500 });//设置窗口最小尺寸
             Frame rootFrame = Window.Current.Content as Frame;
             // 不要在窗口已包含内容时重复应用程序初始化，

@@ -22,8 +22,6 @@ namespace 随机抽取学号.Views
         public List<string> names = new List<string>();
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-        ObservableCollection<Student> studentList = new ObservableCollection<Student>();
-        StudentManager studentManager = new StudentManager();
 
         public ClassPage()
         {
@@ -35,11 +33,9 @@ namespace 随机抽取学号.Views
             if (localSettings.Values["ClassName"] != null) ClassNameTextBox.Text = (string)localSettings.Values["ClassName"];
         }
 
-        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            //读取学生信息
-            studentList = await studentManager.LoadStudentsAsync();
-            StudentListView.ItemsSource = studentList;
+            StudentListView.ItemsSource = StudentManager.StudentList;
         }
 
         protected async override void OnNavigatedFrom(NavigationEventArgs e)
@@ -54,7 +50,7 @@ namespace 随机抽取学号.Views
             {
                 if (lines[i].Length > 0)
                 {
-                    if (i < studentList.Count)
+                    if (i < StudentManager.StudentList.Count)
                     {
                         var item = StudentListView.Items[i] as Student;
                         var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = item.PhotoPath };//Id表示学号，从1开始
@@ -73,22 +69,22 @@ namespace 随机抽取学号.Views
                 }
             }//到此时，newStudentList已经包含了所有学生
             StudentListView.ItemsSource = newStudentList;//手动刷新StudentListView
-            studentList.Clear();//清空studentList
+            StudentManager.StudentList.Clear();//清空studentList
             for (int i = 0; i < newStudentList.Count; i++)//以下为保存StudentListView
             {
                 var _item = StudentListView.Items[i] as Student;
                 if (_item.PhotoPath != null)
                 {
                     var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = _item.PhotoPath };//Id表示学号，从1开始
-                    studentList.Add(student);
+                    StudentManager.StudentList.Add(student);
                 }
                 else//未更改照片，使用的是默认照片
                 {
                     var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = "ms-appx:///Assets/RSSN_Logos/StoreLogo.scale-400.png" };//Id表示学号，从1开始
-                    studentList.Add(student);
+                    StudentManager.StudentList.Add(student);
                 }
             }
-            await studentManager.SaveStudentsAsync(studentList);
+            await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
             GC.Collect();
         }
         public void UpdateLineNumbers()
@@ -237,9 +233,9 @@ namespace 随机抽取学号.Views
                         }
                         i++;
                     }
-                    await studentManager.SaveStudentsAsync(studentList);
+                    await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
                     StudentListView.ItemsSource = null;
-                    StudentListView.ItemsSource = studentList;
+                    StudentListView.ItemsSource = StudentManager.StudentList;
                 }
             }
             else
@@ -295,9 +291,9 @@ namespace 随机抽取学号.Views
                             }
                             i++;
                         }
-                        await studentManager.SaveStudentsAsync(studentList);
+                        await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
                         StudentListView.ItemsSource = null;
-                        StudentListView.ItemsSource = studentList;
+                        StudentListView.ItemsSource = StudentManager.StudentList;
                     }
                 }
             }
@@ -328,7 +324,7 @@ namespace 随机抽取学号.Views
                 // 将剩余的行重新组合成文本，并更新TextBox
                 Editor.Text = string.Join("\r\n", lines);
                 var selectedItem = StudentListView.SelectedItem as Student;
-                studentList.Remove(selectedItem);
+                StudentManager.StudentList.Remove(selectedItem);
                 try
                 {
                     StorageFile file = await StorageFile.GetFileFromPathAsync(selectedItem.PhotoPath);//一并删除存入LocalFolder的照片
@@ -339,13 +335,13 @@ namespace 随机抽取学号.Views
                     //使用的是默认照片
                 }
 
-                for (int i = 0; i < studentList.Count; i++)
+                for (int i = 0; i < StudentManager.StudentList.Count; i++)
                 {
-                    studentList[i].Id = i + 1;//重新更改学号
+                    StudentManager.StudentList[i].Id = i + 1;//重新更改学号
                 }
-                await studentManager.SaveStudentsAsync(studentList);
+                await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
                 StudentListView.ItemsSource = null;
-                StudentListView.ItemsSource = studentList;
+                StudentListView.ItemsSource = StudentManager.StudentList;
                 if (selectedIndex < StudentListView.Items.Count)
                 {
                     StudentListView.SelectedItem = StudentListView.Items[selectedIndex];//默认选择被删除项的下一项
@@ -372,7 +368,7 @@ namespace 随机抽取学号.Views
             {
                 if (lines[i].Length > 0)
                 {
-                    if(i < studentList.Count)
+                    if(i < StudentManager.StudentList.Count)
                     {
                         var item = StudentListView.Items[i] as Student;
                         var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = item.PhotoPath };//Id表示学号，从1开始
@@ -391,24 +387,24 @@ namespace 随机抽取学号.Views
                 }
             }//到此时，newStudentList已经包含了所有学生
             StudentListView.ItemsSource = newStudentList;//手动刷新StudentListView
-            studentList.Clear();//清空studentList
+            StudentManager.StudentList.Clear();//清空studentList
             for(int i = 0;i < newStudentList.Count;i++)//以下为保存StudentListView
             {
                 var _item = StudentListView.Items[i] as Student;
                 if (_item.PhotoPath != null)
                 {
                     var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = _item.PhotoPath };//Id表示学号，从1开始
-                    studentList.Add(student);
+                    StudentManager.StudentList.Add(student);
                 }
                 else//未更改照片，使用的是默认照片
                 {
                     var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = "ms-appx:///Assets/RSSN_Logos/StoreLogo.scale-400.png" };//Id表示学号，从1开始
-                    studentList.Add(student);
+                    StudentManager.StudentList.Add(student);
                 }
             }
-            await studentManager.SaveStudentsAsync(studentList);
+            await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
             StudentListView.ItemsSource = null;
-            StudentListView.ItemsSource = studentList;
+            StudentListView.ItemsSource = StudentManager.StudentList;
         }
     }
 
