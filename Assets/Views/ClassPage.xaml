@@ -12,14 +12,14 @@
     mc:Ignorable="d">
     <Page.Resources>
         <DataTemplate x:Key="StudentListTemplate" x:DataType="classes:Student">
-            <Grid Margin="0,12,0,12">
+            <Grid>
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Border
                     BorderBrush="{ThemeResource SystemAccentColorLight2}"
-                    BorderThickness="2"
+                    BorderThickness="0.1"
                     CornerRadius="4,4,4,4">
                     <Image
                         Width="75"
@@ -40,7 +40,6 @@
                         <TextBlock
                             FontFamily="{StaticResource HarmonyOSSans}"
                             FontSize="20"
-                            Foreground="{ThemeResource SystemAccentColorLight2}"
                             Text="{x:Bind Id}" />
                     </StackPanel>
                     <StackPanel Orientation="Horizontal">
@@ -69,7 +68,7 @@
                 <Button VerticalAlignment="Top" Click="OpenFileButton_Click">
                     <Button.Transitions>
                         <TransitionCollection>
-                            <EntranceThemeTransition FromVerticalOffset="-1000" />
+                            <EntranceThemeTransition FromHorizontalOffset="-200" />
                         </TransitionCollection>
                     </Button.Transitions>
                     <Grid>
@@ -87,7 +86,7 @@
                     Click="SaveFileButton_Click">
                     <Button.Transitions>
                         <TransitionCollection>
-                            <EntranceThemeTransition FromVerticalOffset="-1000" />
+                            <EntranceThemeTransition FromHorizontalOffset="-600" />
                         </TransitionCollection>
                     </Button.Transitions>
                     <Grid>
@@ -174,31 +173,19 @@
                 Text="我的班级"
                 TextChanged="ClassNameTextBox_TextChanged"
                 TextWrapping="Wrap" />
-            <!--<GridView x:Name="PhotosGridView" Grid.Column="2"  Style="{StaticResource GridViewStyle}"  Margin="0,80,0,0" ItemTemplate="{StaticResource GridViewItemTemplate}" CanReorderItems="True" AllowDrop="True">
-            -->
-            <!--<GridView.ItemContainerTransitions>
-                    <TransitionCollection>
-                        <AddDeleteThemeTransition/>
-                        <ContentThemeTransition/>
-                        <ReorderThemeTransition/>
-                        <EntranceThemeTransition IsStaggeringEnabled="True" FromVerticalOffset="200"/>
-                    </TransitionCollection>
-                </GridView.ItemContainerTransitions>-->
-            <!--
-            </GridView>-->
             <Grid
                 x:Name="PhotosGrid"
                 Grid.Column="2"
                 Margin="0,80,0,0">
-                <ListView
-                    
-                    x:Name="StudentListView"
+                <ListBox
+                    x:Name="StudentListBox"
                     AllowDrop="True"
-                    DragOver="StudentListView_DragOver"
-                    Drop="StudentListView_Drop"
+                    Background="Transparent"
+                    DragOver="StudentListBox_DragOver"
+                    Drop="StudentListBox_Drop"
                     ItemTemplate="{StaticResource StudentListTemplate}"
                     ItemsSource="{x:Bind classes:StudentManager.StudentList}"
-                    SelectionChanged="StudentListView_SelectionChanged"
+                    SelectionChanged="StudentListBox_SelectionChanged"
                     SelectionMode="Single" />
             </Grid>
             <AppBarButton
