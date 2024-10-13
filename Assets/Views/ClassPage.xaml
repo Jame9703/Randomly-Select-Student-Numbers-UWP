@@ -18,6 +18,7 @@
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Border
+                    Background="White"
                     BorderBrush="{ThemeResource SystemAccentColorLight2}"
                     BorderThickness="0.1"
                     CornerRadius="4,4,4,4">
@@ -186,7 +187,13 @@
                     ItemTemplate="{StaticResource StudentListTemplate}"
                     ItemsSource="{x:Bind classes:StudentManager.StudentList}"
                     SelectionChanged="StudentListBox_SelectionChanged"
-                    SelectionMode="Single" />
+                    SelectionMode="Single">
+                    <ListBox.Transitions>
+                        <TransitionCollection>
+                            <EntranceThemeTransition FromVerticalOffset="500" IsStaggeringEnabled="True" />
+                        </TransitionCollection>
+                    </ListBox.Transitions>
+                </ListBox>
             </Grid>
             <AppBarButton
                 x:Name="DeleteItemButton"

@@ -262,28 +262,28 @@ namespace 随机抽取学号.Views
         {
             if (StudentListBox.SelectedItem != null)
             {
-                if (e.DataView.Contains(StandardDataFormats.StorageItems))
+                var items = await e.DataView.GetStorageItemsAsync();
+                if (e.DataView.Contains(StandardDataFormats.StorageItems) && items.Any())
                 {
-                    var items = await e.DataView.GetStorageItemsAsync();
-                    if (items.Any())
+                    int i = 0;
+                    while (i < items.Count)//支持同时拖入多个文件
                     {
-                        int i = 0;
-                        while ( i < items.Count)//支持同时拖入多个文件
+                        var file = items[i] as StorageFile;
+                        var selectedItem = StudentListBox.SelectedItem as Student;
+                        try
                         {
-                            var selectedItem = StudentListBox.SelectedItem as Student;
-                            var file = items[i] as StorageFile;
                             var contentType = file.ContentType;
                             if (contentType == "image/jpg" || contentType == "image/jpeg" || contentType == "image/png" || contentType == "image/bmp")
                             {
                                 var localFile = await localFolder.CreateFileAsync(items[i].Name, CreationCollisionOption.ReplaceExisting);
                                 await file.CopyAndReplaceAsync(localFile);
                                 StorageFile photoFile = await localFolder.GetFileAsync(file.Name);
-                                if(StudentListBox.Items.Count > StudentListBox.SelectedIndex+1)//超出部分不填充
+                                if (StudentListBox.Items.Count > StudentListBox.SelectedIndex + 1)//超出部分不填充
                                 {
                                     selectedItem.PhotoPath = photoFile.Path;
                                     StudentListBox.SelectedItem = StudentListBox.Items[StudentListBox.SelectedIndex + 1];
                                 }
-                                else if(StudentListBox.Items.Count == StudentListBox.SelectedIndex+1)//当前选择的是最后一项
+                                else if (StudentListBox.Items.Count == StudentListBox.SelectedIndex + 1)//当前选择的是最后一项
                                 {
                                     selectedItem.PhotoPath = photoFile.Path;
                                     break;//避免被后面的图片覆盖
@@ -291,10 +291,16 @@ namespace 随机抽取学号.Views
                             }
                             i++;
                         }
-                        await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
-                        StudentListBox.ItemsSource = null;
-                        StudentListBox.ItemsSource = StudentManager.StudentList;
+                        catch(Exception)
+                        {
+                            PopupNotice popupNotice = new PopupNotice("填充失败");
+                            popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                            popupNotice.ShowPopup();
+                        }
                     }
+                    await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
+                    StudentListBox.ItemsSource = null;
+                    StudentListBox.ItemsSource = StudentManager.StudentList;
                 }
             }
             else
