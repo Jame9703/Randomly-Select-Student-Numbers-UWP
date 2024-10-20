@@ -24,8 +24,8 @@
     <AppxPackageSigningTimestampDigestAlgorithm>SHA256</AppxPackageSigningTimestampDigestAlgorithm>
     <AppxAutoIncrementPackageRevision>False</AppxAutoIncrementPackageRevision>
     <GenerateTestArtifacts>True</GenerateTestArtifacts>
-    <AppxBundle>Auto</AppxBundle>
-    <AppxBundlePlatforms>x86|x64|arm</AppxBundlePlatforms>
+    <AppxBundle>Always</AppxBundle>
+    <AppxBundlePlatforms>x86|x64</AppxBundlePlatforms>
     <HoursBetweenUpdateChecks>0</HoursBetweenUpdateChecks>
     <AppxSymbolPackageEnabled>False</AppxSymbolPackageEnabled>
   </PropertyGroup>
@@ -129,6 +129,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Assets\Classes\RippleHelper.cs" />
     <Compile Include="Assets\Classes\Student.cs" />
     <Compile Include="Assets\Media\BackdropMicaBrush.cs" />
     <Compile Include="Assets\Media\BackgroundSource.cs" />
@@ -165,6 +166,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Assets\Photos\GithubLogo.png" />
+    <Content Include="Assets\Photos\RippleMask.png" />
     <Content Include="Assets\RSSN_Logos\LargeTile.scale-100.png" />
     <Content Include="Assets\RSSN_Logos\LargeTile.scale-125.png" />
     <Content Include="Assets\RSSN_Logos\LargeTile.scale-150.png" />
@@ -284,7 +286,9 @@
     <Content Include="Assets\Fonts\HarmonyOS_Sans_SC_Medium.ttf" />
     <None Include="随机抽取学号_TemporaryKey.pfx" />
   </ItemGroup>
-  <ItemGroup />
+  <ItemGroup>
+    <Folder Include="Assets\Controls\" />
+  </ItemGroup>
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

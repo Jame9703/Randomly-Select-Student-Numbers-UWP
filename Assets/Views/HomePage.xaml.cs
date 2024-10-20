@@ -3,11 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using 随机抽取学号.Classes;
@@ -23,6 +25,7 @@ namespace 随机抽取学号.Views
         ClassPage ClassPage = new ClassPage();
         ObservableCollection<Student> selectedStudentList = new ObservableCollection<Student>();//记录多选模式下选中的学生
         private GridView PhotosGridView;
+        private int randomIndex;
         //string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
         //string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
         public HomePage()
@@ -205,12 +208,13 @@ namespace 随机抽取学号.Views
                 SelectAllCheckBox.IsChecked = null;
             }
         }
-        private void StartorStopButton_Click(object sender, RoutedEventArgs e)//仅在单人模式有效
+        private async void StartorStopButton_Click(object sender, RoutedEventArgs e)//仅在单人模式有效
         {
             //Storyboard1.Begin();
             //Storyboard2.Begin();
             //Storyboard3.Begin();
             //Storyboard4.Begin();
+
             if (ClassPage.Current.Editor.Text == string.Empty)
             {
                 PopupNotice popupNotice = new PopupNotice("请先填写班级信息");
@@ -225,8 +229,8 @@ namespace 随机抽取学号.Views
                     //开始抽取
                     isRandomizing = true;
                     timer.Start();
-                    StartorStopButton.Label = "停止";
-                    StartorStopButton.Icon = new SymbolIcon(Symbol.Pause);
+                    StartorStopButtonContent.Text = "停止";
+                    StartorStopButtonIcon.Symbol = Symbol.Pause;
                     StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 236, G = 179, B = 1 });
                 }
                 else if (isRandomizing)
@@ -234,9 +238,23 @@ namespace 随机抽取学号.Views
                     //停止抽取
                     timer.Stop();
                     isRandomizing = false;
-                    StartorStopButton.Label = "开始";
-                    StartorStopButton.Icon = new SymbolIcon(Symbol.Play);
+                    StartorStopButtonContent.Text = "开始";
+                    StartorStopButtonIcon.Symbol = Symbol.Play;
                     StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
+                    if (NoReturnCheckBox.IsChecked == true)//抽完不放回
+                    {
+                        var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
+                        checkBox[randomIndex].IsChecked = false;
+                        UpdateCheckedCheckBoxes();
+                        if (checkedCheckBoxes.Count == 0)
+                        {
+                            SelectAllCheckBox.IsChecked = false;
+                        }
+                        else
+                        {
+                            SelectAllCheckBox.IsChecked = null;
+                        }
+                    }
                 }
             }
         }
@@ -246,7 +264,7 @@ namespace 随机抽取学号.Views
             {
                 string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
                 Random random = new Random();
-                int randomIndex = checkedCheckBoxes[random.Next(checkedCheckBoxes.Count)];
+                randomIndex = checkedCheckBoxes[random.Next(checkedCheckBoxes.Count)];
                 StudentPhoto.Source = new BitmapImage(new Uri(StudentManager.StudentList[randomIndex].PhotoPath));
                 ResultTextBox.Text = (randomIndex + 1).ToString() + "." + lines[randomIndex];
             }
@@ -258,8 +276,8 @@ namespace 随机抽取学号.Views
                 //停止本次抽取
                 ((DispatcherTimer)sender).Stop();
                 isRandomizing = false;
-                StartorStopButton.Label = "开始";
-                StartorStopButton.Icon = new SymbolIcon(Symbol.Play);
+                StartorStopButtonContent.Text = "开始";
+                StartorStopButtonIcon.Symbol = Symbol.Play;
                 StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
             }
 
@@ -404,8 +422,8 @@ namespace 随机抽取学号.Views
             //停止抽取
             timer.Stop();
             isRandomizing = false;
-            StartorStopButton.Label = "开始";
-            StartorStopButton.Icon = new SymbolIcon(Symbol.Play);
+            StartorStopButtonContent.Text = "开始";
+            StartorStopButtonIcon.Symbol = Symbol.Play;
             StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
             string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
             string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
@@ -423,13 +441,27 @@ namespace 随机抽取学号.Views
                         // 取前几位数字
                         List<int> Result = checkedCheckBoxes.Take(a).ToList();
                         selectedStudentList.Clear();
+                        var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
                         for (int i = 0; i < Result.Count; i++)
                         {
                             int randomIndex = Result[i];
                             var item = new Student { Id = randomIndex + 1, PhotoPath = StudentManager.StudentList[randomIndex].PhotoPath, Name = StudentManager.StudentList[randomIndex].Name };//Id表示学号，从1开始
                             selectedStudentList.Add(item);
+                            if (NoReturnCheckBox.IsChecked == true)//抽完不放回
+                            {
+                                checkBox[randomIndex].IsChecked = false;
+                            }
                         }
                         LoadPhotosGridView();
+                        UpdateCheckedCheckBoxes();
+                        if (checkedCheckBoxes.Count == 0)
+                        {
+                            SelectAllCheckBox.IsChecked = false;
+                        }
+                        else
+                        {
+                            SelectAllCheckBox.IsChecked = null;
+                        }
                     }
                     else
                     {

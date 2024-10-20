@@ -21,7 +21,7 @@
         </Storyboard>
     </Page.Resources>
 
-    <Grid >
+    <Grid>
 
         <StackPanel x:Name="SettingsPanel">
             <TextBlock
@@ -91,7 +91,7 @@
                 <TextBlock
                     FontFamily="{StaticResource HarmonyOSSans}"
                     Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                    Text="Version 1.1.0   2024/10/7" />
+                    Text="Version 1.1.0   2024/10/20" />
 
             </controls:SettingsExpander>
             <controls:SettingsCard
