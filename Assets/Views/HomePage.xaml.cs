@@ -3,11 +3,13 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using 随机抽取学号.Classes;
@@ -23,6 +25,7 @@ namespace 随机抽取学号.Views
         ClassPage ClassPage = new ClassPage();
         ObservableCollection<Student> selectedStudentList = new ObservableCollection<Student>();//记录多选模式下选中的学生
         private GridView PhotosGridView;
+        private int randomIndex;
         //string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
         //string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
         public HomePage()
@@ -205,12 +208,13 @@ namespace 随机抽取学号.Views
                 SelectAllCheckBox.IsChecked = null;
             }
         }
-        private void StartorStopButton_Click(object sender, RoutedEventArgs e)//仅在单人模式有效
+        private async void StartorStopButton_Click(object sender, RoutedEventArgs e)//仅在单人模式有效
         {
             //Storyboard1.Begin();
             //Storyboard2.Begin();
             //Storyboard3.Begin();
             //Storyboard4.Begin();
+
             if (ClassPage.Current.Editor.Text == string.Empty)
             {
                 PopupNotice popupNotice = new PopupNotice("请先填写班级信息");
@@ -237,8 +241,25 @@ namespace 随机抽取学号.Views
                     StartorStopButton.Label = "开始";
                     StartorStopButton.Icon = new SymbolIcon(Symbol.Play);
                     StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
+                    if (NoReturnCheckBox.IsChecked == true)//抽完不放回
+                    {
+                        var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
+                        checkBox[randomIndex].IsChecked = false;
+                        UpdateCheckedCheckBoxes();
+                        if (checkedCheckBoxes.Count == 0)
+                        {
+                            SelectAllCheckBox.IsChecked = false;
+                        }
+                        else
+                        {
+                            SelectAllCheckBox.IsChecked = null;
+                        }
+                    }
                 }
             }
+            StartorStopButton.RenderTransform = new CompositeTransform { ScaleX = 0.9f, ScaleY = 0.9f };
+            await Task.Delay(50);
+            StartorStopButton.RenderTransform = new CompositeTransform { ScaleX = 1.0f, ScaleY = 1.0f };
         }
         private void Timer_Tick(object sender, object e)
         {
@@ -246,7 +267,7 @@ namespace 随机抽取学号.Views
             {
                 string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
                 Random random = new Random();
-                int randomIndex = checkedCheckBoxes[random.Next(checkedCheckBoxes.Count)];
+                randomIndex = checkedCheckBoxes[random.Next(checkedCheckBoxes.Count)];
                 StudentPhoto.Source = new BitmapImage(new Uri(StudentManager.StudentList[randomIndex].PhotoPath));
                 ResultTextBox.Text = (randomIndex + 1).ToString() + "." + lines[randomIndex];
             }
@@ -423,13 +444,27 @@ namespace 随机抽取学号.Views
                         // 取前几位数字
                         List<int> Result = checkedCheckBoxes.Take(a).ToList();
                         selectedStudentList.Clear();
+                        var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
                         for (int i = 0; i < Result.Count; i++)
                         {
                             int randomIndex = Result[i];
                             var item = new Student { Id = randomIndex + 1, PhotoPath = StudentManager.StudentList[randomIndex].PhotoPath, Name = StudentManager.StudentList[randomIndex].Name };//Id表示学号，从1开始
                             selectedStudentList.Add(item);
+                            if (NoReturnCheckBox.IsChecked == true)//抽完不放回
+                            {
+                                checkBox[randomIndex].IsChecked = false;
+                            }
                         }
                         LoadPhotosGridView();
+                        UpdateCheckedCheckBoxes();
+                        if (checkedCheckBoxes.Count == 0)
+                        {
+                            SelectAllCheckBox.IsChecked = false;
+                        }
+                        else
+                        {
+                            SelectAllCheckBox.IsChecked = null;
+                        }
                     }
                     else
                     {
@@ -451,6 +486,48 @@ namespace 随机抽取学号.Views
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
                 popupNotice.ShowPopup();
             }
+        }
+
+        private void StartorStopButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+    //        if (
+    //e.GetCurrentPoint(null).Properties.IsLeftButtonPressed)
+    //        {
+    //            // 这里处理鼠标左键按下的逻辑
+    //            Debug.WriteLine("Mouse left button pressed.");
+    //            StartorStopButton.RenderTransform = new CompositeTransform { ScaleX = 0.8f, ScaleY = 0.8f };
+    //        }
+
+            var temp = e.GetCurrentPoint(sender as AppBarButton);
+            if (temp.Properties.IsLeftButtonPressed)
+            {
+                PopupNotice popupNotice = new PopupNotice("请先填写班级信息");
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
+                popupNotice.ShowPopup();
+                //MyEllipse.Center = temp.Position;
+                var animation = new DoubleAnimation()
+                {
+                    From = 0,
+                    To = 150,
+                    Duration = new Duration(TimeSpan.FromSeconds(1))
+                };
+                animation.BeginTime = TimeSpan.FromSeconds(0);
+                //MyEllipse.BeginAnimation(EllipseGeometry.RadiusXProperty, animation);
+                var animation2 = new DoubleAnimation()
+                {
+                    From = 0.3,
+                    To = 0,
+                    Duration = new Duration(TimeSpan.FromSeconds(1))
+                };
+                animation2.BeginTime = TimeSpan.FromSeconds(0.5);
+                //MyPath.BeginAnimation(Path.OpacityProperty, animation2);
+            }
+
+        }
+
+        private void StartorStopButton_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            StartorStopButton.RenderTransform = new CompositeTransform { ScaleX = 1.0f, ScaleY = 1.0f };
         }
     }
 }

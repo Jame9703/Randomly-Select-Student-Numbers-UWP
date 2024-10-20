@@ -1,6 +1,4 @@
-﻿using CommunityToolkit.WinUI;
-using Microsoft.UI.Xaml.Controls;
-using System;
+﻿using System;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Storage;
@@ -11,7 +9,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-using 随机抽取学号.Classes;
 using 随机抽取学号.Views;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
