@@ -257,6 +257,9 @@ namespace 随机抽取学号.Views
                     }
                 }
             }
+            StartorStopButton.RenderTransform = new CompositeTransform { ScaleX = 0.9f, ScaleY = 0.9f };
+            await Task.Delay(50);
+            StartorStopButton.RenderTransform = new CompositeTransform { ScaleX = 1.0f, ScaleY = 1.0f };
         }
         private void Timer_Tick(object sender, object e)
         {
@@ -483,6 +486,48 @@ namespace 随机抽取学号.Views
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
                 popupNotice.ShowPopup();
             }
+        }
+
+        private void StartorStopButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+    //        if (
+    //e.GetCurrentPoint(null).Properties.IsLeftButtonPressed)
+    //        {
+    //            // 这里处理鼠标左键按下的逻辑
+    //            Debug.WriteLine("Mouse left button pressed.");
+    //            StartorStopButton.RenderTransform = new CompositeTransform { ScaleX = 0.8f, ScaleY = 0.8f };
+    //        }
+
+            var temp = e.GetCurrentPoint(sender as AppBarButton);
+            if (temp.Properties.IsLeftButtonPressed)
+            {
+                PopupNotice popupNotice = new PopupNotice("请先填写班级信息");
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
+                popupNotice.ShowPopup();
+                //MyEllipse.Center = temp.Position;
+                var animation = new DoubleAnimation()
+                {
+                    From = 0,
+                    To = 150,
+                    Duration = new Duration(TimeSpan.FromSeconds(1))
+                };
+                animation.BeginTime = TimeSpan.FromSeconds(0);
+                //MyEllipse.BeginAnimation(EllipseGeometry.RadiusXProperty, animation);
+                var animation2 = new DoubleAnimation()
+                {
+                    From = 0.3,
+                    To = 0,
+                    Duration = new Duration(TimeSpan.FromSeconds(1))
+                };
+                animation2.BeginTime = TimeSpan.FromSeconds(0.5);
+                //MyPath.BeginAnimation(Path.OpacityProperty, animation2);
+            }
+
+        }
+
+        private void StartorStopButton_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            StartorStopButton.RenderTransform = new CompositeTransform { ScaleX = 1.0f, ScaleY = 1.0f };
         }
     }
 }
