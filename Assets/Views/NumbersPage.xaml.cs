@@ -16,10 +16,16 @@ namespace 随机抽取学号.Views
     /// </summary>
     public sealed partial class NumbersPage : Page
     {
-
+        List <int> RandomNumbersList = new List<int>();
+        bool isGridViewUpdated;
+        bool isListUpdated;
+        bool isTextBoxUpdated;
         public NumbersPage()
         {
             this.InitializeComponent();
+            isGridViewUpdated = false;
+            isListUpdated = false;
+            isTextBoxUpdated = false;
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
@@ -41,22 +47,29 @@ namespace 随机抽取学号.Views
             }
             else
             {
+                isGridViewUpdated = false;
+                isListUpdated = false;
+                isTextBoxUpdated = false;
                 int Start = int.Parse(RangeFromNumberBox.Text);
                 int End = int.Parse(RangeToNumberBox.Text);
-                int a; bool success = int.TryParse(SelectCountNumberBox.Text, out a);
+                if (Start > End)
+                {
+                    PopupNotice popupNotice = new PopupNotice("起始值不能大于终止值");
+                    popupNotice.PopupContent.Severity = Microsoft.UI.Xaml.Controls.InfoBarSeverity.Warning;
+                    popupNotice.ShowPopup();
+                }
+                bool success = int.TryParse(SelectCountNumberBox.Text, out int TakeCount);
                 if (success)
                 {
                     // 转换成功
-                    int TakeCount = int.Parse(SelectCountNumberBox.Text);
                     // 生成指定范围内的数字序列
                     List<int> numbers = Enumerable.Range(Start, End - Start + 1).ToList();
-
                     // 使用随机数生成器对数字序列进行打乱
                     Random random = new Random();
                     numbers = numbers.OrderBy(x => random.Next()).ToList();
 
                     // 取前几位数字
-                    List<int> Result = numbers.Take(TakeCount).ToList();
+                    RandomNumbersList = numbers.Take(TakeCount).ToList();
                     //清除旧的列表内容
                     RandomNumbersListStackPanel.Children.Clear();
                     // 清除旧的网格内容
@@ -68,87 +81,26 @@ namespace 随机抽取学号.Views
                     }
                     if (segmented.SelectedIndex == 0)
                     {
-                        foreach (int result in Result)
+                        if (isGridViewUpdated == false)
                         {
-                            //网格
-                            RandomNumbersGridView.Visibility = Visibility.Visible;
-                            RandomNumbersListStackPanel.Visibility = Visibility.Collapsed;
-                            RandomNumbersTextBoxGrid.Visibility = Visibility.Collapsed;
-                            Border border2 = new Border()
-                            {
-                                CornerRadius = new CornerRadius(8, 8, 8, 8),
-                                BorderBrush = new SolidColorBrush(Colors.LightBlue),
-                                BorderThickness = new Thickness(4),
-                                Margin = new Thickness(5),
-                                Height = 60,
-                                Child = new TextBlock
-                                {
-                                    Name = "textBlock",
-                                    FontSize = 33,
-                                    FontFamily = new FontFamily("{StaticResource HarmonyOSSans}"),
-                                    Width = 150,
-                                    Height = 50,
-                                    Margin = new Thickness(5),
-                                    TextAlignment = TextAlignment.Center,
-                                    HorizontalAlignment = HorizontalAlignment.Center,
-                                    VerticalAlignment = VerticalAlignment.Center,
-                                    Text = result.ToString(),
-                                }
-                            };
-                            RandomNumbersGridView.Items.Add(border2);
+                            ShowRandomNumbersInGridView();
+                            isGridViewUpdated = true;
                         }
                     }
                     else if (segmented.SelectedIndex == 1)
                     {
-                        foreach (int result in Result)
+                        if(isListUpdated == false)
                         {
-                            //列表
-                            RandomNumbersGridView.Visibility = Visibility.Collapsed;
-                            RandomNumbersListStackPanel.Visibility = Visibility.Visible;
-                            RandomNumbersTextBoxGrid.Visibility = Visibility.Collapsed;
-                            Border border1 = new Border()
-                            {
-                                CornerRadius = new CornerRadius(8, 8, 8, 8),
-                                BorderBrush = new SolidColorBrush(Colors.LightBlue),
-                                BorderThickness = new Thickness(4),
-                                Margin = new Thickness(5),
-                                Height = 60,
-                                Child = new TextBlock
-                                {
-                                    FontSize = 33,
-                                    FontFamily = new FontFamily("{StaticResource HarmonyOSSans}"),
-                                    Width = 150,
-                                    Height = 50,
-                                    Margin = new Thickness(5),
-                                    TextAlignment = TextAlignment.Center,
-                                    HorizontalAlignment = HorizontalAlignment.Center,
-                                    VerticalAlignment = VerticalAlignment.Center,
-                                    Text = result.ToString(),
-                                }
-                            };
-                            RandomNumbersListStackPanel.Children.Add(border1);
+                            ShowRandomNumbersInList();
+                            isListUpdated = true;
                         }
                     }
                     else
                     {
-                        foreach (int result in Result)
+                        if(isTextBoxUpdated ==false)
                         {
-                            //文本
-                            RandomNumbersGridView.Visibility = Visibility.Collapsed;
-                            RandomNumbersListStackPanel.Visibility = Visibility.Collapsed;
-                            RandomNumbersTextBoxGrid.Visibility = Visibility.Visible;
-                            if (ComboBox2.SelectedItem.ToString() == "-- --")
-                            {
-                                ResultTextBox.Text += "--" + result.ToString() + "--";
-                            }
-                            else if (ComboBox2.SelectedItem.ToString() == "“ ”")
-                            {
-                                ResultTextBox.Text += "“" + result.ToString() + "”";
-                            }
-                            else if (ComboBox2.SelectedItem.ToString() == "‘ ’")
-                            {
-                                ResultTextBox.Text += "‘" + result.ToString() + "’";
-                            }
+                            ShowRandomNumbersInTextBox();
+                            isTextBoxUpdated = true;
                         }
                     }
                 }
@@ -164,8 +116,6 @@ namespace 随机抽取学号.Views
         {
             ClearAll();
         }
-
-
 
         private void ClearResult_Click(object sender, RoutedEventArgs e)
         {
@@ -185,128 +135,128 @@ namespace 随机抽取学号.Views
 
         private void segmented_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (RangeFromNumberBox.Text == "" | RangeToNumberBox.Text == "" | SelectCountNumberBox.Text == "")
+            if (segmented.SelectedIndex == 0)
             {
-                PopupNotice popupNotice = new PopupNotice("请输入完整信息");
-                popupNotice.ShowPopup();
+                //网格
+                RandomNumbersGridView.Visibility = Visibility.Visible;
+                RandomNumbersListStackPanel.Visibility = Visibility.Collapsed;
+                RandomNumbersTextBoxGrid.Visibility = Visibility.Collapsed;
+                if (isGridViewUpdated == false)
+                {
+                    ShowRandomNumbersInGridView();
+                    isGridViewUpdated = true;
+                }
+            }
+            else if (segmented.SelectedIndex == 1)
+            {
+                //列表
+                RandomNumbersGridView.Visibility = Visibility.Collapsed;
+                RandomNumbersListStackPanel.Visibility = Visibility.Visible;
+                RandomNumbersTextBoxGrid.Visibility = Visibility.Collapsed;
+                if (isListUpdated == false)
+                {
+                    ShowRandomNumbersInList();
+                    isListUpdated = true;
+                }
             }
             else
             {
-                int Start = int.Parse(RangeFromNumberBox.Text);
-                int End = int.Parse(RangeToNumberBox.Text);
-                int a; bool success = int.TryParse(SelectCountNumberBox.Text, out a);
-                if (success)
+                //文本
+                RandomNumbersGridView.Visibility = Visibility.Collapsed;
+                RandomNumbersListStackPanel.Visibility = Visibility.Collapsed;
+                RandomNumbersTextBoxGrid.Visibility = Visibility.Visible;
+                if (isTextBoxUpdated == false)
                 {
-                    // 转换成功
-                    int TakeCount = int.Parse(SelectCountNumberBox.Text);
-                    // 生成指定范围内的数字序列
-                    List<int> numbers = Enumerable.Range(Start, End - Start + 1).ToList();
-
-                    // 使用随机数生成器对数字序列进行打乱
-                    Random random = new Random();
-                    numbers = numbers.OrderBy(x => random.Next()).ToList();
-
-                    // 取前几位数字
-                    List<int> Result = numbers.Take(TakeCount).ToList();
-                    //清除旧的列表内容
-                    RandomNumbersListStackPanel.Children.Clear();
-                    // 清除旧的网格内容
-                    RandomNumbersGridView.Items.Clear();
-                    //按需清除文本内容
-                    if (CheckBox.IsChecked != true)
-                    {
-                        ResultTextBox.Text = "";
-                    }
-                    if (segmented.SelectedIndex == 0)
-                    {
-                        foreach (int result in Result)
-                        {
-                            //网格
-                            RandomNumbersGridView.Visibility = Visibility.Visible;
-                            RandomNumbersListStackPanel.Visibility = Visibility.Collapsed;
-                            RandomNumbersTextBoxGrid.Visibility = Visibility.Collapsed;
-                            Border border2 = new Border()
-                            {
-                                CornerRadius = new CornerRadius(8, 8, 8, 8),
-                                BorderBrush = new SolidColorBrush(Colors.LightBlue),
-                                BorderThickness = new Thickness(4),
-                                Margin = new Thickness(5),
-                                Height = 60,
-                                Child = new TextBlock
-                                {
-                                    Name = "textBlock",
-                                    FontSize = 33,
-                                    FontFamily = new FontFamily("{StaticResource HarmonyOSSans}"),
-                                    Width = 150,
-                                    Height = 50,
-                                    Margin = new Thickness(5),
-                                    TextAlignment = TextAlignment.Center,
-                                    HorizontalAlignment = HorizontalAlignment.Center,
-                                    VerticalAlignment = VerticalAlignment.Center,
-                                    Text = result.ToString(),
-                                }
-                            };
-                            RandomNumbersGridView.Items.Add(border2);
-                        }
-                    }
-                    else if (segmented.SelectedIndex == 1)
-                    {
-                        foreach (int result in Result)
-                        {
-                            //列表
-                            RandomNumbersGridView.Visibility = Visibility.Collapsed;
-                            RandomNumbersListStackPanel.Visibility = Visibility.Visible;
-                            RandomNumbersTextBoxGrid.Visibility = Visibility.Collapsed;
-                            Border border1 = new Border()
-                            {
-                                CornerRadius = new CornerRadius(8, 8, 8, 8),
-                                BorderBrush = new SolidColorBrush(Colors.LightBlue),
-                                BorderThickness = new Thickness(4),
-                                Margin = new Thickness(5),
-                                Height = 60,
-                                Child = new TextBlock
-                                {
-                                    FontSize = 33,
-                                    FontFamily = new FontFamily("{StaticResource HarmonyOSSans}"),
-                                    Width = 150,
-                                    Height = 50,
-                                    Margin = new Thickness(5),
-                                    TextAlignment = TextAlignment.Center,
-                                    HorizontalAlignment = HorizontalAlignment.Center,
-                                    VerticalAlignment = VerticalAlignment.Center,
-                                    Text = result.ToString(),
-                                }
-                            };
-                            RandomNumbersListStackPanel.Children.Add(border1);
-                        }
-                    }
-                    else
-                    {
-                        foreach (int result in Result)
-                        {
-                            //文本
-                            RandomNumbersGridView.Visibility = Visibility.Collapsed;
-                            RandomNumbersListStackPanel.Visibility = Visibility.Collapsed;
-                            RandomNumbersTextBoxGrid.Visibility = Visibility.Visible;
-                            if (ComboBox2.SelectedItem.ToString() == "-- --")
-                            {
-                                ResultTextBox.Text += "--" + result.ToString() + "--";
-                            }
-                            else if (ComboBox2.SelectedItem.ToString() == "“ ”")
-                            {
-                                ResultTextBox.Text += "“" + result.ToString() + "”";
-                            }
-                            else if (ComboBox2.SelectedItem.ToString() == "‘ ’")
-                            {
-                                ResultTextBox.Text += "‘" + result.ToString() + "’";
-                            }
-                        }
-                    }
+                    ShowRandomNumbersInTextBox();
+                    isTextBoxUpdated = true;
                 }
-                else
+            }
+        }
+
+        private void ShowRandomNumbersInGridView()
+        {
+            foreach (int result in RandomNumbersList)
+            {
+                //网格
+                RandomNumbersGridView.Visibility = Visibility.Visible;
+                RandomNumbersListStackPanel.Visibility = Visibility.Collapsed;
+                RandomNumbersTextBoxGrid.Visibility = Visibility.Collapsed;
+                Border border2 = new Border()
                 {
-                    // 转换失败，NumberBox中的值不是有效的整数
-                    SelectCountNumberBox.Text = "10";
+                    CornerRadius = new CornerRadius(8, 8, 8, 8),
+                    BorderBrush = new SolidColorBrush(Colors.LightBlue),
+                    BorderThickness = new Thickness(4),
+                    Margin = new Thickness(5),
+                    Height = 60,
+                    Child = new TextBlock
+                    {
+                        Name = "textBlock",
+                        FontSize = 33,
+                        FontFamily = new FontFamily("{StaticResource HarmonyOSSans}"),
+                        Width = 150,
+                        Height = 50,
+                        Margin = new Thickness(5),
+                        TextAlignment = TextAlignment.Center,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Text = result.ToString(),
+                    }
+                };
+                RandomNumbersGridView.Items.Add(border2);
+            }
+        }
+
+        private void ShowRandomNumbersInList()
+        {
+            foreach (int result in RandomNumbersList)
+            {
+                //列表
+                RandomNumbersGridView.Visibility = Visibility.Collapsed;
+                RandomNumbersListStackPanel.Visibility = Visibility.Visible;
+                RandomNumbersTextBoxGrid.Visibility = Visibility.Collapsed;
+                Border border1 = new Border()
+                {
+                    CornerRadius = new CornerRadius(8, 8, 8, 8),
+                    BorderBrush = new SolidColorBrush(Colors.LightBlue),
+                    BorderThickness = new Thickness(4),
+                    Margin = new Thickness(5),
+                    Height = 60,
+                    Child = new TextBlock
+                    {
+                        FontSize = 33,
+                        FontFamily = new FontFamily("{StaticResource HarmonyOSSans}"),
+                        Width = 150,
+                        Height = 50,
+                        Margin = new Thickness(5),
+                        TextAlignment = TextAlignment.Center,
+                        HorizontalAlignment = HorizontalAlignment.Center,
+                        VerticalAlignment = VerticalAlignment.Center,
+                        Text = result.ToString(),
+                    }
+                };
+                RandomNumbersListStackPanel.Children.Add(border1);
+            }
+        }
+
+        private void ShowRandomNumbersInTextBox()
+        {
+            foreach (int result in RandomNumbersList)
+            {
+                //文本
+                RandomNumbersGridView.Visibility = Visibility.Collapsed;
+                RandomNumbersListStackPanel.Visibility = Visibility.Collapsed;
+                RandomNumbersTextBoxGrid.Visibility = Visibility.Visible;
+                if (ComboBox2.SelectedItem.ToString() == "-- --")
+                {
+                    ResultTextBox.Text += "--" + result.ToString() + "--";
+                }
+                else if (ComboBox2.SelectedItem.ToString() == "“ ”")
+                {
+                    ResultTextBox.Text += "“" + result.ToString() + "”";
+                }
+                else if (ComboBox2.SelectedItem.ToString() == "‘ ’")
+                {
+                    ResultTextBox.Text += "‘" + result.ToString() + "’";
                 }
             }
         }
