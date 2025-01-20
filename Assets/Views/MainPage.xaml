@@ -428,13 +428,12 @@
                </ResourceDictionary>-->
 
     </Page.Resources>
+    <Page.Background>
+        <ImageBrush ImageSource="ms-appx:///Assets/Photos/background.jpg" />
+    </Page.Background>
     <Grid x:Name="MainGrid">
         <Grid.Background>
-            <media:BackdropMicaBrush
-                BackgroundSource="WallpaperBackdrop"
-                FallbackColor="{ThemeResource SolidBackgroundFillColorBase}"
-                TintColor="{ThemeResource SolidBackgroundFillColorBase}"
-                TintOpacity="0.4" />
+            <AcrylicBrush TintColor="White" TintOpacity="0.2"/>
         </Grid.Background>
         <Grid>
             <Grid.RowDefinitions>

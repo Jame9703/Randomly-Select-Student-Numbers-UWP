@@ -22,7 +22,6 @@
     </Page.Resources>
 
     <Grid>
-
         <StackPanel x:Name="SettingsPanel">
             <TextBlock
                 Margin="15,0,20,0"

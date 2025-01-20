@@ -31,8 +31,8 @@ namespace 随机抽取学号
             // 隐藏系统标题栏并设置新的标题栏
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
-            //设置标题栏边距
-            CoreApplication.GetCurrentView().TitleBar.LayoutMetricsChanged += (s, e) => UpdateAppTitle(s);
+            ////设置标题栏边距
+            //CoreApplication.GetCurrentView().TitleBar.LayoutMetricsChanged += (s, e) => UpdateAppTitle(s);
             var view = ApplicationView.GetForCurrentView();
             view.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             Window.Current.SetTitleBar(AppTitleBar);
@@ -85,11 +85,11 @@ namespace 随机抽取学号
 
         }
         public event EventHandler<double> ChangeOpacityRequested;
-        void UpdateAppTitle(CoreApplicationViewTitleBar coreTitleBar)
-        {
-            //ensure the custom title bar does not overlap window caption controls
-            AppTitleBar.Margin = new Thickness(0, 0, coreTitleBar.SystemOverlayRightInset, 0);
-        }
+        //void UpdateAppTitle(CoreApplicationViewTitleBar coreTitleBar)
+        //{
+        //    //ensure the custom title bar does not overlap window caption controls
+        //    AppTitleBar.Margin = new Thickness(0, 0, coreTitleBar.SystemOverlayRightInset, 0);
+        //}
         public  void OnChangeOpacityRequested(double opacity)
         {
             ChangeOpacityRequested?.Invoke(this, opacity);

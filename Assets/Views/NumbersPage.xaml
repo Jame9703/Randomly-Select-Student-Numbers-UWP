@@ -10,7 +10,6 @@
     xmlns:ui="using:CommunityToolkit.WinUI"
     mc:Ignorable="d">
     <Grid Background="{ThemeResource GridBackground}">
-
         <muxc:NumberBox
             x:Name="RangeFromNumberBox"
             Width="100"

@@ -12,57 +12,6 @@
     NavigationCacheMode="Disabled"
     mc:Ignorable="d">
     <Page.Resources>
-        <Storyboard x:Name="Storyboard1">
-            <DoubleAnimation
-                Storyboard.TargetName="A"
-                Storyboard.TargetProperty="X"
-                From="1650 "
-                To="0"
-                Duration="00:00:1">
-                <DoubleAnimation.EasingFunction>
-                    <QuadraticEase />
-                </DoubleAnimation.EasingFunction>
-            </DoubleAnimation>
-        </Storyboard>
-
-        <Storyboard x:Name="Storyboard2">
-            <DoubleAnimation
-                Storyboard.TargetName="B"
-                Storyboard.TargetProperty="X"
-                From="975"
-                To="0"
-                Duration="00:00:0.7">
-                <DoubleAnimation.EasingFunction>
-                    <PowerEase Power="1" />
-                </DoubleAnimation.EasingFunction>
-            </DoubleAnimation>
-        </Storyboard>
-
-        <Storyboard x:Name="Storyboard3">
-            <DoubleAnimation
-                Storyboard.TargetName="C"
-                Storyboard.TargetProperty="X"
-                From="975"
-                To="0"
-                Duration="00:00:0.67">
-                <DoubleAnimation.EasingFunction>
-                    <PowerEase />
-                </DoubleAnimation.EasingFunction>
-            </DoubleAnimation>
-        </Storyboard>
-
-        <Storyboard x:Name="Storyboard4">
-            <DoubleAnimation
-                Storyboard.TargetName="D"
-                Storyboard.TargetProperty="X"
-                From="975"
-                To="0"
-                Duration="00:00:0.7">
-                <DoubleAnimation.EasingFunction>
-                    <SineEase />
-                </DoubleAnimation.EasingFunction>
-            </DoubleAnimation>
-        </Storyboard>
         <Style TargetType="AppBarButton">
             <Setter Property="Background" Value="Transparent" />
             <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
@@ -761,12 +710,12 @@
                 Margin="10,81,0,0"
                 VerticalAlignment="Top"
                 Background="#FFC0F2BC"
-                Foreground="Black"
                 BorderBrush="Green"
                 BorderThickness="2"
                 Click="GenerateButton_Click"
                 CornerRadius="64,64,64,64"
                 FontFamily="{StaticResource HarmonyOSSans}"
+                Foreground="Black"
                 Style="{StaticResource DefaultButtonStyle}">
                 <!--<Button.Transitions>
                     <TransitionCollection>

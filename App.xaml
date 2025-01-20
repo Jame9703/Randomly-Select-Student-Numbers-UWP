@@ -9,6 +9,9 @@
             <controls:XamlControlsResources.MergedDictionaries>
                 <!--  Other app resources here  -->
                 <ResourceDictionary>
+                    <Style TargetType="controls:NumberBox">
+                        <Setter Property="Foreground" Value="{ThemeResource SystemBaseHighColor}" />
+                    </Style>
                     <FontFamily x:Key="HarmonyOSSans">ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC</FontFamily>
                 </ResourceDictionary>
                 <ResourceDictionary>
@@ -18,8 +21,8 @@
                             <SolidColorBrush x:Key="MyBrush" Color="Yellow" />
                             <SolidColorBrush
                                 x:Key="GridBackground"
-                                Opacity="0.6"
-                                Color="White" />
+                                Opacity="0.3"
+                               Color="White"/>
                             <SolidColorBrush x:Key="LineNumberForeground" Color="#E42B91AF" />
                             <Color x:Key="ButtonForegroundColor">Green</Color>
 

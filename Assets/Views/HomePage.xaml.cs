@@ -9,7 +9,6 @@ using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using 随机抽取学号.Classes;
@@ -22,33 +21,21 @@ namespace 随机抽取学号.Views
         public DispatcherTimer timer = new DispatcherTimer();
         private bool isRandomizing = false;
         List<int> checkedCheckBoxes = new List<int>();
-        ClassPage ClassPage = new ClassPage();
         ObservableCollection<Student> selectedStudentList = new ObservableCollection<Student>();//记录多选模式下选中的学生
         private GridView PhotosGridView;
         private int randomIndex;
-        //string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-        //string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
         public HomePage()
         {
             this.InitializeComponent();
         }
-        private void Timer1_Tick(object sender, object e)
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-           CreateCheckBoxes();
-            // 停止计时器，避免重复加载
-            ((DispatcherTimer)sender).Stop();
-        }
-        private void Page_Loaded(object sender, RoutedEventArgs e)
-        {
-            var timer1 = new DispatcherTimer();//使用定时器在Page加载后加载CheckBoxes以提高性能
-            timer1.Tick += Timer1_Tick;
-            timer1.Start();
             timer.Interval = TimeSpan.FromMilliseconds(50);
             timer.Tick += Timer_Tick;
-            string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-            EndNumberBox.Value = lines.Length;
-            BeginNumberBox.Maximum = lines.Length;
-            EndNumberBox.Maximum = lines.Length;
+            await  CreateCheckBoxes();
+            EndNumberBox.Value = StudentManager.StudentList.Count;
+            BeginNumberBox.Maximum = StudentManager.StudentList.Count;
+            EndNumberBox.Maximum = StudentManager.StudentList.Count;
             if(checkedCheckBoxes.Count > 0)
             {
                 Numbers.Maximum = checkedCheckBoxes.Count;
@@ -70,10 +57,8 @@ namespace 随机抽取学号.Views
             PhotosGridView.Style = (Style)Resources["GridViewStyle"];
             PhotosGridView.ItemsSource = selectedStudentList;
         }
-        private void CreateCheckBoxes()
+        private async Task CreateCheckBoxes()
         {
-            string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-            string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             //从应用设置加载checkedCheckBoxes
             var localSettings = ApplicationData.Current.LocalSettings;
             if (localSettings.Values["checkedCheckBoxesString"] != null)
@@ -95,61 +80,68 @@ namespace 随机抽取学号.Views
             }
             StackPanelCheckBoxes.Children.Clear();//将曾经的CheckBox删去（如果有）
             StackPanelCheckBoxes.Orientation = Orientation.Vertical; //设置为竖直布局
-                                                                     //创建CheckBox并在“StackPanelCheckBoxes”中显示
-            for (int i = 0; i < lines.Length; i++)//此次i指Index
+             //创建CheckBox并在“StackPanelCheckBoxes”中显示
+            for (int i = 0; i < StudentManager.StudentList.Count; i++)//此次i指Index
             {
                 var checkBox = new CheckBox();
-                string line = lines[i];
-                checkBox.Content = i + 1 + "." + line;//遍历Editor中的每一行，用来生成CheckBox集合
+                checkBox.Content = i + 1 + "." + StudentManager.StudentList[i].Name;//遍历StudentList，用来生成CheckBox集合
                 checkBox.Click += checkBox_Click;
                 checkBox.Margin = new Thickness(0); //设置边距以避免与其他元素重叠(设置了个寂寞)
                 checkBox.IsChecked = true;
                 StackPanelCheckBoxes.Children.Add(checkBox);
                 checkBox.FontFamily = (FontFamily)Application.Current.Resources["HarmonyOSSans"];
                 checkBox.FontSize = 16;
-                if (lines[i] != String.Empty)
+                if (checkedCheckBoxes.Contains(i) == true)
                 {
-                    checkBox.IsEnabled = true;
-                    if (checkedCheckBoxes.Contains(i) == true)
-                    {
-                        checkBox.IsChecked = true;
-                    }
-                    else
-                    {
-                        checkBox.IsChecked = false;
-                    }
+                    checkBox.IsChecked = true;
                 }
                 else
                 {
-                    checkBox.Content += "未知";
                     checkBox.IsChecked = false;
-                    checkBox.IsEnabled = false;
                 }
+                //if (lines[i] != String.Empty)
+                //{
+                //    checkBox.IsEnabled = true;
+                //    if (checkedCheckBoxes.Contains(i) == true)
+                //    {
+                //        checkBox.IsChecked = true;
+                //    }
+                //    else
+                //    {
+                //        checkBox.IsChecked = false;
+                //    }
+                //}
+                //else
+                //{
+                //    checkBox.Content += "未知";
+                //    checkBox.IsChecked = false;
+                //    checkBox.IsEnabled = false;
+                //}
 
             }
-            checkedCheckBoxes.Clear();
-            if (_lines.Length > 0)
-            {
-                for (int i = 0; i < lines.Length; i++)//此次i指Index
-                {
-                    // 遍历所有CheckBox并检查它们的IsChecked属性
-                    var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();
-                    if (checkBox[i].IsChecked == true)
-                    {
-                        checkedCheckBoxes.Add(i);
-                    }
-                }
-                //将checkBoxes转换为string存入应用设置
-                string checkedCheckBoxesString = string.Join(",", checkedCheckBoxes);
-                localSettings.Values["checkedCheckBoxesString"] = checkedCheckBoxesString;
-                checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + _lines.Length.ToString();
-                Numbers.Maximum = checkedCheckBoxes.Count;
-            }
-            else
-            {
-                checkedCheckBoxesCount.Text = "未选择";
-            }
-            if (checkedCheckBoxes.Count.ToString()==_lines.Length.ToString())
+            //checkedCheckBoxes.Clear();
+            //if (_lines.Length > 0)
+            //{
+            //    for (int i = 0; i < lines.Length; i++)//此次i指Index
+            //    {
+            //        // 遍历所有CheckBox并检查它们的IsChecked属性
+            //        var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();
+            //        if (checkBox[i].IsChecked == true)
+            //        {
+            //            checkedCheckBoxes.Add(i);
+            //        }
+            //    }
+            //    //将checkBoxes转换为string存入应用设置
+            //    string checkedCheckBoxesString = string.Join(",", checkedCheckBoxes);
+            //    localSettings.Values["checkedCheckBoxesString"] = checkedCheckBoxesString;
+            //    checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + _lines.Length.ToString();
+            //    Numbers.Maximum = checkedCheckBoxes.Count;
+            //}
+            //else
+            //{
+            //    checkedCheckBoxesCount.Text = "未选择";
+            //}
+            if (checkedCheckBoxes.Count==StudentManager.StudentList.Count)
             {
                 SelectAllCheckBox.IsChecked = true;
             }
@@ -161,17 +153,30 @@ namespace 随机抽取学号.Views
             {
                 SelectAllCheckBox.IsChecked = null;
             }
-            checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + _lines.Length.ToString();
+            checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
         }
-
+        private void UpdateCheckedCheckBoxesCount(object sender)
+        {
+            if(sender is CheckBox checkBox)
+            {
+                int index = StackPanelCheckBoxes.Children.IndexOf(checkBox);
+                if (checkBox.IsChecked == false)
+                {
+                    checkedCheckBoxes.Remove(index);
+                }
+                else if (checkBox.IsChecked == true)
+                {
+                    checkedCheckBoxes.Add(index);
+                }
+                checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
+            }
+        }
         private void UpdateCheckedCheckBoxes()
         {
-            string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-            string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             checkedCheckBoxes.Clear();
-            if (lines.Length > 0)
+            if (StudentManager.StudentList.Count > 0)
             {
-                for (int i = 0; i < lines.Length; i++)//此处i指Index
+                for (int i = 0; i < StudentManager.StudentList.Count; i++)//此处i指Index
                 {
                     var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
                     if (checkBox[i].IsChecked == true)
@@ -183,7 +188,7 @@ namespace 随机抽取学号.Views
                 string checkedCheckBoxesString = string.Join(",", checkedCheckBoxes);
                 var localSettings = ApplicationData.Current.LocalSettings;
                 localSettings.Values["checkedCheckBoxesString"] = checkedCheckBoxesString;
-                checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + _lines.Length.ToString();
+                checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
                 Numbers.Minimum = 1;
                 if (checkedCheckBoxes.Count > 0)//重新设置最大抽取人数
                 {
@@ -193,12 +198,14 @@ namespace 随机抽取学号.Views
         }
         private void checkBox_Click(object sender, RoutedEventArgs e)
         {
-            UpdateCheckedCheckBoxes();
-            string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            if (checkedCheckBoxes.Count == _lines.Length)
+            //UpdateCheckedCheckBoxes();
+            UpdateCheckedCheckBoxesCount(sender);
+            //string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            if (checkedCheckBoxes.Count == StudentManager.StudentList.Count)
             {
                 SelectAllCheckBox.IsChecked = true;
             }
+
             else if (checkedCheckBoxes.Count == 0)
             {
                 SelectAllCheckBox.IsChecked = false;
@@ -208,14 +215,10 @@ namespace 随机抽取学号.Views
                 SelectAllCheckBox.IsChecked = null;
             }
         }
-        private async void StartorStopButton_Click(object sender, RoutedEventArgs e)//仅在单人模式有效
+        private void StartorStopButton_Click(object sender, RoutedEventArgs e)//仅在单人模式有效
         {
-            //Storyboard1.Begin();
-            //Storyboard2.Begin();
-            //Storyboard3.Begin();
-            //Storyboard4.Begin();
 
-            if (ClassPage.Current.Editor.Text == string.Empty)
+            if (StudentManager.StudentList.Count == 0)
             {
                 PopupNotice popupNotice = new PopupNotice("请先填写班级信息");
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
@@ -257,19 +260,16 @@ namespace 随机抽取学号.Views
                     }
                 }
             }
-            StartorStopButton.RenderTransform = new CompositeTransform { ScaleX = 0.9f, ScaleY = 0.9f };
-            await Task.Delay(50);
-            StartorStopButton.RenderTransform = new CompositeTransform { ScaleX = 1.0f, ScaleY = 1.0f };
         }
         private void Timer_Tick(object sender, object e)
         {
             if(checkedCheckBoxes .Count != 0)
             {
-                string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+                //string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
                 Random random = new Random();
                 randomIndex = checkedCheckBoxes[random.Next(checkedCheckBoxes.Count)];
                 StudentPhoto.Source = new BitmapImage(new Uri(StudentManager.StudentList[randomIndex].PhotoPath));
-                ResultTextBox.Text = (randomIndex + 1).ToString() + "." + lines[randomIndex];
+                ResultTextBox.Text = (randomIndex + 1).ToString() + "." + StudentManager.StudentList[randomIndex].Name;
             }
             else
             {
@@ -309,15 +309,15 @@ namespace 随机抽取学号.Views
 
         private void changeCheckBoxes_Click(object sender, RoutedEventArgs e)
         {
-            string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-            string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            //string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+            //string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             checkedCheckBoxes.Clear();
             var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
-            if (lines.Length > 0)
+            if (StudentManager.StudentList.Count > 0)
             {
                 if (isOnlyThisRangeCheckBox.IsChecked == true)
                 {
-                    for (int i = 0; i < lines.Length; i++)
+                    for (int i = 0; i < StudentManager.StudentList.Count; i++)
                     {
                         checkBox[i].IsChecked = false;
                     }
@@ -335,7 +335,7 @@ namespace 随机抽取学号.Views
                         }
                     }
                     UpdateCheckedCheckBoxes();
-                    if (checkedCheckBoxes.Count == _lines.Length)
+                    if (checkedCheckBoxes.Count == StudentManager.StudentList.Count)
                     {
                         SelectAllCheckBox.IsChecked = true;
                     }
@@ -350,7 +350,7 @@ namespace 随机抽取学号.Views
                     PopupNotice popupNotice = new PopupNotice("成功应用更改");
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
                     popupNotice.ShowPopup();
-                    checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + _lines.Length.ToString();
+                    checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
                 }
                 else
                 {
@@ -360,7 +360,7 @@ namespace 随机抽取学号.Views
                     }
                     if (!int.TryParse(EndNumberBox.Text, out endnum))
                     {
-                        EndNumberBox.Value = lines.Length;
+                        EndNumberBox.Value = StudentManager.StudentList.Count;
                     }
                     PopupNotice popupNotice = new PopupNotice("请输入范围内整数");
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
@@ -373,8 +373,8 @@ namespace 随机抽取学号.Views
 
         private void SelectAllCheckBox_Checked(object sender, RoutedEventArgs e)
         {
-            string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-            for (int i = 0; i < lines.Length; i++)//此处i指Index
+            //string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+            for (int i = 0; i < StudentManager.StudentList.Count; i++)//此处i指Index
             {
                 var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
                 if (checkBox[i].IsEnabled == true)
@@ -387,8 +387,8 @@ namespace 随机抽取学号.Views
 
         private void SelectAllCheckBox_Unchecked(object sender, RoutedEventArgs e)
         {
-            string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-            for (int i = 0; i < lines.Length; i++)//此处i指Index
+            //string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+            for (int i = 0; i < StudentManager.StudentList.Count; i++)//此处i指Index
             {
                 var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
                 if (checkBox[i].IsEnabled == true)
@@ -428,9 +428,9 @@ namespace 随机抽取学号.Views
             StartorStopButtonContent.Text = "开始";
             StartorStopButtonIcon.Symbol = Symbol.Play;
             StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
-            string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
-            string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
-            if (lines.Length > 0)
+            //string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
+            //string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+            if (StudentManager.StudentList.Count > 0)
             {
                 int a; bool success = int.TryParse(Numbers.Text, out a);
                 if (success)
@@ -448,7 +448,7 @@ namespace 随机抽取学号.Views
                         for (int i = 0; i < Result.Count; i++)
                         {
                             int randomIndex = Result[i];
-                            var item = new Student { Id = randomIndex + 1, PhotoPath = StudentManager.StudentList[randomIndex].PhotoPath, Name = StudentManager.StudentList[randomIndex].Name };//Id表示学号，从1开始
+                            var item = new Student { StudentNumber = randomIndex + 1, PhotoPath = StudentManager.StudentList[randomIndex].PhotoPath, Name = StudentManager.StudentList[randomIndex].Name };//Id表示学号，从1开始
                             selectedStudentList.Add(item);
                             if (NoReturnCheckBox.IsChecked == true)//抽完不放回
                             {
@@ -486,48 +486,6 @@ namespace 随机抽取学号.Views
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
                 popupNotice.ShowPopup();
             }
-        }
-
-        private void StartorStopButton_PointerPressed(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-    //        if (
-    //e.GetCurrentPoint(null).Properties.IsLeftButtonPressed)
-    //        {
-    //            // 这里处理鼠标左键按下的逻辑
-    //            Debug.WriteLine("Mouse left button pressed.");
-    //            StartorStopButton.RenderTransform = new CompositeTransform { ScaleX = 0.8f, ScaleY = 0.8f };
-    //        }
-
-            var temp = e.GetCurrentPoint(sender as AppBarButton);
-            if (temp.Properties.IsLeftButtonPressed)
-            {
-                PopupNotice popupNotice = new PopupNotice("请先填写班级信息");
-                popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
-                popupNotice.ShowPopup();
-                //MyEllipse.Center = temp.Position;
-                var animation = new DoubleAnimation()
-                {
-                    From = 0,
-                    To = 150,
-                    Duration = new Duration(TimeSpan.FromSeconds(1))
-                };
-                animation.BeginTime = TimeSpan.FromSeconds(0);
-                //MyEllipse.BeginAnimation(EllipseGeometry.RadiusXProperty, animation);
-                var animation2 = new DoubleAnimation()
-                {
-                    From = 0.3,
-                    To = 0,
-                    Duration = new Duration(TimeSpan.FromSeconds(1))
-                };
-                animation2.BeginTime = TimeSpan.FromSeconds(0.5);
-                //MyPath.BeginAnimation(Path.OpacityProperty, animation2);
-            }
-
-        }
-
-        private void StartorStopButton_PointerReleased(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
-        {
-            StartorStopButton.RenderTransform = new CompositeTransform { ScaleX = 1.0f, ScaleY = 1.0f };
         }
     }
 }
