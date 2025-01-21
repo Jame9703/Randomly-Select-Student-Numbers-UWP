@@ -18,7 +18,7 @@
             </ResourceDictionary.MergedDictionaries>
             <Style x:Key="PanelStyle" TargetType="StackPanel">
                 <Setter Property="CornerRadius" Value="8" />
-                <Setter Property="Padding" Value="16" />
+                <Setter Property="Padding" Value="10" />
                 <Setter Property="Background" Value="{ThemeResource CardBackgroundFillColorDefaultBrush}" />
                 <Setter Property="BorderThickness" Value="1" />
                 <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}" />
@@ -496,18 +496,18 @@
             </Grid>
             <TextBlock
                 Width="70"
-                Height="29"
-                Margin="295,0,0,0"
+                Height="30"
+                Margin="160,9,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 FontFamily="{StaticResource HarmonyOSSans}"
-                Text="班级名称："
-                TextWrapping="Wrap" />
+                FontSize="15"
+                Text="班级名称：" />
             <TextBox
                 x:Name="ClassNameTextBox"
                 Width="164"
                 Height="30"
-                Margin="375,0,0,0"
+                Margin="230,5,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 FontFamily="{StaticResource HarmonyOSSans}"
@@ -547,12 +547,23 @@
                     <Button
                         x:Name="AddItemButton"
                         Grid.Column="2"
-                        Width="75"
+                        Width="90"
                         Height="60"
-                        VerticalAlignment="Top"
+                        VerticalAlignment="Center"
                         FontFamily="{StaticResource HarmonyOSSans}">
                         <StackPanel>
-                            <SymbolIcon Symbol="Add" />
+                            <SymbolIcon HorizontalAlignment="Center" Symbol="Add">
+                                <SymbolIcon.RenderTransform>
+                                    <CompositeTransform
+                                        ScaleX="0.8"
+                                        ScaleY="0.8"
+                                        TranslateX="0.5"
+                                        TranslateY="0.5" />
+                                </SymbolIcon.RenderTransform>
+                                <!--<SymbolIcon.RenderTransformOrigin>
+                                    <Point X="0.5" Y="0.5" />
+                                </SymbolIcon.RenderTransformOrigin>-->
+                            </SymbolIcon>
                             <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="添加学生" />
                         </StackPanel>
                         <Button.Flyout>
@@ -570,25 +581,78 @@
                             </Flyout>
                         </Button.Flyout>
                     </Button>
-                    <AppBarButton
+                    <Button
                         x:Name="DeleteItemButton"
                         Grid.Column="2"
-                        Width="75"
+                        Width="90"
                         Height="60"
                         Click="DeleteItemButton_Click"
-                        FontFamily="{StaticResource HarmonyOSSans}"
-                        Foreground="#FFFC5665"
-                        Icon="Delete"
-                        Label="删除当前项" />
-                    <AppBarButton
+                        FontFamily="{StaticResource HarmonyOSSans}">
+                        <StackPanel>
+                            <SymbolIcon
+                                HorizontalAlignment="Center"
+                                Foreground="#FFFC5665"
+                                Symbol="Delete">
+                                <SymbolIcon.RenderTransform>
+                                    <CompositeTransform ScaleX="0.8" ScaleY="0.8" />
+                                </SymbolIcon.RenderTransform>
+                            </SymbolIcon>
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                Foreground="#FFFC5665"
+                                Text="删除此项" />
+                        </StackPanel>
+                    </Button>
+                    <Button
                         x:Name="SaveButton"
                         Grid.Column="2"
-                        Width="75"
+                        Width="90"
                         Height="60"
                         Click="SaveButton_Click"
+                        FontFamily="{StaticResource HarmonyOSSans}">
+                        <StackPanel>
+                            <SymbolIcon HorizontalAlignment="Center" Symbol="Save" Foreground="#FF009AFF">
+                                <SymbolIcon.RenderTransform>
+                                    <ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+                                </SymbolIcon.RenderTransform>
+                            </SymbolIcon>
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                Foreground="#FF009AFF"
+                                Text="保存更改" />
+                        </StackPanel>
+                    </Button>
+                    <AppBarButton
+                        x:Name="FolderPickerButton"
+                        Width="75"
+                        Height="60"
                         FontFamily="{StaticResource HarmonyOSSans}"
-                        Icon="Save"
-                        Label="保存并刷新" />
+                        Icon="OpenLocal"
+                        Label="打开文件夹">
+                        <AppBarButton.Flyout>
+                            <Flyout>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="选择一个文件夹，将文件夹下所有图片从当前被选择的项开始填充" />
+                                    <Button
+                                        Click="FolderPickerButton_Click"
+                                        Content="确定"
+                                        FontFamily="{StaticResource HarmonyOSSans}" />
+                                </StackPanel>
+                            </Flyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
+                    <TextBlock
+                        x:Name="CurrentSelectionTextBlock"
+                        Height="30"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Text="当前选择项:无" />
+                    <TextBlock
+                        Width="1270"
+                        Height="30"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Text="Tips:可以直接拖动一个或多个图片从当前被选择项开始填充" />
                 </StackPanel>
                 <StackPanel
                     x:Name="FileStackPanel"
@@ -598,40 +662,6 @@
                     animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}"
                     Style="{StaticResource PanelStyle}" />
             </Grid>
-
-            <TextBlock
-                x:Name="CurrentSelectionTextBlock"
-                Height="30"
-                Margin="295,74,-65,0"
-                VerticalAlignment="Top"
-                FontFamily="{StaticResource HarmonyOSSans}"
-                Text="当前选择项:无" />
-            <TextBlock
-                Height="30"
-                Margin="300,89,-70,0"
-                VerticalAlignment="Top"
-                FontFamily="{StaticResource HarmonyOSSans}"
-                Text="Tips:可以直接拖动一个或多个图片从当前被选择项开始填充" />
-            <AppBarButton
-                x:Name="FolderPickerButton"
-                Width="75"
-                Height="60"
-                Margin="220,59,0,0"
-                FontFamily="{StaticResource HarmonyOSSans}"
-                Icon="OpenLocal"
-                Label="打开文件夹">
-                <AppBarButton.Flyout>
-                    <Flyout>
-                        <StackPanel Orientation="Vertical">
-                            <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="选择一个文件夹，将文件夹下所有图片从当前被选择的项开始填充" />
-                            <Button
-                                Click="FolderPickerButton_Click"
-                                Content="确定"
-                                FontFamily="{StaticResource HarmonyOSSans}" />
-                        </StackPanel>
-                    </Flyout>
-                </AppBarButton.Flyout>
-            </AppBarButton>
         </Grid>
 
 

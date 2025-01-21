@@ -460,7 +460,7 @@
                     FontFamily="{StaticResource HarmonyOSSans}"
                     FontSize="14"
                     Style="{StaticResource CaptionTextBlockStyle}"
-                    Text="随机抽取学号 2024" />
+                    Text="随机抽取学号 2025" />
                 <TextBlock
                     x:Name="AppTitleTextBlock_2"
                     Grid.ColumnSpan="2"
