@@ -15,12 +15,18 @@ using 随机抽取学号.Classes;
 
 namespace 随机抽取学号.Views
 {
+    public class CheckBoxItem
+    {
+        public string Name { get; set; } // 以姓名作为Content
+        public bool IsChecked { get; set; } // 勾选状态
+    }
     public sealed partial class HomePage : Page
     {
 
         public DispatcherTimer timer = new DispatcherTimer();
         private bool isRandomizing = false;
-        List<int> checkedCheckBoxes = new List<int>();
+        List<string> checkedCheckBoxes = new List<string>();
+        List<CheckBoxItem> checkBoxItems = new List<CheckBoxItem>();
         ObservableCollection<Student> selectedStudentList = new ObservableCollection<Student>();//记录多选模式下选中的学生
         private GridView PhotosGridView;
         private int randomIndex;
@@ -42,6 +48,7 @@ namespace 随机抽取学号.Views
             }
             Numbers.Minimum = 1;
             segmented.SelectedIndex = 0;//在xaml中设置会导致后面的控件未加载就被调用//System.NullReferenceException:“Object reference not set to an instance of an object.”
+
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
@@ -59,66 +66,83 @@ namespace 随机抽取学号.Views
         }
         private async Task CreateCheckBoxes()
         {
-            //从应用设置加载checkedCheckBoxes
-            var localSettings = ApplicationData.Current.LocalSettings;
-            if (localSettings.Values["checkedCheckBoxesString"] != null)
+            //从应用文件夹加载checkedCheckBoxes
+            //if (localSettings.Values["checkedCheckBoxesString"] != null)
+            //{
+            //    string checkedCheckBoxesString = (string)localSettings.Values["checkedCheckBoxesString"];
+            //    if (checkedCheckBoxesString != String.Empty)
+            //    {
+            //        checkedCheckBoxes = checkedCheckBoxesString.Split(',').ToList();
+            //    }
+            //    else
+            //    {
+            //        checkedCheckBoxes = new List<string>();
+            //    }
+            //}
+            //else 
+            //{
+            //    string checkedCheckBoxesString = string.Join(",", checkedCheckBoxes);
+            //    localSettings.Values["checkedCheckBoxesString"] = checkedCheckBoxesString;
+            //}
+            checkedCheckBoxes = await  StudentManager.LoadCheckedStudentsAsync();
+            for(int i = 0; i < StudentManager.StudentList.Count; i++)
             {
-                string checkedCheckBoxesString = (string)localSettings.Values["checkedCheckBoxesString"];
-                if (checkedCheckBoxesString != String.Empty)
+                var item = new CheckBoxItem();
                 {
-                    checkedCheckBoxes = checkedCheckBoxesString.Split(',').Select(int.Parse).ToList();
+                    item.Name = StudentManager.StudentList[i].Name;
+                    if (checkedCheckBoxes.Contains(item.Name) == true)
+                    {
+                        item.IsChecked = true;
+                    }
+                    else
+                    {
+                        item.IsChecked = false;
+                    }
                 }
-                else
-                {
-                    checkedCheckBoxes = new List<int>();
-                }
+                checkBoxItems.Add(item);
             }
-            else 
-            {
-                string checkedCheckBoxesString = string.Join(",", checkedCheckBoxes);
-                localSettings.Values["checkedCheckBoxesString"] = checkedCheckBoxesString;
-            }
+            CheckBoxListView.ItemsSource = checkBoxItems;
             StackPanelCheckBoxes.Children.Clear();//将曾经的CheckBox删去（如果有）
             StackPanelCheckBoxes.Orientation = Orientation.Vertical; //设置为竖直布局
              //创建CheckBox并在“StackPanelCheckBoxes”中显示
-            for (int i = 0; i < StudentManager.StudentList.Count; i++)//此次i指Index
-            {
-                var checkBox = new CheckBox();
-                checkBox.Content = i + 1 + "." + StudentManager.StudentList[i].Name;//遍历StudentList，用来生成CheckBox集合
-                checkBox.Click += checkBox_Click;
-                checkBox.Margin = new Thickness(0); //设置边距以避免与其他元素重叠(设置了个寂寞)
-                checkBox.IsChecked = true;
-                StackPanelCheckBoxes.Children.Add(checkBox);
-                checkBox.FontFamily = (FontFamily)Application.Current.Resources["HarmonyOSSans"];
-                checkBox.FontSize = 16;
-                if (checkedCheckBoxes.Contains(i) == true)
-                {
-                    checkBox.IsChecked = true;
-                }
-                else
-                {
-                    checkBox.IsChecked = false;
-                }
-                //if (lines[i] != String.Empty)
-                //{
-                //    checkBox.IsEnabled = true;
-                //    if (checkedCheckBoxes.Contains(i) == true)
-                //    {
-                //        checkBox.IsChecked = true;
-                //    }
-                //    else
-                //    {
-                //        checkBox.IsChecked = false;
-                //    }
-                //}
-                //else
-                //{
-                //    checkBox.Content += "未知";
-                //    checkBox.IsChecked = false;
-                //    checkBox.IsEnabled = false;
-                //}
+            //for (int i = 0; i < StudentManager.StudentList.Count; i++)//此次i指Index
+            //{
+            //    var checkBox = new CheckBox();
+            //    checkBox.Content = i + 1 + "." + StudentManager.StudentList[i].Name;//遍历StudentList，用来生成CheckBox集合
+            //    checkBox.Click += checkBox_Click;
+            //    checkBox.Margin = new Thickness(0); //设置边距以避免与其他元素重叠(设置了个寂寞)
+            //    checkBox.IsChecked = true;
+            //    StackPanelCheckBoxes.Children.Add(checkBox);
+            //    checkBox.FontFamily = (FontFamily)Application.Current.Resources["HarmonyOSSans"];
+            //    checkBox.FontSize = 16;
+            //    if (checkedCheckBoxes.Contains(checkBoxItems[i].Name) == true)
+            //    {
+            //        checkBox.IsChecked = true;
+            //    }
+            //    else
+            //    {
+            //        checkBox.IsChecked = false;
+            //    }
+            //    //if (lines[i] != String.Empty)
+            //    //{
+            //    //    checkBox.IsEnabled = true;
+            //    //    if (checkedCheckBoxes.Contains(i) == true)
+            //    //    {
+            //    //        checkBox.IsChecked = true;
+            //    //    }
+            //    //    else
+            //    //    {
+            //    //        checkBox.IsChecked = false;
+            //    //    }
+            //    //}
+            //    //else
+            //    //{
+            //    //    checkBox.Content += "未知";
+            //    //    checkBox.IsChecked = false;
+            //    //    checkBox.IsEnabled = false;
+            //    //}
 
-            }
+            //}
             //checkedCheckBoxes.Clear();
             //if (_lines.Length > 0)
             //{
@@ -159,35 +183,36 @@ namespace 随机抽取学号.Views
         {
             if(sender is CheckBox checkBox)
             {
-                int index = StackPanelCheckBoxes.Children.IndexOf(checkBox);
                 if (checkBox.IsChecked == false)
                 {
-                    checkedCheckBoxes.Remove(index);
+                    checkedCheckBoxes.Remove((string)checkBox.Content);
                 }
                 else if (checkBox.IsChecked == true)
                 {
-                    checkedCheckBoxes.Add(index);
+                    checkedCheckBoxes.Add((string)checkBox.Name);
                 }
                 checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
             }
         }
-        private void UpdateCheckedCheckBoxes()
+        private async void UpdateCheckedCheckBoxes(object sender)//将选中的CheckBox存入localSettings
         {
-            checkedCheckBoxes.Clear();
+            //checkedCheckBoxes.Clear();
             if (StudentManager.StudentList.Count > 0)
             {
                 for (int i = 0; i < StudentManager.StudentList.Count; i++)//此处i指Index
                 {
-                    var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
-                    if (checkBox[i].IsChecked == true)
+                    //var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
+                    if ((sender as CheckBox).IsChecked== true)
                     {
-                        checkedCheckBoxes.Add(i);
+                        checkedCheckBoxes.Add(checkBoxItems[i].Name);
+                    }
+                    else
+                    {
+                        checkedCheckBoxes.Remove(checkBoxItems[i].Name);
                     }
                 }
-                //将checkBoxes转换为string存入应用设置
-                string checkedCheckBoxesString = string.Join(",", checkedCheckBoxes);
-                var localSettings = ApplicationData.Current.LocalSettings;
-                localSettings.Values["checkedCheckBoxesString"] = checkedCheckBoxesString;
+                //将checkBoxes转换为string存入应用文件夹
+                await StudentManager.SaveCheckedStudentsAsync(checkedCheckBoxes);
                 checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
                 Numbers.Minimum = 1;
                 if (checkedCheckBoxes.Count > 0)//重新设置最大抽取人数
@@ -198,7 +223,7 @@ namespace 随机抽取学号.Views
         }
         private void checkBox_Click(object sender, RoutedEventArgs e)
         {
-            //UpdateCheckedCheckBoxes();
+            UpdateCheckedCheckBoxes(sender);
             UpdateCheckedCheckBoxesCount(sender);
             //string[] _lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
             if (checkedCheckBoxes.Count == StudentManager.StudentList.Count)
@@ -248,7 +273,7 @@ namespace 随机抽取学号.Views
                     {
                         var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
                         checkBox[randomIndex].IsChecked = false;
-                        UpdateCheckedCheckBoxes();
+                        //UpdateCheckedCheckBoxes();
                         if (checkedCheckBoxes.Count == 0)
                         {
                             SelectAllCheckBox.IsChecked = false;
@@ -267,7 +292,15 @@ namespace 随机抽取学号.Views
             {
                 //string[] lines = ClassPage.Current.Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.None);
                 Random random = new Random();
-                randomIndex = checkedCheckBoxes[random.Next(checkedCheckBoxes.Count)];
+                var checkBoxItemsName = checkBoxItems.Select(x => x.Name).ToList();// 获取所有CheckBox的Name
+                List<int> checkedCheckBoxesIndex = new List<int>();// 用于存储被选中的CheckBox的索引
+                foreach (var item in checkedCheckBoxes)
+                {
+                    var index = checkBoxItemsName.IndexOf(item);
+                    checkedCheckBoxesIndex.Add(index);
+                }
+
+                randomIndex = checkedCheckBoxesIndex[random.Next(checkedCheckBoxes.Count)];
                 StudentPhoto.Source = new BitmapImage(new Uri(StudentManager.StudentList[randomIndex].PhotoPath));
                 ResultTextBox.Text = (randomIndex + 1).ToString() + "." + StudentManager.StudentList[randomIndex].Name;
             }
@@ -334,7 +367,7 @@ namespace 随机抽取学号.Views
                             checkBox[i - 1].IsChecked = true;
                         }
                     }
-                    UpdateCheckedCheckBoxes();
+                    //UpdateCheckedCheckBoxes();
                     if (checkedCheckBoxes.Count == StudentManager.StudentList.Count)
                     {
                         SelectAllCheckBox.IsChecked = true;
@@ -382,7 +415,7 @@ namespace 随机抽取学号.Views
                     checkBox[i].IsChecked = true;
                 }
             }
-            UpdateCheckedCheckBoxes();
+            //UpdateCheckedCheckBoxes();
         }
 
         private void SelectAllCheckBox_Unchecked(object sender, RoutedEventArgs e)
@@ -396,7 +429,7 @@ namespace 随机抽取学号.Views
                     checkBox[i].IsChecked = false;
                 }
             }
-            UpdateCheckedCheckBoxes();
+            //UpdateCheckedCheckBoxes();
         }
 
         private void SelectAllCheckBox_Click(object sender, RoutedEventArgs e)
@@ -441,8 +474,15 @@ namespace 随机抽取学号.Views
                         //将checkedCheckBoxes打乱顺序
                         Random random = new Random();
                         checkedCheckBoxes = checkedCheckBoxes.OrderBy(x => random.Next()).ToList();
+                        var checkBoxItemsName = checkBoxItems.Select(x => x.Name).ToList();// 获取所有CheckBox的Name
+                        List<int> checkedCheckBoxesIndex = new List<int>();// 用于存储被选中的CheckBox的索引
+                        foreach (var item in checkedCheckBoxes)
+                        {
+                            var index = checkBoxItemsName.IndexOf(item);
+                            checkedCheckBoxesIndex.Add(index);
+                        }
                         // 取前几位数字
-                        List<int> Result = checkedCheckBoxes.Take(a).ToList();
+                        List<int> Result = checkedCheckBoxesIndex.Take(a).ToList();
                         selectedStudentList.Clear();
                         var checkBox = StackPanelCheckBoxes.Children.OfType<CheckBox>().ToList();// 遍历所有CheckBox
                         for (int i = 0; i < Result.Count; i++)
@@ -456,7 +496,7 @@ namespace 随机抽取学号.Views
                             }
                         }
                         LoadPhotosGridView();
-                        UpdateCheckedCheckBoxes();
+                        //UpdateCheckedCheckBoxes();
                         if (checkedCheckBoxes.Count == 0)
                         {
                             SelectAllCheckBox.IsChecked = false;

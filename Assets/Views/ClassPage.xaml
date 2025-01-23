@@ -411,89 +411,6 @@
             </controls:SegmentedItem>
         </controls:Segmented>
         <Grid MinWidth="400" MinHeight="300">
-            <Grid Visibility="Collapsed">
-                <Button VerticalAlignment="Top" Click="OpenFileButton_Click">
-                    <Button.Transitions>
-                        <TransitionCollection>
-                            <EntranceThemeTransition FromHorizontalOffset="-200" />
-                        </TransitionCollection>
-                    </Button.Transitions>
-                    <Grid>
-                        <SymbolIcon HorizontalAlignment="Left" Symbol="Read" />
-                        <TextBlock
-                            Margin="25,0,0,0"
-                            HorizontalAlignment="Left"
-                            FontFamily="{StaticResource HarmonyOSSans}"
-                            Text="打开文件..." />
-                    </Grid>
-                </Button>
-                <Button
-                    Margin="0,35,0,0"
-                    VerticalAlignment="Top"
-                    Click="SaveFileButton_Click">
-                    <Button.Transitions>
-                        <TransitionCollection>
-                            <EntranceThemeTransition FromHorizontalOffset="-600" />
-                        </TransitionCollection>
-                    </Button.Transitions>
-                    <Grid>
-                        <SymbolIcon HorizontalAlignment="Left" Symbol="Save" />
-                        <TextBlock
-                            Margin="25,0,0,0"
-                            HorizontalAlignment="Left"
-                            FontFamily="{StaticResource HarmonyOSSans}"
-                            Text="保存副本..." />
-                    </Grid>
-                </Button>
-                <ScrollViewer
-                    Margin="0,70,0,0"
-                    VerticalScrollBarVisibility="Auto"
-                    VerticalScrollMode="Enabled">
-                    <ScrollViewer.Transitions>
-                        <TransitionCollection>
-                            <EntranceThemeTransition FromHorizontalOffset="-1000" />
-                        </TransitionCollection>
-                    </ScrollViewer.Transitions>
-                    <Grid
-                        x:Name="NamesGrid"
-                        MinWidth="120"
-                        MaxWidth="300"
-                        CornerRadius="0,0,0,0">
-                        <Grid.ColumnDefinitions>
-                            <ColumnDefinition Width="Auto" />
-                            <ColumnDefinition Width="*" />
-                        </Grid.ColumnDefinitions>
-
-                        <Border
-                            x:Name="lineNumberBorder"
-                            Grid.Column="0"
-                            CornerRadius="8,0,0,8">
-                            <TextBlock
-                                x:Name="lineNumberTextBlock"
-                                Margin="0,5"
-                                VerticalAlignment="Top"
-                                FontFamily="{StaticResource HarmonyOSSans}"
-                                FontSize="16"
-                                Foreground="{ThemeResource LineNumberForeground}"
-                                IsTextSelectionEnabled="False"
-                                TextAlignment="Right" />
-                        </Border>
-
-                        <TextBox
-                            x:Name="Editor"
-                            Grid.Column="1"
-                            x:FieldModifier="public"
-                            AcceptsReturn="True"
-                            CornerRadius="0,0,0,0"
-                            FontFamily="{StaticResource HarmonyOSSans}"
-                            FontSize="16"
-                            Loaded="Editor_Loaded"
-                            Style="{StaticResource EditorStyle}"
-                            TextChanged="Editor_TextChanged" />
-
-                    </Grid>
-                </ScrollViewer>
-            </Grid>
             <TextBlock
                 Width="70"
                 Height="30"
@@ -556,24 +473,111 @@
                                 <SymbolIcon.RenderTransform>
                                     <CompositeTransform
                                         ScaleX="0.8"
-                                        ScaleY="0.8"
-                                        TranslateX="0.5"
-                                        TranslateY="0.5" />
+                                        ScaleY="0.8"/>
                                 </SymbolIcon.RenderTransform>
-                                <!--<SymbolIcon.RenderTransformOrigin>
-                                    <Point X="0.5" Y="0.5" />
-                                </SymbolIcon.RenderTransformOrigin>-->
                             </SymbolIcon>
                             <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="添加学生" />
                         </StackPanel>
                         <Button.Flyout>
                             <Flyout>
                                 <StackPanel>
-                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="姓名:" />
-                                    <TextBox
-                                        x:Name="NameTextBox"
-                                        Height="30"
-                                        Margin="0,15,0,0" />
+                                    <controls:Segmented x:Name="AddModeSegmented" VerticalAlignment="Top" SelectionChanged="AddModeSegmented_SelectionChanged">
+                                        <controls:SegmentedItem Content="逐个添加" FontFamily="{StaticResource HarmonyOSSans}" />
+                                        <controls:SegmentedItem Content="批量添加" FontFamily="{StaticResource HarmonyOSSans}" />
+                                    </controls:Segmented>
+                                    <Grid x:Name="SingleAddGrid" Margin="0,15,0,0">
+                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="姓名:" />
+                                        <TextBox
+                                            x:Name="NameTextBox"
+                                            Height="30"
+                                            Margin="0,15,0,0" />
+                                    </Grid>
+                                    <Grid x:Name="BatchAddGrid" Margin="0,15,0,0">
+                                        <Grid>
+                                            <Button VerticalAlignment="Top" Click="OpenFileButton_Click">
+                                                <Button.Transitions>
+                                                    <TransitionCollection>
+                                                        <EntranceThemeTransition FromHorizontalOffset="-200" />
+                                                    </TransitionCollection>
+                                                </Button.Transitions>
+                                                <Grid>
+                                                    <SymbolIcon HorizontalAlignment="Left" Symbol="Read" />
+                                                    <TextBlock
+                                                        Margin="25,0,0,0"
+                                                        HorizontalAlignment="Left"
+                                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                                        Text="打开文件..." />
+                                                </Grid>
+                                            </Button>
+                                            <Button
+                                                Margin="0,35,0,0"
+                                                VerticalAlignment="Top"
+                                                Click="SaveFileButton_Click">
+                                                <Button.Transitions>
+                                                    <TransitionCollection>
+                                                        <EntranceThemeTransition FromHorizontalOffset="-600" />
+                                                    </TransitionCollection>
+                                                </Button.Transitions>
+                                                <Grid>
+                                                    <SymbolIcon HorizontalAlignment="Left" Symbol="Save" />
+                                                    <TextBlock
+                                                        Margin="25,0,0,0"
+                                                        HorizontalAlignment="Left"
+                                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                                        Text="保存副本..." />
+                                                </Grid>
+                                            </Button>
+                                            <ScrollViewer
+                                                Margin="0,70,0,0"
+                                                VerticalScrollBarVisibility="Auto"
+                                                VerticalScrollMode="Enabled">
+                                                <ScrollViewer.Transitions>
+                                                    <TransitionCollection>
+                                                        <EntranceThemeTransition FromHorizontalOffset="-1000" />
+                                                    </TransitionCollection>
+                                                </ScrollViewer.Transitions>
+                                                <Grid
+                                                    x:Name="NamesGrid"
+                                                    MinWidth="120"
+                                                    MaxWidth="300"
+                                                    CornerRadius="0,0,0,0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Border
+                                                        x:Name="lineNumberBorder"
+                                                        Grid.Column="0"
+                                                        CornerRadius="8,0,0,8">
+                                                        <TextBlock
+                                                            x:Name="lineNumberTextBlock"
+                                                            Margin="0,5"
+                                                            VerticalAlignment="Top"
+                                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                                            FontSize="16"
+                                                            Foreground="{ThemeResource LineNumberForeground}"
+                                                            IsTextSelectionEnabled="False"
+                                                            TextAlignment="Right" />
+                                                    </Border>
+
+                                                    <TextBox
+                                                        x:Name="Editor"
+                                                        Grid.Column="1"
+                                                        x:FieldModifier="public"
+                                                        AcceptsReturn="True"
+                                                        CornerRadius="0,0,0,0"
+                                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                                        FontSize="16"
+                                                        Loaded="Editor_Loaded"
+                                                        Style="{StaticResource EditorStyle}"
+                                                        TextChanged="Editor_TextChanged" />
+
+                                                </Grid>
+                                            </ScrollViewer>
+                                        </Grid>
+                                    </Grid>
+
                                     <Button Margin="0,100,0,0" Click="AddItemButton_Click">
                                         <SymbolIcon Symbol="Accept" />
                                     </Button>
@@ -612,7 +616,10 @@
                         Click="SaveButton_Click"
                         FontFamily="{StaticResource HarmonyOSSans}">
                         <StackPanel>
-                            <SymbolIcon HorizontalAlignment="Center" Symbol="Save" Foreground="#FF009AFF">
+                            <SymbolIcon
+                                HorizontalAlignment="Center"
+                                Foreground="#FF009AFF"
+                                Symbol="Save">
                                 <SymbolIcon.RenderTransform>
                                     <ScaleTransform ScaleX="0.8" ScaleY="0.8" />
                                 </SymbolIcon.RenderTransform>

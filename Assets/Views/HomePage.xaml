@@ -312,6 +312,15 @@
                 </Setter.Value>
             </Setter>
         </Style>
+        <DataTemplate x:Key="CheckBoxListViewItem" x:DataType="local:CheckBoxItem">
+            <Grid>
+                <CheckBox
+                    Click="checkBox_Click"
+                    Content="{x:Bind Name}"
+                    FontFamily="{StaticResource HarmonyOSSans}"
+                    IsChecked="{x:Bind IsChecked, Mode=TwoWay}" />
+            </Grid>
+        </DataTemplate>
     </Page.Resources>
     <Grid Background="{ThemeResource GridBackground}">
         <Grid.ColumnDefinitions>
@@ -438,11 +447,13 @@
                 FontSize="16"
                 Text="已选择0/0"
                 TextWrapping="Wrap" />
+
             <ScrollViewer
                 Margin="0,60,0,0"
                 HorizontalScrollBarVisibility="Hidden"
                 VerticalScrollBarVisibility="Visible"
                 VerticalScrollMode="Enabled"
+                Visibility="Collapsed"
                 ZoomMode="Enabled">
                 <StackPanel
                     x:Name="StackPanelCheckBoxes"
@@ -460,7 +471,10 @@
                     </StackPanel.ChildrenTransitions>
                 </StackPanel>
             </ScrollViewer>
-
+            <ListView
+                x:Name="CheckBoxListView"
+                ItemTemplate="{StaticResource CheckBoxListViewItem}"
+                SelectionMode="None" />
             <Button
                 Margin="60,22,0,0"
                 VerticalAlignment="Top"

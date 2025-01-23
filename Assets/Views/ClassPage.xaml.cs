@@ -32,6 +32,7 @@ namespace 随机抽取学号.Views
             if (localSettings.Values["ClassName"] != null) ClassNameTextBox.Text = (string)localSettings.Values["ClassName"];
             StudentManager.StudentList.CollectionChanged += StudentList_CollectionChanged;
             FileEditSegmented.SelectedIndex = 0;
+            AddModeSegmented.SelectedIndex = 0;
         }
 
         private async void StudentList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
@@ -421,10 +422,10 @@ namespace 随机抽取学号.Views
 
         private void StudentListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
-            //UpdateStudentId();
-            var item = StudentListView.ContainerFromIndex(1) as ListViewItem;
-            var idTextBlock = item.FindName("IdTextBlock") as TextBlock;//找不到
-            var child = VisualTreeHelper.GetChild(item, 0) as ContentPresenter;
+            UpdateStudentId();
+            //var item = StudentListView.ContainerFromIndex(1) as ListViewItem;
+            //var idTextBlock = item.FindName("IdTextBlock") as TextBlock;//找不到
+            //var child = VisualTreeHelper.GetChild(item, 0) as ContentPresenter;
             //var child1 = child;
             //var child = VisualTreeHelper.GetChild(item, 0) /*as Grid*/;
             //var child1 = VisualTreeHelper.GetChild(child, 0) as Border;
@@ -446,13 +447,30 @@ namespace 随机抽取学号.Views
 
         private async  void AddItemButton_Click(object sender, RoutedEventArgs e)
         {
-            var student = new Student
-            { 
-                StudentNumber = StudentManager.StudentList.Count + 1, 
-                Name = NameTextBox.Text,
-                PhotoPath = "ms-appx:///Assets/RSSN_Logos/StoreLogo.scale-400.png"
-            };
-            StudentManager.StudentList.Add(student);
+            if(AddModeSegmented.SelectedIndex == 0)//逐个添加
+            {
+                var student = new Student
+                {
+                    StudentNumber = StudentManager.StudentList.Count + 1,
+                    Name = NameTextBox.Text,
+                    PhotoPath = "ms-appx:///Assets/RSSN_Logos/StoreLogo.scale-400.png"
+                };
+                StudentManager.StudentList.Add(student);
+            }
+            else//批量添加
+            {
+                string[] lines = Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
+                foreach (var line in lines)
+                {
+                    var student = new Student
+                    {
+                        StudentNumber = StudentManager.StudentList.Count + 1,
+                        Name = line,
+                        PhotoPath = "ms-appx:///Assets/RSSN_Logos/StoreLogo.scale-400.png"
+                    };
+                    StudentManager.StudentList.Add(student);
+                }
+            }
             UpdateStudentId();
         }
 
@@ -467,6 +485,20 @@ namespace 随机抽取学号.Views
             {
                 FileStackPanel.Visibility = Visibility.Collapsed;
                 EditStackPanel.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void AddModeSegmented_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (AddModeSegmented.SelectedIndex == 0)//逐个添加
+            {
+                SingleAddGrid.Visibility = Visibility.Visible;
+                BatchAddGrid.Visibility = Visibility.Collapsed;
+            }
+            else//批量添加
+            {
+                SingleAddGrid.Visibility = Visibility.Collapsed;
+                BatchAddGrid.Visibility = Visibility.Visible;
             }
         }
     }
