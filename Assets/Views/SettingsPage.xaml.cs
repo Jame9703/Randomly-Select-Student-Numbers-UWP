@@ -36,19 +36,6 @@ namespace 随机抽取学号.Views
             GC.Collect();
         }
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-        private void ChangeMainPageOpacity(double opacity)
-        {
-            if (this.Frame.Content is MainPage mainPage)
-            {
-                mainPage.OnChangeOpacityRequested(opacity);
-            }
-        }
-        //protected override void OnNavigatedTo(NavigationEventArgs e)
-        //{
-        //    base.OnNavigatedTo(e);
-
-
-        //}
 
         private void AppearanceRadioButtons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -90,9 +77,5 @@ namespace 随机抽取学号.Views
             }
         }
 
-        private void Button_Click(object sender, RoutedEventArgs e)
-        {
-            ChangeMainPageOpacity(0);
-        }
     }
 }

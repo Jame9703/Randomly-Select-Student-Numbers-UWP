@@ -24,10 +24,16 @@ namespace 随机抽取学号
         private AppBarToggleButton _lastSelectedButton;
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         private static readonly string ClassNameKey = "ClassName";
+        public delegate void UpdateTextEventHandler(string text);// 定义委托
+        public event UpdateTextEventHandler UpdateTextBoxEvent;// 定义事件
+        public void TriggerUpdateTextEvent(string text)
+        {
+            UpdateTextBoxEvent?.Invoke(text);
+        }
         public MainPage()
         {
             this.InitializeComponent();
-            Current = this;
+            UpdateTextBoxEvent += OnUpdateTextBox; // 订阅事件
             // 隐藏系统标题栏并设置新的标题栏
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
@@ -46,7 +52,6 @@ namespace 随机抽取学号
             _lastSelectedButton = HomePageButton;//确保开始时_lastSelectedButton不为null
             string ClassName = localSettings.Values[ClassNameKey] as string;
             if (ClassName != null) ClassNameHyperlinkButton.Content = ClassName;
-            ChangeOpacityRequested += MainPage_ChangeOpacityRequested;
             if (localSettings.Values["Theme"] !=null)
             {
                 if ((int)localSettings.Values["Theme"] == 0)
@@ -84,20 +89,9 @@ namespace 随机抽取学号
             }
 
         }
-        public event EventHandler<double> ChangeOpacityRequested;
-        //void UpdateAppTitle(CoreApplicationViewTitleBar coreTitleBar)
-        //{
-        //    //ensure the custom title bar does not overlap window caption controls
-        //    AppTitleBar.Margin = new Thickness(0, 0, coreTitleBar.SystemOverlayRightInset, 0);
-        //}
-        public  void OnChangeOpacityRequested(double opacity)
+        private void OnUpdateTextBox(string text)
         {
-            ChangeOpacityRequested?.Invoke(this, opacity);
-        }
-        private void MainPage_ChangeOpacityRequested(object sender, double opacity)
-        {
-            // 设置 MainPage 的透明度
-            MainGrid.Opacity = opacity;
+            ClassNameHyperlinkButton.Content = text;
         }
         private void ContentFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)
         {

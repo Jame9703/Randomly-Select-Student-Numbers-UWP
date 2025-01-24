@@ -430,13 +430,11 @@
                 Width="50"
                 Margin="0,23,0,0"
                 VerticalAlignment="Top"
-                Checked="SelectAllCheckBox_Checked"
                 Click="SelectAllCheckBox_Click"
                 Content="全选"
                 FontFamily="{StaticResource HarmonyOSSans}"
                 FontSize="16"
-                IsThreeState="True"
-                Unchecked="SelectAllCheckBox_Unchecked" />
+                IsThreeState="True" />
             <TextBlock
                 x:Name="checkedCheckBoxesCount"
                 Width="162"
@@ -473,6 +471,7 @@
             </ScrollViewer>
             <ListView
                 x:Name="CheckBoxListView"
+                Margin="0,60,0,0"
                 ItemTemplate="{StaticResource CheckBoxListViewItem}"
                 SelectionMode="None" />
             <Button
@@ -632,23 +631,6 @@
             FontFamily="{StaticResource HarmonyOSSans}"
             FontSize="16" />
         <Grid x:Name="SingleModeGrid" Grid.Column="2">
-            <!--<AppBarButton
-                x:Name="StartorStopButton1"
-                Width="97"
-                Height="54"
-                Margin="27,450,0,0"
-                VerticalAlignment="Top"
-                classes:RippleHelper.IsFillEnable="True"
-                classes:RippleHelper.RippleColor="Green"
-                classes:RippleHelper.RippleDuration="0:0:0.5"
-                classes:RippleHelper.RippleHelperState="Pressed"
-                Background="#FFC0F2BC"
-                Click="StartorStopButton_Click"
-                FontFamily="{StaticResource HarmonyOSSans}"
-                Icon="Play"
-                Label="开始"
-                PointerPressed="StartorStopButton_PointerPressed"
-                PointerReleased="StartorStopButton_PointerReleased" />-->
             <Button
                 x:Name="StartorStopButton"
                 Margin="27,450,0,0"
@@ -718,29 +700,25 @@
                 </Style>
             </Grid.Resources>
             <Grid x:Name="PhotosGrid" Margin="12,136,0,10" />
-
             <Button
                 x:Name="GenerateButton"
                 Margin="10,81,0,0"
                 VerticalAlignment="Top"
+                classes:RippleHelper.IsFillEnable="True"
+                classes:RippleHelper.RippleColor="Green"
+                classes:RippleHelper.RippleDuration="0:0:0.5"
+                classes:RippleHelper.RippleHelperState="Pressed"
                 Background="#FFC0F2BC"
-                BorderBrush="Green"
-                BorderThickness="2"
                 Click="GenerateButton_Click"
-                CornerRadius="64,64,64,64"
-                FontFamily="{StaticResource HarmonyOSSans}"
-                Foreground="Black"
-                Style="{StaticResource DefaultButtonStyle}">
-                <!--<Button.Transitions>
-                    <TransitionCollection>
-                        <EntranceThemeTransition/>
-                    </TransitionCollection>
-                </Button.Transitions>-->
+                CornerRadius="20,20,20,20"
+                Style="{StaticResource StartorStopButtonStyle}">
                 <StackPanel Orientation="Horizontal">
-                    <SymbolIcon Symbol="Download" />
+                    <SymbolIcon Foreground="Black" Symbol="Download" />
                     <TextBlock
+                        Margin="5,0,0,0"
                         FontFamily="{StaticResource HarmonyOSSans}"
                         FontSize="20"
+                        Foreground="Black"
                         Text="生成" />
                 </StackPanel>
             </Button>

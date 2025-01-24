@@ -135,6 +135,12 @@ namespace 随机抽取学号.Views
         private void ClassNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             localSettings.Values["ClassName"] = ClassNameTextBox.Text;
+            MainPage mainPage = (Window.Current.Content as Frame).Content as MainPage;
+            if (mainPage != null)
+            {
+                // 传递班级名称
+                mainPage.TriggerUpdateTextEvent(ClassNameTextBox.Text);
+            }
         }
 
 
