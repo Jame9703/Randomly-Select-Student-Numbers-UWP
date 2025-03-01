@@ -9,10 +9,17 @@
 
     <Grid Background="{ThemeResource GridBackground}">
         <Button
-            Margin="115,340,0,0"
+            Margin="80,340,0,0"
             VerticalAlignment="Top"
             Click="Button_Click"
             Content="生成"
+            FontFamily="{StaticResource HarmonyOSSans}" />
+        <Button
+            x:Name="SpeakChineseButton"
+            Margin="160,340,0,0"
+            VerticalAlignment="Top"
+            Click="SpeakChineseButton_Click"
+            Content="读"
             FontFamily="{StaticResource HarmonyOSSans}" />
         <TextBox
             x:Name="TextBox"

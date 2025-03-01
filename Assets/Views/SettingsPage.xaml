@@ -2,6 +2,7 @@
     x:Class="随机抽取学号.Views.SettingsPage"
     xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
     xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:classes="using:随机抽取学号.Classes"
     xmlns:controls="using:CommunityToolkit.WinUI.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:随机抽取学号.Views"
@@ -22,97 +23,140 @@
     </Page.Resources>
 
     <Grid>
-        <StackPanel x:Name="SettingsPanel">
-            <TextBlock
-                Margin="15,0,20,0"
-                FontFamily="{StaticResource HarmonyOSSans}"
-                FontSize="16"
-                Text="外观"
-                TextWrapping="Wrap" />
-
-            <controls:SettingsExpander
-                Margin="10,0,20,0"
-                Description="选择要显示的应用主题"
-                FontFamily="{StaticResource HarmonyOSSans}"
-                Header="应用程序主题"
-                IsTabStop="True">
-                <controls:SettingsExpander.HeaderIcon>
-                    <FontIcon Glyph="&#xE790;" />
-                </controls:SettingsExpander.HeaderIcon>
-                <controls:SettingsExpander.Items>
-                    <controls:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
-                        <StackPanel Margin="-12,0,0,0" Orientation="Vertical">
-                            <muxc:RadioButtons x:Name="AppearanceRadioButtons" SelectionChanged="AppearanceRadioButtons_SelectionChanged">
-                                <RadioButton Content="浅色" FontFamily="{StaticResource HarmonyOSSans}" />
-                                <RadioButton Content="深色" FontFamily="{StaticResource HarmonyOSSans}" />
-                                <RadioButton Content="使用系统设置" FontFamily="{StaticResource HarmonyOSSans}" />
-                            </muxc:RadioButtons>
-                        </StackPanel>
-                    </controls:SettingsCard>
-                </controls:SettingsExpander.Items>
-            </controls:SettingsExpander>
-            <TextBlock
-                Margin="15,0,20,0"
-                FontFamily="{StaticResource HarmonyOSSans}"
-                FontSize="16"
-                Text="关于"
-                TextWrapping="Wrap" />
-            <controls:SettingsExpander
-                Margin="10,0,20,0"
-                Description="© 2022-2024. All rights reserved."
-                FontFamily="{StaticResource HarmonyOSSans}"
-                Header="Randomly Select Student Numbers">
-                <controls:SettingsExpander.HeaderIcon>
-                    <ui:BitmapIconExtension Source="ms-appx:///Assets/RSSN_Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png" />
-                </controls:SettingsExpander.HeaderIcon>
-                <!--  IsTextSelectionEnabled="True"  -->
-                <controls:SettingsExpander.Items>
-                    <controls:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
-                        <StackPanel Margin="-12,0,0,0" Orientation="Vertical">
-                            <TextBlock
-                                Margin="0,5,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                FontFamily="{StaticResource HarmonyOSSans}"
-                                Text="平台：Universal Windows Platform(通用Windows平台)"
-                                TextWrapping="Wrap" />
-                            <TextBlock
-                                Margin="0,10,0,0"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Top"
-                                FontFamily="{StaticResource HarmonyOSSans}"
-                                Text="最低支持版本：Windows10，Version1809"
-                                TextWrapping="Wrap" />
-                        </StackPanel>
-                    </controls:SettingsCard>
-                </controls:SettingsExpander.Items>
-
+        <ScrollViewer VerticalScrollBarVisibility="Auto">
+            <StackPanel x:Name="SettingsPanel">
                 <TextBlock
+                    Margin="15,0,20,0"
                     FontFamily="{StaticResource HarmonyOSSans}"
-                    Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                    Text="Version 1.1.0   2024/10/20" />
+                    FontSize="16"
+                    Text="外观"
+                    TextWrapping="Wrap" />
 
-            </controls:SettingsExpander>
-            <controls:SettingsCard
-                Margin="10,0,20,0"
-                Description="https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP"
-                FontFamily="{StaticResource HarmonyOSSans}"
-                Header="在Github中查看此项目源代码">
-                <controls:SettingsCard.HeaderIcon>
-                    <ui:BitmapIconExtension Source="ms-appx:///Assets/Photos/GithubLogo.png" />
-                </controls:SettingsCard.HeaderIcon>
-                <HyperlinkButton NavigateUri="https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP">
-                    <StackPanel Width="116" Orientation="Horizontal">
-                        <FontIcon FontSize="12" Glyph="&#xE8A7;" />
-                        <TextBlock
-                            Width="100"
-                            Margin="5,0,0,0"
-                            FontFamily="{StaticResource HarmonyOSSans}"
-                            Text="在浏览器中打开" />
-                    </StackPanel>
-                </HyperlinkButton>
-            </controls:SettingsCard>
+                <controls:SettingsExpander
+                    Margin="10,0,20,0"
+                    classes:RippleHelper.IsFillEnable="True"
+                    classes:RippleHelper.RippleColor="Gray"
+                    classes:RippleHelper.RippleDuration="0:0:0.5"
+                    classes:RippleHelper.RippleHelperState="Pressed"
+                    Description="选择要显示的应用主题"
+                    FontFamily="{StaticResource HarmonyOSSans}"
+                    Header="应用程序主题"
+                    IsTabStop="True">
+                    <controls:SettingsExpander.HeaderIcon>
+                        <FontIcon Glyph="&#xE790;" />
+                    </controls:SettingsExpander.HeaderIcon>
+                    <controls:SettingsExpander.Items>
+                        <controls:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
+                            <StackPanel Margin="-12,0,0,0" Orientation="Vertical">
+                                <muxc:RadioButtons x:Name="AppearanceRadioButtons" SelectionChanged="AppearanceRadioButtons_SelectionChanged">
+                                    <RadioButton Content="浅色" FontFamily="{StaticResource HarmonyOSSans}" />
+                                    <RadioButton Content="深色" FontFamily="{StaticResource HarmonyOSSans}" />
+                                    <RadioButton Content="使用系统设置" FontFamily="{StaticResource HarmonyOSSans}" />
+                                </muxc:RadioButtons>
+                            </StackPanel>
+                        </controls:SettingsCard>
+                    </controls:SettingsExpander.Items>
+                </controls:SettingsExpander>
+                <controls:SettingsExpander
+                    Margin="10,0,20,0"
+                    classes:RippleHelper.IsFillEnable="True"
+                    classes:RippleHelper.RippleColor="Gray"
+                    classes:RippleHelper.RippleDuration="0:0:0.5"
+                    classes:RippleHelper.RippleHelperState="Pressed"
+                    Description="选择要显示的应用背景"
+                    FontFamily="{StaticResource HarmonyOSSans}"
+                    Header="应用程序背景"
+                    IsTabStop="True">
+                    <controls:SettingsExpander.HeaderIcon>
+                        <SymbolIcon Symbol="Pictures" />
+                    </controls:SettingsExpander.HeaderIcon>
+                    <controls:SettingsExpander.Items>
+                        <controls:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
+                            <StackPanel Margin="-12,0,0,0" Orientation="Vertical">
+                                <muxc:RadioButtons
+                                    x:Name="BackgroundRadioButtons"
+                                    MaxColumns="3"
+                                    SelectionChanged="BackgroundRadioButtons_SelectionChanged">
+                                    <RadioButton Content="无背景" FontFamily="{StaticResource HarmonyOSSans}" />
+                                    <RadioButton Content="Acrylic" FontFamily="{StaticResource HarmonyOSSans}" />
+                                    <RadioButton Content="Mica" FontFamily="{StaticResource HarmonyOSSans}" />
+                                </muxc:RadioButtons>
+                            </StackPanel>
+                        </controls:SettingsCard>
+                    </controls:SettingsExpander.Items>
+                </controls:SettingsExpander>
+                <TextBlock
+                    Margin="15,0,20,0"
+                    FontFamily="{StaticResource HarmonyOSSans}"
+                    FontSize="16"
+                    Text="关于"
+                    TextWrapping="Wrap" />
+                <controls:SettingsExpander
+                    Margin="10,0,20,0"
+                    classes:RippleHelper.IsFillEnable="True"
+                    classes:RippleHelper.RippleColor="Gray"
+                    classes:RippleHelper.RippleDuration="0:0:0.5"
+                    classes:RippleHelper.RippleHelperState="Pressed"
+                    Description="© 2022-2024. All rights reserved."
+                    FontFamily="{StaticResource HarmonyOSSans}"
+                    Header="Randomly Select Student Numbers">
+                    <controls:SettingsExpander.HeaderIcon>
+                        <ui:BitmapIconExtension Source="ms-appx:///Assets/RSSN_Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png" />
+                    </controls:SettingsExpander.HeaderIcon>
+                    <!--  IsTextSelectionEnabled="True"  -->
+                    <controls:SettingsExpander.Items>
+                        <controls:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
+                            <StackPanel Margin="-12,0,0,0" Orientation="Vertical">
+                                <TextBlock
+                                    Margin="0,5,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    FontFamily="{StaticResource HarmonyOSSans}"
+                                    Text="平台：Universal Windows Platform(通用Windows平台)"
+                                    TextWrapping="Wrap" />
+                                <TextBlock
+                                    Margin="0,10,0,0"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    FontFamily="{StaticResource HarmonyOSSans}"
+                                    Text="最低支持版本：Windows10，Version1809"
+                                    TextWrapping="Wrap" />
+                            </StackPanel>
+                        </controls:SettingsCard>
+                    </controls:SettingsExpander.Items>
 
-        </StackPanel>
+                    <TextBlock
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                        Text="Version 1.1.0   2025/2/14" />
+
+                </controls:SettingsExpander>
+                <controls:SettingsCard
+                    Margin="10,0,20,0"
+                    classes:RippleHelper.IsFillEnable="True"
+                    classes:RippleHelper.RippleColor="Gray"
+                    classes:RippleHelper.RippleDuration="0:0:0.5"
+                    classes:RippleHelper.RippleHelperState="Pressed"
+                    Description="https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP"
+                    FontFamily="{StaticResource HarmonyOSSans}"
+                    Header="在Github中查看此项目源代码">
+                    <controls:SettingsCard.HeaderIcon>
+                        <ui:BitmapIconExtension Source="ms-appx:///Assets/Photos/GithubLogo.png" />
+                    </controls:SettingsCard.HeaderIcon>
+                    <HyperlinkButton NavigateUri="https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP">
+                        <StackPanel Width="116" Orientation="Horizontal">
+                            <FontIcon FontSize="12" Glyph="&#xE8A7;" />
+                            <TextBlock
+                                Width="100"
+                                Margin="5,0,0,0"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                Text="在浏览器中打开" />
+                        </StackPanel>
+                    </HyperlinkButton>
+                </controls:SettingsCard>
+
+            </StackPanel>
+        </ScrollViewer>
+
     </Grid>
 </Page>

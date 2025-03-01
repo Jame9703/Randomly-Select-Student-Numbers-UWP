@@ -9,6 +9,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using 随机抽取学号.Assets.Controls;
 using 随机抽取学号.Views;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
@@ -26,19 +27,22 @@ namespace 随机抽取学号
         private static readonly string ClassNameKey = "ClassName";
         public delegate void UpdateTextEventHandler(string text);// 定义委托
         public event UpdateTextEventHandler UpdateTextBoxEvent;// 定义事件
+        public static StackPanel PopupContainerInstance;
         public void TriggerUpdateTextEvent(string text)
         {
             UpdateTextBoxEvent?.Invoke(text);
         }
+
         public MainPage()
         {
             this.InitializeComponent();
+            //LoadBackground();
+            PopupContainerInstance = PopupContainer;
             UpdateTextBoxEvent += OnUpdateTextBox; // 订阅事件
             // 隐藏系统标题栏并设置新的标题栏
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
             ////设置标题栏边距
-            //CoreApplication.GetCurrentView().TitleBar.LayoutMetricsChanged += (s, e) => UpdateAppTitle(s);
             var view = ApplicationView.GetForCurrentView();
             view.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             Window.Current.SetTitleBar(AppTitleBar);
@@ -89,6 +93,92 @@ namespace 随机抽取学号
             }
 
         }
+        // 用于存储背景笔刷的公共属性
+        public Brush MainPageBackground
+        {
+            get { return (Brush)GetValue(MainPageBackgroundProperty); }
+            set { SetValue(MainPageBackgroundProperty, value); }
+        }
+
+        // 注册依赖属性
+        public static readonly DependencyProperty MainPageBackgroundProperty =
+            DependencyProperty.Register("MainPageBackground", typeof(Brush), typeof(MainPage), new PropertyMetadata(null, OnMainPageBackgroundChanged));
+
+        // 依赖属性更改时的回调方法
+        private static void OnMainPageBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
+        {
+            var mainPage = d as MainPage;
+            if (mainPage != null)
+            {
+                // 当属性值更改时，更新MainPage的背景
+                mainPage.Background = e.NewValue as Brush;
+            }
+        }
+
+        private void LoadBackground()
+        {
+            // 创建线性渐变画刷
+            LinearGradientBrush gradientBrush = new LinearGradientBrush();
+            gradientBrush.StartPoint = new Windows.Foundation.Point(0.2, 0);
+            gradientBrush.EndPoint = new Windows.Foundation.Point(0.5, 1);
+            // 创建透明度动画
+            DoubleAnimation opacityAnimation = new DoubleAnimation();
+            opacityAnimation.From = 0;
+            opacityAnimation.Duration = new Duration(TimeSpan.FromSeconds(2.5));
+            opacityAnimation.EnableDependentAnimation = true;
+            var rootFrame = Window.Current.Content as Frame;
+            if (rootFrame.ActualTheme == ElementTheme.Dark)
+            {
+                // 当前是深色主题
+                opacityAnimation.To = 0.5;
+                GradientStop stop1 = new GradientStop();
+                stop1.Color = Color.FromArgb(255, 0, 0, 139); // 深蓝色
+                stop1.Offset = 1;
+                gradientBrush.GradientStops.Add(stop1);
+
+                GradientStop stop2 = new GradientStop();
+                stop2.Color = Color.FromArgb(255, 139, 0, 139); // 深紫色
+                stop2.Offset = 0;
+                gradientBrush.GradientStops.Add(stop2);
+            }
+            else if (rootFrame.ActualTheme == ElementTheme.Light)
+            {
+                // 当前是浅色主题
+                opacityAnimation.To = 0.6;
+                // 添加渐变停止点：浅绿色
+                GradientStop lightGreenStop = new GradientStop();
+                lightGreenStop.Color = Color.FromArgb(255, 144, 238, 144);
+                lightGreenStop.Offset = 0;
+                gradientBrush.GradientStops.Add(lightGreenStop);
+
+                // 添加渐变停止点：浅蓝绿色
+                GradientStop lightBlueGreenStop = new GradientStop();
+                lightBlueGreenStop.Color = Color.FromArgb(255, 173, 216, 230);
+                lightBlueGreenStop.Offset = 0.5;
+                gradientBrush.GradientStops.Add(lightBlueGreenStop);
+
+                // 添加渐变停止点：浅蓝色
+                GradientStop lightBlueStop = new GradientStop();
+                lightBlueStop.Color = Color.FromArgb(255, 135, 206, 250);
+                lightBlueStop.Offset = 1;
+                gradientBrush.GradientStops.Add(lightBlueStop);
+            }
+            // 初始设置背景透明度为 0
+            gradientBrush.Opacity = 0;
+            this.Background = gradientBrush;
+
+
+
+            // 创建故事板
+            Storyboard storyboard = new Storyboard();
+            Storyboard.SetTarget(opacityAnimation, gradientBrush);
+            Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
+            storyboard.Children.Add(opacityAnimation);
+
+            // 开始动画
+            storyboard.Begin();
+        }
+
         private void OnUpdateTextBox(string text)
         {
             ClassNameHyperlinkButton.Content = text;

@@ -131,6 +131,9 @@
     </Compile>
     <Compile Include="Assets\Classes\RippleHelper.cs" />
     <Compile Include="Assets\Classes\Student.cs" />
+    <Compile Include="Assets\Controls\PopupMessage.xaml.cs">
+      <DependentUpon>PopupMessage.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Assets\Media\BackdropMicaBrush.cs" />
     <Compile Include="Assets\Media\BackgroundSource.cs" />
     <Compile Include="Assets\Views\MainPage.xaml.cs">
@@ -227,6 +230,10 @@
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
     </ApplicationDefinition>
+    <Page Include="Assets\Controls\PopupMessage.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
     <Page Include="Assets\Views\MainPage.xaml">
       <Generator>MSBuild:Compile</Generator>
       <SubType>Designer</SubType>
@@ -293,9 +300,7 @@
     <Content Include="Assets\Fonts\HarmonyOS_Sans_SC_Medium.ttf" />
     <None Include="随机抽取学号_TemporaryKey.pfx" />
   </ItemGroup>
-  <ItemGroup>
-    <Folder Include="Assets\Controls\" />
-  </ItemGroup>
+  <ItemGroup />
   <PropertyGroup Condition=" '$(VisualStudioVersion)' == '' or '$(VisualStudioVersion)' &lt; '14.0' ">
     <VisualStudioVersion>14.0</VisualStudioVersion>
   </PropertyGroup>

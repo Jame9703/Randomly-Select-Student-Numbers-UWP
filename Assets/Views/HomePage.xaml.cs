@@ -3,6 +3,7 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml;
@@ -10,6 +11,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
+using 随机抽取学号.Assets.Controls;
 using 随机抽取学号.Classes;
 
 namespace 随机抽取学号.Views
@@ -24,8 +26,10 @@ namespace 随机抽取学号.Views
 
         public DispatcherTimer timer = new DispatcherTimer();
         private bool isRandomizing = false;//是否正在单人模式随机抽取
-        List<string> checkedCheckBoxes = new List<string>();// 记录被选中的CheckBox的Name
-        List<CheckBoxItem> checkBoxItems = new List<CheckBoxItem>();// 记录每CheckBox的状态:Name,IsChecked
+        List<CheckBoxItem> checkBoxItems = new List<CheckBoxItem>();// 记录每个CheckBox的状态:Name,IsChecked
+        List<string> checkBoxItemsName = new List<string>();// 记录每个CheckBox的Name
+        List<int> checkedCheckBoxesIndex = new List<int>();// 记录每个被选中CheckBox的Index
+        List<string> checkedCheckBoxesName = new List<string>();// 记录每个被选中CheckBox的Name
         ObservableCollection<Student> selectedStudentList = new ObservableCollection<Student>();// 记录多选模式下选中的学生
         private GridView PhotosGridView;
         private int randomIndex;
@@ -41,9 +45,9 @@ namespace 随机抽取学号.Views
             EndNumberBox.Value = StudentManager.StudentList.Count;
             BeginNumberBox.Maximum = StudentManager.StudentList.Count;
             EndNumberBox.Maximum = StudentManager.StudentList.Count;
-            if(checkedCheckBoxes.Count > 0)
+            if(StudentManager.checkedCheckBoxes.Count > 0)
             {
-                Numbers.Maximum = checkedCheckBoxes.Count;
+                Numbers.Maximum = StudentManager.checkedCheckBoxes.Count;
             }
             Numbers.Minimum = 1;
             segmented.SelectedIndex = 0;//在xaml中设置会导致后面的控件未加载就被调用//System.NullReferenceException:“Object reference not set to an instance of an object.”
@@ -64,13 +68,15 @@ namespace 随机抽取学号.Views
         }
         private async Task CreateCheckBoxes()
         {
-            checkedCheckBoxes = await  StudentManager.LoadCheckedStudentsAsync();
-            for(int i = 0; i < StudentManager.StudentList.Count; i++)
+            checkBoxItems.Clear();
+            StudentManager.checkedCheckBoxes = await  StudentManager.LoadCheckedStudentsAsync();
+            checkedCheckBoxesName = StudentManager.checkedCheckBoxes.Select(x => x.Name).ToList();// 获取所有被选中CheckBox的Name
+            for (int i = 0; i < StudentManager.StudentList.Count; i++)
             {
                 var item = new CheckBoxItem();
                 {
                     item.Name = StudentManager.StudentList[i].Name;
-                    if (checkedCheckBoxes.Contains(item.Name) == true)
+                    if (checkedCheckBoxesName.Contains(item.Name) == true)
                     {
                         item.IsChecked = true;
                     }
@@ -82,11 +88,11 @@ namespace 随机抽取学号.Views
                 checkBoxItems.Add(item);
             }
             CheckBoxListView.ItemsSource = checkBoxItems;
-            if (checkedCheckBoxes.Count==StudentManager.StudentList.Count)
-            {
+            if (StudentManager.checkedCheckBoxes.Count==StudentManager.StudentList.Count &&StudentManager.StudentList.Count > 0)
+            { 
                 SelectAllCheckBox.IsChecked = true;
             }
-            else if (checkedCheckBoxes.Count==0)
+            else if (StudentManager.checkedCheckBoxes.Count==0)
             {
                 SelectAllCheckBox.IsChecked = false;
             }
@@ -94,28 +100,29 @@ namespace 随机抽取学号.Views
             {
                 SelectAllCheckBox.IsChecked = null;
             }
-            checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
+            checkedCheckBoxesCount.Text = "已选择" + StudentManager.checkedCheckBoxes.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
         }
         private async Task SaveCheckedCheckBoxesAsync()//将选中的CheckBox存入localSettings
         {
-            checkedCheckBoxes.Clear();
+            StudentManager.checkedCheckBoxes.Clear();
             if (StudentManager.StudentList.Count > 0)
             {
                 for (int i = 0; i < StudentManager.StudentList.Count; i++)
                 {
                     if (checkBoxItems[i].IsChecked== true)
                     {
-                        checkedCheckBoxes.Add(checkBoxItems[i].Name);
-                    }
-                    else
-                    {
-                        checkedCheckBoxes.Remove(checkBoxItems[i].Name);
+                        CheckedCheckBox checkedCheckBox = new CheckedCheckBox()
+                        {
+                            Index = i,
+                            Name = checkBoxItems[i].Name
+                        };
+                        StudentManager.checkedCheckBoxes.Add(checkedCheckBox);
                     }
                 }
                 //将checkBoxes转换为json文件存入应用文件夹
                 try
                 {
-                    await StudentManager.SaveCheckedStudentsAsync(checkedCheckBoxes);
+                    await StudentManager.SaveCheckedStudentsAsync(StudentManager.checkedCheckBoxes);
                 }
                 catch (Exception)
                 {
@@ -123,18 +130,18 @@ namespace 随机抽取学号.Views
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
                     popupNotice.ShowPopup();
                 }
-                checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
+                checkedCheckBoxesCount.Text = "已选择" + StudentManager.checkedCheckBoxes.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
                 Numbers.Minimum = 1;
-                if (checkedCheckBoxes.Count > 0)//重新设置最大抽取人数
+                if (StudentManager.checkedCheckBoxes.Count > 0)//重新设置最大抽取人数
                 {
-                    Numbers.Maximum = checkedCheckBoxes.Count;
+                    Numbers.Maximum = StudentManager.checkedCheckBoxes.Count;
                 }
                 // 重新判断是否全选
-                if(checkedCheckBoxes.Count == StudentManager.StudentList.Count)
+                if(StudentManager.checkedCheckBoxes.Count == StudentManager.StudentList.Count)
                 {
                     SelectAllCheckBox.IsChecked = true;
                 }
-                else if (checkedCheckBoxes.Count == 0)
+                else if (StudentManager.checkedCheckBoxes.Count == 0)
                 {
                     SelectAllCheckBox.IsChecked = false;
                 }
@@ -150,6 +157,11 @@ namespace 随机抽取学号.Views
         }
         private async void StartorStopButton_Click(object sender, RoutedEventArgs e)//仅在单人模式有效
         {
+            //PopupMessage.ShowPopupMessage("ss", "This is a popup message from AnotherPage.",InfoBarSeverity.Success);
+            PopupMessage popup = new PopupMessage("ss6789", "This is a popup message from AnotherPage.", InfoBarSeverity.Success);
+            
+            MainPage.PopupContainerInstance.Children.Add(popup);
+            popup.VerticalAlignment = VerticalAlignment.Bottom;
             if (StudentManager.StudentList.Count == 0)
             {
                 PopupNotice popupNotice = new PopupNotice("请先填写班级信息");
@@ -186,18 +198,18 @@ namespace 随机抽取学号.Views
         }
         private void Timer_Tick(object sender, object e)
         {
-            if(checkedCheckBoxes .Count != 0)
+            if(StudentManager.checkedCheckBoxes .Count != 0)
             {
                 Random random = new Random();
                 var checkBoxItemsName = checkBoxItems.Select(x => x.Name).ToList();// 获取所有CheckBox的Name
                 List<int> checkedCheckBoxesIndex = new List<int>();// 用于存储被选中的CheckBox的索引
-                foreach (var item in checkedCheckBoxes)
+                foreach (var item in StudentManager.checkedCheckBoxes)
                 {
-                    var index = checkBoxItemsName.IndexOf(item);
+                    var index = checkBoxItemsName.IndexOf(item.Name);
                     checkedCheckBoxesIndex.Add(index);
                 }
 
-                randomIndex = checkedCheckBoxesIndex[random.Next(checkedCheckBoxes.Count)];
+                randomIndex = checkedCheckBoxesIndex[random.Next(StudentManager.checkedCheckBoxes.Count)];
                 StudentPhoto.Source = new BitmapImage(new Uri(StudentManager.StudentList[randomIndex].PhotoPath));
                 ResultTextBox.Text = (randomIndex + 1).ToString() + "." + StudentManager.StudentList[randomIndex].Name;
             }
@@ -239,7 +251,7 @@ namespace 随机抽取学号.Views
 
         private async void changeCheckBoxes_Click(object sender, RoutedEventArgs e)
         {
-            checkedCheckBoxes.Clear();
+            StudentManager.checkedCheckBoxes.Clear();
             if (StudentManager.StudentList.Count > 0)
             {
                 if (isOnlyThisRangeCheckBox.IsChecked == true)
@@ -260,7 +272,7 @@ namespace 随机抽取学号.Views
                     PopupNotice popupNotice = new PopupNotice("成功应用更改");
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
                     popupNotice.ShowPopup();
-                    checkedCheckBoxesCount.Text = "已选择" + checkedCheckBoxes.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
+                    checkedCheckBoxesCount.Text = "已选择" + StudentManager.checkedCheckBoxes.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
                 }
                 else
                 {
@@ -332,16 +344,16 @@ namespace 随机抽取学号.Views
                 if (int.TryParse(Numbers.Text, out int a))
                 {
                     // 转换成功
-                    if (a <= checkedCheckBoxes.Count)
+                    if (a <= StudentManager.checkedCheckBoxes.Count)
                     {
                         //将checkedCheckBoxes打乱顺序
                         Random random = new Random();
-                        checkedCheckBoxes = checkedCheckBoxes.OrderBy(x => random.Next()).ToList();
+                        StudentManager.checkedCheckBoxes = StudentManager.checkedCheckBoxes.OrderBy(x => random.Next()).ToList();
                         var checkBoxItemsName = checkBoxItems.Select(x => x.Name).ToList();// 获取所有CheckBox的Name
                         List<int> checkedCheckBoxesIndex = new List<int>();// 用于存储被选中的CheckBox的索引
-                        foreach (var item in checkedCheckBoxes)
+                        foreach (var item in StudentManager.checkedCheckBoxes)
                         {
-                            var index = checkBoxItemsName.IndexOf(item);
+                            var index = checkBoxItemsName.IndexOf(item.Name);
                             checkedCheckBoxesIndex.Add(index);
                         }
                         // 取前几位数字

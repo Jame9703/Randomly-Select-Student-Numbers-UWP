@@ -9,7 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     Loaded="Page_Loaded"
-    NavigationCacheMode="Disabled"
+    NavigationCacheMode="Required"
     mc:Ignorable="d">
     <Page.Resources>
         <Style TargetType="AppBarButton">

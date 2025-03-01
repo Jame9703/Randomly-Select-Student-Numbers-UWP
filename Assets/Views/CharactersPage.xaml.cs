@@ -2,6 +2,8 @@
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
+using Windows.Media.SpeechSynthesis;
+using System.Threading.Tasks;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -32,6 +34,43 @@ namespace 随机抽取学号.Views
         {
             string randomCharacter = GenerateRandomChineseCharacter();
             TextBox.Text = randomCharacter;
+        }
+        private async Task SpeakChinese(string text)
+        {
+            using (SpeechSynthesizer synthesizer = new SpeechSynthesizer())
+            {
+                // 获取中文语音
+                var voices = SpeechSynthesizer.AllVoices;
+                VoiceInformation voice = null;
+                foreach (var v in voices)
+                {
+                    if (v.Language.StartsWith("zh-"))
+                    {
+                        voice = v;
+                        break;
+                    }
+                }
+                if (voice != null)
+                {
+                    synthesizer.Voice = voice;
+                }
+
+                // 合成语音
+                SpeechSynthesisStream stream = await synthesizer.SynthesizeTextToStreamAsync(text);
+
+                // 播放语音
+                MediaElement mediaElement = new MediaElement();
+                mediaElement.SetSource(stream, stream.ContentType);
+                mediaElement.Play();
+            }
+        }
+
+        private async void SpeakChineseButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (TextBox.Text != "")
+            {
+              await  SpeakChinese(TextBox.Text);
+            }
         }
     }
 }

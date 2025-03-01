@@ -18,17 +18,18 @@
             Text="帮助：如何使用?"
             TextWrapping="Wrap" />
         <TextBlock
+            Width="656"
             Margin="10,44,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             FontFamily="{StaticResource HarmonyOSSans}"
-            TextWrapping="Wrap" Width="656" ><Run Text="1.在班级页面中填写班级名称，按学号顺序填写学生姓名"/><Run Text="(选填学生照片)，"/><Run Text="空行表示该学生不存在"/></TextBlock>
+            TextWrapping="Wrap"><Run Text="1.在班级页面中填写班级名称，按学号顺序填写学生姓名" /><Run Text="(选填学生照片)，" /><Run Text="空行表示该学生不存在" /></TextBlock>
         <TextBlock
             Margin="10,68,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             FontFamily="{StaticResource HarmonyOSSans}"
-            TextWrapping="Wrap" ><Run Text="2.填写完成后回到主页页面，在左侧勾选框中选择本次要抽取的"/><Run Text="学生"/><Run Text="范围"/></TextBlock>
+            TextWrapping="Wrap"><Run Text="2.填写完成后回到主页页面，在左侧勾选框中选择本次要抽取的" /><Run Text="学生" /><Run Text="范围" /></TextBlock>
         <TextBlock
             Margin="10,91,0,0"
             HorizontalAlignment="Left"
@@ -41,7 +42,7 @@
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             FontFamily="{StaticResource HarmonyOSSans}"
-            TextWrapping="Wrap" ><Run Text="4.设置"/><Run Text="滚动频率(仅为理论值，实际40Hz就不错了)"/></TextBlock>
+            TextWrapping="Wrap"><Run Text="4.设置" /><Run Text="滚动频率(仅为理论值，实际40Hz就不错了)" /></TextBlock>
         <TextBlock
             Margin="10,138,0,0"
             HorizontalAlignment="Left"

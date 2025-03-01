@@ -1,15 +1,12 @@
-﻿using Microsoft.UI.Xaml.Controls;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.UI.Xaml.Controls;
 using System;
+using System.Collections.Generic;
 using System.Collections.ObjectModel;
-using System.IO;
-using System.Runtime.Serialization.Json;
+using System.Data.Common;
 using System.Threading.Tasks;
 using Windows.Storage;
 using 随机抽取学号.Views;
-using Microsoft.Data.Sqlite;
-using System.Collections.Generic;
-using Windows.Storage.Streams;
-using Windows.UI.Xaml.Media.Imaging;
 
 namespace 随机抽取学号.Classes
 {
@@ -20,20 +17,30 @@ namespace 随机抽取学号.Classes
         public int Gender { get; set; }//性别
         public string  PhotoPath { get; set; }//图片路径
     }
+    public class CheckedCheckBox
+    {
+        public int Index { get; set; }// 索引
+        public string Name { get; set; }// 学生姓名
+    }
     public static class StudentManager
     {
-        private static string dbPath;
-        public static ObservableCollection<Student> StudentList { get; set; } = new ObservableCollection<Student>();
+        public static string StudentDataBasePath;
+        public static string CheckedStudentDataBasePath;
+        public static int SaveProcess;
+        public static ObservableCollection<Student> StudentList { get; set; } = new ObservableCollection<Student>();// 记录所有学生信息
+        public static List<CheckedCheckBox> checkedCheckBoxes = new List<CheckedCheckBox>();// 记录被选中的CheckBox的索引，对应学生姓名
         static  StudentManager()
         {
             StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-            StorageFile dbFile = Task.Run(async () => await localFolder.CreateFileAsync("students.db", CreationCollisionOption.OpenIfExists)).Result;
-            dbPath = dbFile.Path;
+            StorageFile StudentDBFile = Task.Run(async () => await localFolder.CreateFileAsync("students.db", CreationCollisionOption.OpenIfExists)).Result;
+            StudentDataBasePath = StudentDBFile.Path;
+            StorageFile CheckedStudentDBFile = Task.Run(async () => await localFolder.CreateFileAsync("checkedstudents.db", CreationCollisionOption.OpenIfExists)).Result;
+            CheckedStudentDataBasePath = CheckedStudentDBFile.Path;
             CreateTablesAsync();
         }
         private static async Task CreateTablesAsync()
         {
-            using (SqliteConnection db = new SqliteConnection($"Filename={dbPath}"))
+            using (SqliteConnection db = new SqliteConnection($"Filename={StudentDataBasePath}"))
             {
                 await db.OpenAsync();
                 // 创建 Students 表，StudentNumber 作为主键
@@ -41,75 +48,20 @@ namespace 随机抽取学号.Classes
                 SqliteCommand createStudentsTableCmd = new SqliteCommand(createStudentsTable, db);
                 await createStudentsTableCmd.ExecuteNonQueryAsync();
             }
-        }
-
-        public static async Task InsertStudentAsync(Student student)
-        {
-            using (SqliteConnection db = new SqliteConnection($"Filename={dbPath}"))
+            using (SqliteConnection db = new SqliteConnection($"Filename={CheckedStudentDataBasePath}"))
             {
                 await db.OpenAsync();
-                string insertCommand = "INSERT INTO Students (StudentNumber, Name, Gender, PhotoPath) VALUES (@StudentNumber, @Name, @Gender, @PhotoPath)";
-                SqliteCommand insertCmd = new SqliteCommand(insertCommand, db);
-                insertCmd.Parameters.AddWithValue("@StudentNumber", student.StudentNumber);
-                insertCmd.Parameters.AddWithValue("@Name", student.Name);
-                insertCmd.Parameters.AddWithValue("@Gender", student.Gender);
-                insertCmd.Parameters.AddWithValue("@PhotoPath", student.PhotoPath);
-                await insertCmd.ExecuteNonQueryAsync();
+                // 创建 CheckedStudents 表，Index 作为主键
+                string createStudentsTable = "CREATE TABLE IF NOT EXISTS CheckedStudents (Index INT PRIMARY KEY, Name NVARCHAR(2048))";
+                SqliteCommand createStudentsTableCmd = new SqliteCommand(createStudentsTable, db);
+                await createStudentsTableCmd.ExecuteNonQueryAsync();
             }
-        }
-
-        public static async Task InsertMultipleStudentsAsync(List<Student> students)
-        {
-            using (SqliteConnection db = new SqliteConnection($"Filename={dbPath}"))
-            {
-                await db.OpenAsync();
-                using (SqliteTransaction transaction = db.BeginTransaction())
-                {
-                    try
-                    {
-                        foreach (Student student in students)
-                        {
-                            string insertCommand = "INSERT INTO Students (StudentNumber, Name, Gender, PhotoPath) VALUES (@StudentNumber, @Name, @Gender, @PhotoPath)";
-                            SqliteCommand insertCmd = new SqliteCommand(insertCommand, db);
-                            insertCmd.Parameters.AddWithValue("@StudentNumber", student.StudentNumber);
-                            insertCmd.Parameters.AddWithValue("@Name", student.Name);
-                            insertCmd.Parameters.AddWithValue("@Gender", student.Gender);
-                            insertCmd.Parameters.AddWithValue("@PhotoPath", student.PhotoPath);
-                            await insertCmd.ExecuteNonQueryAsync();
-                        }
-                        transaction.Commit();
-                    }
-                    catch (Exception ex)
-                    {
-                        transaction.Rollback();
-                        throw ex;
-                    }
-                }
-            }
-        }
-        public static async Task DeleteStudentAsync(int studentNumber)
-        {
-            using (SqliteConnection db = new SqliteConnection($"Filename={dbPath}"))
-            {
-                await db.OpenAsync();
-                string deleteCommand = "DELETE FROM Students WHERE StudentNumber = @StudentNumber";
-                SqliteCommand deleteCmd = new SqliteCommand(deleteCommand, db);
-                deleteCmd.Parameters.AddWithValue("@StudentNumber", studentNumber);
-                await deleteCmd.ExecuteNonQueryAsync();
-            }
-        }
-        public static void SelectStudentAsync(int studentNumber)
-        {
-            // 假设这里有一个表存储被选中的学生信息，仅作示例，你可以根据需求实现
-            // 这里使用一个简单的列表存储选中的学生编号，实际应用可存储在数据库中
-            List<int> selectedStudents = new List<int>();
-            selectedStudents.Add(studentNumber);
         }
 
         public static async Task<ObservableCollection<Student>> LoadStudentsAsync()
         {
             ObservableCollection<Student> students = new ObservableCollection<Student>();
-            using (SqliteConnection db = new SqliteConnection($"Filename={dbPath}"))
+            using (SqliteConnection db = new SqliteConnection($"Filename={StudentDataBasePath}"))
             {
                 await db.OpenAsync();
                 string selectCommand = "SELECT * FROM Students";
@@ -134,81 +86,143 @@ namespace 随机抽取学号.Classes
 
         public static async Task SaveStudentsAsync(ObservableCollection<Student> students)
         {
-            using (SqliteConnection db = new SqliteConnection($"Filename={dbPath}"))
+            await Task.Run(() =>
             {
-                await db.OpenAsync();
-                // 先清空表
-                string clearCommand = "DELETE FROM Students";
-                SqliteCommand clearCmd = new SqliteCommand(clearCommand, db);
-                await clearCmd.ExecuteNonQueryAsync();
-
-                foreach (Student student in students)
+                using (SqliteConnection connection = new SqliteConnection($"Filename={StudentDataBasePath}"))
                 {
-                    string insertCommand = "INSERT INTO Students (StudentNumber, Name, Gender, PhotoPath) VALUES (@StudentNumber, @Name, @Gender, @PhotoPath)";
-                    SqliteCommand insertCmd = new SqliteCommand(insertCommand, db);
-                    insertCmd.Parameters.AddWithValue("@StudentNumber", student.StudentNumber);
-                    insertCmd.Parameters.AddWithValue("@Name", student.Name);
-                    insertCmd.Parameters.AddWithValue("@Gender", student.Gender);
-                    insertCmd.Parameters.AddWithValue("@PhotoPath", student.PhotoPath);
-                    await insertCmd.ExecuteNonQueryAsync();
-                }
-            }
-        }
-
-        private const string FileName = "CheckedStudents.json";
-
-        public static async Task SaveCheckedStudentsAsync(List<string> students)
-        {
-            try
-            {
-                var localFolder = ApplicationData.Current.LocalFolder;
-                var file = await localFolder.CreateFileAsync(FileName, CreationCollisionOption.ReplaceExisting);
-
-                using (var stream = await file.OpenStreamForWriteAsync())
-                {
-                    var serializer = new DataContractJsonSerializer(typeof(List<string>));
-                    serializer.WriteObject(stream, students);
-                }
-            }
-            catch (Exception)
-            {
-                PopupNotice popupNotice = new PopupNotice("保存学生信息失败");
-                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
-                popupNotice.ShowPopup();
-            }
-
-        }
-
-        public static async Task<List<string>> LoadCheckedStudentsAsync()
-        {
-            var localFolder = ApplicationData.Current.LocalFolder;
-            try
-            {
-                var file = await localFolder.GetFileAsync(FileName);
-                using (var stream = await file.OpenStreamForReadAsync())
-                {
-                    var serializer = new DataContractJsonSerializer(typeof(List<string>));
                     try
                     {
-                        return (List<string>)serializer.ReadObject(stream);
+                        connection.Open();
+
+                        // 清空数据库中的数据
+                        string clearQuery = "DELETE FROM Students";
+                        using (SqliteCommand clearCommand = new SqliteCommand(clearQuery, connection))
+                        {
+                            clearCommand.ExecuteNonQuery();
+                        }
+
+                        // 开始事务
+                        using (DbTransaction transaction = connection.BeginTransaction())
+                        {
+                            string insertQuery = "INSERT INTO Students (StudentNumber, Name, Gender, PhotoPath) VALUES (@StudentNumber, @Name, @Gender, @PhotoPath)";
+                            using (SqliteCommand insertCommand = new SqliteCommand(insertQuery, connection, (SqliteTransaction)transaction))
+                            {
+                                insertCommand.Parameters.Add("@StudentNumber", SqliteType.Integer);
+                                insertCommand.Parameters.Add("@Name", SqliteType.Text);
+                                insertCommand.Parameters.Add("@Gender", SqliteType.Integer);
+                                insertCommand.Parameters.Add("@PhotoPath", SqliteType.Text);
+
+                                int totalCount = students.Count;
+                                if(totalCount != 0)
+                                {
+                                    for (int i = 0; i < totalCount; i++)
+                                    {
+                                        Student student = students[i];
+                                        insertCommand.Parameters["@StudentNumber"].Value = student.StudentNumber;
+                                        insertCommand.Parameters["@Name"].Value = student.Name;
+                                        insertCommand.Parameters["@Gender"].Value = student.Gender;
+                                        insertCommand.Parameters["@PhotoPath"].Value = student.PhotoPath;
+
+                                        insertCommand.ExecuteNonQuery();
+                                        if (totalCount != 0)
+                                        {
+                                            // 计算并报告进度
+                                            SaveProcess = (int)((i + 1) * 100.0 / totalCount);
+                                        }
+                                    }
+                                }
+                                else
+                                {
+                                    SaveProcess = -1;
+                                }
+                            }
+
+                            // 提交事务
+                            transaction.Commit();
+                        }
+                    }
+                    catch (Exception ex)
+                    {
+                        // 处理异常
+                        PopupNotice popupNotice = new PopupNotice("保存学生信息失败");
+                        popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                        popupNotice.ShowPopup();
+                    }
+                }
+            });
+
+        }
+
+        public static async Task SaveCheckedStudentsAsync(List<CheckedCheckBox> checkedcheckboxes)
+        {
+            await Task.Run(() =>
+            {
+                using (SqliteConnection connection = new SqliteConnection($"Filename={CheckedStudentDataBasePath}"))
+                {
+                    try
+                    {
+                        connection.Open();
+
+                        // 清空数据库中的数据
+                        string clearQuery = "DELETE FROM CheckedStudents";
+                        using (SqliteCommand clearCommand = new SqliteCommand(clearQuery, connection))
+                        {
+                            clearCommand.ExecuteNonQuery();
+                        }
+
+                        // 开始事务
+                        using (DbTransaction transaction = connection.BeginTransaction())
+                        {
+                            string insertQuery = "INSERT INTO CheckedStudents (Index,Name) VALUES (@Index, @Name)";
+                            using (SqliteCommand insertCommand = new SqliteCommand(insertQuery, connection, (SqliteTransaction)transaction))
+                            {
+                                insertCommand.Parameters.Add("@Index", SqliteType.Integer);
+                                insertCommand.Parameters.Add("@Name", SqliteType.Text);
+                                int totalCount = checkedcheckboxes.Count;
+                                foreach (var checkbox in checkedcheckboxes)
+                                {
+                                    insertCommand.Parameters["@Index"].Value = checkbox.Index;
+                                    insertCommand.Parameters["@Name"].Value = checkbox.Name;
+                                    insertCommand.ExecuteNonQuery();
+                                }
+                            }
+                            // 提交事务
+                            transaction.Commit();
+                        }
                     }
                     catch (Exception)
                     {
-                        PopupNotice popupNotice = new PopupNotice("读取学生信息失败");
+                        // 处理异常
+                        PopupNotice popupNotice = new PopupNotice("保存抽取范围失败");
                         popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
                         popupNotice.ShowPopup();
-                        return new List<string>();
+                    }
+                }
+            });
+        }
+
+        public static async Task<List<CheckedCheckBox>> LoadCheckedStudentsAsync()
+        {
+            List<CheckedCheckBox> checkedcheckboxes = new List<CheckedCheckBox>();
+            using (SqliteConnection db = new SqliteConnection($"Filename={StudentDataBasePath}"))
+            {
+                await db.OpenAsync();
+                string selectCommand = "SELECT * FROM Students";
+                SqliteCommand selectCmd = new SqliteCommand(selectCommand, db);
+                using (SqliteDataReader query = await selectCmd.ExecuteReaderAsync())
+                {
+                    while (await query.ReadAsync())
+                    {
+                        CheckedCheckBox checkbox = new CheckedCheckBox
+                        {
+                            Index = query.GetInt32(0),
+                            Name = query.GetString(1),
+                        };
+                        checkedcheckboxes.Add(checkbox);
                     }
                 }
             }
-            catch (FileNotFoundException)
-            {
-                PopupNotice popupNotice = new PopupNotice("找不到students.json,请不要移动、修改或删除此文件");
-                popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
-                popupNotice.ShowPopup();
-                await localFolder.CreateFileAsync(FileName, CreationCollisionOption.ReplaceExisting);
-                return new List<string>();
-            }
+            return checkedcheckboxes;
         }
     }
 }

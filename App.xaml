@@ -22,7 +22,7 @@
                             <SolidColorBrush
                                 x:Key="GridBackground"
                                 Opacity="0.3"
-                               Color="White"/>
+                                Color="White" />
                             <SolidColorBrush x:Key="LineNumberForeground" Color="#E42B91AF" />
                             <Color x:Key="ButtonForegroundColor">Green</Color>
 

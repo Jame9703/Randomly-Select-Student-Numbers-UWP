@@ -4,8 +4,12 @@ using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using 随机抽取学号.Assets.Controls;
+using 随机抽取学号.Media;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -77,5 +81,39 @@ namespace 随机抽取学号.Views
             }
         }
 
+        private void BackgroundRadioButtons_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            var mainPage = ((Frame)Window.Current.Content).Content as MainPage;
+            if (mainPage != null)
+            {
+                if (BackgroundRadioButtons.SelectedIndex == 0)// 无背景
+                {
+                        // 创建一个新的纯色笔刷来设置MainPage的背景
+                        var newBrush = new SolidColorBrush(Colors.Red);
+                        mainPage.MainPageBackground = newBrush;
+                }
+                else if (BackgroundRadioButtons.SelectedIndex == 1)// 亚克力背景
+                {
+                    var acrylicBrush = new AcrylicBrush
+                    {
+                        BackgroundSource = AcrylicBackgroundSource.Backdrop,
+                    };
+                    mainPage.MainPageBackground = acrylicBrush;
+
+                }
+                else if (BackgroundRadioButtons.SelectedIndex == 2)// 云母背景
+                {
+                    var backdropMicaBrush = new BackdropMicaBrush
+                    {
+                        BackgroundSource = BackgroundSource.WallpaperBackdrop,
+                    };
+                    mainPage.MainPageBackground = backdropMicaBrush;
+                }
+            }
+            else
+            {
+                PopupMessage.ShowPopupMessage("更改背景失败");
+            }
+        }
     }
 }

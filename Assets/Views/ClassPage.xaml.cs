@@ -1,15 +1,21 @@
-﻿using Microsoft.UI.Xaml.Controls;
+﻿using Microsoft.Data.Sqlite;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.IO;
 using System.Linq;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
 using Windows.Storage;
 using Windows.Storage.Pickers;
+using Windows.System;
+using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Navigation;
 using 随机抽取学号.Classes;
 
 namespace 随机抽取学号.Views
@@ -28,34 +34,15 @@ namespace 随机抽取学号.Views
             this.InitializeComponent();
             // 初始化行号
             UpdateLineNumbers();
-            //if (localSettings.Values["Names"] != null) Editor.Text = (string)localSettings.Values["Names"];
-            if (localSettings.Values["ClassName"] != null) ClassNameTextBox.Text = (string)localSettings.Values["ClassName"];
             StudentManager.StudentList.CollectionChanged += StudentList_CollectionChanged;
+            if (localSettings.Values["ClassName"] != null) ClassNameTextBox.Text = (string)localSettings.Values["ClassName"];
             FileEditSegmented.SelectedIndex = 0;
             AddModeSegmented.SelectedIndex = 0;
         }
 
         private async void StudentList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            //await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
-            //try
-            //{
-            //    UpdateStudentId();
-            //    await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
-            //    StudentListView.ItemsSource = null;
-            //    StudentListView.ItemsSource = StudentManager.StudentList;
-
-            //}
-            //catch (Exception ex)
-            //{
-
-            //}
-            //finally
-            //{
-            //    PopupNotice popupNotice = new PopupNotice("保存学生列表成功");
-            //    popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
-            //    popupNotice.ShowPopup();
-            //}
+            await UpdateSaveButton();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -72,55 +59,11 @@ namespace 随机抽取学号.Views
             StudentListView.ItemsSource = null;
             StudentListView.ItemsSource = StudentManager.StudentList;
         }
-        //protected async override void OnNavigatedFrom(NavigationEventArgs e)
-        //{
-        //    /*简介
-        //     * 步骤1：将在Editor中做的更改用于刷新StudentListView(比如Editor有3行，但StudentListView只有2项)
-        //     * 步骤2：保存对StudentListView的更改(通过保存studentList)
-        //     */
-        //    string[] lines = Editor.Text.Split(new string[] { "\r\n", "\r", "\n" }, StringSplitOptions.None);
-        //    ObservableCollection<Student> newStudentList = new ObservableCollection<Student>();
-        //    for (int i = 0; i < lines.Length; i++)//将在Editor中做的更改用于刷新StudentListView
-        //    {
-        //        if (lines[i].Length > 0)
-        //        {
-        //            if (i < StudentManager.StudentList.Count)
-        //            {
-        //                var item = StudentListView.Items[i] as Student;
-        //                var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = item.PhotoPath };//Id表示学号，从1开始
-        //                newStudentList.Add(student);
-        //            }
-        //            else
-        //            {
-        //                var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = "ms-appx:///Assets/RSSN_Logos/StoreLogo.scale-400.png" };//Id表示学号，从1开始
-        //                newStudentList.Add(student);
-        //            }
-        //        }
-        //        else//空行
-        //        {
-        //            var student = new Student { Id = i + 1, Name = "未知", PhotoPath = "ms-appx:///Assets/RSSN_Logos/StoreLogo.scale-400.png" };//Id表示学号，从1开始
-        //            newStudentList.Add(student);
-        //        }
-        //    }//到此时，newStudentList已经包含了所有学生
-        //    StudentListView.ItemsSource = newStudentList;//手动刷新StudentListView
-        //    StudentManager.StudentList.Clear();//清空studentList
-        //    for (int i = 0; i < newStudentList.Count; i++)//以下为保存StudentListView
-        //    {
-        //        var _item = StudentListView.Items[i] as Student;
-        //        if (_item.PhotoPath != null)
-        //        {
-        //            var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = _item.PhotoPath };//Id表示学号，从1开始
-        //            StudentManager.StudentList.Add(student);
-        //        }
-        //        else//未更改照片，使用的是默认照片
-        //        {
-        //            var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = "ms-appx:///Assets/RSSN_Logos/StoreLogo.scale-400.png" };//Id表示学号，从1开始
-        //            StudentManager.StudentList.Add(student);
-        //        }
-        //    }
-        //    await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
-        //    GC.Collect();
-        //}
+        protected async override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            //await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
+            GC.Collect();
+        }
         public void UpdateLineNumbers()
         {
             string text = Editor.Text;
@@ -157,8 +100,6 @@ namespace 随机抽取学号.Views
                     string text = await FileIO.ReadTextAsync(file);
                     Editor.Text = text;
                     ClassNameTextBox.Text = System.IO.Path.GetFileNameWithoutExtension(file.Name);
-                    localSettings.Values["Names"] = Editor.Text;
-
                     PopupNotice popupNotice = new PopupNotice("成功打开文件: " + file.Name);
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
                     popupNotice.ShowPopup();
@@ -176,6 +117,7 @@ namespace 随机抽取学号.Views
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
                 popupNotice.ShowPopup();
             }
+            AddItemButton.Flyout.ShowAt(AddItemButton);
         }
         private async void SaveFileButton_Click(object sender, RoutedEventArgs e)
         {
@@ -368,6 +310,11 @@ namespace 随机抽取学号.Views
                 var selectedIndex = StudentListView.SelectedIndex;
                 var selectedItem = StudentListView.SelectedItem as Student;
                 StudentManager.StudentList.Remove(selectedItem);
+                //if (StudentManager.ch.Contains(selectedItem.Name))
+                //{
+                //    StudentManager.checkedCheckBoxes.Remove(selectedItem.Name);
+                //    await StudentManager.SaveCheckedStudentsAsync(StudentManager.checkedCheckBoxes);
+                //}
                 try
                 {
                     StorageFile file = await StorageFile.GetFileFromPathAsync(selectedItem.PhotoPath);//一并删除存入LocalFolder的照片
@@ -379,9 +326,6 @@ namespace 随机抽取学号.Views
                 }
 
                 UpdateStudentId();
-                await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
-                StudentListView.ItemsSource = null;
-                StudentListView.ItemsSource = StudentManager.StudentList;
                 if (selectedIndex < StudentListView.Items.Count)
                 {
                     StudentListView.SelectedItem = StudentListView.Items[selectedIndex];//默认选择被删除项的下一项
@@ -399,58 +343,109 @@ namespace 随机抽取学号.Views
         private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
             //UpdateStudentId();
+            await UpdateSaveButton();
+        }
+        private async Task UpdateSaveButton()
+        {
             var focusedElement = FocusManager.GetFocusedElement() as Control;
             focusedElement.Focus(FocusState.Programmatic);
-            //focusedElement.SetValue(FocusStateProperty, FocusState.Unfocused);
             StudentListView.SelectedItem = null;
-            await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
-            //ObservableCollection<Student> newStudentList = new ObservableCollection<Student>();
-            //StudentListView.ItemsSource = newStudentList;//手动刷新StudentListView
-            //StudentManager.StudentList.Clear();//清空studentList
-            //for (int i = 0; i < newStudentList.Count; i++)//以下为保存StudentListView
-            //{
-            //    var _item = StudentListView.Items[i] as Student;
-            //    if (_item.PhotoPath != null)
-            //    {
-            //        var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = _item.PhotoPath };//Id表示学号，从1开始
-            //        StudentManager.StudentList.Add(student);
-            //    }
-            //    else//未更改照片，使用的是默认照片
-            //    {
-            //        var student = new Student { Id = i + 1, Name = lines[i], PhotoPath = "ms-appx:///Assets/RSSN_Logos/StoreLogo.scale-400.png" };//Id表示学号，从1开始
-            //        StudentManager.StudentList.Add(student);
-            //    }
-            //}
-            //await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
-            //StudentListView.ItemsSource = null;
-            //StudentListView.ItemsSource = StudentManager.StudentList;
+            if (SaveProcessBar.Value == 100)
+            {
+                SaveProcessBar.Value = 0;
+            }
+            DispatcherTimer timer = new DispatcherTimer();
+            timer.Interval = TimeSpan.FromSeconds(0.1);
+            timer.Tick += Timer_Tick;
+            timer.Start();
+            try
+            {
+                await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
+            }
+            catch (Exception)
+            {
+                PopupNotice popupNotice = new PopupNotice("保存失败");
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.ShowPopup();
+            }
+        }
+        private async void Timer_Tick(object sender, object e)
+        {
+            if (StudentManager.SaveProcess >= 0 && StudentManager.SaveProcess < 100)
+            {
+                SaveProcessBar.Value = StudentManager.SaveProcess;
+                SavingStackPanel.Visibility = Visibility.Visible;
+                SaveStackPanel.Visibility = Visibility.Collapsed;
+                SavedStackPanel.Visibility = Visibility.Collapsed;
+                SaveButtonGrid.Background = new SolidColorBrush
+                { 
+                    Color = Colors.LightBlue,
+                    Opacity = 0.5
+                };
+            }
+            else
+            {
+                SaveProcessBar.Value = 100;
+                ((DispatcherTimer)sender).Stop();
+                SavedStackPanel.Visibility = Visibility.Visible;
+                SavingStackPanel.Visibility = Visibility.Collapsed;
+                SaveStackPanel.Visibility = Visibility.Collapsed;
+                SaveButtonGrid.Background = new SolidColorBrush
+                {
+                    Color = Colors.LightGreen,
+                    Opacity = 0.5
+                };
+                await Task.Delay(5000);
+                SaveStackPanel.Visibility = Visibility.Visible;
+                SavedStackPanel.Visibility = Visibility.Collapsed;
+                SavingStackPanel.Visibility = Visibility.Collapsed;
+                SaveButtonGrid.Background = new SolidColorBrush
+                {
+                    Color = Colors.LightYellow,
+                    Opacity = 0.5
+                };
+                SaveProcessBar.Value = 0;
+            }
         }
 
         private void StudentListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
+            double scrollOffset = GetScrollViewerVerticalOffset(StudentListView);
             UpdateStudentId();
-            //var item = StudentListView.ContainerFromIndex(1) as ListViewItem;
-            //var idTextBlock = item.FindName("IdTextBlock") as TextBlock;//找不到
-            //var child = VisualTreeHelper.GetChild(item, 0) as ContentPresenter;
-            //var child1 = child;
-            //var child = VisualTreeHelper.GetChild(item, 0) /*as Grid*/;
-            //var child1 = VisualTreeHelper.GetChild(child, 0) as Border;
-            //var child2 = child1.Child as Grid;
-            //var child2 = VisualTreeHelper.GetChild(child1, 0) as Grid/* as Grid*/;
-            //var child3 = VisualTreeHelper.GetChild(child2, 0) as StackPanel;
-            //var idTextBlock = child3.FindName("IdTextBlock") as TextBlock;
-            //idTextBlock.Text = "1000";
-
+            SetScrollViewerVerticalOffset(StudentListView, scrollOffset);
         }
-        private void SaveStudents()
+        private double GetScrollViewerVerticalOffset(ListView listView)
         {
-            StudentManager.StudentList.Clear();
-            foreach (var item in StudentListView.Items)
-            {
+            ScrollViewer scrollViewer = FindVisualChild<ScrollViewer>(listView);
+            return scrollViewer?.VerticalOffset ?? 0;
+        }
 
+        private void SetScrollViewerVerticalOffset(ListView listView, double offset)
+        {
+            ScrollViewer scrollViewer = FindVisualChild<ScrollViewer>(listView);
+            if (scrollViewer != null)
+            {
+                scrollViewer.ChangeView(null, offset, null);
             }
         }
 
+        private T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
+        {
+            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
+            {
+                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
+                if (child != null && child is T)
+                {
+                    return (T)child;
+                }
+                T childOfChild = FindVisualChild<T>(child);
+                if (childOfChild != null)
+                {
+                    return childOfChild;
+                }
+            }
+            return null;
+        }
         private async  void AddItemButton_Click(object sender, RoutedEventArgs e)
         {
             if(AddModeSegmented.SelectedIndex == 0)//逐个添加
@@ -482,7 +477,7 @@ namespace 随机抽取学号.Views
 
         private void FileEditSegmented_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(FileEditSegmented.SelectedIndex == 0)//文件
+            if (FileEditSegmented.SelectedIndex == 0)//文件
             {
                 EditStackPanel.Visibility = Visibility.Collapsed;
                 FileStackPanel.Visibility = Visibility.Visible;
@@ -505,6 +500,140 @@ namespace 随机抽取学号.Views
             {
                 SingleAddGrid.Visibility = Visibility.Collapsed;
                 BatchAddGrid.Visibility = Visibility.Visible;
+            }
+        }
+
+        private async void AddFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            StudentManager.StudentList.Clear();
+            StudentManager.checkedCheckBoxes.Clear();
+            await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
+            await StudentManager.SaveCheckedStudentsAsync(StudentManager.checkedCheckBoxes);
+        }
+
+        private async void OpenLocalFolderButton_Click(object sender, RoutedEventArgs e)
+        {
+            // 获取应用的本地文件夹
+            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+
+            // 使用文件管理器打开本地文件夹
+            await LaunchFolderInFileManager(localFolder);
+        }
+        private async Task LaunchFolderInFileManager(StorageFolder folder)
+        {
+            try
+            {
+                
+                bool success = await Launcher.LaunchFolderAsync(folder);// 尝试使用文件管理器打开文件夹
+                if (!success)
+                {
+                    // 打开失败
+                    PopupNotice popupNotice = new PopupNotice("打开失败，请重试");
+                    popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                    popupNotice.ShowPopup();
+                }
+            }
+            catch (Exception ex)
+            {
+                PopupNotice popupNotice = new PopupNotice("打开失败，请重试");
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.ShowPopup();
+            }
+        }
+
+        private async void OpenDataFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            FileOpenPicker openPicker = new FileOpenPicker();
+            // 设置选取器的起始位置
+            openPicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            // 添加允许的文件类型
+            openPicker.FileTypeFilter.Add(".db");
+
+            // 显示选取器并等待用户选择文件
+            StorageFile file = await openPicker.PickSingleFileAsync();
+            if (file != null)
+            {
+                try
+                {
+                    SqliteConnection.ClearAllPools();
+                    //打开所选文件的流以进行读取
+                    using (Stream sourceStream = await file.OpenStreamForReadAsync())
+                    {
+                        //打开目标文件的流以进行写入
+                        StorageFile destinationFile = await localFolder.CreateFileAsync("students.db", CreationCollisionOption.ReplaceExisting);
+                        using (Stream destinationStream = await destinationFile.OpenStreamForWriteAsync())
+                        {
+                            //复制流内容
+                           await sourceStream.CopyToAsync(destinationStream);
+
+                        }
+                    }
+                    StudentManager.StudentList = await StudentManager.LoadStudentsAsync();
+                    PopupNotice popupNotice = new PopupNotice("打开数据库成功");
+                    popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
+                    popupNotice.ShowPopup();
+                }
+                catch (Exception)
+                {
+                    PopupNotice popupNotice = new PopupNotice("打开数据库失败，请重试");
+                    popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                    popupNotice.ShowPopup();
+                }
+            }
+            else
+            {
+                PopupNotice popupNotice = new PopupNotice("打开数据库操作已取消");
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
+                popupNotice.ShowPopup();
+            }
+        }
+
+        private async void SaveDataFileButton_Click(object sender, RoutedEventArgs e)
+        {
+            FileSavePicker savePicker = new FileSavePicker();
+            // 设置选取器的起始位置
+            savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
+            // 添加允许的文件类型
+            savePicker.FileTypeChoices.Add("数据库文件", new[] { ".db" });
+            // 设置建议的文件名
+            savePicker.SuggestedFileName = "students.db";
+            // 显示选取器并等待用户选择保存位置和文件名
+            StorageFile saveFile = await savePicker.PickSaveFileAsync();
+            if(saveFile != null)
+            {
+                try
+                {
+                    StorageFile sourceFile = await localFolder.TryGetItemAsync("students.db") as StorageFile;
+                    await UpdateSaveButton();
+                    await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
+
+                    // 打开源文件进行读取
+                    using (Stream sourceStream = await sourceFile.OpenStreamForReadAsync())
+                    {
+                        // 打开目标文件进行写入
+                        using (Stream targetStream = await saveFile.OpenStreamForWriteAsync())
+                        {
+                            // 将源文件的内容复制到目标文件
+                            await sourceStream.CopyToAsync(targetStream);
+                        }
+                    }
+
+                    PopupNotice popupNotice = new PopupNotice("另存数据库成功");
+                    popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
+                    popupNotice.ShowPopup();
+                }
+                catch (Exception)
+                {
+                    PopupNotice popupNotice = new PopupNotice("另存数据库失败，请重试");
+                    popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                    popupNotice.ShowPopup();
+                }
+            }
+            else
+            {
+                PopupNotice popupNotice = new PopupNotice("另存数据库操作已取消");
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
+                popupNotice.ShowPopup();
             }
         }
     }

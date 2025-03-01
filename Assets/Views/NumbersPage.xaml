@@ -78,15 +78,6 @@
             Content="全部重置"
             CornerRadius="4,4,4,4"
             FontFamily="{StaticResource HarmonyOSSans}" />
-        <!--<TextBlock HorizontalAlignment="Left" Margin="188,1,0,0" TextWrapping="Wrap" Text="分隔符：" VerticalAlignment="Top" FontSize="16" FontFamily="{StaticResource HarmonyOSSans}"/>
-        <Grid x:Name="RandomNumbersTextBoxGrid" Height="Auto" Width="Auto" Margin="5,188,1061,633" Visibility="Collapsed">
-            <Slider RenderTransformOrigin="0.5,0.5" UseLayoutRounding="False" ValueChanged="Slider_ValueChanged" Minimum="4" Value="18" d:LayoutRounding="Auto" Margin="-55,90,714,91" TickPlacement="Outside">
-                <Slider.RenderTransform>
-                    <CompositeTransform Rotation="-89.864"/>
-                </Slider.RenderTransform>
-            </Slider>
-            <TextBox x:Name="txtRe" TextWrapping="Wrap" Text="" CornerRadius="4,4,4,4" IsReadOnly="True" FontFamily="{StaticResource HarmonyOSSans}" RenderTransformOrigin="0.5,0.5" Margin="44,10,10,1"/>
-        </Grid>-->
         <muxc:NumberBox
             x:Name="SelectCountNumberBox"
             Width="100"
@@ -114,16 +105,7 @@
                 </StackPanel.ChildrenTransitions>
             </StackPanel>
         </ScrollViewer>
-        <GridView x:Name="RandomNumbersGridView" Margin="0,180,0,0">
-            <!--<GridView.ItemsPanel>
-                        <ItemsPanelTemplate>
-                            <ItemsWrapGrid
-                                x:Name="MaxItemsWrapGrid"
-                                MaximumRowsOrColumns="5"
-                                Orientation="Horizontal" />
-                        </ItemsPanelTemplate>
-                    </GridView.ItemsPanel>-->
-        </GridView>
+        <GridView x:Name="RandomNumbersGridView" Margin="0,180,0,0" />
         <Grid
             x:Name="RandomNumbersTextBoxGrid"
             Width="Auto"
@@ -183,7 +165,7 @@
         </Grid>
         <controls:Segmented
             x:Name="segmented"
-            Margin="0,120,0,0"
+            Margin="0,140,0,0"
             HorizontalAlignment="Left"
             VerticalAlignment="Top"
             SelectedIndex="0"
