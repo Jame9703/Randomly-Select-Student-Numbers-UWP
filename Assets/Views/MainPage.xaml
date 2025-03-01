@@ -471,7 +471,6 @@
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />
             </Grid.RowDefinitions>
-
             <!--  muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"  -->
             <Grid x:Name="AppTitleBar" Background="Transparent">
                 <Grid.ColumnDefinitions>

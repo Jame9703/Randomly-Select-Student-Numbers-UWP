@@ -1,10 +1,12 @@
 ﻿using System;
 using Windows.Storage;
+using Windows.System;
 using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
@@ -89,14 +91,17 @@ namespace 随机抽取学号.Views
                 if (BackgroundRadioButtons.SelectedIndex == 0)// 无背景
                 {
                         // 创建一个新的纯色笔刷来设置MainPage的背景
-                        var newBrush = new SolidColorBrush(Colors.Red);
+                        var newBrush = new SolidColorBrush(Colors.White);
                         mainPage.MainPageBackground = newBrush;
                 }
                 else if (BackgroundRadioButtons.SelectedIndex == 1)// 亚克力背景
                 {
                     var acrylicBrush = new AcrylicBrush
                     {
-                        BackgroundSource = AcrylicBackgroundSource.Backdrop,
+                        BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                        Opacity = 1,
+                        TintOpacity = 0.6,
+                        TintColor = Colors.Transparent
                     };
                     mainPage.MainPageBackground = acrylicBrush;
 
@@ -114,6 +119,23 @@ namespace 随机抽取学号.Views
             {
                 PopupMessage.ShowPopupMessage("更改背景失败");
             }
+        }
+
+        private async void GoToGithubSettingsCard_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                await Launcher.LaunchUriAsync(new Uri("https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP"));
+            }
+            catch (Exception)
+            {
+
+            }
+        }
+        private void ExpanderContent_PointerPressed(object sender, PointerRoutedEventArgs e)
+        {
+            // 阻止事件冒泡
+            e.Handled = true;
         }
     }
 }

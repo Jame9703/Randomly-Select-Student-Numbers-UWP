@@ -41,7 +41,8 @@
                     Description="选择要显示的应用主题"
                     FontFamily="{StaticResource HarmonyOSSans}"
                     Header="应用程序主题"
-                    IsTabStop="True">
+                    IsTabStop="True"
+                    PointerPressed="ExpanderContent_PointerPressed">
                     <controls:SettingsExpander.HeaderIcon>
                         <FontIcon Glyph="&#xE790;" />
                     </controls:SettingsExpander.HeaderIcon>
@@ -132,14 +133,17 @@
 
                 </controls:SettingsExpander>
                 <controls:SettingsCard
+                    x:Name="GoToGithubSettingsCard"
                     Margin="10,0,20,0"
                     classes:RippleHelper.IsFillEnable="True"
                     classes:RippleHelper.RippleColor="Gray"
                     classes:RippleHelper.RippleDuration="0:0:0.5"
                     classes:RippleHelper.RippleHelperState="Pressed"
+                    Click="GoToGithubSettingsCard_Click"
                     Description="https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP"
                     FontFamily="{StaticResource HarmonyOSSans}"
-                    Header="在Github中查看此项目源代码">
+                    Header="在Github中查看此项目源代码"
+                    IsClickEnabled="True">
                     <controls:SettingsCard.HeaderIcon>
                         <ui:BitmapIconExtension Source="ms-appx:///Assets/Photos/GithubLogo.png" />
                     </controls:SettingsCard.HeaderIcon>
