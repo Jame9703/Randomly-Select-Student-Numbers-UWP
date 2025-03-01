@@ -569,6 +569,7 @@ namespace 随机抽取学号.Views
                         }
                     }
                     StudentManager.StudentList = await StudentManager.LoadStudentsAsync();
+                    StudentListView.ItemsSource = StudentManager.StudentList;
                     PopupNotice popupNotice = new PopupNotice("打开数据库成功");
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
                     popupNotice.ShowPopup();

@@ -6,6 +6,7 @@ using System.Collections.ObjectModel;
 using System.Data.Common;
 using System.Threading.Tasks;
 using Windows.Storage;
+using 随机抽取学号.Assets.Controls;
 using 随机抽取学号.Views;
 
 namespace 随机抽取学号.Classes
@@ -40,22 +41,30 @@ namespace 随机抽取学号.Classes
         }
         private static async Task CreateTablesAsync()
         {
-            using (SqliteConnection db = new SqliteConnection($"Filename={StudentDataBasePath}"))
+            try
             {
-                await db.OpenAsync();
-                // 创建 Students 表，StudentNumber 作为主键
-                string createStudentsTable = "CREATE TABLE IF NOT EXISTS Students (StudentNumber INT PRIMARY KEY, Name NVARCHAR(2048), Gender INT, PhotoPath NVARCHAR(2048))";
-                SqliteCommand createStudentsTableCmd = new SqliteCommand(createStudentsTable, db);
-                await createStudentsTableCmd.ExecuteNonQueryAsync();
+                using (SqliteConnection db = new SqliteConnection($"Filename={StudentDataBasePath}"))
+                {
+                    await db.OpenAsync();
+                    // 创建 Students 表，StudentNumber 作为主键
+                    string createStudentsTable = "CREATE TABLE IF NOT EXISTS Students (StudentNumber INT PRIMARY KEY, Name NVARCHAR(2048), Gender INT, PhotoPath NVARCHAR(2048))";
+                    SqliteCommand createStudentsTableCmd = new SqliteCommand(createStudentsTable, db);
+                    await createStudentsTableCmd.ExecuteNonQueryAsync();
+                }
+                using (SqliteConnection db = new SqliteConnection($"Filename={CheckedStudentDataBasePath}"))
+                {
+                    await db.OpenAsync();
+                    // 创建 CheckedStudents 表，Index 作为主键(注意Index是关键字)
+                    string createCheckedStudentsTable = "CREATE TABLE IF NOT EXISTS CheckedStudents ([Index] INT PRIMARY KEY, Name NVARCHAR(2048))";
+                    SqliteCommand createCheckedStudentsTableCmd = new SqliteCommand(createCheckedStudentsTable, db);
+                    await createCheckedStudentsTableCmd.ExecuteNonQueryAsync();
+                }
             }
-            using (SqliteConnection db = new SqliteConnection($"Filename={CheckedStudentDataBasePath}"))
+            catch (Exception)
             {
-                await db.OpenAsync();
-                // 创建 CheckedStudents 表，Index 作为主键
-                string createStudentsTable = "CREATE TABLE IF NOT EXISTS CheckedStudents (Index INT PRIMARY KEY, Name NVARCHAR(2048))";
-                SqliteCommand createStudentsTableCmd = new SqliteCommand(createStudentsTable, db);
-                await createStudentsTableCmd.ExecuteNonQueryAsync();
+                PopupMessage.ShowPopupMessage("错误","创建数据库失败",InfoBarSeverity.Error);
             }
+
         }
 
         public static async Task<ObservableCollection<Student>> LoadStudentsAsync()
@@ -173,7 +182,7 @@ namespace 随机抽取学号.Classes
                         // 开始事务
                         using (DbTransaction transaction = connection.BeginTransaction())
                         {
-                            string insertQuery = "INSERT INTO CheckedStudents (Index,Name) VALUES (@Index, @Name)";
+                            string insertQuery = "INSERT INTO CheckedStudents ([Index],Name) VALUES (@Index, @Name)";
                             using (SqliteCommand insertCommand = new SqliteCommand(insertQuery, connection, (SqliteTransaction)transaction))
                             {
                                 insertCommand.Parameters.Add("@Index", SqliteType.Integer);
@@ -204,10 +213,10 @@ namespace 随机抽取学号.Classes
         public static async Task<List<CheckedCheckBox>> LoadCheckedStudentsAsync()
         {
             List<CheckedCheckBox> checkedcheckboxes = new List<CheckedCheckBox>();
-            using (SqliteConnection db = new SqliteConnection($"Filename={StudentDataBasePath}"))
+            using (SqliteConnection db = new SqliteConnection($"Filename={CheckedStudentDataBasePath}"))
             {
                 await db.OpenAsync();
-                string selectCommand = "SELECT * FROM Students";
+                string selectCommand = "SELECT * FROM CheckedStudents";
                 SqliteCommand selectCmd = new SqliteCommand(selectCommand, db);
                 using (SqliteDataReader query = await selectCmd.ExecuteReaderAsync())
                 {
