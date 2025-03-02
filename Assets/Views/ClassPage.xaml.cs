@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.Specialized;
+using System.Diagnostics;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
@@ -242,7 +243,6 @@ namespace 随机抽取学号.Views
 
         private async void StudentListView_Drop(object sender, DragEventArgs e)
         {
-
             if (StudentListView.SelectedItem != null)
             {
                 var items = await e.DataView.GetStorageItemsAsync();
@@ -274,7 +274,7 @@ namespace 随机抽取学号.Views
                             }
                             i++;
                         }
-                        catch(Exception)
+                        catch (Exception)
                         {
                             PopupNotice popupNotice = new PopupNotice("填充失败");
                             popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
@@ -292,6 +292,23 @@ namespace 随机抽取学号.Views
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Warning;
                 popupNotice.ShowPopup();
             }
+            //var listView = sender as ListView;
+            //var dropPosition = e.GetPosition(listView);
+            //var hitTest = VisualTreeHelper.FindElementsInHostCoordinates(dropPosition, listView);
+
+            //foreach (var element in hitTest)
+            //{
+            //    if (element is ListViewItem item)
+            //    {
+            //        item.Background = new SolidColorBrush(Colors.Red);
+            //        var targetIndex = listView.IndexFromContainer(item);
+            //        PopupNotice popupNotice = new PopupNotice(targetIndex.ToString());
+            //        popupNotice.ShowPopup();
+            //        // 通过 targetIndex 定位具体项
+            //        break;
+
+            //    }
+            //}
 
         }
 

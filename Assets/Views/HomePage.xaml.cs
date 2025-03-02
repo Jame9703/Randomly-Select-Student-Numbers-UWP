@@ -26,7 +26,7 @@ namespace 随机抽取学号.Views
 
         public DispatcherTimer timer = new DispatcherTimer();
         private bool isRandomizing = false;//是否正在单人模式随机抽取
-        List<CheckBoxItem> checkBoxItems = new List<CheckBoxItem>();// 记录每个CheckBox的状态:Name,IsChecked
+
         List<string> checkBoxItemsName = new List<string>();// 记录每个CheckBox的Name
         List<int> checkedCheckBoxesIndex = new List<int>();// 记录每个被选中CheckBox的Index
         List<string> checkedCheckBoxesName = new List<string>();// 记录每个被选中CheckBox的Name
@@ -68,7 +68,7 @@ namespace 随机抽取学号.Views
         }
         private async Task CreateCheckBoxes()
         {
-            checkBoxItems.Clear();
+            StudentManager.CheckBoxItems.Clear();
             StudentManager.checkedCheckBoxes = await  StudentManager.LoadCheckedStudentsAsync();
             checkedCheckBoxesName = StudentManager.checkedCheckBoxes.Select(x => x.Name).ToList();// 获取所有被选中CheckBox的Name
             for (int i = 0; i < StudentManager.StudentList.Count; i++)
@@ -85,9 +85,9 @@ namespace 随机抽取学号.Views
                         item.IsChecked = false;
                     }
                 }
-                checkBoxItems.Add(item);
+                StudentManager.CheckBoxItems.Add(item);
             }
-            CheckBoxListView.ItemsSource = checkBoxItems;
+            CheckBoxListView.ItemsSource = StudentManager.CheckBoxItems;
             if (StudentManager.checkedCheckBoxes.Count==StudentManager.StudentList.Count &&StudentManager.StudentList.Count > 0)
             { 
                 SelectAllCheckBox.IsChecked = true;
@@ -109,12 +109,12 @@ namespace 随机抽取学号.Views
             {
                 for (int i = 0; i < StudentManager.StudentList.Count; i++)
                 {
-                    if (checkBoxItems[i].IsChecked== true)
+                    if (StudentManager.CheckBoxItems[i].IsChecked== true)
                     {
                         CheckedCheckBox checkedCheckBox = new CheckedCheckBox()
                         {
                             Index = i,
-                            Name = checkBoxItems[i].Name
+                            Name = StudentManager.CheckBoxItems[i].Name
                         };
                         StudentManager.checkedCheckBoxes.Add(checkedCheckBox);
                     }
@@ -190,7 +190,7 @@ namespace 随机抽取学号.Views
                     StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
                     if (NoReturnCheckBox.IsChecked == true)//抽完不放回
                     {
-                        checkBoxItems[randomIndex].IsChecked = false;
+                        StudentManager.CheckBoxItems[randomIndex].IsChecked = false;
                         await SaveCheckedCheckBoxesAsync();
                     }
                 }
@@ -201,7 +201,7 @@ namespace 随机抽取学号.Views
             if(StudentManager.checkedCheckBoxes .Count != 0)
             {
                 Random random = new Random();
-                var checkBoxItemsName = checkBoxItems.Select(x => x.Name).ToList();// 获取所有CheckBox的Name
+                var checkBoxItemsName = StudentManager.CheckBoxItems.Select(x => x.Name).ToList();// 获取所有CheckBox的Name
                 List<int> checkedCheckBoxesIndex = new List<int>();// 用于存储被选中的CheckBox的索引
                 foreach (var item in StudentManager.checkedCheckBoxes)
                 {
@@ -258,7 +258,7 @@ namespace 随机抽取学号.Views
                 {
                     for (int i = 0; i < StudentManager.StudentList.Count; i++)
                     {
-                        checkBoxItems[i].IsChecked = false;// 若勾选"仅选择此范围"，先取消所有CheckBox的选中状态
+                        StudentManager.CheckBoxItems[i].IsChecked = false;// 若勾选"仅选择此范围"，先取消所有CheckBox的选中状态
                     }
                 }
                 if (int.TryParse(BeginNumberBox.Text, out int beginnum) == true && int.TryParse(EndNumberBox.Text, out int endnum) == true)
@@ -266,8 +266,10 @@ namespace 随机抽取学号.Views
                     // 转换成功
                     for (int i = beginnum; i <= endnum; i++)
                     {
-                        checkBoxItems[i - 1].IsChecked = true;// 将指定范围内的CheckBox设置为选中状态
+                        StudentManager.CheckBoxItems[i - 1].IsChecked = true;// 将指定范围内的CheckBox设置为选中状态
                     }
+                    CheckBoxListView.ItemsSource = null;
+                    CheckBoxListView.ItemsSource = StudentManager.CheckBoxItems;
                     await SaveCheckedCheckBoxesAsync();
                     PopupNotice popupNotice = new PopupNotice("成功应用更改");
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
@@ -300,21 +302,21 @@ namespace 随机抽取学号.Views
             }
             if (SelectAllCheckBox.IsChecked == true)
             {
-                foreach (var item in checkBoxItems)
+                foreach (var item in StudentManager.CheckBoxItems)
                 {
                     item.IsChecked = true;
                 }
             }
             else if (SelectAllCheckBox.IsChecked == false)
             {
-                foreach (var item in checkBoxItems)
+                foreach (var item in StudentManager.CheckBoxItems)
                 {
                     item.IsChecked = false;
                 }
             }
 
             CheckBoxListView.ItemsSource = null;
-            CheckBoxListView.ItemsSource = checkBoxItems;
+            CheckBoxListView.ItemsSource = StudentManager.CheckBoxItems;
             await SaveCheckedCheckBoxesAsync();
         }
         private void FrequencySelector_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
@@ -349,7 +351,7 @@ namespace 随机抽取学号.Views
                         //将checkedCheckBoxes打乱顺序
                         Random random = new Random();
                         StudentManager.checkedCheckBoxes = StudentManager.checkedCheckBoxes.OrderBy(x => random.Next()).ToList();
-                        var checkBoxItemsName = checkBoxItems.Select(x => x.Name).ToList();// 获取所有CheckBox的Name
+                        var checkBoxItemsName = StudentManager.CheckBoxItems.Select(x => x.Name).ToList();// 获取所有CheckBox的Name
                         List<int> checkedCheckBoxesIndex = new List<int>();// 用于存储被选中的CheckBox的索引
                         foreach (var item in StudentManager.checkedCheckBoxes)
                         {
@@ -366,7 +368,7 @@ namespace 随机抽取学号.Views
                             selectedStudentList.Add(item);
                             if (NoReturnCheckBox.IsChecked == true)//抽完不放回
                             {
-                                checkBoxItems[randomIndex].IsChecked = false;
+                                StudentManager.CheckBoxItems[randomIndex].IsChecked = false;
                             }
                         }
                         LoadPhotosGridView();

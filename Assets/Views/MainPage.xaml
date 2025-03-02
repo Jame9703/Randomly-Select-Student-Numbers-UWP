@@ -508,9 +508,10 @@
             <HyperlinkButton
                 x:Name="ClassNameHyperlinkButton"
                 Grid.Column="0"
+                HorizontalAlignment="Right"
                 Width="Auto"
                 Height="36"
-                Margin="175,2,0,2"
+                Margin="0,0,150,0"
                 x:FieldModifier="public"
                 BorderBrush="{ThemeResource SystemAccentColorDark2}"
                 BorderThickness="2"
@@ -523,11 +524,11 @@
             <!--  搜索框  -->
             <!--<AutoSuggestBox x:Name="MySearchBox" PlaceholderText="搜索..." HorizontalAlignment="Left" VerticalAlignment="Center" Margin="300,0,0,0" Width="200" />-->
 
-            <!--<AutoSuggestBox QueryIcon="Find"
+            <AutoSuggestBox QueryIcon="Find"
                     PlaceholderText="搜索"
                     HorizontalAlignment="Center"
                     MinWidth="200" MaxWidth="350" Height="32" Grid.Column="1"
-                    AutoMaximizeSuggestionArea="True" FontFamily="{StaticResource HarmonyOSSans}"/>-->
+                    AutoMaximizeSuggestionArea="True" FontFamily="{StaticResource HarmonyOSSans}"/>
 
         </Grid>
 

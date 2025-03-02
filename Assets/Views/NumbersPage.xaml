@@ -88,23 +88,14 @@
             FontSize="16"
             Maximum="10000"
             Minimum="0" />
-        <ScrollViewer Margin="0,180,0,0">
-            <StackPanel
-                x:Name="RandomNumbersListStackPanel"
+        <ListView Margin="0,180,0,0"
+                x:Name="RandomNumbersListView"
                 Width="Auto"
                 Height="Auto"
-                Margin="0,0,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
-                Orientation="Vertical"
                 Visibility="Collapsed">
-                <StackPanel.ChildrenTransitions>
-                    <TransitionCollection>
-                        <EntranceThemeTransition IsStaggeringEnabled="True" />
-                    </TransitionCollection>
-                </StackPanel.ChildrenTransitions>
-            </StackPanel>
-        </ScrollViewer>
+        </ListView>
         <GridView x:Name="RandomNumbersGridView" Margin="0,180,0,0" />
         <Grid
             x:Name="RandomNumbersTextBoxGrid"

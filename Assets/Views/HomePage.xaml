@@ -473,6 +473,7 @@
                 x:Name="CheckBoxListView"
                 Margin="0,60,0,0"
                 ItemTemplate="{StaticResource CheckBoxListViewItem}"
+                ItemsSource="{x:Bind classes:StudentManager.CheckBoxItems}"
                 SelectionMode="None" />
             <Button
                 Margin="60,22,0,0"

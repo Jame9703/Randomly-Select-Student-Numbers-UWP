@@ -716,14 +716,20 @@
                             </StackPanel>
                         </Button>
 
-                        <AppBarButton
+                        <Button
                             x:Name="FolderPickerButton"
-                            Width="75"
+                            Width="100"
                             Height="60"
-                            FontFamily="{StaticResource HarmonyOSSans}"
-                            Icon="OpenLocal"
-                            Label="打开文件夹">
-                            <AppBarButton.Flyout>
+                            FontFamily="{StaticResource HarmonyOSSans}">
+                            <StackPanel>
+                                <SymbolIcon HorizontalAlignment="Center" Symbol="OpenLocal">
+                                    <SymbolIcon.RenderTransform>
+                                        <CompositeTransform ScaleX="0.8" ScaleY="0.8" />
+                                    </SymbolIcon.RenderTransform>
+                                </SymbolIcon>
+                                <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="打开文件夹" />
+                            </StackPanel>
+                            <Button.Flyout>
                                 <Flyout>
                                     <StackPanel Orientation="Vertical">
                                         <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="选择一个文件夹，将文件夹下所有图片从当前被选择的项开始填充" />
@@ -733,8 +739,8 @@
                                             FontFamily="{StaticResource HarmonyOSSans}" />
                                     </StackPanel>
                                 </Flyout>
-                            </AppBarButton.Flyout>
-                        </AppBarButton>
+                            </Button.Flyout>
+                        </Button>
                         <TextBlock
                             x:Name="CurrentSelectionTextBlock"
                             Height="30"

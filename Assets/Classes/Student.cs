@@ -29,6 +29,7 @@ namespace 随机抽取学号.Classes
         public static string CheckedStudentDataBasePath;
         public static int SaveProcess;
         public static ObservableCollection<Student> StudentList { get; set; } = new ObservableCollection<Student>();// 记录所有学生信息
+        public static ObservableCollection<CheckBoxItem> CheckBoxItems = new ObservableCollection<CheckBoxItem>();// 记录每个CheckBox的状态:Name,IsChecked
         public static List<CheckedCheckBox> checkedCheckBoxes = new List<CheckedCheckBox>();// 记录被选中的CheckBox的索引，对应学生姓名
         static  StudentManager()
         {
