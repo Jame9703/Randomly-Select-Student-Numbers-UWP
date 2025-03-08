@@ -9,6 +9,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     xmlns:media="using:随机抽取学号.Media"
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls" 
+    Loaded="Page_Loaded"
     mc:Ignorable="d">
     <Page.Resources>
         <!--<Storyboard x:Name="FadeInStoryboard">
@@ -443,265 +444,243 @@
         <media:BackdropMicaBrush BackgroundSource="WallpaperBackdrop" Opacity="1" />
 
     </Page.Background>
-
-    <!--<ImageBrush ImageSource="ms-appx:///Assets/Photos/background.jpg" />
-    <SolidColorBrush Color="LightGreen" Opacity="0.5"/>
-
-        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1" Opacity="0.3">
-            <GradientStop Color="#FF00B200" Offset="0" />
-            <GradientStop Color="#FF0078D7" Offset="1"/>
-        </LinearGradientBrush>-->
-    <!--
-        <LinearGradientBrush x:Name="GradientBackgroundBrush" StartPoint="0,0" EndPoint="0,1" Opacity="1">
-    -->
-    <!--  浅蓝绿色渐变停止点  -->
-    <!--
-            <GradientStop Color="#FF7FFFD4" Offset="0" />
-    -->
-    <!--  浅蓝色渐变停止点  -->
-    <!--
-            <GradientStop Color="#FFADD8E6" Offset="1" />
-        </LinearGradientBrush>
-    </Page.Background>-->
     <Grid x:Name="MainGrid">
         <Grid.Background>
             <AcrylicBrush TintColor="White" TintOpacity="0.2" />
         </Grid.Background>
-        <Grid>
-            <Grid.RowDefinitions>
-                <RowDefinition Height="40" />
-            </Grid.RowDefinitions>
-            <!--  muxc:BackdropMaterial.ApplyToRootOrPageBackground="True"  -->
-            <Grid x:Name="AppTitleBar" Background="Transparent">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <Image
-                    Width="26"
-                    Height="26"
-                    Margin="7,7,0,7"
-                    HorizontalAlignment="Left"
-                    Source="ms-appx:///Assets/RSSN_Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png" />
-                <TextBlock
-                    x:Name="AppTitleTextBlock_1"
-                    Margin="40,5,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    FontFamily="{StaticResource HarmonyOSSans}"
-                    FontSize="14"
-                    Style="{StaticResource CaptionTextBlockStyle}"
-                    Text="随机抽取学号 2025" />
-                <TextBlock
-                    x:Name="AppTitleTextBlock_2"
-                    Grid.ColumnSpan="2"
-                    Width="136"
-                    Height="17"
-                    Margin="40,25,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    FontFamily="{StaticResource HarmonyOSSans}"
-                    FontSize="8"
-                    Style="{StaticResource CaptionTextBlockStyle}"
-                    Text="Randomly Select Student Numbers" />
+        <Grid x:Name="ContentGrid" Visibility="Collapsed">
+            <Grid>
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="40" />
+                </Grid.RowDefinitions>
+                <Grid x:Name="AppTitleBar" Background="Transparent">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <Image
+                   Width="26"
+                   Height="26"
+                   Margin="7,7,0,7"
+                   HorizontalAlignment="Left"
+                   Source="ms-appx:///Assets/RSSN_Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png" />
+                    <TextBlock
+                   x:Name="AppTitleTextBlock_1"
+                   Margin="40,5,0,0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   FontFamily="{StaticResource HarmonyOSSans}"
+                   FontSize="14"
+                   Style="{StaticResource CaptionTextBlockStyle}"
+                   Text="随机抽取学号 2025" />
+                    <TextBlock
+                   x:Name="AppTitleTextBlock_2"
+                   Grid.ColumnSpan="2"
+                   Width="136"
+                   Height="17"
+                   Margin="40,25,0,0"
+                   HorizontalAlignment="Left"
+                   VerticalAlignment="Top"
+                   FontFamily="{StaticResource HarmonyOSSans}"
+                   FontSize="8"
+                   Style="{StaticResource CaptionTextBlockStyle}"
+                   Text="Randomly Select Student Numbers" />
+                </Grid>
+                <HyperlinkButton
+               x:Name="ClassNameHyperlinkButton"
+               Grid.Column="0"
+               HorizontalAlignment="Right"
+               Width="Auto"
+               Height="36"
+               Margin="0,0,150,0"
+               x:FieldModifier="public"
+               BorderBrush="{ThemeResource SystemAccentColorDark2}"
+               BorderThickness="2"
+               Click="ClassNameHyperlinkButton_Click"
+               Content="我的班级"
+               FocusVisualPrimaryBrush="Transparent"
+               FontFamily="{StaticResource HarmonyOSSans}"
+               FontSize="16" />
+
+                <AutoSuggestBox QueryIcon="Find"
+                   PlaceholderText="搜索"
+                   HorizontalAlignment="Center"
+                   MinWidth="200" MaxWidth="350" Height="32" Grid.Column="1"
+                   AutoMaximizeSuggestionArea="True" FontFamily="{StaticResource HarmonyOSSans}"/>
+
             </Grid>
-            <HyperlinkButton
-                x:Name="ClassNameHyperlinkButton"
-                Grid.Column="0"
-                HorizontalAlignment="Right"
-                Width="Auto"
-                Height="36"
-                Margin="0,0,150,0"
-                x:FieldModifier="public"
-                BorderBrush="{ThemeResource SystemAccentColorDark2}"
-                BorderThickness="2"
-                Click="ClassNameHyperlinkButton_Click"
-                Content="我的班级"
-                FocusVisualPrimaryBrush="Transparent"
-                FontFamily="{StaticResource HarmonyOSSans}"
-                FontSize="16" />
 
-            <!--  搜索框  -->
-            <!--<AutoSuggestBox x:Name="MySearchBox" PlaceholderText="搜索..." HorizontalAlignment="Left" VerticalAlignment="Center" Margin="300,0,0,0" Width="200" />-->
+            <Frame
+           x:Name="ContentFrame"
+           Grid.Row="0"
+           Margin="70,45,0,0"
+           x:FieldModifier="public"
+           BorderBrush="Transparent"
+           BorderThickness="0"
+           CornerRadius="8,0,0,0"
+           NavigationFailed="ContentFrame_NavigationFailed">
+                <Frame.ContentTransitions>
+                    <TransitionCollection>
+                        <NavigationThemeTransition />
+                    </TransitionCollection>
+                </Frame.ContentTransitions>
 
-            <AutoSuggestBox QueryIcon="Find"
-                    PlaceholderText="搜索"
-                    HorizontalAlignment="Center"
-                    MinWidth="200" MaxWidth="350" Height="32" Grid.Column="1"
-                    AutoMaximizeSuggestionArea="True" FontFamily="{StaticResource HarmonyOSSans}"/>
+            </Frame>
+            <!--<ScrollViewer
+           Margin="0,45,0,0"
+           HorizontalAlignment="Right"
+           HorizontalScrollBarVisibility="Hidden"
+           VerticalScrollBarVisibility="Auto">
+           <StackPanel
+               x:Name="PopupContainer"
+               HorizontalAlignment="Right"
+               VerticalAlignment="Bottom"
+               Orientation="Vertical"
+               Spacing="10">
+               <controls:PopupMessage VerticalAlignment="Bottom" />
+           </StackPanel>
 
-        </Grid>
+       </ScrollViewer>-->
 
-        <Frame
-            x:Name="ContentFrame"
-            Grid.Row="0"
-            Margin="70,45,0,0"
-            x:FieldModifier="public"
-            BorderBrush="Transparent"
-            BorderThickness="0"
-            CornerRadius="8,0,0,0"
-            NavigationFailed="ContentFrame_NavigationFailed">
-            <Frame.ContentTransitions>
-                <TransitionCollection>
-                    <NavigationThemeTransition />
-                </TransitionCollection>
-            </Frame.ContentTransitions>
-
-        </Frame>
-        <!--<ScrollViewer
-            Margin="0,45,0,0"
-            HorizontalAlignment="Right"
-            HorizontalScrollBarVisibility="Hidden"
-            VerticalScrollBarVisibility="Auto">
-            <StackPanel
-                x:Name="PopupContainer"
-                HorizontalAlignment="Right"
-                VerticalAlignment="Bottom"
-                Orientation="Vertical"
-                Spacing="10">
-                <controls:PopupMessage VerticalAlignment="Bottom" />
-            </StackPanel>
-
-        </ScrollViewer>-->
-
-        <Rectangle
-            x:Name="MovingRectangle"
-            Width="6"
-            Height="50"
-            Margin="0,50,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            Fill="{ThemeResource AccentFillColorDefaultBrush}"
-            RadiusX="4"
-            RadiusY="4">
-            <Rectangle.RenderTransform>
-                <CompositeTransform />
-            </Rectangle.RenderTransform>
-        </Rectangle>
-        <Grid
-            x:Name="Canvas"
-            Width="65"
-            Margin="0,45,0,0"
-            HorizontalAlignment="Left">
-            <Grid.RowDefinitions>
-                <RowDefinition Height="60" />
-                <RowDefinition Height="60" />
-                <RowDefinition Height="60" />
-                <RowDefinition Height="60" />
-                <RowDefinition Height="60" />
-                <RowDefinition Height="*" />
-                <RowDefinition Height="60" />
-            </Grid.RowDefinitions>
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="6" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
             <Rectangle
-                x:Name="rectangle"
-                Grid.Row="6"
-                Grid.Column="0"
-                Width="6"
-                Height="50"
-                Margin="0,5,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Fill="{ThemeResource AccentFillColorDefaultBrush}"
-                RadiusX="4"
-                RadiusY="4"
-                Visibility="Collapsed">
+           x:Name="MovingRectangle"
+           Width="6"
+           Height="50"
+           Margin="0,50,0,0"
+           HorizontalAlignment="Left"
+           VerticalAlignment="Top"
+           Fill="{ThemeResource AccentFillColorDefaultBrush}"
+           RadiusX="4"
+           RadiusY="4">
                 <Rectangle.RenderTransform>
                     <CompositeTransform />
                 </Rectangle.RenderTransform>
             </Rectangle>
-            <AppBarToggleButton
-                x:Name="HomePageButton"
-                Grid.Row="0"
-                Grid.ColumnSpan="2"
-                Width="65"
-                Height="60"
-                HorizontalAlignment="Center"
-                x:FieldModifier="public"
-                Click="HomePage_Click"
-                CornerRadius="6,6,6,6"
-                FontFamily="{StaticResource HarmonyOSSans}"
-                Icon="Home"
-                Label="主页"
-                Style="{StaticResource AppBarToggleButtonStyle}" />
-            <AppBarToggleButton
-                x:Name="ClassPageButton"
-                Grid.Row="1"
-                Grid.ColumnSpan="2"
-                Width="65"
-                Height="60"
-                HorizontalAlignment="Center"
-                x:FieldModifier="public"
-                Click="ClassPage_Click"
-                CornerRadius="6,6,6,6"
-                FontFamily="{StaticResource HarmonyOSSans}"
-                Icon="People"
-                Label="班级"
-                Style="{StaticResource AppBarToggleButtonStyle}" />
-            <AppBarToggleButton
-                x:Name="NumbersPageButton"
-                Grid.Row="2"
-                Grid.ColumnSpan="2"
-                Width="65"
-                Height="60"
-                HorizontalAlignment="Center"
-                x:FieldModifier="public"
-                Click="NumbersPage_Click"
-                CornerRadius="6,6,6,6"
-                FontFamily="{StaticResource HarmonyOSSans}"
-                Icon="OutlineStar"
-                Label="数字"
-                Style="{StaticResource AppBarToggleButtonStyle}" />
-            <AppBarToggleButton
-                x:Name="CharactersPageButton"
-                Grid.Row="3"
-                Grid.ColumnSpan="2"
-                Width="65"
-                Height="60"
-                HorizontalAlignment="Center"
-                x:FieldModifier="public"
-                Click="CharactersPage_Click"
-                CornerRadius="6,6,6,6"
-                FontFamily="{StaticResource HarmonyOSSans}"
-                Icon="Character"
-                Label="文字"
-                Style="{StaticResource AppBarToggleButtonStyle}" />
-            <AppBarToggleButton
-                x:Name="HelpPageButton"
-                Grid.Row="4"
-                Grid.ColumnSpan="2"
-                Width="65"
-                Height="60"
-                HorizontalAlignment="Center"
-                x:FieldModifier="public"
-                Click="HelpPage_Click"
-                CornerRadius="6,6,6,6"
-                FontFamily="{StaticResource HarmonyOSSans}"
-                Icon="Help"
-                Label="帮助"
-                Style="{StaticResource AppBarToggleButtonStyle}" />
             <Grid
-                Grid.Row="5"
-                Grid.ColumnSpan="2"
-                Height="Auto" />
-            <AppBarToggleButton
-                x:Name="SettingsPageButton"
-                Grid.Row="6"
-                Grid.ColumnSpan="2"
-                Width="65"
-                Height="60"
-                VerticalAlignment="Bottom"
-                x:FieldModifier="Public"
-                Click="SettingsPage_Click"
-                CornerRadius="6,6,6,6"
-                FontFamily="{StaticResource HarmonyOSSans}"
-                Icon="Setting"
-                Label="设置"
-                Style="{StaticResource AppBarToggleButtonStyle}" />
+           x:Name="Canvas"
+           Width="65"
+           Margin="0,45,0,0"
+           HorizontalAlignment="Left">
+                <Grid.RowDefinitions>
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="60" />
+                    <RowDefinition Height="*" />
+                    <RowDefinition Height="60" />
+                </Grid.RowDefinitions>
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="6" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
+                <Rectangle
+               x:Name="rectangle"
+               Grid.Row="6"
+               Grid.Column="0"
+               Width="6"
+               Height="50"
+               Margin="0,5,0,0"
+               HorizontalAlignment="Left"
+               VerticalAlignment="Top"
+               Fill="{ThemeResource AccentFillColorDefaultBrush}"
+               RadiusX="4"
+               RadiusY="4"
+               Visibility="Collapsed">
+                    <Rectangle.RenderTransform>
+                        <CompositeTransform />
+                    </Rectangle.RenderTransform>
+                </Rectangle>
+                <AppBarToggleButton
+               x:Name="HomePageButton"
+               Grid.Row="0"
+               Grid.ColumnSpan="2"
+               Width="65"
+               Height="60"
+               HorizontalAlignment="Center"
+               x:FieldModifier="public"
+               Click="HomePage_Click"
+               CornerRadius="6,6,6,6"
+               FontFamily="{StaticResource HarmonyOSSans}"
+               Icon="Home"
+               Label="主页"
+               Style="{StaticResource AppBarToggleButtonStyle}" />
+                <AppBarToggleButton
+               x:Name="ClassPageButton"
+               Grid.Row="1"
+               Grid.ColumnSpan="2"
+               Width="65"
+               Height="60"
+               HorizontalAlignment="Center"
+               x:FieldModifier="public"
+               Click="ClassPage_Click"
+               CornerRadius="6,6,6,6"
+               FontFamily="{StaticResource HarmonyOSSans}"
+               Icon="People"
+               Label="班级"
+               Style="{StaticResource AppBarToggleButtonStyle}" />
+                <AppBarToggleButton
+               x:Name="NumbersPageButton"
+               Grid.Row="2"
+               Grid.ColumnSpan="2"
+               Width="65"
+               Height="60"
+               HorizontalAlignment="Center"
+               x:FieldModifier="public"
+               Click="NumbersPage_Click"
+               CornerRadius="6,6,6,6"
+               FontFamily="{StaticResource HarmonyOSSans}"
+               Icon="OutlineStar"
+               Label="数字"
+               Style="{StaticResource AppBarToggleButtonStyle}" />
+                <AppBarToggleButton
+               x:Name="CharactersPageButton"
+               Grid.Row="3"
+               Grid.ColumnSpan="2"
+               Width="65"
+               Height="60"
+               HorizontalAlignment="Center"
+               x:FieldModifier="public"
+               Click="CharactersPage_Click"
+               CornerRadius="6,6,6,6"
+               FontFamily="{StaticResource HarmonyOSSans}"
+               Icon="Character"
+               Label="文字"
+               Style="{StaticResource AppBarToggleButtonStyle}" />
+                <AppBarToggleButton
+               x:Name="HelpPageButton"
+               Grid.Row="4"
+               Grid.ColumnSpan="2"
+               Width="65"
+               Height="60"
+               HorizontalAlignment="Center"
+               x:FieldModifier="public"
+               Click="HelpPage_Click"
+               CornerRadius="6,6,6,6"
+               FontFamily="{StaticResource HarmonyOSSans}"
+               Icon="Help"
+               Label="帮助"
+               Style="{StaticResource AppBarToggleButtonStyle}" />
+                <Grid
+               Grid.Row="5"
+               Grid.ColumnSpan="2"
+               Height="Auto" />
+                <AppBarToggleButton
+               x:Name="SettingsPageButton"
+               Grid.Row="6"
+               Grid.ColumnSpan="2"
+               Width="65"
+               Height="60"
+               VerticalAlignment="Bottom"
+               x:FieldModifier="Public"
+               Click="SettingsPage_Click"
+               CornerRadius="6,6,6,6"
+               FontFamily="{StaticResource HarmonyOSSans}"
+               Icon="Setting"
+               Label="设置"
+               Style="{StaticResource AppBarToggleButtonStyle}" />
+            </Grid>
         </Grid>
-
+        <muxc:ProgressRing x:Name="LoadProgressRing" IsActive="True" Width="200" Height="200"></muxc:ProgressRing>
     </Grid>
 </Page>

@@ -38,10 +38,9 @@ namespace 随机抽取学号
         /// 将在启动应用程序以打开特定文件等情况下使用。
         /// </summary>
         /// <param name="e">有关启动请求和过程的详细信息。</param>
-        protected async override void OnLaunched(LaunchActivatedEventArgs e)
+        protected override void OnLaunched(LaunchActivatedEventArgs e)
         {
-            //在App初始化时加载学生信息，确保不重复加载
-            StudentManager.StudentList = await StudentManager.LoadStudentsAsync();
+
             ApplicationView.GetForCurrentView().SetPreferredMinSize(new Size { Width = 500, Height = 500 });//设置窗口最小尺寸
             Frame rootFrame = Window.Current.Content as Frame;
             // 不要在窗口已包含内容时重复应用程序初始化，
@@ -51,18 +50,6 @@ namespace 随机抽取学号
                 // 创建要充当导航上下文的框架，并导航到第一页
                 rootFrame = new Frame();
                 rootFrame.NavigationFailed += OnNavigationFailed;
-                ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-                if (localSettings.Values["Theme"] != null)
-                {
-                    rootFrame.RequestedTheme = (int)localSettings.Values["Theme"] switch
-                    {
-                        0 => ElementTheme.Light,
-                        1 => ElementTheme.Dark,
-                        _ => ElementTheme.Default
-                    };
-                }
-
-
                 if (e.PreviousExecutionState == ApplicationExecutionState.Terminated)
                 {
                     //TODO: 从之前挂起的应用程序加载状态

@@ -472,6 +472,8 @@
             <ListView
                 x:Name="CheckBoxListView"
                 Margin="0,60,0,0"
+                IncrementalLoadingThreshold="5"
+                IncrementalLoadingTrigger="Edge"
                 ItemTemplate="{StaticResource CheckBoxListViewItem}"
                 ItemsSource="{x:Bind classes:StudentManager.CheckBoxItems}"
                 SelectionMode="None">

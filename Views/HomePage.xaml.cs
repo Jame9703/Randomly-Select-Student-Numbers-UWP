@@ -69,7 +69,6 @@ namespace 随机抽取学号.Views
         private async Task CreateCheckBoxes()
         {
             StudentManager.CheckBoxItems.Clear();
-            StudentManager.checkedCheckBoxes = await  StudentManager.LoadCheckedStudentsAsync();
             checkedCheckBoxesName = StudentManager.checkedCheckBoxes.Select(x => x.Name).ToList();// 获取所有被选中CheckBox的Name
             for (int i = 0; i < StudentManager.StudentList.Count; i++)
             {

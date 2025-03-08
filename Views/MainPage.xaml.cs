@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Storage;
@@ -9,6 +10,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
+using 随机抽取学号.Classes;
 using 随机抽取学号.Views;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
@@ -35,6 +37,13 @@ namespace 随机抽取学号
         public MainPage()
         {
             this.InitializeComponent();
+
+        }
+        private async void Page_Loaded(object sender, RoutedEventArgs e)
+        {
+            //在MainPage初始化时加载学生信息，确保不重复加载
+            StudentManager.StudentList = await StudentManager.LoadStudentsAsync();
+            StudentManager.checkedCheckBoxes = await StudentManager.LoadCheckedStudentsAsync();
             //LoadBackground();
             //PopupContainerInstance = PopupContainer;
             UpdateTextBoxEvent += OnUpdateTextBox; // 订阅事件
@@ -55,7 +64,7 @@ namespace 随机抽取学号
             _lastSelectedButton = HomePageButton;//确保开始时_lastSelectedButton不为null
             string ClassName = localSettings.Values[ClassNameKey] as string;
             if (ClassName != null) ClassNameHyperlinkButton.Content = ClassName;
-            if (localSettings.Values["Theme"] !=null)
+            if (localSettings.Values["Theme"] != null)
             {
                 if ((int)localSettings.Values["Theme"] == 0)
                 {
@@ -65,21 +74,27 @@ namespace 随机抽取学号
                 {
                     view.TitleBar.ButtonForegroundColor = Colors.White;
                 }
+               (Window.Current.Content as Frame).RequestedTheme = (int)localSettings.Values["Theme"] switch
+               {
+                        0 => ElementTheme.Light,
+                        1 => ElementTheme.Dark,
+                        _ => ElementTheme.Default
+               };
             }
             else
             {
                 //找不到值，第一次启动，显示欢迎界面
                 ContentDialog dialog = new ContentDialog();
-                dialog.Title = AddText(24,"欢迎使用随机抽取学号");
+                dialog.Title = AddText(24, "欢迎使用随机抽取学号");
                 dialog.Content = AddText(12, "随机抽取学号是一款使用C#编写，基于Random()伪随机数生成器，免费￥、开源的通用Windows平台应用程序(UWP)。\r\n \r\n随机抽取学号不会将您的隐私数据发送到服务器(姓名，性别，照片等)，同时应用数据会在卸载时自动删除，以下为随机抽取学号的开源许可:\r\n\r\nMIT License\r\n\r\nCopyright (c) 2022-2024 Randomly Select Student Numbers\r\n\r\nPermission is hereby granted, free of charge, to any person obtaining a copy\r\nof this software and associated documentation files (the \"Software\"), to deal\r\nin the Software without restriction, including without limitation the rights\r\nto use, copy, modify, merge, publish, distribute, sublicense, and/or sell\r\ncopies of the Software, and to permit persons to whom the Software is\r\nfurnished to do so, subject to the following conditions:\r\n\r\nThe above copyright notice and this permission notice shall be included in all\r\ncopies or substantial portions of the Software.\r\n\r\nTHE SOFTWARE IS PROVIDED \"AS IS\", WITHOUT WARRANTY OF ANY KIND, EXPRESS OR IMPLIED, INCLUDING BUT NOT LIMITED TO THE WARRANTIES OF MERCHANTABILITY, FITNESS FOR A PARTICULAR PURPOSE AND NONINFRINGEMENT. IN NO EVENT SHALL THE AUTHORS OR COPYRIGHT HOLDERS BE LIABLE FOR ANY CLAIM, DAMAGES OR OTHER LIABILITY, WHETHER IN AN ACTION OF CONTRACT, TORT OR OTHERWISE, ARISING FROM, OUT OF OR IN CONNECTION WITH THE SOFTWARE OR THE USE OR OTHER DEALINGS IN THE SOFTWARE.");
                 dialog.PrimaryButtonText = "同意并继续";
                 dialog.DefaultButton = ContentDialogButton.Primary;
                 dialog.PrimaryButtonClick += (sender, args) => dialog.Hide();
-                TextBlock AddText(int newFontSize,string newText)
+                TextBlock AddText(int newFontSize, string newText)
                 {
                     TextBlock textBlock = new TextBlock()
                     {
-                        TextWrapping= TextWrapping.Wrap,
+                        TextWrapping = TextWrapping.Wrap,
                         Text = newText,
                         FontFamily = (FontFamily)Application.Current.Resources["HarmonyOSSans"],
                         FontSize = newFontSize,
@@ -90,7 +105,9 @@ namespace 随机抽取学号
                 _ = dialog.ShowAsync();
                 localSettings.Values["Theme"] = 2;//确保下次打开不显示欢迎界面
             }
-
+            await Task.Delay(250);
+            ContentGrid.Visibility = Visibility.Visible;
+            LoadProgressRing.Visibility = Visibility.Collapsed;
         }
         // 用于存储背景笔刷的公共属性
         public Brush MainPageBackground
@@ -284,6 +301,7 @@ namespace 随机抽取学号
             StartAnimation(ClassPageButton);
 
         }
+
 
     }
 }
