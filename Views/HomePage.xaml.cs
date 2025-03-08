@@ -3,7 +3,6 @@ using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
-using System.ServiceModel.Channels;
 using System.Threading.Tasks;
 using Windows.UI;
 using Windows.UI.Xaml;
@@ -33,6 +32,8 @@ namespace 随机抽取学号.Views
         ObservableCollection<Student> selectedStudentList = new ObservableCollection<Student>();// 记录多选模式下选中的学生
         private GridView PhotosGridView;
         private int randomIndex;
+        private int currentIndex = 0;
+        Random random = new Random();
         public HomePage()
         {
             this.InitializeComponent();
@@ -180,6 +181,18 @@ namespace 随机抽取学号.Views
                     StartorStopButtonContent.Text = "停止";
                     StartorStopButtonIcon.Symbol = Symbol.Pause;
                     StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 236, G = 179, B = 1 });
+                    checkedCheckBoxesIndex.Clear();
+                    checkedCheckBoxesIndex = StudentManager.checkedCheckBoxes.Select(x => x.Index).ToList();// 获取所有被选中的CheckBox的索引
+                    if(OptimizeToggleSwitch.IsOn == true)//优化开关打开
+                    {
+                        for (int i =  0; i < checkedCheckBoxesIndex.Count; i++)//洗牌算法，全部打乱
+                        {
+                            int j = random.Next(StudentManager.checkedCheckBoxes.Count);
+                            int temp = checkedCheckBoxesIndex[i];
+                            checkedCheckBoxesIndex[i] = checkedCheckBoxesIndex[j];
+                            checkedCheckBoxesIndex[j] = temp;
+                        }
+                    }
                 }
                 else if (isRandomizing)
                 {
@@ -189,7 +202,7 @@ namespace 随机抽取学号.Views
                     StartorStopButtonContent.Text = "开始";
                     StartorStopButtonIcon.Symbol = Symbol.Play;
                     StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
-                    if (NoReturnCheckBox.IsChecked == true)//抽完不放回
+                    if (NoReturnToggleSwitch.IsOn == true)//抽完不放回
                     {
                         StudentManager.CheckBoxItems[randomIndex].IsChecked = false;
                         await SaveCheckedCheckBoxesAsync();
@@ -197,22 +210,30 @@ namespace 随机抽取学号.Views
                 }
             }
         }
+
         private void Timer_Tick(object sender, object e)
         {
             if(StudentManager.checkedCheckBoxes .Count != 0)
             {
-                Random random = new Random();
-                var checkBoxItemsName = StudentManager.CheckBoxItems.Select(x => x.Name).ToList();// 获取所有CheckBox的Name
-                List<int> checkedCheckBoxesIndex = new List<int>();// 用于存储被选中的CheckBox的索引
-                foreach (var item in StudentManager.checkedCheckBoxes)
+                if(OptimizeToggleSwitch.IsOn == false)//优化开关关闭
                 {
-                    var index = checkBoxItemsName.IndexOf(item.Name);
-                    checkedCheckBoxesIndex.Add(index);
+                    randomIndex = random.Next(StudentManager.checkedCheckBoxes.Count);
+                    var _randomIndex = checkedCheckBoxesIndex[randomIndex];
+                    StudentPhoto.Source = new BitmapImage(new Uri(StudentManager.StudentList[_randomIndex].PhotoPath));
+                    ResultTextBox.Text = (randomIndex + 1).ToString() + "." + StudentManager.StudentList[_randomIndex].Name;
+                }
+                else //优化开关打开
+                {
+                    if(currentIndex +1  >= checkedCheckBoxesIndex.Count)
+                    {
+                        currentIndex = 0;
+                    }
+                    var _randomIndex = checkedCheckBoxesIndex[currentIndex];
+                    StudentPhoto.Source = new BitmapImage(new Uri(StudentManager.StudentList[_randomIndex].PhotoPath));
+                    ResultTextBox.Text = (_randomIndex + 1).ToString() + "." + StudentManager.StudentList[_randomIndex].Name;
+                    currentIndex++;
                 }
 
-                randomIndex = checkedCheckBoxesIndex[random.Next(StudentManager.checkedCheckBoxes.Count)];
-                StudentPhoto.Source = new BitmapImage(new Uri(StudentManager.StudentList[randomIndex].PhotoPath));
-                ResultTextBox.Text = (randomIndex + 1).ToString() + "." + StudentManager.StudentList[randomIndex].Name;
             }
             else
             {
@@ -367,7 +388,7 @@ namespace 随机抽取学号.Views
                             int randomIndex = Result[i];
                             var item = new Student { StudentNumber = randomIndex + 1, PhotoPath = StudentManager.StudentList[randomIndex].PhotoPath, Name = StudentManager.StudentList[randomIndex].Name };//Id表示学号，从1开始
                             selectedStudentList.Add(item);
-                            if (NoReturnCheckBox.IsChecked == true)//抽完不放回
+                            if (NoReturnToggleSwitch.IsOn == true)//抽完不放回
                             {
                                 StudentManager.CheckBoxItems[randomIndex].IsChecked = false;
                             }
