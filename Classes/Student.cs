@@ -6,7 +6,7 @@ using System.Collections.ObjectModel;
 using System.Data.Common;
 using System.Threading.Tasks;
 using Windows.Storage;
-using 随机抽取学号.Assets.Controls;
+using 随机抽取学号.Controls;
 using 随机抽取学号.Views;
 
 namespace 随机抽取学号.Classes
@@ -63,7 +63,7 @@ namespace 随机抽取学号.Classes
             }
             catch (Exception)
             {
-                PopupMessage.ShowPopupMessage("错误","创建数据库失败",InfoBarSeverity.Error);
+                //PopupMessage.ShowPopupMessage("错误","创建数据库失败",InfoBarSeverity.Error);
             }
 
         }

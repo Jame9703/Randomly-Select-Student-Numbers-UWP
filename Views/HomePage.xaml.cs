@@ -11,8 +11,8 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
-using 随机抽取学号.Assets.Controls;
 using 随机抽取学号.Classes;
+using 随机抽取学号.Controls;
 
 namespace 随机抽取学号.Views
 {
@@ -158,10 +158,12 @@ namespace 随机抽取学号.Views
         private async void StartorStopButton_Click(object sender, RoutedEventArgs e)//仅在单人模式有效
         {
             //PopupMessage.ShowPopupMessage("ss", "This is a popup message from AnotherPage.",InfoBarSeverity.Success);
-            PopupMessage popup = new PopupMessage("ss6789", "This is a popup message from AnotherPage.", InfoBarSeverity.Success);
-            
-            MainPage.PopupContainerInstance.Children.Add(popup);
-            popup.VerticalAlignment = VerticalAlignment.Bottom;
+            //PopupMessage popup = new PopupMessage("ss6789", "This is a popup message from AnotherPage.", InfoBarSeverity.Success);
+            PopupMessage popup = new PopupMessage();
+            popup.ShowMessage();
+            //MainPage.PopupContainerInstance.Children.Add(popup);
+            //popup.VerticalAlignment = VerticalAlignment.Bottom;
+
             if (StudentManager.StudentList.Count == 0)
             {
                 PopupNotice popupNotice = new PopupNotice("请先填写班级信息");

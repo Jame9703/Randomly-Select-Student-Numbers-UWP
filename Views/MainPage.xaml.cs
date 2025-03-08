@@ -9,7 +9,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-using 随机抽取学号.Assets.Controls;
 using 随机抽取学号.Views;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
@@ -37,7 +36,7 @@ namespace 随机抽取学号
         {
             this.InitializeComponent();
             //LoadBackground();
-            PopupContainerInstance = PopupContainer;
+            //PopupContainerInstance = PopupContainer;
             UpdateTextBoxEvent += OnUpdateTextBox; // 订阅事件
             // 隐藏系统标题栏并设置新的标题栏
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;

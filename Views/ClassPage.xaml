@@ -474,11 +474,11 @@
                     ItemsSource="{x:Bind classes:StudentManager.StudentList}"
                     SelectionChanged="StudentListView_SelectionChanged"
                     SelectionMode="Single">
-                    <ListView.Transitions>
+                    <!--<ListView.Transitions>
                         <TransitionCollection>
                             <EntranceThemeTransition FromVerticalOffset="500" IsStaggeringEnabled="True" />
                         </TransitionCollection>
-                    </ListView.Transitions>
+                    </ListView.Transitions>-->
                     <ListView.ItemContainerTransitions>
                         <TransitionCollection>
                             <RepositionThemeTransition />

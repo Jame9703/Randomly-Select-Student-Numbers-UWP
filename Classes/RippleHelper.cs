@@ -105,7 +105,7 @@ namespace 随机抽取学号.Classes
             {
                 if (_Mask == null)
                 {
-                    var surface = LoadedImageSurface.StartLoadFromUri(new Uri("ms-appx:///Assets/Photos/RippleMask.png"), new Windows.Foundation.Size(100d, 100d));
+                    var surface = LoadedImageSurface.StartLoadFromUri(new Uri("ms-appx:///Photos/RippleMask.png"), new Windows.Foundation.Size(100d, 100d));
                     _Mask = compositor.CreateSurfaceBrush(surface);
                 }
                 return _Mask;

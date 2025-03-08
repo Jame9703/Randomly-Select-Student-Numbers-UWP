@@ -446,7 +446,7 @@
                 Text="已选择0/0"
                 TextWrapping="Wrap" />
 
-            <ScrollViewer
+            <!--<ScrollViewer
                 Margin="0,60,0,0"
                 HorizontalScrollBarVisibility="Hidden"
                 VerticalScrollBarVisibility="Visible"
@@ -468,13 +468,17 @@
                         </TransitionCollection>
                     </StackPanel.ChildrenTransitions>
                 </StackPanel>
-            </ScrollViewer>
+            </ScrollViewer>-->
             <ListView
                 x:Name="CheckBoxListView"
                 Margin="0,60,0,0"
                 ItemTemplate="{StaticResource CheckBoxListViewItem}"
                 ItemsSource="{x:Bind classes:StudentManager.CheckBoxItems}"
-                SelectionMode="None" />
+                SelectionMode="None">
+                <ListView.ItemContainerTransitions>
+                    <TransitionCollection />
+                </ListView.ItemContainerTransitions>
+            </ListView>
             <Button
                 Margin="60,22,0,0"
                 VerticalAlignment="Top"

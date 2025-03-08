@@ -10,7 +10,7 @@ using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-using 随机抽取学号.Assets.Controls;
+using 随机抽取学号.Controls;
 using 随机抽取学号.Media;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
@@ -117,7 +117,7 @@ namespace 随机抽取学号.Views
             }
             else
             {
-                PopupMessage.ShowPopupMessage("更改背景失败");
+                //PopupMessage.ShowPopupMessage("更改背景失败");
             }
         }
 

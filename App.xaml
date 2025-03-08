@@ -12,7 +12,7 @@
                     <Style TargetType="controls:NumberBox">
                         <Setter Property="Foreground" Value="{ThemeResource SystemBaseHighColor}" />
                     </Style>
-                    <FontFamily x:Key="HarmonyOSSans">ms-appx:///Assets/Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC</FontFamily>
+                    <FontFamily x:Key="HarmonyOSSans">ms-appx:///Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC</FontFamily>
                 </ResourceDictionary>
                 <ResourceDictionary>
                     <ResourceDictionary.ThemeDictionaries>
