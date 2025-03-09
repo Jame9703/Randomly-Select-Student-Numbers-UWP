@@ -332,7 +332,7 @@
                     Width="Auto"
                     MinWidth="150"
                     MaxWidth="300" />
-                <ColumnDefinition Width="*" />
+                <ColumnDefinition Width="*" MinWidth="300"/>
                 <ColumnDefinition Width="Auto" MaxWidth="400" />
             </Grid.ColumnDefinitions>
             <muxc:NumberBox
@@ -389,6 +389,7 @@
                     MaxWidth="300"
                     Margin="0,60,0,0"
                     ItemTemplate="{StaticResource CheckBoxListViewItem}"
+                    ItemsSource="{x:Bind classes:StudentManager.CheckBoxItems}"
                     SelectionMode="None">
                     <ListView.ItemContainerTransitions>
                         <TransitionCollection />

@@ -43,80 +43,87 @@ namespace 随机抽取学号.Views
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
             var CheckBoxItems = new ObservableCollection<CheckBoxItem>();
-            await Task.Run(() =>
+            if(StudentManager.checkedCheckBoxes.Count <= StudentManager.StudentList.Count)
             {
+                await Task.Run(() =>
+                {
 
-                checkedCheckBoxesName = StudentManager.checkedCheckBoxes.Select(x => x.Name).ToList();// 获取所有被选中CheckBox的Name
-                for (int i = 0; i < StudentManager.StudentList.Count; i++)
-                {
-                    var item = new CheckBoxItem();
+                    checkedCheckBoxesName = StudentManager.checkedCheckBoxes.Select(x => x.Name).ToList();// 获取所有被选中CheckBox的Name
+                    for (int i = 0; i < StudentManager.StudentList.Count; i++)
                     {
-                        item.Name = StudentManager.StudentList[i].Name;
-                        if (checkedCheckBoxesName.Contains(item.Name) == true)
+                        var item = new CheckBoxItem();
                         {
-                            item.IsChecked = true;
+                            item.Name = StudentManager.StudentList[i].Name;
+                            if (checkedCheckBoxesName.Contains(item.Name) == true)
+                            {
+                                item.IsChecked = true;
+                            }
+                            else
+                            {
+                                item.IsChecked = false;
+                            }
                         }
-                        else
-                        {
-                            item.IsChecked = false;
-                        }
+                        CheckBoxItems.Add(item);
                     }
-                    CheckBoxItems.Add(item);
-                }
-            });
-            
-            //回到UI线程
-            await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
-            {
-                StudentManager.CheckBoxItems = CheckBoxItems;
-                CheckBoxListView.ItemsSource = StudentManager.CheckBoxItems;
-                if (StudentManager.checkedCheckBoxes.Count == StudentManager.StudentList.Count && StudentManager.StudentList.Count > 0)
+                });
+
+                //回到UI线程
+                await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
-                    SelectAllCheckBox.IsChecked = true;
-                }
-                else if (StudentManager.checkedCheckBoxes.Count == 0)
-                {
-                    SelectAllCheckBox.IsChecked = false;
-                }
-                else
-                {
-                    SelectAllCheckBox.IsChecked = null;
-                }
-                checkedCheckBoxesCount.Text = "已选择" + StudentManager.checkedCheckBoxes.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
-                timer.Interval = TimeSpan.FromMilliseconds(20);//默认每秒50次
-                timer.Tick += Timer_Tick;
-                EndNumberBox.Value = StudentManager.StudentList.Count;
-                BeginNumberBox.Maximum = StudentManager.StudentList.Count;
-                EndNumberBox.Maximum = StudentManager.StudentList.Count;
-                if (StudentManager.checkedCheckBoxes.Count > 0)
-                {
-                    Numbers.Maximum = StudentManager.checkedCheckBoxes.Count;
-                }
-                Numbers.Minimum = 1;
-                segmented.SelectedIndex = 0;//在xaml中设置会导致后面的控件未加载就被调用//System.NullReferenceException:“Object reference not set to an instance of an object.”
-                if (localSettings.Values.ContainsKey("NoReturn")
-                &&localSettings.Values.ContainsKey("AutoStop")
-                && localSettings.Values.ContainsKey("Optimize")
-                && localSettings.Values.ContainsKey("SaveRange")
-                && localSettings.Values.ContainsKey("SaveHistory"))
-                {
-                    NoReturnToggleSwitch.IsOn = (bool)localSettings.Values["NoReturn"];
-                    AutoStopToggleSwitch.IsOn = (bool)localSettings.Values["AutoStop"];
-                    OptimizeToggleSwitch.IsOn = (bool)localSettings.Values["Optimize"];
-                    SaveRangeToggleSwitch.IsOn = (bool)localSettings.Values["SaveRange"];
-                    SaveHistoryToggleSwitch.IsOn = (bool)localSettings.Values["SaveHistory"];
-                }
-                else
-                {
-                    localSettings.Values["NoReturn"] = false;
-                    localSettings.Values["AutoStop"] = false;
-                    localSettings.Values["Optimize"] = false;
-                    localSettings.Values["SaveRange"] = false;
-                    localSettings.Values["SaveHistory"] = false;
-                }
+                    StudentManager.CheckBoxItems = CheckBoxItems;
+                    CheckBoxListView.ItemsSource = StudentManager.CheckBoxItems;
+                    if (StudentManager.checkedCheckBoxes.Count == StudentManager.StudentList.Count && StudentManager.StudentList.Count > 0)
+                    {
+                        SelectAllCheckBox.IsChecked = true;
+                    }
+                    else if (StudentManager.checkedCheckBoxes.Count == 0)
+                    {
+                        SelectAllCheckBox.IsChecked = false;
+                    }
+                    else
+                    {
+                        SelectAllCheckBox.IsChecked = null;
+                    }
+                    checkedCheckBoxesCount.Text = "已选择" + StudentManager.checkedCheckBoxes.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
+                    timer.Interval = TimeSpan.FromMilliseconds(20);//默认每秒50次
+                    timer.Tick += Timer_Tick;
+                    EndNumberBox.Value = StudentManager.StudentList.Count;
+                    BeginNumberBox.Maximum = StudentManager.StudentList.Count;
+                    EndNumberBox.Maximum = StudentManager.StudentList.Count;
+                    if (StudentManager.checkedCheckBoxes.Count > 0)
+                    {
+                        Numbers.Maximum = StudentManager.checkedCheckBoxes.Count;
+                    }
+                    Numbers.Minimum = 1;
+                    segmented.SelectedIndex = 0;//在xaml中设置会导致后面的控件未加载就被调用//System.NullReferenceException:“Object reference not set to an instance of an object.”
+                    if (localSettings.Values.ContainsKey("NoReturn")
+                    && localSettings.Values.ContainsKey("AutoStop")
+                    && localSettings.Values.ContainsKey("Optimize")
+                    && localSettings.Values.ContainsKey("SaveRange")
+                    && localSettings.Values.ContainsKey("SaveHistory"))
+                    {
+                        NoReturnToggleSwitch.IsOn = (bool)localSettings.Values["NoReturn"];
+                        AutoStopToggleSwitch.IsOn = (bool)localSettings.Values["AutoStop"];
+                        OptimizeToggleSwitch.IsOn = (bool)localSettings.Values["Optimize"];
+                        SaveRangeToggleSwitch.IsOn = (bool)localSettings.Values["SaveRange"];
+                        SaveHistoryToggleSwitch.IsOn = (bool)localSettings.Values["SaveHistory"];
+                    }
+                    else
+                    {
+                        localSettings.Values["NoReturn"] = false;
+                        localSettings.Values["AutoStop"] = false;
+                        localSettings.Values["Optimize"] = false;
+                        localSettings.Values["SaveRange"] = false;
+                        localSettings.Values["SaveHistory"] = false;
+                    }
                     ContentGrid.Visibility = Visibility.Visible;
-                LoadProgressRing.Visibility = Visibility.Collapsed;
-            });
+                    LoadProgressRing.Visibility = Visibility.Collapsed;
+                });
+            }
+            else //上一次保存StudentList失败
+            {
+                StudentManager.checkedCheckBoxes.Clear();
+            }
 
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
@@ -150,7 +157,7 @@ namespace 随机抽取学号.Views
                         StudentManager.checkedCheckBoxes.Add(checkedCheckBox);
                     }
                 }
-                //将checkBoxes转换为json文件存入应用文件夹
+                //将checkBoxes转换为数据库文件存入应用文件夹
                 try
                 {
                     await StudentManager.SaveCheckedStudentsAsync(StudentManager.checkedCheckBoxes);
@@ -184,7 +191,10 @@ namespace 随机抽取学号.Views
         }
         private async void checkBox_Click(object sender, RoutedEventArgs e)
         {
-            await SaveCheckedCheckBoxesAsync();
+            if (NoReturnToggleSwitch.IsOn == true)
+            {
+                await SaveCheckedCheckBoxesAsync();
+            }
         }
         private async void StartorStopButton_Click(object sender, RoutedEventArgs e)//仅在单人模式有效
         {
@@ -237,7 +247,10 @@ namespace 随机抽取学号.Views
                     {
                         StudentManager.CheckBoxItems[randomIndex].IsChecked = false;
                         await SaveCheckedCheckBoxesAsync();
+                        CheckBoxListView.ItemsSource = null;
+                        CheckBoxListView.ItemsSource = StudentManager.CheckBoxItems;
                     }
+
                 }
             }
         }
@@ -255,13 +268,13 @@ namespace 随机抽取学号.Views
                 }
                 else //优化开关打开
                 {
-                    if(currentIndex +1  >= checkedCheckBoxesIndex.Count)
+                    if(currentIndex +1  > checkedCheckBoxesIndex.Count)
                     {
                         currentIndex = 0;
                     }
-                    var _randomIndex = checkedCheckBoxesIndex[currentIndex];
-                    StudentPhoto.Source = new BitmapImage(new Uri(StudentManager.StudentList[_randomIndex].PhotoPath));
-                    ResultTextBox.Text = (_randomIndex + 1).ToString() + "." + StudentManager.StudentList[_randomIndex].Name;
+                    randomIndex = checkedCheckBoxesIndex[currentIndex];//更新randomIndex的值
+                    StudentPhoto.Source = new BitmapImage(new Uri(StudentManager.StudentList[randomIndex].PhotoPath));
+                    ResultTextBox.Text = (randomIndex + 1).ToString() + "." + StudentManager.StudentList[randomIndex].Name;
                     currentIndex++;
                 }
 
@@ -323,7 +336,10 @@ namespace 随机抽取学号.Views
                     }
                     CheckBoxListView.ItemsSource = null;
                     CheckBoxListView.ItemsSource = StudentManager.CheckBoxItems;
-                    await SaveCheckedCheckBoxesAsync();
+                    if (NoReturnToggleSwitch.IsOn == true)
+                    {
+                        await SaveCheckedCheckBoxesAsync();
+                    }
                     PopupNotice popupNotice = new PopupNotice("成功应用更改");
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
                     popupNotice.ShowPopup();
@@ -370,7 +386,10 @@ namespace 随机抽取学号.Views
 
             CheckBoxListView.ItemsSource = null;
             CheckBoxListView.ItemsSource = StudentManager.CheckBoxItems;
-            await SaveCheckedCheckBoxesAsync();
+            if(NoReturnToggleSwitch.IsOn == true)
+            {
+                await SaveCheckedCheckBoxesAsync();
+            }
         }
         private void FrequencySelector_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
         {
@@ -425,7 +444,10 @@ namespace 随机抽取学号.Views
                             }
                         }
                         LoadPhotosGridView();
-                        await SaveCheckedCheckBoxesAsync();
+                        if (NoReturnToggleSwitch.IsOn == true)
+                        {
+                            await SaveCheckedCheckBoxesAsync();
+                        }
                     }
                     else
                     {

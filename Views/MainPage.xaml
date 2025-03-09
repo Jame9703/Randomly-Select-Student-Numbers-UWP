@@ -428,10 +428,10 @@
 
     </Page.Resources>
 
-    <Page.Background>
+    <!--<Page.Background>
         <media:BackdropMicaBrush BackgroundSource="WallpaperBackdrop" Opacity="1" />
 
-    </Page.Background>
+    </Page.Background>-->
     <Grid x:Name="MainGrid">
         <Grid.Background>
             <AcrylicBrush TintColor="White" TintOpacity="0.2" />
@@ -474,32 +474,41 @@
                         Style="{StaticResource CaptionTextBlockStyle}"
                         Text="Randomly Select Student Numbers" />
                 </Grid>
-                <HyperlinkButton
-                    x:Name="ClassNameHyperlinkButton"
-                    Grid.Column="0"
-                    Width="Auto"
-                    Height="36"
-                    Margin="0,0,150,0"
-                    HorizontalAlignment="Right"
-                    x:FieldModifier="public"
-                    BorderBrush="{ThemeResource SystemAccentColorDark2}"
-                    BorderThickness="2"
-                    Click="ClassNameHyperlinkButton_Click"
-                    Content="我的班级"
-                    FocusVisualPrimaryBrush="Transparent"
-                    FontFamily="{StaticResource HarmonyOSSans}"
-                    FontSize="16" />
+                <Grid
+                    Margin="180,0,150,0"
+                    HorizontalAlignment="Stretch">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto"></ColumnDefinition>
+                        <ColumnDefinition Width="*"></ColumnDefinition>
+                    </Grid.ColumnDefinitions>
+                    <AutoSuggestBox
+                        MinWidth="150"
+                        Grid.Column="1"
+                        Height="32"
+                        MaxWidth="350"
+                        FontSize="14"
+                        AutoMaximizeSuggestionArea="True"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        PlaceholderText="搜索"
+                        QueryIcon="Find" />
+                    <HyperlinkButton
+                        x:Name="ClassNameHyperlinkButton"
+                        Width="Auto"
+                        Height="36"
+                        Grid.Column="0"
+                        x:FieldModifier="public"
+                        BorderBrush="{ThemeResource SystemAccentColorDark2}"
+                        BorderThickness="2"
+                        Click="ClassNameHyperlinkButton_Click"
+                        Content="我的班级"
+                        FocusVisualPrimaryBrush="Transparent"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        FontSize="16" />
 
-                <AutoSuggestBox
-                    Grid.Column="1"
-                    Height="32"
-                    MinWidth="200"
-                    MaxWidth="350"
-                    HorizontalAlignment="Center"
-                    AutoMaximizeSuggestionArea="True"
-                    FontFamily="{StaticResource HarmonyOSSans}"
-                    PlaceholderText="搜索"
-                    QueryIcon="Find" />
+
+                </Grid>
+
 
             </Grid>
 
