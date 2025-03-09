@@ -251,13 +251,13 @@ namespace 随机抽取学号.Classes
                     Control control = ele as Control;
                     geometry.CornerRadius = new Vector2((float)control.CornerRadius.TopLeft, (float)control.CornerRadius.TopRight);
                 }
-                else if(ele is FrameworkElement)
+                else if (ele is FrameworkElement)
                 {
                     FrameworkElement frameworkElement = ele as FrameworkElement;
                     //geometry.CornerRadius = new Vector2((float)frameworkElement.CornerRadius.Top, (float)frameworkElement.CornerRadius);
                 }
 
-                    cVisual.Clip = compositor.CreateGeometricClip(geometry);
+                cVisual.Clip = compositor.CreateGeometricClip(geometry);
                 ElementCompositionPreview.SetElementChildVisual(ele, cVisual);
             }
 

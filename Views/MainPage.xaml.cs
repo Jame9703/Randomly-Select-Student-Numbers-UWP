@@ -105,7 +105,6 @@ namespace 随机抽取学号
                 _ = dialog.ShowAsync();
                 localSettings.Values["Theme"] = 2;//确保下次打开不显示欢迎界面
             }
-            await Task.Delay(250);
             ContentGrid.Visibility = Visibility.Visible;
             LoadProgressRing.Visibility = Visibility.Collapsed;
         }
