@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
@@ -11,6 +12,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using 随机抽取学号.Classes;
+using 随机抽取学号.Media;
 using 随机抽取学号.Views;
 
 // https://go.microsoft.com/fwlink/?LinkId=402352&clcid=0x804 上介绍了“空白页”项模板
@@ -80,6 +82,40 @@ namespace 随机抽取学号
                         1 => ElementTheme.Dark,
                         _ => ElementTheme.Default
                };
+                if (localSettings.Values.ContainsKey("MainPageBackground"))
+                {
+                    if ((int)localSettings.Values["MainPageBackground"] == 0)
+                    {
+                        this.Background = new SolidColorBrush(Colors.White);
+                    }
+                    else if ((int)localSettings.Values["MainPageBackground"] == 1)
+                    {
+                        var acrylicBrush = new AcrylicBrush
+                        {
+                            BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                            Opacity = 1,
+                            TintOpacity = 0.6,
+                            TintColor = Colors.Transparent
+                        };
+                        this.Background = acrylicBrush;
+                    }
+                    else if ((int)localSettings.Values["MainPageBackground"] == 2)
+                    {
+                        var backdropMicaBrush = new BackdropMicaBrush
+                        {
+                            BackgroundSource = BackgroundSource.WallpaperBackdrop,
+                        };
+                        this.Background = backdropMicaBrush;
+                    }
+                }
+                else
+                {
+                    var backdropMicaBrush = new BackdropMicaBrush
+                    {
+                        BackgroundSource = BackgroundSource.WallpaperBackdrop,
+                    };
+                    this.Background = backdropMicaBrush;
+                }
             }
             else
             {

@@ -25,14 +25,8 @@ namespace 随机抽取学号.Views
         public SettingsPage()
         {
             this.InitializeComponent();
-            if(localSettings.Values["Theme"]!=null)
-            {
-                AppearanceRadioButtons.SelectedIndex = (int)ApplicationData.Current.LocalSettings.Values["Theme"];
-            }
-            else
-            {
-                AppearanceRadioButtons.SelectedIndex = 2;
-            }
+            AppearanceRadioButtons.SelectedIndex = (int)ApplicationData.Current.LocalSettings.Values["Theme"];
+            BackgroundRadioButtons.SelectedIndex = (int)ApplicationData.Current.LocalSettings.Values["MainPageBackground"];
             // 开始进入动画
             var enterPageStoryboard = this.Resources["EnterPageStoryboard"] as Storyboard;
             enterPageStoryboard.Begin();
@@ -93,6 +87,7 @@ namespace 随机抽取学号.Views
                         // 创建一个新的纯色笔刷来设置MainPage的背景
                         var newBrush = new SolidColorBrush(Colors.White);
                         mainPage.MainPageBackground = newBrush;
+                    localSettings.Values["MainPageBackground"] = 0;
                 }
                 else if (BackgroundRadioButtons.SelectedIndex == 1)// 亚克力背景
                 {
@@ -104,7 +99,7 @@ namespace 随机抽取学号.Views
                         TintColor = Colors.Transparent
                     };
                     mainPage.MainPageBackground = acrylicBrush;
-
+                    localSettings.Values["MainPageBackground"] = 1;
                 }
                 else if (BackgroundRadioButtons.SelectedIndex == 2)// 云母背景
                 {
@@ -113,6 +108,7 @@ namespace 随机抽取学号.Views
                         BackgroundSource = BackgroundSource.WallpaperBackdrop,
                     };
                     mainPage.MainPageBackground = backdropMicaBrush;
+                    localSettings.Values["MainPageBackground"] = 2;
                 }
             }
             else

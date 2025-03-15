@@ -131,6 +131,7 @@
     </Compile>
     <Compile Include="Classes\RippleHelper.cs" />
     <Compile Include="Classes\Student.cs" />
+    <Compile Include="Controls\PomodoroStateButton.cs" />
     <Compile Include="Controls\PopupMessage.xaml.cs">
       <DependentUpon>PopupMessage.xaml</DependentUpon>
     </Compile>

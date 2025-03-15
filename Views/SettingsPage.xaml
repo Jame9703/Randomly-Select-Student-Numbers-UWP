@@ -145,7 +145,7 @@
                     Header="在Github中查看此项目源代码"
                     IsClickEnabled="True">
                     <controls:SettingsCard.HeaderIcon>
-                        <ui:BitmapIconExtension Source="ms-appx:///Assets/Photos/GithubLogo.png" />
+                        <ui:BitmapIconExtension Source="ms-appx:///Photos/GithubLogo.png" />
                     </controls:SettingsCard.HeaderIcon>
                     <HyperlinkButton NavigateUri="https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP">
                         <StackPanel Width="116" Orientation="Horizontal">
