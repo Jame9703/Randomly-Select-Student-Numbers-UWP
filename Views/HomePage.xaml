@@ -330,9 +330,8 @@
             Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
-                    Width="Auto"
                     MinWidth="150"
-                    MaxWidth="300" />
+                    MaxWidth="250" />
                 <ColumnDefinition Width="*" MinWidth="300" />
                 <ColumnDefinition Width="Auto" MaxWidth="400" />
             </Grid.ColumnDefinitions>
@@ -616,7 +615,8 @@
                 </Button.Flyout>
             </Button>
             <Grid x:Name="SingleModeGrid" Grid.Column="1">
-                <controls:PomodoroStateButton
+                
+                <Button
                     x:Name="StartorStopButton"
                     Margin="27,450,0,0"
                     VerticalAlignment="Top"
@@ -641,7 +641,7 @@
                             Foreground="Black"
                             Text="开始" />
                     </StackPanel>
-                </controls:PomodoroStateButton>
+                </Button>
                 <TextBlock
                     x:Name="ResultTextBox"
                     Width="Auto"
@@ -722,8 +722,8 @@
         </Grid>
         <muxc:ProgressRing
             x:Name="LoadProgressRing"
-            Width="75"
-            Height="75"
+            Width="100"
+            Height="100"
             IsActive="True" />
     </Grid>
 
