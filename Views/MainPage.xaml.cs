@@ -43,6 +43,8 @@ namespace 随机抽取学号
         }
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            WelcomeContentDialog welcomeDialog = new WelcomeContentDialog();
+            await welcomeDialog.ShowAsync();
             //在MainPage初始化时加载学生信息，确保不重复加载
             StudentManager.StudentList = await StudentManager.LoadStudentsAsync();
             StudentManager.checkedCheckBoxes = await StudentManager.LoadCheckedStudentsAsync();
@@ -249,7 +251,7 @@ namespace 随机抽取学号
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-            ContentFrame.Navigate(typeof(ClassPage));
+            ContentFrame.Navigate(typeof(ClassPage), null, new DrillInNavigationTransitionInfo());
 
         }
 
@@ -257,13 +259,13 @@ namespace 随机抽取学号
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-            ContentFrame.Navigate(typeof(NumbersPage));
+            ContentFrame.Navigate(typeof(NumbersPage), null, new DrillInNavigationTransitionInfo());
         }
         private void CharactersPage_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-            ContentFrame.Navigate(typeof(CharactersPage));
+            ContentFrame.Navigate(typeof(CharactersPage), null, new DrillInNavigationTransitionInfo());
 
 
 
@@ -272,14 +274,14 @@ namespace 随机抽取学号
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-            ContentFrame.Navigate(typeof(HelpPage));
+            ContentFrame.Navigate(typeof(HelpPage), null, new DrillInNavigationTransitionInfo());
 
         }
         private void SettingsPage_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-            ContentFrame.Navigate(typeof(SettingsPage), null, new SlideNavigationTransitionInfo() { Effect = SlideNavigationTransitionEffect.FromRight });
+            ContentFrame.Navigate(typeof(SettingsPage), null, new DrillInNavigationTransitionInfo());
 
         }
 

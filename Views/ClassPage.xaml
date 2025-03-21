@@ -377,7 +377,7 @@
 
     </Page.Resources>
 
-    <Grid Background="{ThemeResource GridBackground}">
+    <Grid x:Name="ContentGrid" Background="{ThemeResource GridBackground}">
         <Grid
             Width="Auto"
             HorizontalAlignment="Left"

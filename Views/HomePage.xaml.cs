@@ -8,6 +8,7 @@ using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
@@ -131,6 +132,18 @@ namespace 随机抽取学号.Views
             timer.Stop();
             GC.Collect();
         }
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+            var compositor = ElementCompositionPreview.GetElementVisual(ContentGrid).Compositor;
+            var animation = compositor.CreateScalarKeyFrameAnimation();
+            animation.InsertKeyFrame(0f, 0f);
+            animation.InsertKeyFrame(1f, 1f);
+            animation.Duration = TimeSpan.FromSeconds(1);
+            var visual = ElementCompositionPreview.GetElementVisual(ContentGrid);
+            visual.StartAnimation("Opacity", animation);
+        }
+
         private void LoadPhotosGridView()//多人模式下加载PhotosGridView
         {
             PhotosGrid.Children.Clear();

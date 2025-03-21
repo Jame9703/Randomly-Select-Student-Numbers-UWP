@@ -9,7 +9,7 @@
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:ui="using:CommunityToolkit.WinUI"
     mc:Ignorable="d">
-    <Grid Background="{ThemeResource GridBackground}">
+    <Grid x:Name="ContentGrid" Background="{ThemeResource GridBackground}">
         <muxc:NumberBox
             x:Name="RangeFromNumberBox"
             Width="100"

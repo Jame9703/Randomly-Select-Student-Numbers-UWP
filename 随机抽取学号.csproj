@@ -162,6 +162,9 @@
     <Compile Include="Views\PopupNotice.xaml.cs">
       <DependentUpon>PopupNotice.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\WelcomeContentDialog.xaml.cs">
+      <DependentUpon>WelcomeContentDialog.xaml</DependentUpon>
+    </Compile>
   </ItemGroup>
   <ItemGroup>
     <AppxManifest Include="Package.appxmanifest">
@@ -264,6 +267,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PopupNotice.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\WelcomeContentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
