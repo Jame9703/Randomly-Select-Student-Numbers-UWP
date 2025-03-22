@@ -40,6 +40,7 @@ namespace 随机抽取学号.Views
         public HomePage()
         {
             this.InitializeComponent();
+            SideBarSegmented.SelectedIndex = 0;
         }
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -160,7 +161,7 @@ namespace 随机抽取学号.Views
             {
                 for (int i = 0; i < StudentManager.StudentList.Count; i++)
                 {
-                    if (StudentManager.CheckBoxItems[i].IsChecked== true)
+                    if (StudentManager.CheckBoxItems[i].IsChecked == true)
                     {
                         CheckedCheckBox checkedCheckBox = new CheckedCheckBox()
                         {
@@ -188,7 +189,7 @@ namespace 随机抽取学号.Views
                     Numbers.Maximum = StudentManager.checkedCheckBoxes.Count;
                 }
                 // 重新判断是否全选
-                if(StudentManager.checkedCheckBoxes.Count == StudentManager.StudentList.Count)
+                if (StudentManager.checkedCheckBoxes.Count == StudentManager.StudentList.Count)
                 {
                     SelectAllCheckBox.IsChecked = true;
                 }
@@ -206,8 +207,11 @@ namespace 随机抽取学号.Views
         {
             if (NoReturnToggleSwitch.IsOn == true)
             {
-                await SaveCheckedCheckBoxesAsync();
-            }
+                StudentManager.CheckBoxItems[randomIndex].IsChecked = false;
+                CheckBoxListView.ItemsSource = null;
+                CheckBoxListView.ItemsSource = StudentManager.CheckBoxItems;
+            }               
+            await SaveCheckedCheckBoxesAsync();
         }
         private async void StartorStopButton_Click(object sender, RoutedEventArgs e)//仅在单人模式有效
         {
@@ -259,11 +263,10 @@ namespace 随机抽取学号.Views
                     if (NoReturnToggleSwitch.IsOn == true)//抽完不放回
                     {
                         StudentManager.CheckBoxItems[randomIndex].IsChecked = false;
-                        await SaveCheckedCheckBoxesAsync();
                         CheckBoxListView.ItemsSource = null;
                         CheckBoxListView.ItemsSource = StudentManager.CheckBoxItems;
                     }
-
+                    await SaveCheckedCheckBoxesAsync();
                 }
             }
         }
@@ -349,10 +352,7 @@ namespace 随机抽取学号.Views
                     }
                     CheckBoxListView.ItemsSource = null;
                     CheckBoxListView.ItemsSource = StudentManager.CheckBoxItems;
-                    if (NoReturnToggleSwitch.IsOn == true)
-                    {
-                        await SaveCheckedCheckBoxesAsync();
-                    }
+                    await SaveCheckedCheckBoxesAsync();
                     PopupNotice popupNotice = new PopupNotice("成功应用更改");
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
                     popupNotice.ShowPopup();
@@ -399,10 +399,7 @@ namespace 随机抽取学号.Views
 
             CheckBoxListView.ItemsSource = null;
             CheckBoxListView.ItemsSource = StudentManager.CheckBoxItems;
-            if(NoReturnToggleSwitch.IsOn == true)
-            {
-                await SaveCheckedCheckBoxesAsync();
-            }
+            await SaveCheckedCheckBoxesAsync();
         }
         private void FrequencySelector_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
         {
@@ -459,8 +456,11 @@ namespace 随机抽取学号.Views
                         LoadPhotosGridView();
                         if (NoReturnToggleSwitch.IsOn == true)
                         {
-                            await SaveCheckedCheckBoxesAsync();
+                            StudentManager.CheckBoxItems[randomIndex].IsChecked = false;
+                            CheckBoxListView.ItemsSource = null;
+                            CheckBoxListView.ItemsSource = StudentManager.CheckBoxItems;
                         }
+                        await SaveCheckedCheckBoxesAsync();
                     }
                     else
                     {
@@ -509,5 +509,19 @@ namespace 随机抽取学号.Views
             localSettings.Values["SaveHistory"] = SaveHistoryToggleSwitch.IsOn;
         }
         #endregion
+
+        private void SideBarSegmented_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if(SideBarSegmented.SelectedIndex == 0)
+            {
+                SettingsScrollViewer.Visibility = Visibility.Collapsed;
+                checkBoxesGrid.Visibility = Visibility.Visible;
+            }
+            else
+            {
+                checkBoxesGrid.Visibility = Visibility.Collapsed;
+                SettingsScrollViewer.Visibility = Visibility.Visible;
+            }
+        }
     }
 }

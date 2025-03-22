@@ -329,15 +329,11 @@
             Background="{ThemeResource GridBackground}"
             Visibility="Collapsed">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition
-                    MinWidth="150"
-                    MaxWidth="250" />
                 <ColumnDefinition Width="*" MinWidth="300" />
                 <ColumnDefinition Width="Auto" MaxWidth="400" />
             </Grid.ColumnDefinitions>
             <muxc:NumberBox
                 x:Name="Numbers"
-                Grid.Column="1"
                 Width="Auto"
                 Height="32"
                 Margin="185,40,0,0"
@@ -350,227 +346,236 @@
                 SpinButtonPlacementMode="Inline"
                 Value="1" />
             <TextBlock
-                Grid.Column="1"
                 Margin="150,45,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 FontFamily="{StaticResource HarmonyOSSans}"
                 Text="人数:"
                 TextWrapping="Wrap" />
-            <Grid
-                x:Name="checkBoxesGrid"
-                MinWidth="150"
-                MaxWidth="300"
-                HorizontalAlignment="Stretch">
-                <CheckBox
-                    x:Name="SelectAllCheckBox"
-                    Width="50"
-                    Margin="5,23,0,0"
-                    VerticalAlignment="Top"
-                    Click="SelectAllCheckBox_Click"
-                    Content="全选"
-                    FontFamily="{StaticResource HarmonyOSSans}"
-                    FontSize="16"
-                    IsThreeState="True" />
-                <TextBlock
-                    x:Name="checkedCheckBoxesCount"
-                    Width="Auto"
-                    Height="27"
-                    Margin="5,0,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    FontFamily="{StaticResource HarmonyOSSans}"
-                    FontSize="16"
-                    Text="已选择0/0"
-                    TextWrapping="NoWrap" />
-                <ListView
-                    x:Name="CheckBoxListView"
-                    MinWidth="140"
-                    MaxWidth="300"
-                    Margin="0,60,0,0"
-                    ItemTemplate="{StaticResource CheckBoxListViewItem}"
-                    ItemsSource="{x:Bind classes:StudentManager.CheckBoxItems}"
-                    SelectionMode="None">
-                    <ListView.ItemContainerTransitions>
-                        <TransitionCollection />
-                    </ListView.ItemContainerTransitions>
-                </ListView>
-                <Button
-                    Margin="70,22,0,0"
-                    VerticalAlignment="Top"
-                    Content="快速选择"
-                    FontFamily="{StaticResource HarmonyOSSans}">
-                    <Button.Flyout>
-                        <Flyout>
-                            <Grid>
-                                <Grid.RowDefinitions>
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                    <RowDefinition Height="Auto" />
-                                </Grid.RowDefinitions>
-                                <TextBlock
-                                    Grid.Row="0"
-                                    Margin="0,6,0,0"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    Text="开始值：" />
-                                <TextBlock
-                                    Grid.Row="1"
-                                    Margin="0,8,0,0"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    Text="结束值：" />
-                                <muxc:NumberBox
-                                    x:Name="BeginNumberBox"
-                                    Grid.Row="0"
-                                    Height="30"
-                                    MinWidth="110"
-                                    Margin="55,0,0,0"
-                                    Padding="5,5,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    Minimum="1"
-                                    SmallChange="1"
-                                    SpinButtonPlacementMode="Compact"
-                                    Value="1" />
-                                <muxc:NumberBox
-                                    x:Name="EndNumberBox"
-                                    Grid.Row="1"
-                                    Height="30"
-                                    MinWidth="110"
-                                    Margin="55,5,0,0"
-                                    Padding="5,5,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Top"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    Minimum="1"
-                                    SmallChange="1"
-                                    SpinButtonPlacementMode="Compact" />
-                                <CheckBox
-                                    x:Name="isOnlyThisRangeCheckBox"
-                                    Grid.Row="2"
-                                    Padding="5,6,0,0"
-                                    Content="仅选择此范围"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    FontSize="14" />
-                                <Button
-                                    x:Name="changeCheckBoxes"
-                                    Grid.Row="2"
-                                    Height="26"
-                                    Margin="120,5,0,0"
-                                    HorizontalAlignment="Left"
-                                    Click="changeCheckBoxes_Click"
-                                    Content="确定"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    FontSize="12"
-                                    Style="{StaticResource AccentButtonStyle}" />
-                            </Grid>
-                        </Flyout>
-                    </Button.Flyout>
-                </Button>
-            </Grid>
-            <communitytoolkitcontrols:GridSplitter
+
+            <!--<communitytoolkitcontrols:GridSplitter
                 Grid.Column="1"
                 Width="16"
                 HorizontalAlignment="Left"
                 Cursor="Hand"
                 ResizeBehavior="BasedOnAlignment"
                 ResizeDirection="Columns">
-                <!--<communitytoolkitcontrols:GridSplitter.RenderTransform>
+            -->
+            <!--<communitytoolkitcontrols:GridSplitter.RenderTransform>
                 <TranslateTransform X="16" />
             </communitytoolkitcontrols:GridSplitter.RenderTransform>-->
-            </communitytoolkitcontrols:GridSplitter>
-            <ScrollViewer
-                Grid.Column="2"
-                VerticalScrollBarVisibility="Auto"
-                VerticalScrollMode="Auto">
-                <StackPanel
-                    x:Name="SettingsStackPanel"
-                    MinWidth="0"
-                    MaxWidth="400"
+            <!--
+            </communitytoolkitcontrols:GridSplitter>-->
+            <Grid Grid.Column="1">
+                <communitytoolkitcontrols:Segmented
+                    x:Name="SideBarSegmented"
                     HorizontalAlignment="Stretch"
-                    Spacing="10">
-                    <communitytoolkitcontrols:SettingsCard
+                    VerticalAlignment="Top"
+                    SelectionChanged="SideBarSegmented_SelectionChanged">
+                    <communitytoolkitcontrols:SegmentedItem Content="范围" FontFamily="{StaticResource HarmonyOSSans}" />
+                    <communitytoolkitcontrols:SegmentedItem Content="选项" FontFamily="{StaticResource HarmonyOSSans}" />
+                </communitytoolkitcontrols:Segmented>
+                <ScrollViewer
+                    Margin="0,30,0,0"
+                    x:Name="SettingsScrollViewer"
+                    VerticalScrollBarVisibility="Auto"
+                    VerticalScrollMode="Auto"
+                    Visibility="Collapsed">
+                    <StackPanel
+                        x:Name="SettingsStackPanel"
+                        MinWidth="0"
+                        MaxWidth="400"
                         HorizontalAlignment="Stretch"
-                        classes:RippleHelper.RippleColor="Gray"
-                        classes:RippleHelper.RippleDuration="0:0:0.5"
-                        classes:RippleHelper.RippleHelperState="Pressed"
-                        ContentAlignment="Left"
-                        Description="停止抽取时从抽取范围中移除抽到的同学"
-                        FontFamily="{StaticResource HarmonyOSSans}"
-                        Header="抽完不放回">
-                        <ToggleSwitch
-                            x:Name="NoReturnToggleSwitch"
-                            Margin="0,-10,0,0"
+                        Spacing="10">
+                        <communitytoolkitcontrols:SettingsCard
+                            HorizontalAlignment="Stretch"
+                            classes:RippleHelper.RippleColor="Gray"
+                            classes:RippleHelper.RippleDuration="0:0:0.5"
+                            classes:RippleHelper.RippleHelperState="Pressed"
+                            ContentAlignment="Left"
+                            Description="停止抽取时从抽取范围中移除抽到的同学"
                             FontFamily="{StaticResource HarmonyOSSans}"
-                            Toggled="NoReturnToggleSwitch_Toggled" />
-                    </communitytoolkitcontrols:SettingsCard>
-                    <communitytoolkitcontrols:SettingsCard
-                        HorizontalAlignment="Stretch"
-                        classes:RippleHelper.RippleColor="Gray"
-                        classes:RippleHelper.RippleDuration="0:0:0.5"
-                        classes:RippleHelper.RippleHelperState="Pressed"
-                        ContentAlignment="Left"
-                        Description="开始抽取后过一段时间自动停止"
-                        FontFamily="{StaticResource HarmonyOSSans}"
-                        Header="自动停止">
-                        <ToggleSwitch
-                            x:Name="AutoStopToggleSwitch"
-                            Margin="0,-10,0,0"
+                            Header="抽完不放回">
+                            <ToggleSwitch
+                                x:Name="NoReturnToggleSwitch"
+                                Margin="0,-10,0,0"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                Toggled="NoReturnToggleSwitch_Toggled" />
+                        </communitytoolkitcontrols:SettingsCard>
+                        <communitytoolkitcontrols:SettingsCard
+                            HorizontalAlignment="Stretch"
+                            classes:RippleHelper.RippleColor="Gray"
+                            classes:RippleHelper.RippleDuration="0:0:0.5"
+                            classes:RippleHelper.RippleHelperState="Pressed"
+                            ContentAlignment="Left"
+                            Description="开始抽取后过一段时间自动停止"
                             FontFamily="{StaticResource HarmonyOSSans}"
-                            Toggled="AutoStopToggleSwitch_Toggled" />
-                    </communitytoolkitcontrols:SettingsCard>
-                    <communitytoolkitcontrols:SettingsCard
-                        HorizontalAlignment="Stretch"
-                        classes:RippleHelper.RippleColor="Gray"
-                        classes:RippleHelper.RippleDuration="0:0:0.5"
-                        classes:RippleHelper.RippleHelperState="Pressed"
-                        ContentAlignment="Left"
-                        Description="先将抽取范围中的学生打乱再按顺序输出，这可能会提高性能"
-                        FontFamily="{StaticResource HarmonyOSSans}"
-                        Header="优化抽取性能">
-                        <ToggleSwitch
-                            x:Name="OptimizeToggleSwitch"
-                            Margin="0,-10,0,0"
+                            Header="自动停止">
+                            <ToggleSwitch
+                                x:Name="AutoStopToggleSwitch"
+                                Margin="0,-10,0,0"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                Toggled="AutoStopToggleSwitch_Toggled" />
+                        </communitytoolkitcontrols:SettingsCard>
+                        <communitytoolkitcontrols:SettingsCard
+                            HorizontalAlignment="Stretch"
+                            classes:RippleHelper.RippleColor="Gray"
+                            classes:RippleHelper.RippleDuration="0:0:0.5"
+                            classes:RippleHelper.RippleHelperState="Pressed"
+                            ContentAlignment="Left"
+                            Description="先将抽取范围中的学生打乱再按顺序输出，这可能会提高性能"
                             FontFamily="{StaticResource HarmonyOSSans}"
-                            Toggled="OptimizeToggleSwitch_Toggled" />
-                    </communitytoolkitcontrols:SettingsCard>
-                    <communitytoolkitcontrols:SettingsCard
-                        HorizontalAlignment="Stretch"
-                        classes:RippleHelper.RippleColor="Gray"
-                        classes:RippleHelper.RippleDuration="0:0:0.5"
-                        classes:RippleHelper.RippleHelperState="Pressed"
-                        ContentAlignment="Left"
-                        Description="将抽取范围保存到本地"
-                        FontFamily="{StaticResource HarmonyOSSans}"
-                        Header="保存抽取范围">
-                        <ToggleSwitch
-                            x:Name="SaveRangeToggleSwitch"
-                            Margin="0,-10,0,0"
+                            Header="优化抽取性能">
+                            <ToggleSwitch
+                                x:Name="OptimizeToggleSwitch"
+                                Margin="0,-10,0,0"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                Toggled="OptimizeToggleSwitch_Toggled" />
+                        </communitytoolkitcontrols:SettingsCard>
+                        <communitytoolkitcontrols:SettingsCard
+                            HorizontalAlignment="Stretch"
+                            classes:RippleHelper.RippleColor="Gray"
+                            classes:RippleHelper.RippleDuration="0:0:0.5"
+                            classes:RippleHelper.RippleHelperState="Pressed"
+                            ContentAlignment="Left"
+                            Description="将抽取范围保存到本地"
                             FontFamily="{StaticResource HarmonyOSSans}"
-                            Toggled="SaveRangeToggleSwitch_Toggled" />
-                    </communitytoolkitcontrols:SettingsCard>
-                    <communitytoolkitcontrols:SettingsCard
-                        HorizontalAlignment="Stretch"
-                        classes:RippleHelper.RippleColor="Gray"
-                        classes:RippleHelper.RippleDuration="0:0:0.5"
-                        classes:RippleHelper.RippleHelperState="Pressed"
-                        ContentAlignment="Left"
-                        Description="将历史抽取记录保存到本地"
-                        FontFamily="{StaticResource HarmonyOSSans}"
-                        Header="保存历史记录">
-                        <ToggleSwitch
-                            x:Name="SaveHistoryToggleSwitch"
-                            Margin="0,-10,0,0"
+                            Header="保存抽取范围">
+                            <ToggleSwitch
+                                x:Name="SaveRangeToggleSwitch"
+                                Margin="0,-10,0,0"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                Toggled="SaveRangeToggleSwitch_Toggled" />
+                        </communitytoolkitcontrols:SettingsCard>
+                        <communitytoolkitcontrols:SettingsCard
+                            HorizontalAlignment="Stretch"
+                            classes:RippleHelper.RippleColor="Gray"
+                            classes:RippleHelper.RippleDuration="0:0:0.5"
+                            classes:RippleHelper.RippleHelperState="Pressed"
+                            ContentAlignment="Left"
+                            Description="将历史抽取记录保存到本地"
                             FontFamily="{StaticResource HarmonyOSSans}"
-                            Toggled="SaveHistoryToggleSwitch_Toggled" />
-                    </communitytoolkitcontrols:SettingsCard>
-                </StackPanel>
-            </ScrollViewer>
+                            Header="保存历史记录">
+                            <ToggleSwitch
+                                x:Name="SaveHistoryToggleSwitch"
+                                Margin="0,-10,0,0"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                Toggled="SaveHistoryToggleSwitch_Toggled" />
+                        </communitytoolkitcontrols:SettingsCard>
+                    </StackPanel>
+                </ScrollViewer>
+                <Grid x:Name="checkBoxesGrid" HorizontalAlignment="Stretch" Margin="0,30,0,0">
+                    <CheckBox
+                        x:Name="SelectAllCheckBox"
+                        Width="50"
+                        Margin="5,23,0,0"
+                        VerticalAlignment="Top"
+                        Click="SelectAllCheckBox_Click"
+                        Content="全选"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        FontSize="16"
+                        IsThreeState="True" />
+                    <TextBlock
+                        x:Name="checkedCheckBoxesCount"
+                        Width="Auto"
+                        Height="27"
+                        Margin="5,0,0,0"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Top"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        FontSize="16"
+                        Text="已选择0/0"
+                        TextWrapping="NoWrap" />
+                    <ListView
+                        x:Name="CheckBoxListView"
+                        ItemTemplate="{StaticResource CheckBoxListViewItem}"
+                        ItemsSource="{x:Bind classes:StudentManager.CheckBoxItems}"
+                        ScrollViewer.VerticalScrollBarVisibility="Auto"
+                        Margin="0,50,0,0"
+                        SelectionMode="None">
+                        <ListView.ItemContainerTransitions>
+                            <TransitionCollection />
+                        </ListView.ItemContainerTransitions>
+                    </ListView>
+                    <Button
+                        Margin="70,22,0,0"
+                        VerticalAlignment="Top"
+                        Content="快速选择"
+                        FontFamily="{StaticResource HarmonyOSSans}">
+                        <Button.Flyout>
+                            <Flyout>
+                                <Grid>
+                                    <Grid.RowDefinitions>
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                        <RowDefinition Height="Auto" />
+                                    </Grid.RowDefinitions>
+                                    <TextBlock
+                                        Grid.Row="0"
+                                        Margin="0,6,0,0"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        Text="开始值：" />
+                                    <TextBlock
+                                        Grid.Row="1"
+                                        Margin="0,8,0,0"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        Text="结束值：" />
+                                    <muxc:NumberBox
+                                        x:Name="BeginNumberBox"
+                                        Grid.Row="0"
+                                        Height="30"
+                                        MinWidth="110"
+                                        Margin="55,0,0,0"
+                                        Padding="5,5,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        Minimum="1"
+                                        SmallChange="1"
+                                        SpinButtonPlacementMode="Compact"
+                                        Value="1" />
+                                    <muxc:NumberBox
+                                        x:Name="EndNumberBox"
+                                        Grid.Row="1"
+                                        Height="30"
+                                        MinWidth="110"
+                                        Margin="55,5,0,0"
+                                        Padding="5,5,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        Minimum="1"
+                                        SmallChange="1"
+                                        SpinButtonPlacementMode="Compact" />
+                                    <CheckBox
+                                        x:Name="isOnlyThisRangeCheckBox"
+                                        Grid.Row="2"
+                                        Padding="5,6,0,0"
+                                        Content="仅选择此范围"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        FontSize="14" />
+                                    <Button
+                                        x:Name="changeCheckBoxes"
+                                        Grid.Row="2"
+                                        Height="26"
+                                        Margin="120,5,0,0"
+                                        HorizontalAlignment="Left"
+                                        Click="changeCheckBoxes_Click"
+                                        Content="确定"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        FontSize="12"
+                                        Style="{StaticResource AccentButtonStyle}" />
+                                </Grid>
+                            </Flyout>
+                        </Button.Flyout>
+                    </Button>
+                </Grid>
+            </Grid>
+
 
 
             <communitytoolkitcontrols:Segmented
                 x:Name="segmented"
-                Grid.Column="1"
                 Margin="10,3,0,0"
                 HorizontalAlignment="Stretch"
                 VerticalAlignment="Top"
@@ -589,7 +594,6 @@
             </communitytoolkitcontrols:Segmented>
             <Button
                 x:Name="FrequencySelectorButton"
-                Grid.Column="1"
                 Margin="10,40,0,0"
                 VerticalAlignment="Top"
                 Content="滚动频率:50Hz"
@@ -614,8 +618,8 @@
                     </Flyout>
                 </Button.Flyout>
             </Button>
-            <Grid x:Name="SingleModeGrid" Grid.Column="1">
-                
+            <Grid x:Name="SingleModeGrid">
+
                 <Button
                     x:Name="StartorStopButton"
                     Margin="27,450,0,0"
@@ -669,10 +673,7 @@
                         Height="300" />
                 </Border>
             </Grid>
-            <Grid
-                x:Name="MultipleModeGrid"
-                Grid.Column="1"
-                Visibility="Collapsed">
+            <Grid x:Name="MultipleModeGrid" Visibility="Collapsed">
                 <Grid.Resources>
                     <Style x:Key="DefaultButtonStyle" TargetType="Button">
                         <Setter Property="Transitions">
@@ -709,7 +710,7 @@
                 </Button>
             </Grid>
             <communitytoolkitcontrols:GridSplitter
-                Grid.Column="2"
+                Grid.Column="1"
                 Width="16"
                 HorizontalAlignment="Left"
                 Cursor="Hand"

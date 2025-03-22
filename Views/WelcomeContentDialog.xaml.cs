@@ -22,16 +22,26 @@ namespace 随机抽取学号.Views
         public WelcomeContentDialog()
         {
             this.InitializeComponent();
+            segmented.SelectedIndex = 0;
         }
 
-        private void ContentDialog_PrimaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void Segmented_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-
+            if(segmented.SelectedIndex == 0)
+            {
+                IntroductionGrid.Visibility = Visibility.Visible;
+                LicenseGrid.Visibility = Visibility.Collapsed;
+            }
+            else
+            {
+                IntroductionGrid.Visibility = Visibility.Collapsed;
+                LicenseGrid.Visibility = Visibility.Visible;
+            }
         }
 
-        private void ContentDialog_SecondaryButtonClick(ContentDialog sender, ContentDialogButtonClickEventArgs args)
+        private void ContinueButton_Click(object sender, RoutedEventArgs e)
         {
-
+            this.Hide();
         }
     }
 }
