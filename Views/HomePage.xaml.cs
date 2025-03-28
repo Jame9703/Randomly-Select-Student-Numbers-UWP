@@ -44,36 +44,43 @@ namespace 随机抽取学号.Views
         }
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            var CheckBoxItems = new ObservableCollection<CheckBoxItem>();
+            CheckBoxListView.ItemsSource = StudentManager.StudentList;
+            //var CheckBoxItems = new ObservableCollection<CheckBoxItem>();
             if(StudentManager.checkedCheckBoxes.Count <= StudentManager.StudentList.Count)
             {
+                checkedCheckBoxesName = StudentManager.checkedCheckBoxes.Select(x => x.Name).ToList();// 获取所有被选中CheckBox的Name
+                checkedCheckBoxesIndex = StudentManager.checkedCheckBoxes.Select(x => x.Index).ToList();// 获取所有被选中CheckBox的Index
+                foreach (var item in StudentManager.checkedCheckBoxes)
+                {
+                    CheckBoxListView.SelectedItems.Add(item);
+                }
                 await Task.Run(() =>
                 {
 
-                    checkedCheckBoxesName = StudentManager.checkedCheckBoxes.Select(x => x.Name).ToList();// 获取所有被选中CheckBox的Name
-                    for (int i = 0; i < StudentManager.StudentList.Count; i++)
-                    {
-                        var item = new CheckBoxItem();
-                        {
-                            item.Name = StudentManager.StudentList[i].Name;
-                            if (checkedCheckBoxesName.Contains(item.Name) == true)
-                            {
-                                item.IsChecked = true;
-                            }
-                            else
-                            {
-                                item.IsChecked = false;
-                            }
-                        }
-                        CheckBoxItems.Add(item);
-                    }
+
+                    //for (int i = 0; i < StudentManager.StudentList.Count; i++)
+                    //{
+                    //    var item = new CheckBoxItem();
+                    //    {
+                    //        item.Name = StudentManager.StudentList[i].Name;
+                    //        if (checkedCheckBoxesName.Contains(item.Name) == true)
+                    //        {
+                    //            item.IsChecked = true;
+                    //        }
+                    //        else
+                    //        {
+                    //            item.IsChecked = false;
+                    //        }
+                    //    }
+                    //    CheckBoxItems.Add(item);
+                    //}
                 });
 
                 //回到UI线程
                 await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                 {
-                    StudentManager.CheckBoxItems = CheckBoxItems;
-                    CheckBoxListView.ItemsSource = StudentManager.CheckBoxItems;
+                    //StudentManager.CheckBoxItems = CheckBoxItems;
+                    //CheckBoxListView.ItemsSource = StudentManager.CheckBoxItems;
                     if (StudentManager.checkedCheckBoxes.Count == StudentManager.StudentList.Count && StudentManager.StudentList.Count > 0)
                     {
                         SelectAllCheckBox.IsChecked = true;
@@ -156,21 +163,21 @@ namespace 随机抽取学号.Views
         }
         private async Task SaveCheckedCheckBoxesAsync()//将选中的CheckBox存入localSettings
         {
-            StudentManager.checkedCheckBoxes.Clear();
+            //StudentManager.checkedCheckBoxes.Clear();
             if (StudentManager.StudentList.Count > 0)
             {
-                for (int i = 0; i < StudentManager.StudentList.Count; i++)
-                {
-                    if (StudentManager.CheckBoxItems[i].IsChecked == true)
-                    {
-                        CheckedCheckBox checkedCheckBox = new CheckedCheckBox()
-                        {
-                            Index = i,
-                            Name = StudentManager.CheckBoxItems[i].Name
-                        };
-                        StudentManager.checkedCheckBoxes.Add(checkedCheckBox);
-                    }
-                }
+                //for (int i = 0; i < StudentManager.StudentList.Count; i++)
+                //{
+                //    if (StudentManager.CheckBoxItems[i].IsChecked == true)
+                //    {
+                //        CheckedCheckBox checkedCheckBox = new CheckedCheckBox()
+                //        {
+                //            Index = i,
+                //            Name = StudentManager.CheckBoxItems[i].Name
+                //        };
+                //        StudentManager.checkedCheckBoxes.Add(checkedCheckBox);
+                //    }
+                //}
                 //将checkBoxes转换为数据库文件存入应用文件夹
                 try
                 {
@@ -521,6 +528,24 @@ namespace 随机抽取学号.Views
             {
                 checkBoxesGrid.Visibility = Visibility.Collapsed;
                 SettingsScrollViewer.Visibility = Visibility.Visible;
+            }
+        }
+
+        private void CheckBoxListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            StudentManager.checkedCheckBoxes.Clear(); // 清除之前的选中项索引
+            foreach (var item in CheckBoxListView.SelectedItems) // 添加新的选中项索引
+            {
+                
+                    int index = StudentManager.StudentList.IndexOf(item as Student);
+                    CheckedCheckBox checkedCheckBox = new CheckedCheckBox
+                    {
+                        Index = index,
+                        Name = StudentManager.checkedCheckBoxes[index].Name,
+                    };
+                    StudentManager.checkedCheckBoxes.Add(checkedCheckBox);
+
+
             }
         }
     }
