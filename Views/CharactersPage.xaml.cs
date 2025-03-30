@@ -21,6 +21,13 @@ namespace 随机抽取学号.Views
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
+            var compositor = ElementCompositionPreview.GetElementVisual(ContentGrid).Compositor;
+            var animation = compositor.CreateScalarKeyFrameAnimation();
+            animation.InsertKeyFrame(0f, 1f);
+            animation.InsertKeyFrame(1f, 0f);
+            animation.Duration = TimeSpan.FromSeconds(1);
+            var visual = ElementCompositionPreview.GetElementVisual(ContentGrid);
+            visual.StartAnimation("Opacity", animation);
             GC.Collect();
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)

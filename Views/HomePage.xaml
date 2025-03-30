@@ -536,7 +536,6 @@
                             Margin="0,50,0,0"
                             ItemTemplate="{StaticResource CheckBoxListViewItem}"
                             ItemsSource="{x:Bind classes:StudentManager.StudentList}"
-                            SelectionChanged="CheckBoxListView_SelectionChanged"
                             ScrollViewer.VerticalScrollBarVisibility="Auto"
                             SelectionMode="Multiple">
                             <ListView.ItemContainerTransitions>

@@ -61,7 +61,18 @@ namespace 随机抽取学号.Views
             var visual = ElementCompositionPreview.GetElementVisual(ContentGrid);
             visual.StartAnimation("Opacity", animation);
         }
-
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            base.OnNavigatedFrom(e);
+            var compositor = ElementCompositionPreview.GetElementVisual(ContentGrid).Compositor;
+            var animation = compositor.CreateScalarKeyFrameAnimation();
+            animation.InsertKeyFrame(0f, 1f);
+            animation.InsertKeyFrame(1f, 0f);
+            animation.Duration = TimeSpan.FromSeconds(1);
+            var visual = ElementCompositionPreview.GetElementVisual(ContentGrid);
+            visual.StartAnimation("Opacity", animation);
+            GC.Collect();
+        }
         private void UpdateStudentId()//重新更改学号
         {
             for (int i = 0; i < StudentManager.StudentList.Count; i++)
@@ -70,11 +81,6 @@ namespace 随机抽取学号.Views
             }
             StudentListView.ItemsSource = null;
             StudentListView.ItemsSource = StudentManager.StudentList;
-        }
-        protected async override void OnNavigatedFrom(NavigationEventArgs e)
-        {
-            //await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
-            GC.Collect();
         }
         public void UpdateLineNumbers()
         {
