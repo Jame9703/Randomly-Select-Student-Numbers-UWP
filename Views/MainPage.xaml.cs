@@ -45,7 +45,7 @@ namespace 随机抽取学号
         {
             //在MainPage初始化时加载学生信息，确保不重复加载
             StudentManager.StudentList = await StudentManager.LoadStudentsAsync();
-            StudentManager.checkedCheckBoxes = await StudentManager.LoadCheckedStudentsAsync();
+            StudentManager.CheckedStudents = await StudentManager.LoadCheckedStudentsAsync();
             //LoadBackground();
             //PopupContainerInstance = PopupContainer;
             UpdateTextBoxEvent += OnUpdateTextBox; // 订阅事件

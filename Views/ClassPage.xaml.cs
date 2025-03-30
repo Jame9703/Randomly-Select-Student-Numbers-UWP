@@ -399,9 +399,9 @@ namespace 随机抽取学号.Views
         }
         private async void Timer_Tick(object sender, object e)
         {
-            if (StudentManager.SaveProcess >= 0 && StudentManager.SaveProcess < 100)
+            if (StudentManager.SaveStudentsProcess >= 0 && StudentManager.SaveStudentsProcess < 100)
             {
-                SaveProcessBar.Value = StudentManager.SaveProcess;
+                SaveProcessBar.Value = StudentManager.SaveStudentsProcess;
                 SavingStackPanel.Visibility = Visibility.Visible;
                 SaveStackPanel.Visibility = Visibility.Collapsed;
                 SavedStackPanel.Visibility = Visibility.Collapsed;
@@ -534,9 +534,9 @@ namespace 随机抽取学号.Views
         private async void AddFileButton_Click(object sender, RoutedEventArgs e)
         {
             StudentManager.StudentList.Clear();
-            StudentManager.checkedCheckBoxes.Clear();
+            StudentManager.CheckedStudents.Clear();
             await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
-            await StudentManager.SaveCheckedStudentsAsync(StudentManager.checkedCheckBoxes);
+            await StudentManager.SaveCheckedStudentsAsync(StudentManager.CheckedStudents);
         }
 
         private async void OpenLocalFolderButton_Click(object sender, RoutedEventArgs e)

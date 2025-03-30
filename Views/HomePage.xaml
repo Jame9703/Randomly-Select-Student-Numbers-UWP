@@ -521,7 +521,7 @@
                             FontSize="16"
                             IsThreeState="True" />
                         <TextBlock
-                            x:Name="checkedCheckBoxesCount"
+                            x:Name="CheckedStudentsCount"
                             Width="Auto"
                             Height="27"
                             Margin="5,0,0,0"
@@ -535,7 +535,7 @@
                             x:Name="CheckBoxListView"
                             Margin="0,50,0,0"
                             ItemTemplate="{StaticResource CheckBoxListViewItem}"
-                            ItemsSource="{x:Bind classes:StudentManager.CheckBoxItems}"
+                            ItemsSource="{x:Bind classes:StudentManager.StudentList}"
                             SelectionChanged="CheckBoxListView_SelectionChanged"
                             ScrollViewer.VerticalScrollBarVisibility="Auto"
                             SelectionMode="Multiple">
