@@ -1,4 +1,5 @@
-﻿using Microsoft.UI.Xaml.Controls;
+﻿using CommunityToolkit.WinUI;
+using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
@@ -8,6 +9,7 @@ using Windows.Storage;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Data;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Imaging;
@@ -32,7 +34,6 @@ namespace 随机抽取学号.Views
         {
             this.InitializeComponent();
             SideBarSegmented.SelectedIndex = 0;
-            CheckBoxListView.SelectionChanged += CheckBoxListView_SelectionChanged;
             timer.Interval = TimeSpan.FromMilliseconds(20);//默认每秒50次
             timer.Tick += Timer_Tick;
             segmented.SelectedIndex = 0;//在xaml中设置会导致后面的控件未加载就被调用//System.NullReferenceException:“Object reference not set to an instance of an object.”
@@ -41,12 +42,14 @@ namespace 随机抽取学号.Views
         {
             if (StudentManager.CheckedStudents.Count <= StudentManager.StudentList.Count)
             {
-                var checkedStudentNumbers = StudentManager.CheckedStudents.Select(x => x.StudentNumber).ToList();
-                var filteredStudents = StudentManager.StudentList.Where(s => checkedStudentNumbers.Contains(s.StudentNumber)).ToList();
-                foreach (var item in filteredStudents)
-                {
-                    CheckBoxListView.SelectedItems.Add(item);
-                }
+                CheckBoxListView.SelectionChanged -= CheckBoxListView_SelectionChanged;
+                //var checkedStudentNumbers = StudentManager.CheckedStudents.Select(x => x.StudentNumber).ToList();
+                //var filteredStudents = StudentManager.StudentList.Where(s => checkedStudentNumbers.Contains(s.StudentNumber)).ToList();
+                //foreach (var item in filteredStudents)
+                //{
+                //    CheckBoxListView.SelectedItems.Add(item);
+                //}
+                CheckBoxListView.SelectionChanged += CheckBoxListView_SelectionChanged;
                 //var s =   CheckBoxListView.SelectedItems.Count();
                 if (StudentManager.CheckedStudents.Count == StudentManager.StudentList.Count && StudentManager.StudentList.Count > 0)
                 {
@@ -276,23 +279,17 @@ namespace 随机抽取学号.Views
 
         private async void changeCheckBoxes_Click(object sender, RoutedEventArgs e)
         {
-            StudentManager.CheckedStudents.Clear();
             if (StudentManager.StudentList.Count > 0)
             {
                 if (isOnlyThisRangeCheckBox.IsChecked == true)
                 {
-                    CheckBoxListView.SelectedItems.Clear();
+                    CheckBoxListView.DeselectAll();
                 }
                 if (int.TryParse(BeginNumberBox.Text, out int beginnum) == true && int.TryParse(EndNumberBox.Text, out int endnum) == true)
                 {
                     // 转换成功
-                    for (int i = beginnum; i <= endnum; i++)
-                    {
-                        // 将ListView指定范围内的项设置为选中状态
-                        var addstudent = StudentManager.StudentList[i - 1];
-                        CheckBoxListView.SelectedItems.Add(addstudent);
-
-                    }
+                    // 将ListView指定范围内的项设置为选中状态
+                    CheckBoxListView.SelectRange(new ItemIndexRange(beginnum-1, (uint)(endnum -beginnum+1)));
                     PopupNotice popupNotice = new PopupNotice("成功应用更改");
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
                     popupNotice.ShowPopup();
@@ -324,11 +321,12 @@ namespace 随机抽取学号.Views
             }
             if (SelectAllCheckBox.IsChecked == true)
             {
+                StudentManager.CheckedStudents.Clear();
                 CheckBoxListView.SelectAll();
             }
             else if (SelectAllCheckBox.IsChecked == false)
             {
-                CheckBoxListView.SelectedItems.Clear();
+                CheckBoxListView.DeselectAll();
             }
         }
         private void FrequencySelector_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
@@ -446,21 +444,16 @@ namespace 随机抽取学号.Views
 
         private async void CheckBoxListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            StudentManager.CheckedStudents.Clear();
-            foreach(var item in CheckBoxListView.SelectedItems)
+            foreach (var item in e.AddedItems) // 添加新的选中项索引
             {
                 StudentManager.CheckedStudents.Add(item as Student);
             }
-            //var a = e.AddedItems.Count;
-            //foreach (var item in e.AddedItems) // 添加新的选中项索引
-            //{
-            //    StudentManager.CheckedStudents.Add(item as Student);
-            //}
-            //foreach (var item in e.RemovedItems)//移除新的移除项索引
-            //{
-            //    StudentManager.CheckedStudents.Remove(item as Student);
-            //}
+            foreach (var item in e.RemovedItems)//移除新的移除项索引
+            {
+                StudentManager.CheckedStudents.Remove(item as Student);
+            }
             await SaveCheckedStudentsAsync();
+      var a=      CheckBoxListView.SelectedRanges.ToList();
         }
     }
 }

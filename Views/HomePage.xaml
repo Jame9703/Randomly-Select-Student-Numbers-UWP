@@ -15,6 +15,14 @@
     mc:Ignorable="d">
     <Page.Resources>
         <ResourceDictionary>
+            <ResourceDictionary.ThemeDictionaries>
+                <ResourceDictionary x:Key="Light">
+                    <SolidColorBrush x:Key="StudentNumberTextBlockForeground" Color="Gray" />
+                </ResourceDictionary>
+                <ResourceDictionary x:Key="Dark">
+                    <SolidColorBrush x:Key="StudentNumberTextBlockForeground" Color="White" />
+                </ResourceDictionary>
+            </ResourceDictionary.ThemeDictionaries>
             <animations:ImplicitAnimationSet x:Name="ShowTransitions">
                 <animations:OffsetAnimation
                     EasingMode="EaseOut"
@@ -342,15 +350,25 @@
             </Style>
             <DataTemplate x:Key="CheckBoxListViewItem" x:DataType="classes:Student">
                 <Grid>
-                    <!--<CheckBox Click="checkBox_Click" IsChecked="{x:Bind IsChecked, Mode=TwoWay}">-->
-                        <TextBlock
-                            HorizontalAlignment="Stretch"
-                            FontFamily="{StaticResource HarmonyOSSans}"
-                            FontSize="16"
-                            Text="{x:Bind Name}"
-                            TextTrimming="CharacterEllipsis"
-                            TextWrapping="NoWrap" />
-                    <!--</CheckBox>-->
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <TextBlock
+                        Grid.Column="0"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Foreground="{ThemeResource StudentNumberTextBlockForeground}"
+                        FontSize="16"
+                        Text="{x:Bind StudentNumber}" />
+                    <TextBlock
+                        Grid.Column="1"
+                        Margin="5,0,0,0"
+                        HorizontalAlignment="Stretch"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        FontSize="16"
+                        Style="{StaticResource CaptionTextBlockStyle}"
+                        Text="{x:Bind Name}"
+                        TextWrapping="NoWrap" />
                 </Grid>
             </DataTemplate>
         </ResourceDictionary>
@@ -541,14 +559,6 @@
                             <ListView.ItemContainerTransitions>
                                 <TransitionCollection />
                             </ListView.ItemContainerTransitions>
-                            <!--<ListView.ItemContainerStyle>
-                                <Style TargetType="ListViewItem">
-                                    <Setter Property="Margin" Value="0,-3,0,-3" />
-                                    --><!--  上下间距5px，左右无间距  --><!--
-                                    <Setter Property="Padding" Value="0" />
-                                    --><!--  可选：调整项内边距  --><!--
-                                </Style>
-                            </ListView.ItemContainerStyle>-->
                         </ListView>
                         <Button
                             Margin="70,22,0,0"
