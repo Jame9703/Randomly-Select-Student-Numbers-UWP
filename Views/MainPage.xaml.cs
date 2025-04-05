@@ -67,7 +67,7 @@ namespace 随机抽取学号
             this.SizeChanged += MainPage_SizeChanged;
             _lastSelectedButton = HomePageButton;//确保开始时_lastSelectedButton不为null
             string ClassName = localSettings.Values[ClassNameKey] as string;
-            if (ClassName != null) ClassNameHyperlinkButton.Content = ClassName;
+            //if (ClassName != null) ClassNameHyperlinkButton.Content = ClassName;
             if (localSettings.Values["Theme"] != null)
             {
                 if ((int)localSettings.Values["Theme"] == 0)
@@ -219,7 +219,7 @@ namespace 随机抽取学号
 
         private void OnUpdateTextBox(string text)
         {
-            ClassNameHyperlinkButton.Content = text;
+            //ClassNameHyperlinkButton.Content = text;
         }
         private void ContentFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)
         {

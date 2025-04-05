@@ -16,6 +16,7 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
+using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using 随机抽取学号.Classes;
 
@@ -29,6 +30,7 @@ namespace 随机抽取学号.Views
         public List<string> names = new List<string>();
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+        private ListViewItem previousExpandedItem;
 
         public ClassPage()
         {
@@ -255,6 +257,29 @@ namespace 随机抽取学号.Views
             else
             {
                 CurrentSelectionTextBlock.Text = "当前选择项:无";
+            }
+            // 还原前一项
+            if (previousExpandedItem != null)
+            {
+                //Storyboard.SetTarget(CollapseStudentListViewItemStorybord,previousExpandedItem);
+                //CollapseStudentListViewItemStorybord.Begin();
+                previousExpandedItem.ContentTemplate = (DataTemplate)Resources["CollapsedTemplate"];
+            }
+
+            // 获取当前选中项
+            var selectedItem = StudentListView.SelectedItem;
+            if (selectedItem != null)
+            {
+                // 获取当前选中项的 ListViewItem
+                var selectedListViewItem = (ListViewItem)StudentListView.ContainerFromItem(selectedItem);
+                if (selectedListViewItem != null)
+                {
+                    //Storyboard.SetTarget(ExpandStudentListViewItemStorybord, selectedListViewItem);
+                    //ExpandStudentListViewItemStorybord.Begin();
+                    // 展开当前项
+                    selectedListViewItem.ContentTemplate = (DataTemplate)Resources["ExpandedTemplate"];
+                    previousExpandedItem = selectedListViewItem;
+                }
             }
         }
 

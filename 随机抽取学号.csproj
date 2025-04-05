@@ -306,6 +306,7 @@
   </ItemGroup>
   <ItemGroup>
     <Content Include="Fonts\HarmonyOS_Sans_SC_Medium.ttf" />
+    <Content Include="Fonts\Segoe Fluent Icons.ttf" />
     <None Include="随机抽取学号_TemporaryKey.pfx" />
   </ItemGroup>
   <ItemGroup />

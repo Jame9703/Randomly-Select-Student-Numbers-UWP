@@ -372,6 +372,47 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <!--  折叠状态模板  -->
+            <DataTemplate x:Key="CollapsedTemplate" x:DataType="classes:Student">
+                <Grid Height="60" Background="Transparent">
+                    <TextBlock VerticalAlignment="Center" Text="{x:Bind Name}" />
+                </Grid>
+            </DataTemplate>
+
+            <!--  展开状态模板  -->
+            <DataTemplate x:Key="ExpandedTemplate" x:DataType="classes:Student">
+                <Grid Height="120" Background="#FFE1F5FE">
+                    <StackPanel>
+                        <TextBlock FontSize="18" Text="{x:Bind Name}" />
+                        <TextBlock Margin="0,10,0,0" Text="详细信息..." />
+                        <Button Margin="0,10" Content="操作按钮" />
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+            <Storyboard x:Key="ExpandStudentListViewItemStorybord" x:Name="ExpandStudentListViewItemStorybord">
+                <DoubleAnimation
+                    Storyboard.TargetProperty="Height"
+                    To="120"
+                    Duration="0:0:0.2" />
+                <DoubleAnimation
+                    BeginTime="0:0:0.1"
+                    Storyboard.TargetProperty="Opacity"
+                    From="0"
+                    To="1"
+                    Duration="0:0:0.3" />
+            </Storyboard>
+            <Storyboard x:Key="CollapseStudentListViewItemStorybord" x:Name="CollapseStudentListViewItemStorybord">
+                <DoubleAnimation
+                    Storyboard.TargetProperty="Height"
+                    To="60"
+                    Duration="0:0:0.2" />
+                <DoubleAnimation
+                    BeginTime="0:0:0.1"
+                    Storyboard.TargetProperty="Opacity"
+                    From="1"
+                    To="0"
+                    Duration="0:0:0.3" />
+            </Storyboard>
         </ResourceDictionary>
 
 
@@ -470,7 +511,7 @@
                     DragItemsCompleted="StudentListView_DragItemsCompleted"
                     DragOver="StudentListView_DragOver"
                     Drop="StudentListView_Drop"
-                    ItemTemplate="{StaticResource StudentListTemplate}"
+                    ItemTemplate="{StaticResource CollapsedTemplate}"
                     ItemsSource="{x:Bind classes:StudentManager.StudentList}"
                     SelectionChanged="StudentListView_SelectionChanged"
                     SelectionMode="Single">

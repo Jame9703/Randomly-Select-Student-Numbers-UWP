@@ -474,29 +474,27 @@
                         Style="{StaticResource CaptionTextBlockStyle}"
                         Text="Randomly Select Student Numbers" />
                 </Grid>
-                <Grid
-                    Margin="180,0,150,0"
-                    HorizontalAlignment="Stretch">
+                <Grid Margin="180,0,150,0" HorizontalAlignment="Stretch">
                     <Grid.ColumnDefinitions>
-                        <ColumnDefinition Width="Auto"></ColumnDefinition>
-                        <ColumnDefinition Width="*"></ColumnDefinition>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
                     <AutoSuggestBox
-                        MinWidth="150"
-                        Grid.Column="1"
+                        Grid.Column="0"
                         Height="32"
+                        MinWidth="150"
                         MaxWidth="350"
-                        FontSize="14"
-                        AutoMaximizeSuggestionArea="True"
                         VerticalAlignment="Center"
+                        AutoMaximizeSuggestionArea="True"
                         FontFamily="{StaticResource HarmonyOSSans}"
+                        FontSize="14"
                         PlaceholderText="搜索"
                         QueryIcon="Find" />
-                    <HyperlinkButton
+                    <!--<HyperlinkButton
                         x:Name="ClassNameHyperlinkButton"
+                        Grid.Column="1"
                         Width="Auto"
                         Height="36"
-                        Grid.Column="0"
                         x:FieldModifier="public"
                         BorderBrush="{ThemeResource SystemAccentColorDark2}"
                         BorderThickness="2"
@@ -504,8 +502,42 @@
                         Content="我的班级"
                         FocusVisualPrimaryBrush="Transparent"
                         FontFamily="{StaticResource HarmonyOSSans}"
-                        FontSize="16" />
+                        FontSize="16" />-->
+                    <Button Background="Transparent" HorizontalAlignment="Right" Grid.Column="1">
+                        <StackPanel Orientation="Horizontal">
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xEB9F;" />
+                            <TextBlock MaxWidth="100" HorizontalAlignment="Stretch" FontFamily="{StaticResource HarmonyOSSans}" Text="我的班级" TextTrimming="CharacterEllipsis" />
+                        </StackPanel>
 
+
+                        <Button.Flyout>
+                            <MenuFlyout Placement="Bottom">
+                                <MenuFlyoutItem
+                                    
+                                    FontFamily="{StaticResource HarmonyOSSans}"
+                                    Text="更改图片" >
+                                    <MenuFlyoutItem.Icon>
+                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE710;" />
+                                        </MenuFlyoutItem.Icon>
+                                    </MenuFlyoutItem>
+                                <MenuFlyoutItem
+                                    FontFamily="{StaticResource HarmonyOSSans}"
+                                    Text="更改班级名称" >
+                                    <MenuFlyoutItem.Icon>
+                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE8AC;" />
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                                <MenuFlyoutItem
+                                    Click="ClassNameHyperlinkButton_Click"
+                                    FontFamily="{StaticResource HarmonyOSSans}"
+                                    Text="管理班级" >
+                                    <MenuFlyoutItem.Icon>
+                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE80F;" />
+                                    </MenuFlyoutItem.Icon>
+                                </MenuFlyoutItem>
+                            </MenuFlyout>
+                        </Button.Flyout>
+                    </Button>
 
                 </Grid>
 
