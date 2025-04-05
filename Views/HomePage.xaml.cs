@@ -49,6 +49,10 @@ namespace 随机抽取学号.Views
                 //{
                 //    CheckBoxListView.SelectedItems.Add(item);
                 //}
+                foreach(var range in StudentManager.CheckedStudents)
+                {
+                    CheckBoxListView.SelectRange(range);
+                }
                 CheckBoxListView.SelectionChanged += CheckBoxListView_SelectionChanged;
                 //var s =   CheckBoxListView.SelectedItems.Count();
                 if (StudentManager.CheckedStudents.Count == StudentManager.StudentList.Count && StudentManager.StudentList.Count > 0)
@@ -211,7 +215,7 @@ namespace 随机抽取学号.Views
                     if (NoReturnToggleSwitch.IsOn == true)//抽完不放回
                     {
                         var randomstudent = StudentManager.StudentList[randomIndex];
-                        StudentManager.CheckedStudents.Remove(randomstudent);
+                        //StudentManager.CheckedStudents.Remove(randomstudent);
                         CheckBoxListView.SelectedItems.Remove(randomstudent);
                     }
                 }
@@ -235,10 +239,10 @@ namespace 随机抽取学号.Views
                     {
                         currentIndex = 0;
                     }
-                    randomIndex = StudentManager.CheckedStudents[currentIndex].StudentNumber;
-                    StudentPhoto.Source = new BitmapImage(new Uri(StudentManager.StudentList[randomIndex].PhotoPath));
-                    ResultTextBox.Text = (randomIndex + 1).ToString() + "." + StudentManager.StudentList[randomIndex].Name;
-                    currentIndex++;
+                    //randomIndex = StudentManager.CheckedStudents[currentIndex].StudentNumber;
+                    //StudentPhoto.Source = new BitmapImage(new Uri(StudentManager.StudentList[randomIndex].PhotoPath));
+                    //ResultTextBox.Text = (randomIndex + 1).ToString() + "." + StudentManager.StudentList[randomIndex].Name;
+                    //currentIndex++;
                 }
             }
             else
@@ -362,7 +366,8 @@ namespace 随机抽取学号.Views
                         Random random = new Random();
                         StudentManager.CheckedStudents = StudentManager.CheckedStudents.OrderBy(x => random.Next()).ToList();
                         // 取前几位数字
-                        List<Student> Result = StudentManager.CheckedStudents.Take(a).ToList();
+                        //List<Student> Result = StudentManager.CheckedStudents.Take(a).ToList();
+                        List<Student> Result = new List<Student>();
                         selectedStudentList.Clear();
                         for (int i = 0; i < Result.Count; i++)
                         {
@@ -444,14 +449,15 @@ namespace 随机抽取学号.Views
 
         private async void CheckBoxListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            foreach (var item in e.AddedItems) // 添加新的选中项索引
-            {
-                StudentManager.CheckedStudents.Add(item as Student);
-            }
-            foreach (var item in e.RemovedItems)//移除新的移除项索引
-            {
-                StudentManager.CheckedStudents.Remove(item as Student);
-            }
+            //foreach (var item in e.AddedItems) // 添加新的选中项索引
+            //{
+            //    StudentManager.CheckedStudents.Add(item as Student);
+            //}
+            //foreach (var item in e.RemovedItems)//移除新的移除项索引
+            //{
+            //    StudentManager.CheckedStudents.Remove(item as Student);
+            //}
+            StudentManager.CheckedStudents = CheckBoxListView.SelectedRanges.ToList();
             await SaveCheckedStudentsAsync();
       var a=      CheckBoxListView.SelectedRanges.ToList();
         }
