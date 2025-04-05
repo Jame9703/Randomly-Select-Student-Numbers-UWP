@@ -313,7 +313,7 @@ namespace 随机抽取学号.Views
         }
 
 
-        private async void SelectAllCheckBox_Click(object sender, RoutedEventArgs e)
+        private void SelectAllCheckBox_Click(object sender, RoutedEventArgs e)
         {
             if (SelectAllCheckBox.IsChecked == null)
             {

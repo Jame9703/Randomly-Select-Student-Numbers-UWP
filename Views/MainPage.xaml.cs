@@ -43,6 +43,8 @@ namespace 随机抽取学号
         }
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            //确保数据库正常加载
+            await StudentManager.InitializeDatabase();
             //在MainPage初始化时加载学生信息，确保不重复加载
             StudentManager.StudentList = await StudentManager.LoadStudentsAsync();
             StudentManager.SelectedRanges = await StudentManager.LoadCheckedStudentsAsync();

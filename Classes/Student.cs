@@ -17,7 +17,7 @@ namespace 随机抽取学号.Classes
         public int StudentNumber { get; set; }//学号
         public string Name { get; set; }//姓名
         public int Gender { get; set; }//性别
-        public string  PhotoPath { get; set; }//图片路径
+        public string PhotoPath { get; set; }//图片路径
     }
     public static class StudentManager
     {
@@ -28,14 +28,14 @@ namespace 随机抽取学号.Classes
         public static ObservableCollection<Student> StudentList = new ObservableCollection<Student>();// 记录所有学生信息
         public static List<ItemIndexRange> SelectedRanges = new List<ItemIndexRange>();// 记录抽取范围中的连续范围，如[1,1],[2,3]等
         public static List<int> CheckedStudents = new List<int>();// 记录抽取范围中的学生的学号
-        static  StudentManager()
+        public static async Task InitializeDatabase()
         {
             StorageFolder localFolder = ApplicationData.Current.LocalFolder;
             StorageFile StudentDBFile = Task.Run(async () => await localFolder.CreateFileAsync("students.db", CreationCollisionOption.OpenIfExists)).Result;
             StudentDataBasePath = StudentDBFile.Path;
             StorageFile CheckedStudentDBFile = Task.Run(async () => await localFolder.CreateFileAsync("checkedstudents.db", CreationCollisionOption.OpenIfExists)).Result;
             CheckedStudentDataBasePath = CheckedStudentDBFile.Path;
-             CreateTablesAsync();
+            await CreateTablesAsync();
         }
         private static async Task CreateTablesAsync()
         {
@@ -49,33 +49,18 @@ namespace 随机抽取学号.Classes
                     SqliteCommand createStudentsTableCmd = new SqliteCommand(createStudentsTable, db);
                     await createStudentsTableCmd.ExecuteNonQueryAsync();
                 }
-                //using (SqliteConnection db = new SqliteConnection($"Filename={CheckedStudentDataBasePath}"))
-                //{
-                //    await db.OpenAsync();
-                //    // 创建 CheckedStudents 表，StudentNumber 作为主键
-                //    string createCheckedStudentsTable = "CREATE TABLE IF NOT EXISTS CheckedStudents (StudentNumber INT PRIMARY KEY, Name NVARCHAR(2048), Gender INT, PhotoPath NVARCHAR(2048))";
-                //    SqliteCommand createCheckedStudentsTableCmd = new SqliteCommand(createCheckedStudentsTable, db);
-                //    await createCheckedStudentsTableCmd.ExecuteNonQueryAsync();
-                //}
+
                 using (SqliteConnection db = new SqliteConnection($"Filename={CheckedStudentDataBasePath}"))
                 {
                     await db.OpenAsync();
-
-                //    var command = db.CreateCommand();
-                //    command.CommandText = @"
-                //CREATE TABLE IF NOT EXISTS CheckedStudents (
-                //    Id INT PRIMARY KEY AUTOINCREMENT,
-                //    FirstIndex INT,
-                //    LastIndex INT
-                //)";
                     string createStudentsTable = "CREATE TABLE IF NOT EXISTS CheckedStudents (FirstIndex INT,LastIndex INT)";
                     SqliteCommand createStudentsTableCmd = new SqliteCommand(createStudentsTable, db);
-                    await  createStudentsTableCmd.ExecuteNonQueryAsync();
+                    await createStudentsTableCmd.ExecuteNonQueryAsync();
                 }
             }
             catch (Exception ex)
             {
-                PopupNotice popupNotice = new PopupNotice("创建数据库失败"+ex.Message);
+                PopupNotice popupNotice = new PopupNotice("创建数据库失败" + ex.Message);
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
                 popupNotice.ShowPopup();
             }
@@ -111,27 +96,27 @@ namespace 随机抽取学号.Classes
             catch (SqliteException sqliteEx)
             {
                 //处理数据库异常
-                PopupNotice popupNotice = new PopupNotice("加载学生信息失败,发生数据库异常"+sqliteEx.Message);
+                PopupNotice popupNotice = new PopupNotice("加载学生信息失败,发生数据库异常" + sqliteEx.Message);
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
                 popupNotice.ShowPopup();
             }
             catch (UnauthorizedAccessException unauthorizedEx)
             {
                 // 处理权限不足异常
-                PopupNotice popupNotice = new PopupNotice("加载学生信息失败,权限不足"+unauthorizedEx.Message);
+                PopupNotice popupNotice = new PopupNotice("加载学生信息失败,权限不足" + unauthorizedEx.Message);
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
                 popupNotice.ShowPopup();
             }
             catch (IOException ioEx)
             {
                 // 处理输入输出异常，如文件损坏
-                PopupNotice popupNotice = new PopupNotice("加载学生信息失败,发生文件操作异常"+ioEx.Message);
+                PopupNotice popupNotice = new PopupNotice("加载学生信息失败,发生文件操作异常" + ioEx.Message);
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
                 popupNotice.ShowPopup();
             }
             catch (Exception ex)
             {
-                PopupNotice popupNotice = new PopupNotice("加载学生信息失败,发生未知错误"+ex.Message);
+                PopupNotice popupNotice = new PopupNotice("加载学生信息失败,发生未知错误" + ex.Message);
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
                 popupNotice.ShowPopup();
             }
@@ -152,7 +137,7 @@ namespace 随机抽取学号.Classes
                         {
                             // 清空数据库中的数据
                             string clearQuery = "DELETE FROM Students";
-                            using (SqliteCommand clearCommand = new SqliteCommand(clearQuery, connection,(SqliteTransaction)transaction))
+                            using (SqliteCommand clearCommand = new SqliteCommand(clearQuery, connection, (SqliteTransaction)transaction))
                             {
                                 await clearCommand.ExecuteNonQueryAsync();
                             }
@@ -232,92 +217,6 @@ namespace 随机抽取学号.Classes
 
         public static async Task SaveCheckedStudentsAsync(List<ItemIndexRange> checkedstudents)
         {
-            //using (SqliteConnection connection = new SqliteConnection($"Filename={CheckedStudentDataBasePath}"))
-            //{
-            //    try
-            //    {
-            //        await connection.OpenAsync();
-            //        // 开始事务
-            //        using (DbTransaction transaction = connection.BeginTransaction())
-            //        {
-            //            try
-            //            {
-            //                // 清空数据库中的数据
-            //                string clearQuery = "DELETE FROM CheckedStudents";
-            //                using (SqliteCommand clearCommand = new SqliteCommand(clearQuery, connection,(SqliteTransaction)transaction))
-            //                {
-            //                    await clearCommand.ExecuteNonQueryAsync();
-            //                }
-            //                string insertQuery = "INSERT INTO CheckedStudents (StudentNumber, Name, Gender, PhotoPath) VALUES (@StudentNumber, @Name, @Gender, @PhotoPath)";
-            //                using (SqliteCommand insertCommand = new SqliteCommand(insertQuery, connection, (SqliteTransaction)transaction))
-            //                {
-            //                    insertCommand.Parameters.Add("@StudentNumber", SqliteType.Integer);
-            //                    insertCommand.Parameters.Add("@Name", SqliteType.Text);
-            //                    insertCommand.Parameters.Add("@Gender", SqliteType.Integer);
-            //                    insertCommand.Parameters.Add("@PhotoPath", SqliteType.Text);
-            //                    int totalCount = checkedstudents.Count;
-            //                    if (totalCount != 0)
-            //                    {
-            //                        for (int i = 0; i < totalCount; i++)
-            //                        {
-            //                            Student checkedstudent = checkedstudents[i];
-            //                            insertCommand.Parameters["@StudentNumber"].Value = checkedstudent.StudentNumber;
-            //                            insertCommand.Parameters["@Name"].Value = checkedstudent.Name;
-            //                            insertCommand.Parameters["@Gender"].Value = checkedstudent.Gender;
-            //                            insertCommand.Parameters["@PhotoPath"].Value = checkedstudent.PhotoPath;
-            //                            await insertCommand.ExecuteNonQueryAsync();
-            //                            // 计算并报告进度
-            //                            SaveCheckedStudentsProcess = (int)((i + 1) * 100.0 / totalCount);
-            //                        }
-            //                    }
-            //                    else
-            //                    {
-            //                        SaveCheckedStudentsProcess = -1;
-            //                    }
-            //                }
-            //                // 提交事务
-            //                transaction.Commit();
-            //            }
-            //            catch (SqliteException sqliteEx)
-            //            {
-            //                transaction.Rollback(); // 发生错误时回滚事务
-            //                                        //处理数据库异常
-            //                PopupNotice popupNotice = new PopupNotice("保存抽取范围信息失败,发生数据库异常" + sqliteEx.Message);
-            //                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
-            //                popupNotice.ShowPopup();
-            //            }
-            //            catch (UnauthorizedAccessException unauthorizedEx)
-            //            {
-            //                transaction.Rollback(); // 发生错误时回滚事务
-            //                                        // 处理权限不足异常
-            //                PopupNotice popupNotice = new PopupNotice("保存抽取范围信息失败,权限不足" + unauthorizedEx.Message);
-            //                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
-            //                popupNotice.ShowPopup();
-            //            }
-            //            catch (IOException ioEx)
-            //            {
-            //                transaction.Rollback(); // 发生错误时回滚事务
-            //                                        // 处理输入输出异常，如文件损坏
-            //                PopupNotice popupNotice = new PopupNotice("保存抽取范围信息失败,发生文件操作异常" + ioEx.Message);
-            //                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
-            //                popupNotice.ShowPopup();
-            //            }
-            //            catch (Exception ex)
-            //            {
-            //                transaction.Rollback(); // 发生错误时回滚事务
-            //                PopupNotice popupNotice = new PopupNotice("保存抽取范围信息数据库失败" + ex.Message);
-            //                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
-            //                popupNotice.ShowPopup();
-            //            }
-            //        }
-            //    }
-            //    catch (Exception ex)
-            //    {
-            //        PopupNotice popupNotice = new PopupNotice("连接抽取范围信息数据库失败" + ex.Message);
-            //        popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
-            //        popupNotice.ShowPopup();
-            //    }
-            //}
             using (var connection = new SqliteConnection($"Filename={CheckedStudentDataBasePath}"))
             {
                 await connection.OpenAsync();
@@ -354,27 +253,40 @@ namespace 随机抽取学号.Classes
                             {
                                 SaveCheckedStudentsProcess = -1;
                             }
-                            //    // 插入新数据
-                            //    foreach (var range in ranges)
-                            //{
-                            //    var insertCommand = connection.CreateCommand();
-                            //    insertCommand.CommandText = @"
-                            //INSERT INTO CheckedStudents (FirstIndex, LastIndex)
-                            //VALUES ($first, $last)";
-
-                            //    insertCommand.Parameters.AddWithValue("$first", range.FirstIndex);
-                            //    insertCommand.Parameters.AddWithValue("$last", range.LastIndex);
-
-                            //    insertCommand.ExecuteNonQuery();
-                            //}
-
+                            //提交事务
                             transaction.Commit();
                         }
                     }
-                    catch
+                    catch (SqliteException sqliteEx)
                     {
-                        transaction.Rollback();
-                        throw;
+                        transaction.Rollback(); // 发生错误时回滚事务
+                                                //处理数据库异常
+                        PopupNotice popupNotice = new PopupNotice("保存抽取范围信息失败,发生数据库异常" + sqliteEx.Message);
+                        popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                        popupNotice.ShowPopup();
+                    }
+                    catch (UnauthorizedAccessException unauthorizedEx)
+                    {
+                        transaction.Rollback(); // 发生错误时回滚事务
+                                                // 处理权限不足异常
+                        PopupNotice popupNotice = new PopupNotice("保存抽取范围信息失败,权限不足" + unauthorizedEx.Message);
+                        popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                        popupNotice.ShowPopup();
+                    }
+                    catch (IOException ioEx)
+                    {
+                        transaction.Rollback(); // 发生错误时回滚事务
+                                                // 处理输入输出异常，如文件损坏
+                        PopupNotice popupNotice = new PopupNotice("保存抽取范围信息失败,发生文件操作异常" + ioEx.Message);
+                        popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                        popupNotice.ShowPopup();
+                    }
+                    catch (Exception ex)
+                    {
+                        transaction.Rollback(); // 发生错误时回滚事务
+                        PopupNotice popupNotice = new PopupNotice("保存抽取范围信息数据库失败" + ex.Message);
+                        popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                        popupNotice.ShowPopup();
                     }
                 }
             }
@@ -383,81 +295,58 @@ namespace 随机抽取学号.Classes
 
         public static async Task<List<ItemIndexRange>> LoadCheckedStudentsAsync()
         {
-
-            var ranges = new List<ItemIndexRange>();
-
-            using (var connection = new SqliteConnection($"Filename={CheckedStudentDataBasePath}"))
+            try
             {
-                await connection.OpenAsync();
+                var ranges = new List<ItemIndexRange>();
 
-                var command = connection.CreateCommand();
-                command.CommandText = "SELECT * FROM CheckedStudents";
-
-                using (var reader = command.ExecuteReader())
+                using (var connection = new SqliteConnection($"Filename={CheckedStudentDataBasePath}"))
                 {
-                    while (reader.Read())
+                    await connection.OpenAsync();
+
+                    var command = connection.CreateCommand();
+                    command.CommandText = "SELECT * FROM CheckedStudents";
+
+                    using (var reader = command.ExecuteReader())
                     {
-                        int firstIndex = reader.GetInt32(0);
-                        int length = reader.GetInt32(1) - firstIndex + 1;
-                        ranges.Add(new ItemIndexRange(firstIndex, (uint)length));
+                        while (reader.Read())
+                        {
+                            int firstIndex = reader.GetInt32(0);
+                            int length = reader.GetInt32(1) - firstIndex + 1;
+                            ranges.Add(new ItemIndexRange(firstIndex, (uint)length));
+                        }
                     }
                 }
-            }
 
-            return ranges;
-            //try
-            //{
-            //    List<Student> checkedstudents = new List<Student>();
-            //    using (SqliteConnection db = new SqliteConnection($"Filename={CheckedStudentDataBasePath}"))
-            //    {
-            //        await db.OpenAsync();
-            //        string selectCommand = "SELECT * FROM CheckedStudents";
-            //        SqliteCommand selectCmd = new SqliteCommand(selectCommand, db);
-            //        using (SqliteDataReader query = await selectCmd.ExecuteReaderAsync())
-            //        {
-            //            while (await query.ReadAsync())
-            //            {
-            //                Student student = new Student
-            //                {
-            //                    StudentNumber = query.GetInt32(0),
-            //                    Name = query.GetString(1),
-            //                    Gender = query.GetInt32(2),
-            //                    PhotoPath = query.GetString(3)
-            //                };
-            //                checkedstudents.Add(student);
-            //            }
-            //        }
-            //    }
-            //    return checkedstudents;
-            //}
-            //catch (SqliteException sqliteEx)
-            //{
-            //    //处理数据库异常
-            //    PopupNotice popupNotice = new PopupNotice("加载抽取范围信息失败,发生数据库异常" + sqliteEx.Message);
-            //    popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
-            //    popupNotice.ShowPopup();
-            //}
-            //catch (UnauthorizedAccessException unauthorizedEx)
-            //{
-            //    // 处理权限不足异常
-            //    PopupNotice popupNotice = new PopupNotice("加载抽取范围信息失败,权限不足" + unauthorizedEx.Message);
-            //    popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
-            //    popupNotice.ShowPopup();
-            //}
-            //catch (IOException ioEx)
-            //{
-            //    // 处理输入输出异常，如文件损坏
-            //    PopupNotice popupNotice = new PopupNotice("加载抽取范围信息失败,发生文件操作异常" + ioEx.Message);
-            //    popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
-            //    popupNotice.ShowPopup();
-            //}
-            //catch (Exception ex)
-            //{
-            //    PopupNotice popupNotice = new PopupNotice("加载抽取范围信息失败,发生未知错误"+ex.Message);
-            //    popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
-            //    popupNotice.ShowPopup();
-            //}
-            //return new List<>();
+                return ranges;
+            }
+            catch (SqliteException sqliteEx)
+            {
+                //处理数据库异常
+                PopupNotice popupNotice = new PopupNotice("加载抽取范围信息失败,发生数据库异常" + sqliteEx.Message);
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.ShowPopup();
+            }
+            catch (UnauthorizedAccessException unauthorizedEx)
+            {
+                // 处理权限不足异常
+                PopupNotice popupNotice = new PopupNotice("加载抽取范围信息失败,权限不足" + unauthorizedEx.Message);
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.ShowPopup();
+            }
+            catch (IOException ioEx)
+            {
+                // 处理输入输出异常，如文件损坏
+                PopupNotice popupNotice = new PopupNotice("加载抽取范围信息失败,发生文件操作异常" + ioEx.Message);
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.ShowPopup();
+            }
+            catch (Exception ex)
+            {
+                PopupNotice popupNotice = new PopupNotice("加载抽取范围信息失败,发生未知错误" + ex.Message);
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.ShowPopup();
+            }
+            return new List<ItemIndexRange>();
         }
     }
 }
