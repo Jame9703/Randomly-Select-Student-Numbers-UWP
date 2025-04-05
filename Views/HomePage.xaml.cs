@@ -43,31 +43,12 @@ namespace 随机抽取学号.Views
             if (StudentManager.CheckedStudents.Count <= StudentManager.StudentList.Count)
             {
                 CheckBoxListView.SelectionChanged -= CheckBoxListView_SelectionChanged;
-                //var checkedStudentNumbers = StudentManager.CheckedStudents.Select(x => x.StudentNumber).ToList();
-                //var filteredStudents = StudentManager.StudentList.Where(s => checkedStudentNumbers.Contains(s.StudentNumber)).ToList();
-                //foreach (var item in filteredStudents)
-                //{
-                //    CheckBoxListView.SelectedItems.Add(item);
-                //}
-                foreach(var range in StudentManager.CheckedStudents)
+                foreach (var range in StudentManager.SelectedRanges)
                 {
                     CheckBoxListView.SelectRange(range);
                 }
                 CheckBoxListView.SelectionChanged += CheckBoxListView_SelectionChanged;
-                //var s =   CheckBoxListView.SelectedItems.Count();
-                if (StudentManager.CheckedStudents.Count == StudentManager.StudentList.Count && StudentManager.StudentList.Count > 0)
-                {
-                    SelectAllCheckBox.IsChecked = true;
-                }
-                else if (StudentManager.CheckedStudents.Count == 0)
-                {
-                    SelectAllCheckBox.IsChecked = false;
-                }
-                else
-                {
-                    SelectAllCheckBox.IsChecked = null;
-                }
-                CheckedStudentsCount.Text = "已选择" + StudentManager.CheckedStudents.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
+                UpdateCheckedStudentsCount();//更新已选人数
 
                 EndNumberBox.Value = StudentManager.StudentList.Count;
                 BeginNumberBox.Maximum = StudentManager.StudentList.Count;
@@ -129,7 +110,30 @@ namespace 随机抽取学号.Views
             var visual = ElementCompositionPreview.GetElementVisual(ContentGrid);
             visual.StartAnimation("Opacity", animation);
         }
-
+        private void UpdateCheckedStudentsCount()
+        {
+            UpdateCheckedStudents();
+            Numbers.Minimum = 1;
+            if (StudentManager.CheckedStudents.Count > 0)//重新设置最大抽取人数
+            {
+                Numbers.Maximum = StudentManager.CheckedStudents.Count;
+            }
+            //重新判断是否全选
+            if (StudentManager.CheckedStudents.Count == StudentManager.StudentList.Count && StudentManager.StudentList.Count > 0)
+            {
+                SelectAllCheckBox.IsChecked = true;
+            }
+            else if (StudentManager.CheckedStudents.Count == 0)
+            {
+                SelectAllCheckBox.IsChecked = false;
+            }
+            else
+            {
+                SelectAllCheckBox.IsChecked = null;
+            }
+            //更新已选人数
+            CheckedStudentsCount.Text = "已选择" + StudentManager.CheckedStudents.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
+        }
         private void LoadPhotosGridView()//多人模式下加载PhotosGridView
         {
             PhotosGrid.Children.Clear();
@@ -139,32 +143,12 @@ namespace 随机抽取学号.Views
             PhotosGridView.Style = (Style)Resources["GridViewStyle"];
             PhotosGridView.ItemsSource = selectedStudentList;
         }
-        private async Task SaveCheckedStudentsAsync()//将选中的CheckBox存入localSettings
+        private async Task SaveCheckedStudentsAsync()
         {
-            //StudentManager.CheckedStudents.Clear();
             if (StudentManager.StudentList.Count > 0)
             {
-                //将CheckedStudents转换为数据库文件存入应用文件夹
-                await StudentManager.SaveCheckedStudentsAsync(StudentManager.CheckedStudents);
-                CheckedStudentsCount.Text = "已选择" + StudentManager.CheckedStudents.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
-                Numbers.Minimum = 1;
-                if (StudentManager.CheckedStudents.Count > 0)//重新设置最大抽取人数
-                {
-                    Numbers.Maximum = StudentManager.CheckedStudents.Count;
-                }
-                // 重新判断是否全选
-                if (StudentManager.CheckedStudents.Count == StudentManager.StudentList.Count)
-                {
-                    SelectAllCheckBox.IsChecked = true;
-                }
-                else if (StudentManager.CheckedStudents.Count == 0)
-                {
-                    SelectAllCheckBox.IsChecked = false;
-                }
-                else
-                {
-                    SelectAllCheckBox.IsChecked = null;
-                }
+                //将SelectedRanges转换为数据库文件存入应用文件夹
+                await StudentManager.SaveCheckedStudentsAsync(StudentManager.SelectedRanges);
             }
         }
         private async void StartorStopButton_Click(object sender, RoutedEventArgs e)//仅在单人模式有效
@@ -193,9 +177,11 @@ namespace 随机抽取学号.Views
                     StartorStopButtonContent.Text = "停止";
                     StartorStopButtonIcon.Symbol = Symbol.Pause;
                     StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 236, G = 179, B = 1 });
-                    if(OptimizeToggleSwitch.IsOn == true)//优化开关打开
+                    //根据SelectedRanges更新CheckedStudents
+                    UpdateCheckedStudents();
+                    if (OptimizeToggleSwitch.IsOn == true)//优化开关打开
                     {
-                        for (int i =  0; i < StudentManager.CheckedStudents.Count; i++)//洗牌算法，全部打乱
+                        for (int i = 0; i < StudentManager.CheckedStudents.Count; i++)//洗牌算法，全部打乱
                         {
                             int j = random.Next(StudentManager.CheckedStudents.Count);
                             var temp = StudentManager.CheckedStudents[i];
@@ -215,34 +201,44 @@ namespace 随机抽取学号.Views
                     if (NoReturnToggleSwitch.IsOn == true)//抽完不放回
                     {
                         var randomstudent = StudentManager.StudentList[randomIndex];
-                        //StudentManager.CheckedStudents.Remove(randomstudent);
                         CheckBoxListView.SelectedItems.Remove(randomstudent);
                     }
                 }
             }
         }
-
+        private void UpdateCheckedStudents()
+        {
+            StudentManager.CheckedStudents.Clear();
+            foreach (var range in StudentManager.SelectedRanges)
+            {
+                for (int i = range.FirstIndex; i <= range.LastIndex; i++)
+                {
+                    StudentManager.CheckedStudents.Add(i);
+                }
+            }
+        }
         private void Timer_Tick(object sender, object e)
         {
-            if(StudentManager.CheckedStudents .Count != 0)
+            if (StudentManager.CheckedStudents.Count != 0)
             {
-                if(OptimizeToggleSwitch.IsOn == false)//优化开关关闭
+                if (OptimizeToggleSwitch.IsOn == false)//优化开关关闭
                 {
-                    randomIndex = random.Next(StudentManager.CheckedStudents.Count);
+                    var randomIndexinCheckedStudents = random.Next(StudentManager.CheckedStudents.Count);
+                    randomIndex = StudentManager.CheckedStudents[randomIndexinCheckedStudents];
                     var randomstudent = StudentManager.StudentList[randomIndex];
                     StudentPhoto.Source = new BitmapImage(new Uri(randomstudent.PhotoPath));
                     ResultTextBox.Text = (randomIndex + 1).ToString() + "." + randomstudent.Name;
                 }
                 else //优化开关打开
                 {
-                    if(currentIndex +1  > StudentManager.CheckedStudents.Count)
+                    if (currentIndex + 1 > StudentManager.CheckedStudents.Count)
                     {
                         currentIndex = 0;
                     }
-                    //randomIndex = StudentManager.CheckedStudents[currentIndex].StudentNumber;
-                    //StudentPhoto.Source = new BitmapImage(new Uri(StudentManager.StudentList[randomIndex].PhotoPath));
-                    //ResultTextBox.Text = (randomIndex + 1).ToString() + "." + StudentManager.StudentList[randomIndex].Name;
-                    //currentIndex++;
+                    randomIndex = StudentManager.CheckedStudents[currentIndex];
+                    StudentPhoto.Source = new BitmapImage(new Uri(StudentManager.StudentList[randomIndex].PhotoPath));
+                    ResultTextBox.Text = (randomIndex + 1).ToString() + "." + StudentManager.StudentList[randomIndex].Name;
+                    currentIndex++;
                 }
             }
             else
@@ -293,7 +289,7 @@ namespace 随机抽取学号.Views
                 {
                     // 转换成功
                     // 将ListView指定范围内的项设置为选中状态
-                    CheckBoxListView.SelectRange(new ItemIndexRange(beginnum-1, (uint)(endnum -beginnum+1)));
+                    CheckBoxListView.SelectRange(new ItemIndexRange(beginnum - 1, (uint)(endnum - beginnum + 1)));
                     PopupNotice popupNotice = new PopupNotice("成功应用更改");
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
                     popupNotice.ShowPopup();
@@ -335,7 +331,7 @@ namespace 随机抽取学号.Views
         }
         private void FrequencySelector_ValueChanged(object sender, Windows.UI.Xaml.Controls.Primitives.RangeBaseValueChangedEventArgs e)
         {
-            if(FrequencySelector.Value==0)
+            if (FrequencySelector.Value == 0)
             {
                 FrequencySelector.Value = 1;
             }
@@ -366,21 +362,16 @@ namespace 随机抽取学号.Views
                         Random random = new Random();
                         StudentManager.CheckedStudents = StudentManager.CheckedStudents.OrderBy(x => random.Next()).ToList();
                         // 取前几位数字
-                        //List<Student> Result = StudentManager.CheckedStudents.Take(a).ToList();
-                        List<Student> Result = new List<Student>();
+                        List<int> Result = StudentManager.CheckedStudents.Take(a).ToList();
                         selectedStudentList.Clear();
                         for (int i = 0; i < Result.Count; i++)
                         {
-                            var item = new Student 
-                            {
-                                StudentNumber = Result[i].StudentNumber,//学号，从1开始
-                                PhotoPath = Result[i].PhotoPath,
-                                Name = Result[i].Name
-                            };
-                            selectedStudentList.Add(item);
+                            var result = Result[i];
+                            var student = StudentManager.StudentList[result];
+                            selectedStudentList.Add(student);
                             if (NoReturnToggleSwitch.IsOn == true)//抽完不放回
                             {
-                                CheckBoxListView.SelectedItems.Remove(Result[i]);
+                                CheckBoxListView.SelectedItems.Remove(student);
                             }
                         }
                         LoadPhotosGridView();
@@ -435,7 +426,7 @@ namespace 随机抽取学号.Views
 
         private void SideBarSegmented_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(SideBarSegmented.SelectedIndex == 0)
+            if (SideBarSegmented.SelectedIndex == 0)
             {
                 SettingsScrollViewer.Visibility = Visibility.Collapsed;
                 checkBoxesGrid.Visibility = Visibility.Visible;
@@ -457,9 +448,9 @@ namespace 随机抽取学号.Views
             //{
             //    StudentManager.CheckedStudents.Remove(item as Student);
             //}
-            StudentManager.CheckedStudents = CheckBoxListView.SelectedRanges.ToList();
+            StudentManager.SelectedRanges = CheckBoxListView.SelectedRanges.ToList();
+            UpdateCheckedStudentsCount();
             await SaveCheckedStudentsAsync();
-      var a=      CheckBoxListView.SelectedRanges.ToList();
         }
     }
 }

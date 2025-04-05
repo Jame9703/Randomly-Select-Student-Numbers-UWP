@@ -542,7 +542,7 @@ namespace 随机抽取学号.Views
             StudentManager.StudentList.Clear();
             StudentManager.CheckedStudents.Clear();
             await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
-            await StudentManager.SaveCheckedStudentsAsync(StudentManager.CheckedStudents);
+            await StudentManager.SaveCheckedStudentsAsync(StudentManager.SelectedRanges);
         }
 
         private async void OpenLocalFolderButton_Click(object sender, RoutedEventArgs e)

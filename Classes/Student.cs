@@ -26,7 +26,8 @@ namespace 随机抽取学号.Classes
         public static int SaveStudentsProcess;// 记录保存学生信息进度
         public static int SaveCheckedStudentsProcess;// 记录保存抽取范围中的学生信息进度
         public static ObservableCollection<Student> StudentList = new ObservableCollection<Student>();// 记录所有学生信息
-        public static List<ItemIndexRange> CheckedStudents = new List<ItemIndexRange>();// 记录抽取范围中的学生信息
+        public static List<ItemIndexRange> SelectedRanges = new List<ItemIndexRange>();// 记录抽取范围中的连续范围，如[1,1],[2,3]等
+        public static List<int> CheckedStudents = new List<int>();// 记录抽取范围中的学生的学号
         static  StudentManager()
         {
             StorageFolder localFolder = ApplicationData.Current.LocalFolder;
