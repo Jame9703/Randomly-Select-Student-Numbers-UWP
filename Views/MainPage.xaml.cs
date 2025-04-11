@@ -62,7 +62,7 @@ namespace 随机抽取学号
             ApplicationViewTitleBar formattableTitleBar = ApplicationView.GetForCurrentView().TitleBar;
             formattableTitleBar.ButtonBackgroundColor = Colors.Transparent;
 
-            ContentFrame.Navigate(typeof(HomePage), null, new DrillInNavigationTransitionInfo());
+            ContentFrame.Navigate(typeof(HomePage));
             HomePageButton.IsChecked = true;
             this.SizeChanged += MainPage_SizeChanged;
             _lastSelectedButton = HomePageButton;//确保开始时_lastSelectedButton不为null
@@ -229,14 +229,14 @@ namespace 随机抽取学号
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-            ContentFrame.Navigate(typeof(HomePage), null, new DrillInNavigationTransitionInfo());
+            ContentFrame.Navigate(typeof(HomePage));
 
         }
         private void ClassPage_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-            ContentFrame.Navigate(typeof(ClassPage), null, new DrillInNavigationTransitionInfo());
+            ContentFrame.Navigate(typeof(ClassPage));
 
         }
 
@@ -244,13 +244,13 @@ namespace 随机抽取学号
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-            ContentFrame.Navigate(typeof(NumbersPage), null, new DrillInNavigationTransitionInfo());
+            ContentFrame.Navigate(typeof(NumbersPage), null);
         }
         private void CharactersPage_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-            ContentFrame.Navigate(typeof(CharactersPage), null, new DrillInNavigationTransitionInfo());
+            ContentFrame.Navigate(typeof(CharactersPage));
 
 
 
@@ -259,14 +259,14 @@ namespace 随机抽取学号
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-            ContentFrame.Navigate(typeof(HelpPage), null, new DrillInNavigationTransitionInfo());
+            ContentFrame.Navigate(typeof(HelpPage));
 
         }
         private void SettingsPage_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as AppBarToggleButton;
             StartAnimation(button);
-            ContentFrame.Navigate(typeof(SettingsPage), null, new DrillInNavigationTransitionInfo());
+            ContentFrame.Navigate(typeof(SettingsPage));
 
         }
 

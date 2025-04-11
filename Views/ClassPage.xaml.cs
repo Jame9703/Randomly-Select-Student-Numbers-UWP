@@ -13,6 +13,7 @@ using Windows.System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
@@ -259,13 +260,13 @@ namespace 随机抽取学号.Views
                 CurrentSelectionTextBlock.Text = "当前选择项:无";
             }
             // 还原前一项
-            if (previousExpandedItem != null)
-            {
-                //Storyboard.SetTarget(CollapseStudentListViewItemStorybord,previousExpandedItem);
-                //CollapseStudentListViewItemStorybord.Begin();
-                previousExpandedItem.ContentTemplate = (DataTemplate)Resources["CollapsedTemplate"];
-            }
+            //if (previousExpandedItem != null)
+            //{
 
+
+            //}
+            CollapseStudentListViewItemStorybord.Stop();
+            ExpandStudentListViewItemStorybord.Stop();
             // 获取当前选中项
             var selectedItem = StudentListView.SelectedItem;
             if (selectedItem != null)
@@ -274,10 +275,22 @@ namespace 随机抽取学号.Views
                 var selectedListViewItem = (ListViewItem)StudentListView.ContainerFromItem(selectedItem);
                 if (selectedListViewItem != null)
                 {
-                    //Storyboard.SetTarget(ExpandStudentListViewItemStorybord, selectedListViewItem);
-                    //ExpandStudentListViewItemStorybord.Begin();
-                    // 展开当前项
-                    selectedListViewItem.ContentTemplate = (DataTemplate)Resources["ExpandedTemplate"];
+                    if(previousExpandedItem != null)
+                    {
+                        //将前一项折叠，将当前项展开
+                        //Storyboard.SetTarget(CollapseStudentListViewItemStorybord, previousExpandedItem);
+                        //Storyboard.SetTarget(ExpandStudentListViewItemStorybord, selectedListViewItem);
+                        //CollapseStudentListViewItemStorybord.Begin();
+                        //ExpandStudentListViewItemStorybord.Begin();
+                        previousExpandedItem.ContentTemplate = (DataTemplate)Resources["CollapsedTemplate"];
+                        selectedListViewItem.ContentTemplate = (DataTemplate)Resources["ExpandedTemplate"];
+                    }
+                    else
+                    {
+                        //Storyboard.SetTarget(ExpandStudentListViewItemStorybord, selectedListViewItem);
+                        //ExpandStudentListViewItemStorybord.Begin();
+                        selectedListViewItem.ContentTemplate = (DataTemplate)Resources["ExpandedTemplate"];
+                    }
                     previousExpandedItem = selectedListViewItem;
                 }
             }
@@ -695,6 +708,19 @@ namespace 随机抽取学号.Views
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
                 popupNotice.ShowPopup();
             }
+        }
+
+        private void ExpandStudentListViewItemStorybord_Completed(object sender, object e)
+        {
+            var selectedListViewItem = (ListViewItem)StudentListView.ContainerFromItem(StudentListView.SelectedItem);
+            //previousExpandedItem.ContentTemplate = (DataTemplate)Resources["CollapsedTemplate"];
+            selectedListViewItem.ContentTemplate = (DataTemplate)Resources["ExpandedTemplate"];
+        }
+
+        private void CollapseStudentListViewItemStorybord_Completed(object sender, object e)
+        {
+            previousExpandedItem.ContentTemplate = (DataTemplate)Resources["CollapsedTemplate"];
+            //selectedListViewItem.ContentTemplate = (DataTemplate)Resources["ExpandedTemplate"];
         }
     }
 

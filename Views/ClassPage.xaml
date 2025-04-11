@@ -389,29 +389,31 @@
                     </StackPanel>
                 </Grid>
             </DataTemplate>
-            <Storyboard x:Key="ExpandStudentListViewItemStorybord" x:Name="ExpandStudentListViewItemStorybord">
+            <Storyboard x:Key="ExpandStudentListViewItemStorybord" x:Name="ExpandStudentListViewItemStorybord" Completed="ExpandStudentListViewItemStorybord_Completed">
                 <DoubleAnimation
                     Storyboard.TargetProperty="Height"
+                    From="60"
                     To="120"
-                    Duration="0:0:0.2" />
-                <DoubleAnimation
+                    Duration="0:0:0.01" />
+                <!--<DoubleAnimation
                     BeginTime="0:0:0.1"
                     Storyboard.TargetProperty="Opacity"
                     From="0"
                     To="1"
-                    Duration="0:0:0.3" />
+                    Duration="0:0:0.3" />-->
             </Storyboard>
-            <Storyboard x:Key="CollapseStudentListViewItemStorybord" x:Name="CollapseStudentListViewItemStorybord">
+            <Storyboard x:Key="CollapseStudentListViewItemStorybord" x:Name="CollapseStudentListViewItemStorybord" Completed="CollapseStudentListViewItemStorybord_Completed">
                 <DoubleAnimation
                     Storyboard.TargetProperty="Height"
+                    From="120"
                     To="60"
-                    Duration="0:0:0.2" />
-                <DoubleAnimation
+                    Duration="0:0:0.01" />
+                <!--<DoubleAnimation
                     BeginTime="0:0:0.1"
                     Storyboard.TargetProperty="Opacity"
                     From="1"
                     To="0"
-                    Duration="0:0:0.3" />
+                    Duration="0:0:0.3" />-->
             </Storyboard>
         </ResourceDictionary>
 
@@ -511,6 +513,7 @@
                     DragItemsCompleted="StudentListView_DragItemsCompleted"
                     DragOver="StudentListView_DragOver"
                     Drop="StudentListView_Drop"
+                   
                     ItemTemplate="{StaticResource CollapsedTemplate}"
                     ItemsSource="{x:Bind classes:StudentManager.StudentList}"
                     SelectionChanged="StudentListView_SelectionChanged"
