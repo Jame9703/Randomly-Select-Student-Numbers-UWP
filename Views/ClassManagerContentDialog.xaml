@@ -8,10 +8,22 @@
     mc:Ignorable="d"
     Title="TITLE"
     PrimaryButtonText="Button1"
+        xmlns:communitytoolkitcontrols="using:CommunityToolkit.WinUI.Controls"
     SecondaryButtonText="Button2"
     PrimaryButtonClick="ContentDialog_PrimaryButtonClick"
     SecondaryButtonClick="ContentDialog_SecondaryButtonClick">
 
     <Grid>
+        <communitytoolkitcontrols:Segmented HorizontalAlignment="Stretch">
+            <communitytoolkitcontrols:SegmentedItem Content="班级图片"  FontFamily="{StaticResource HarmonyOSSans}"/>
+            <communitytoolkitcontrols:SegmentedItem Content="班级名称" FontFamily="{StaticResource HarmonyOSSans}"/>
+        </communitytoolkitcontrols:Segmented>
+        <Grid>
+            <Grid>
+                <PersonPicture   ProfilePicture="/Photos/background.jpg"></PersonPicture>
+            </Grid>
+            <Grid>
+                </Grid>
+        </Grid>
     </Grid>
 </ContentDialog>
