@@ -618,11 +618,7 @@
                             VerticalAlignment="Center"
                             FontFamily="{StaticResource HarmonyOSSans}">
                             <StackPanel>
-                                <SymbolIcon HorizontalAlignment="Center" Symbol="Add">
-                                    <SymbolIcon.RenderTransform>
-                                        <CompositeTransform ScaleX="0.8" ScaleY="0.8" />
-                                    </SymbolIcon.RenderTransform>
-                                </SymbolIcon>
+                                <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE8FA;"></FontIcon>
                                 <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="添加学生" />
                             </StackPanel>
                             <Button.Flyout>
@@ -744,14 +740,7 @@
                             Click="DeleteItemButton_Click"
                             FontFamily="{StaticResource HarmonyOSSans}">
                             <StackPanel>
-                                <SymbolIcon
-                                    HorizontalAlignment="Center"
-                                    Foreground="#FFFC5665"
-                                    Symbol="Delete">
-                                    <SymbolIcon.RenderTransform>
-                                        <CompositeTransform ScaleX="0.8" ScaleY="0.8" />
-                                    </SymbolIcon.RenderTransform>
-                                </SymbolIcon>
+                                <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Foreground="#FFFC5665" Glyph="&#xE74D;"></FontIcon>
                                 <TextBlock
                                     HorizontalAlignment="Center"
                                     FontFamily="{StaticResource HarmonyOSSans}"
@@ -766,11 +755,7 @@
                             Height="60"
                             FontFamily="{StaticResource HarmonyOSSans}">
                             <StackPanel>
-                                <SymbolIcon HorizontalAlignment="Center" Symbol="OpenLocal">
-                                    <SymbolIcon.RenderTransform>
-                                        <CompositeTransform ScaleX="0.8" ScaleY="0.8" />
-                                    </SymbolIcon.RenderTransform>
-                                </SymbolIcon>
+                                <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE838;"></FontIcon>
                                 <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="打开文件夹" />
                             </StackPanel>
                             <Button.Flyout>
@@ -824,11 +809,7 @@
                                 </Flyout>
                             </Button.Flyout>
                             <StackPanel>
-                                <SymbolIcon HorizontalAlignment="Center" Symbol="NewFolder">
-                                    <SymbolIcon.RenderTransform>
-                                        <CompositeTransform ScaleX="0.8" ScaleY="0.8" />
-                                    </SymbolIcon.RenderTransform>
-                                </SymbolIcon>
+                                <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE82E;"></FontIcon>
                                 <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="新建数据库" />
                             </StackPanel>
                         </Button>
@@ -840,11 +821,7 @@
                             VerticalAlignment="Center"
                             Click="OpenDataFileButton_Click">
                             <StackPanel>
-                                <SymbolIcon HorizontalAlignment="Center" Symbol="OpenFile">
-                                    <SymbolIcon.RenderTransform>
-                                        <CompositeTransform ScaleX="0.8" ScaleY="0.8" />
-                                    </SymbolIcon.RenderTransform>
-                                </SymbolIcon>
+                                <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE82D;"></FontIcon>
                                 <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="打开数据库" />
                             </StackPanel>
                         </Button>
@@ -856,11 +833,7 @@
                             VerticalAlignment="Center"
                             Click="SaveDataFileButton_Click">
                             <StackPanel>
-                                <SymbolIcon HorizontalAlignment="Center" Symbol="SaveLocal">
-                                    <SymbolIcon.RenderTransform>
-                                        <CompositeTransform ScaleX="0.8" ScaleY="0.8" />
-                                    </SymbolIcon.RenderTransform>
-                                </SymbolIcon>
+                                <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE792;"></FontIcon>
                                 <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="另存数据库" />
                             </StackPanel>
                         </Button>
@@ -872,11 +845,7 @@
                             VerticalAlignment="Center"
                             Click="OpenLocalFolderButton_Click">
                             <StackPanel>
-                                <SymbolIcon HorizontalAlignment="Center" Symbol="OpenLocal">
-                                    <SymbolIcon.RenderTransform>
-                                        <CompositeTransform ScaleX="0.8" ScaleY="0.8" />
-                                    </SymbolIcon.RenderTransform>
-                                </SymbolIcon>
+                                <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xEC25;"></FontIcon>
                                 <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="本地文件夹" />
                             </StackPanel>
                         </Button>

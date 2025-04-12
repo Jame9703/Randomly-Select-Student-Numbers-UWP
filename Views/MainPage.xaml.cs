@@ -8,6 +8,7 @@ using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
@@ -25,7 +26,7 @@ namespace 随机抽取学号
     public sealed partial class MainPage : Page
     {
         public static MainPage Current;
-        private AppBarToggleButton _lastSelectedButton;
+        private ToggleButton _lastSelectedButton;
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         private static readonly string ClassNameKey = "ClassName";
         public delegate void UpdateTextEventHandler(string text);// 定义委托
@@ -80,9 +81,9 @@ namespace 随机抽取学号
                 }
                (Window.Current.Content as Frame).RequestedTheme = (int)localSettings.Values["Theme"] switch
                {
-                        0 => ElementTheme.Light,
-                        1 => ElementTheme.Dark,
-                        _ => ElementTheme.Default
+                   0 => ElementTheme.Light,
+                   1 => ElementTheme.Dark,
+                   _ => ElementTheme.Default
                };
                 if (localSettings.Values.ContainsKey("MainPageBackground"))
                 {
@@ -130,6 +131,10 @@ namespace 随机抽取学号
             }
             ContentGrid.Visibility = Visibility.Visible;
             LoadProgressRing.Visibility = Visibility.Collapsed;
+            EntranceThemeTransition entranceTransition = new EntranceThemeTransition();
+            entranceTransition.IsStaggeringEnabled = true;
+            entranceTransition.FromHorizontalOffset = -250;
+            Canvas.ChildrenTransitions.Add(entranceTransition);
         }
         // 用于存储背景笔刷的公共属性
         public Brush MainPageBackground
@@ -227,14 +232,14 @@ namespace 随机抽取学号
         }
         private void HomePage_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as AppBarToggleButton;
+            var button = sender as ToggleButton;
             StartAnimation(button);
             ContentFrame.Navigate(typeof(HomePage));
 
         }
         private void ClassPage_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as AppBarToggleButton;
+            var button = sender as ToggleButton;
             StartAnimation(button);
             ContentFrame.Navigate(typeof(ClassPage));
 
@@ -242,13 +247,13 @@ namespace 随机抽取学号
 
         private void NumbersPage_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as AppBarToggleButton;
+            var button = sender as ToggleButton;
             StartAnimation(button);
             ContentFrame.Navigate(typeof(NumbersPage), null);
         }
         private void CharactersPage_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as AppBarToggleButton;
+            var button = sender as ToggleButton;
             StartAnimation(button);
             ContentFrame.Navigate(typeof(CharactersPage));
 
@@ -257,20 +262,20 @@ namespace 随机抽取学号
         }
         private void HelpPage_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as AppBarToggleButton;
+            var button = sender as ToggleButton;
             StartAnimation(button);
             ContentFrame.Navigate(typeof(HelpPage));
 
         }
         private void SettingsPage_Click(object sender, RoutedEventArgs e)
         {
-            var button = sender as AppBarToggleButton;
+            var button = sender as ToggleButton;
             StartAnimation(button);
             ContentFrame.Navigate(typeof(SettingsPage));
 
         }
 
-        private void StartAnimation(AppBarToggleButton button)
+        private void StartAnimation(ToggleButton button)
         {
             if (button != null)
             {
