@@ -1,15 +1,11 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI;
-using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -34,7 +30,6 @@ namespace 随机抽取学号
         public static MainPage Current;
         private ToggleButton _lastSelectedButton;
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-        private static readonly string ClassNameKey = "ClassName";
         public delegate void UpdateTextEventHandler(string text);// 定义委托
         public event UpdateTextEventHandler UpdateTextBoxEvent;// 定义事件
         public static StackPanel PopupContainerInstance;
@@ -73,26 +68,22 @@ namespace 随机抽取学号
             HomePageButton.IsChecked = true;
             this.SizeChanged += MainPage_SizeChanged;
             _lastSelectedButton = HomePageButton;//确保开始时_lastSelectedButton不为null
-            string ClassName = localSettings.Values[ClassNameKey] as string;
+            ClassNameTextBox.Text = (string)localSettings.Values["ClassName"] as string;
             StorageFolder localFolder = ApplicationData.Current.LocalFolder;
             StorageFolder imageFolder = await localFolder.CreateFolderAsync("ClassPictures", CreationCollisionOption.OpenIfExists);
-            try
+            IStorageItem item = await imageFolder.TryGetItemAsync("ClassEmblem.png");
+            if (item != null && item is StorageFile imageFile)
             {
-                StorageFile imageFile = await imageFolder.GetFileAsync("ClassEmblem.png");
-                if (imageFile != null)
-                {
-                    BitmapImage bitmapImage = new BitmapImage();
-                    bitmapImage.SetSource(await imageFile.OpenAsync(FileAccessMode.Read));
-                    SmallClassPicture.ProfilePicture = bitmapImage;
-                    BigClassPicture.ProfilePicture = bitmapImage;
-                }
-            }
-            catch (Exception)
-            {
-
+                BitmapImage bitmapImage = new BitmapImage()
+                { 
+                    DecodePixelHeight = 72,
+                    DecodePixelWidth = 72,
+                    UriSource = new Uri(imageFile.Path)
+                };
+                SmallClassPicture.ProfilePicture = bitmapImage;
+                BigClassPicture.ProfilePicture = bitmapImage;
             }
 
-            //if (ClassName != null) ClassNameHyperlinkButton.Content = ClassName;
             if (localSettings.Values["Theme"] != null)
             {
                 if ((int)localSettings.Values["Theme"] == 0)
@@ -347,7 +338,7 @@ namespace 随机抽取学号
                 }
 
                 button.IsChecked = true; // 设置当前按钮为选中状态
-                var targetPosition = button.TransformToVisual(Canvas).TransformPoint(new Point(button.ActualWidth / 2, (button.ActualHeight ) / 2));
+                var targetPosition = button.TransformToVisual(Canvas).TransformPoint(new Point(button.ActualWidth / 2, (button.ActualHeight) / 2));
                 // 设置Storyboard的动画值
                 if (doubleAnimation != null)
                 {
@@ -374,7 +365,7 @@ namespace 随机抽取学号
 
         private void ManageStudentsButton_Click(object sender, RoutedEventArgs e)
         {
-            if(_lastSelectedButton != ClassPageButton)
+            if (_lastSelectedButton != ClassPageButton)
             {
                 StartAnimation(ClassPageButton);
                 ContentFrame.Navigate(typeof(ClassPage));
@@ -419,9 +410,9 @@ namespace 随机抽取学号
                         BigClassPicture.ProfilePicture = bitmapImage;
                         StorageFolder localFolder = ApplicationData.Current.LocalFolder;
                         StorageFolder imagesFolder = await localFolder.GetFolderAsync("ClassPictures");
-                        if(imagesFolder !=null)
+                        if (imagesFolder != null)
                         {
-                            StorageFile copyFile = await file.CopyAsync(localFolder, "ClassEmblem.png", NameCollisionOption.ReplaceExisting);
+                            StorageFile copyFile = await file.CopyAsync(imagesFolder, "ClassEmblem.png", NameCollisionOption.ReplaceExisting);
                         }
                     }
                 }
@@ -433,10 +424,15 @@ namespace 随机抽取学号
             catch (Exception ex)
             {
                 // 处理异常（如权限问题）
-                PopupNotice popupNotice = new PopupNotice("打开失败"+ex.Message);
+                PopupNotice popupNotice = new PopupNotice("打开失败" + ex.Message);
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
                 popupNotice.ShowPopup();
             }
+        }
+
+        private void ClassNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        {
+            localSettings.Values["ClassName"] = ClassNameTextBox.Text;
         }
     }
 }
