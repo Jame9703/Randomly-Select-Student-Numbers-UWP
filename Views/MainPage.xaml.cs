@@ -233,46 +233,83 @@ namespace 随机抽取学号
         private void HomePage_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as ToggleButton;
-            StartAnimation(button);
-            ContentFrame.Navigate(typeof(HomePage));
-
+            if (_lastSelectedButton != button)
+            {
+                StartAnimation(button);
+                ContentFrame.Navigate(typeof(HomePage));
+            }
+            else
+            {
+                button.IsChecked = true;//上次点击的按钮和本次一样，保持选中状态
+            }
+            HomeIcon.Glyph = "\uEA8A";
         }
         private void ClassPage_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as ToggleButton;
-            StartAnimation(button);
-            ContentFrame.Navigate(typeof(ClassPage));
-
+            if (_lastSelectedButton != button)
+            {
+                StartAnimation(button);
+                ContentFrame.Navigate(typeof(ClassPage));
+            }
+            else
+            {
+                button.IsChecked = true;//上次点击的按钮和本次一样，保持选中状态
+            }
         }
 
         private void NumbersPage_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as ToggleButton;
-            StartAnimation(button);
-            ContentFrame.Navigate(typeof(NumbersPage), null);
+            if (_lastSelectedButton != button)
+            {
+                StartAnimation(button);
+                ContentFrame.Navigate(typeof(NumbersPage), null);
+            }
+            else
+            {
+                button.IsChecked = true;//上次点击的按钮和本次一样，保持选中状态
+            }
         }
         private void CharactersPage_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as ToggleButton;
-            StartAnimation(button);
-            ContentFrame.Navigate(typeof(CharactersPage));
-
-
-
+            if (_lastSelectedButton != button)
+            {
+                StartAnimation(button);
+                ContentFrame.Navigate(typeof(CharactersPage));
+            }
+            else
+            {
+                button.IsChecked = true;//上次点击的按钮和本次一样，保持选中状态
+            }
         }
         private void HelpPage_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as ToggleButton;
-            StartAnimation(button);
-            ContentFrame.Navigate(typeof(HelpPage));
-
+            if (_lastSelectedButton != button)
+            {
+                StartAnimation(button);
+                ContentFrame.Navigate(typeof(HelpPage));
+            }
+            else
+            {
+                button.IsChecked = true;//上次点击的按钮和本次一样，保持选中状态
+            }
         }
         private void SettingsPage_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as ToggleButton;
-            StartAnimation(button);
-            ContentFrame.Navigate(typeof(SettingsPage));
-
+            if (_lastSelectedButton != button)
+            {
+                StartAnimation(button);
+                ContentFrame.Navigate(typeof(SettingsPage));
+            }
+            else
+            {
+                button.IsChecked = true;//上次点击的按钮和本次一样，保持选中状态
+            }
+            SettingsIcon.Glyph = "\uF8B0";
         }
 
         private void StartAnimation(ToggleButton button)
@@ -281,21 +318,12 @@ namespace 随机抽取学号
             {
                 if (_lastSelectedButton != null)
                 {
-                    // 如果之前有选中的按钮，取消其选中状态（如果需要）
+                    // 如果之前有选中的按钮，取消其选中状态
                     _lastSelectedButton.IsChecked = false;
                 }
 
                 button.IsChecked = true; // 设置当前按钮为选中状态
-
-                // 获取目标位置
-                //GeneralTransform transform1 = _lastSelectedButton.TransformToVisual(null); // 转换为相对于根视觉树的坐标
-                //Point point1 = transform1.TransformPoint(new Point(_lastSelectedButton.Margin.Left, _lastSelectedButton.Margin.Top));
-
-                //GeneralTransform transform2 = button.TransformToVisual(null);
-                //Point point2 = transform2.TransformPoint(new Point(button.Margin.Left, button.Margin.Top));
-                var targetPosition = button.TransformToVisual(Canvas).TransformPoint(new Point(button.ActualWidth / 2, (button.ActualHeight + 40) / 2));
-
-                //double a = point2.Y - point1.Y;
+                var targetPosition = button.TransformToVisual(Canvas).TransformPoint(new Point(button.ActualWidth / 2, (button.ActualHeight ) / 2));
                 // 设置Storyboard的动画值
                 if (doubleAnimation != null)
                 {
@@ -307,26 +335,17 @@ namespace 随机抽取学号
                 MoveRectangleStoryboard.Begin();
 
                 _lastSelectedButton = button; // 更新最后选中的按钮
+                HomeIcon.Glyph = "\uE80F";
+                SettingsIcon.Glyph = "\uE713";
             }
         }
         private void MainPage_SizeChanged(object sender, SizeChangedEventArgs e)
         {
             if (SettingsPageButton.IsChecked == true)
             {
-                //StartAnimation(SettingsPageButton);//为解决当窗口大小变化，SettingsPageButton位置改变，但MovingRectangle位置未改变的问题
-
-                //MovingRectangle.SetValue(Grid.RowProperty, 0);
-                //double Height = SettingsPageButton.Margin.Top;
-                //MovingRectangle.Margin = new Thickness(0, 5, 0, 0);
                 MovingRectangle.Visibility = Visibility.Collapsed;
                 rectangle.Visibility = Visibility.Visible;
             }
-        }
-        private void ClassNameHyperlinkButton_Click(object sender, RoutedEventArgs e)
-        {
-            ContentFrame.Navigate(typeof(ClassPage));
-            StartAnimation(ClassPageButton);
-
         }
 
 

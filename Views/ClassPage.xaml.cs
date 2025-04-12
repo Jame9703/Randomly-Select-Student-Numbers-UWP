@@ -532,6 +532,7 @@ namespace 随机抽取学号.Views
             }
             else//批量添加
             {
+                StudentManager.StudentList.CollectionChanged -= StudentList_CollectionChanged;
                 string[] lines = Editor.Text.Split(new char[] { '\r', '\n' }, StringSplitOptions.RemoveEmptyEntries);
                 foreach (var line in lines)
                 {
@@ -543,6 +544,7 @@ namespace 随机抽取学号.Views
                     };
                     StudentManager.StudentList.Add(student);
                 }
+                StudentManager.StudentList.CollectionChanged += StudentList_CollectionChanged;
             }
             UpdateStudentId();
         }
