@@ -702,6 +702,7 @@
                         CornerRadius="16">
                         <StackPanel Orientation="Horizontal">
                             <PersonPicture
+                                x:Name="SmallClassPicture"
                                 Width="28"
                                 Height="28"
                                 Margin="2,2,2,2"
@@ -724,7 +725,7 @@
 
                             <Flyout Placement="Bottom">
                                 <StackPanel Width="200">
-                                    <PersonPicture HorizontalAlignment="Center" ProfilePicture="/Photos/GithubLogo.png" />
+                                    <PersonPicture x:Name="BigClassPicture" HorizontalAlignment="Center" ProfilePicture="/Photos/GithubLogo.png" />
                                     <TextBlock
                                         HorizontalAlignment="Center"
                                         FontFamily="{StaticResource HarmonyOSSans}"
@@ -738,19 +739,20 @@
                                         Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                         Text="更改班级名称：" />
                                     <TextBox FontFamily="{StaticResource HarmonyOSSans}" Text="我的班级" />
-                                    <Button Margin="0,5,0,0" HorizontalAlignment="Stretch">
+                                    <Button x:Name="EditPictureButton"  Click="EditPictureButton_Click" Margin="0,5,0,0" HorizontalAlignment="Stretch">
                                         <StackPanel Orientation="Horizontal">
                                             <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE70F;" />
                                             <TextBlock
                                                 Margin="5,0,0,0"
                                                 FontFamily="{StaticResource HarmonyOSSans}"
-                                                Text="更改图片" />
+                                                Text="更改班徽" />
                                         </StackPanel>
                                     </Button>
                                     <Button
+                                        x:Name="ManageStudentsButton"
                                         Margin="0,5,0,0"
                                         HorizontalAlignment="Stretch"
-                                        Click="ClassPage_Click">
+                                        Click="ManageStudentsButton_Click">
                                         <StackPanel Orientation="Horizontal">
                                             <FontIcon
                                                 FontFamily="{StaticResource SegoeFluentIcons}"

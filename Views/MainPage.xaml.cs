@@ -1,16 +1,22 @@
-﻿using System;
+﻿using Microsoft.UI.Xaml.Controls;
+using System;
+using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Storage;
+using Windows.Storage.Pickers;
+using Windows.Storage.Streams;
 using Windows.UI;
+using Windows.UI.Popups;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
+using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using 随机抽取学号.Classes;
 using 随机抽取学号.Media;
@@ -68,6 +74,24 @@ namespace 随机抽取学号
             this.SizeChanged += MainPage_SizeChanged;
             _lastSelectedButton = HomePageButton;//确保开始时_lastSelectedButton不为null
             string ClassName = localSettings.Values[ClassNameKey] as string;
+            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+            StorageFolder imageFolder = await localFolder.CreateFolderAsync("ClassPictures", CreationCollisionOption.OpenIfExists);
+            try
+            {
+                StorageFile imageFile = await imageFolder.GetFileAsync("ClassEmblem.png");
+                if (imageFile != null)
+                {
+                    BitmapImage bitmapImage = new BitmapImage();
+                    bitmapImage.SetSource(await imageFile.OpenAsync(FileAccessMode.Read));
+                    SmallClassPicture.ProfilePicture = bitmapImage;
+                    BigClassPicture.ProfilePicture = bitmapImage;
+                }
+            }
+            catch (Exception)
+            {
+
+            }
+
             //if (ClassName != null) ClassNameHyperlinkButton.Content = ClassName;
             if (localSettings.Values["Theme"] != null)
             {
@@ -348,7 +372,72 @@ namespace 随机抽取学号
             }
         }
 
+        private void ManageStudentsButton_Click(object sender, RoutedEventArgs e)
+        {
+            if(_lastSelectedButton != ClassPageButton)
+            {
+                StartAnimation(ClassPageButton);
+                ContentFrame.Navigate(typeof(ClassPage));
+            }
+            else
+            {
+                PopupNotice popupNotice = new PopupNotice("当前已在班级页面");
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
+                popupNotice.ShowPopup();
+            }
+        }
 
+        private async void EditPictureButton_Click(object sender, RoutedEventArgs e)
+        {
+            try
+            {
+                // 创建文件选择器
+                FileOpenPicker openPicker = new FileOpenPicker
+                {
+                    ViewMode = PickerViewMode.Thumbnail, // 缩略图视图
+                    SuggestedStartLocation = PickerLocationId.PicturesLibrary // 起始位置为图片库
+                };
+
+                // 添加支持的图片格式
+                openPicker.FileTypeFilter.Add(".jpg");
+                openPicker.FileTypeFilter.Add(".jpeg");
+                openPicker.FileTypeFilter.Add(".png");
+                openPicker.FileTypeFilter.Add(".bmp");
+                openPicker.FileTypeFilter.Add(".gif");
+
+                // 打开选择器并获取文件
+                StorageFile file = await openPicker.PickSingleFileAsync();
+
+                if (file != null)
+                {
+                    // 将文件转换为可显示的图像
+                    using (IRandomAccessStream fileStream = await file.OpenAsync(FileAccessMode.Read))
+                    {
+                        BitmapImage bitmapImage = new BitmapImage();
+                        await bitmapImage.SetSourceAsync(fileStream);
+                        SmallClassPicture.ProfilePicture = bitmapImage;
+                        BigClassPicture.ProfilePicture = bitmapImage;
+                        StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+                        StorageFolder imagesFolder = await localFolder.GetFolderAsync("ClassPictures");
+                        if(imagesFolder !=null)
+                        {
+                            StorageFile copyFile = await file.CopyAsync(localFolder, "ClassEmblem.png", NameCollisionOption.ReplaceExisting);
+                        }
+                    }
+                }
+                else
+                {
+                    // 用户取消选择
+                }
+            }
+            catch (Exception ex)
+            {
+                // 处理异常（如权限问题）
+                PopupNotice popupNotice = new PopupNotice("打开失败"+ex.Message);
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.ShowPopup();
+            }
+        }
     }
 }
 
