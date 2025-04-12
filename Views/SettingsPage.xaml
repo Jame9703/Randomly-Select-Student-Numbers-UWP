@@ -87,7 +87,7 @@
                     classes:RippleHelper.RippleColor="Gray"
                     classes:RippleHelper.RippleDuration="0:0:0.5"
                     classes:RippleHelper.RippleHelperState="Pressed"
-                    Description="© 2022-2024. All rights reserved."
+                    Description="© 2022-2025. All rights reserved."
                     FontFamily="{StaticResource HarmonyOSSans}"
                     Header="Randomly Select Student Numbers">
                     <controls:SettingsExpander.HeaderIcon>

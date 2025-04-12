@@ -39,7 +39,6 @@ namespace 随机抽取学号.Views
             // 初始化行号
             UpdateLineNumbers();
             StudentManager.StudentList.CollectionChanged += StudentList_CollectionChanged;
-            if (localSettings.Values["ClassName"] != null) ClassNameTextBox.Text = (string)localSettings.Values["ClassName"];
             FileEditSegmented.SelectedIndex = 0;
             AddModeSegmented.SelectedIndex = 0;
         }
@@ -96,17 +95,6 @@ namespace 随机抽取学号.Views
             }
         }
 
-        private void ClassNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
-        {
-            localSettings.Values["ClassName"] = ClassNameTextBox.Text;
-            MainPage mainPage = (Window.Current.Content as Frame).Content as MainPage;
-            if (mainPage != null)
-            {
-                // 传递班级名称
-                mainPage.TriggerUpdateTextEvent(ClassNameTextBox.Text);
-            }
-        }
-
 
         private async void OpenFileButton_Click(object sender, RoutedEventArgs e)
         {
@@ -120,7 +108,6 @@ namespace 随机抽取学号.Views
                     // 打开文件并读取内容
                     string text = await FileIO.ReadTextAsync(file);
                     Editor.Text = text;
-                    ClassNameTextBox.Text = System.IO.Path.GetFileNameWithoutExtension(file.Name);
                     PopupNotice popupNotice = new PopupNotice("成功打开文件: " + file.Name);
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
                     popupNotice.ShowPopup();
@@ -146,7 +133,7 @@ namespace 随机抽取学号.Views
             var savePicker = new FileSavePicker();
             savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
             savePicker.FileTypeChoices.Add("文本文档", new List<string>() { ".txt" });
-            string filename = ClassNameTextBox.Text;
+            string filename = (string)localSettings.Values["ClassName"];
             savePicker.SuggestedFileName = filename;
 
             // 显示文件选取器并等待用户选择文件
@@ -251,49 +238,49 @@ namespace 随机抽取学号.Views
 
         private void StudentListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (StudentListView.SelectedItem != null)
-            {
-                CurrentSelectionTextBlock.Text = "当前选择项:"+(StudentListView.SelectedIndex+1).ToString();
-            }
-            else
-            {
-                CurrentSelectionTextBlock.Text = "当前选择项:无";
-            }
-            // 还原前一项
-            //if (previousExpandedItem != null)
+            //if (StudentListView.SelectedItem != null)
             //{
-
-
+            //    CurrentSelectionTextBlock.Text = "当前选择项:"+(StudentListView.SelectedIndex+1).ToString();
             //}
-            CollapseStudentListViewItemStorybord.Stop();
-            ExpandStudentListViewItemStorybord.Stop();
-            // 获取当前选中项
-            var selectedItem = StudentListView.SelectedItem;
-            if (selectedItem != null)
-            {
-                // 获取当前选中项的 ListViewItem
-                var selectedListViewItem = (ListViewItem)StudentListView.ContainerFromItem(selectedItem);
-                if (selectedListViewItem != null)
-                {
-                    if(previousExpandedItem != null)
-                    {
-                        //将前一项折叠，将当前项展开
-                        //Storyboard.SetTarget(CollapseStudentListViewItemStorybord, previousExpandedItem);
-                        //Storyboard.SetTarget(ExpandStudentListViewItemStorybord, selectedListViewItem);
-                        //CollapseStudentListViewItemStorybord.Begin();
-                        //ExpandStudentListViewItemStorybord.Begin();
-                        previousExpandedItem.ContentTemplate = (DataTemplate)Resources["CollapsedTemplate"];
-                        selectedListViewItem.ContentTemplate = (DataTemplate)Resources["ExpandedTemplate"];
-                    }
-                    else
-                    {
-                        //Storyboard.SetTarget(ExpandStudentListViewItemStorybord, selectedListViewItem);
-                        //ExpandStudentListViewItemStorybord.Begin();
-                        selectedListViewItem.ContentTemplate = (DataTemplate)Resources["ExpandedTemplate"];
-                    }
-                    previousExpandedItem = selectedListViewItem;
-                }
-            }
+            //else
+            //{
+            //    CurrentSelectionTextBlock.Text = "当前选择项:无";
+            //}
+            //// 还原前一项
+            ////if (previousExpandedItem != null)
+            ////{
+
+
+            ////}
+            //CollapseStudentListViewItemStorybord.Stop();
+            //ExpandStudentListViewItemStorybord.Stop();
+            //// 获取当前选中项
+            //var selectedItem = StudentListView.SelectedItem;
+            //if (selectedItem != null)
+            //{
+            //    // 获取当前选中项的 ListViewItem
+            //    var selectedListViewItem = (ListViewItem)StudentListView.ContainerFromItem(selectedItem);
+            //    if (selectedListViewItem != null)
+            //    {
+            //        if(previousExpandedItem != null)
+            //        {
+            //            //将前一项折叠，将当前项展开
+            //            //Storyboard.SetTarget(CollapseStudentListViewItemStorybord, previousExpandedItem);
+            //            //Storyboard.SetTarget(ExpandStudentListViewItemStorybord, selectedListViewItem);
+            //            //CollapseStudentListViewItemStorybord.Begin();
+            //            //ExpandStudentListViewItemStorybord.Begin();
+            //            previousExpandedItem.ContentTemplate = (DataTemplate)Resources["CollapsedTemplate"];
+            //            selectedListViewItem.ContentTemplate = (DataTemplate)Resources["ExpandedTemplate"];
+            //        }
+            //        else
+            //        {
+            //            //Storyboard.SetTarget(ExpandStudentListViewItemStorybord, selectedListViewItem);
+            //            //ExpandStudentListViewItemStorybord.Begin();
+            //            selectedListViewItem.ContentTemplate = (DataTemplate)Resources["ExpandedTemplate"];
+            //        }
+            //        previousExpandedItem = selectedListViewItem;
+            //    }
+            //}
         }
 
         private async void StudentListView_Drop(object sender, DragEventArgs e)

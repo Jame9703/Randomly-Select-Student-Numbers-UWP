@@ -92,8 +92,8 @@
         </ScrollViewer>
         <Button
             x:Name="ContinueButton"
-            Click="ContinueButton_Click"
             HorizontalAlignment="Right"
+            Click="ContinueButton_Click"
             Content="继续"
             FontFamily="{StaticResource HarmonyOSSans}"
             Style="{StaticResource AccentButtonStyle}" />
