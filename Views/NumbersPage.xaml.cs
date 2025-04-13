@@ -1,12 +1,11 @@
 ﻿using System;
 using System.Collections.Generic;
+using System.Collections.ObjectModel;
 using System.Linq;
 using System.Threading.Tasks;
-using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Hosting;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
@@ -18,7 +17,7 @@ namespace 随机抽取学号.Views
     /// </summary>
     public sealed partial class NumbersPage : Page
     {
-        List <int> RandomNumbersList = new List<int>();
+        public ObservableCollection<int> RandomNumbersList { get; set; } = new ObservableCollection<int>();
         bool isGridViewUpdated;
         bool isListUpdated;
         bool isTextBoxUpdated;
@@ -82,7 +81,7 @@ namespace 随机抽取学号.Views
                 if (success)
                 {
                     // 转换成功
-                    await Task.Run(() => 
+                    await Task.Run(() =>
                     {
                         // 生成指定范围内的数字序列
                         List<int> numbers = Enumerable.Range(Start, End - Start + 1).ToList();
@@ -91,7 +90,7 @@ namespace 随机抽取学号.Views
                         numbers = numbers.OrderBy(x => random.Next()).ToList();
 
                         // 取前几位数字
-                        RandomNumbersList = numbers.Take(TakeCount).ToList();
+                        RandomNumbersList = new ObservableCollection<int>(numbers.Take(TakeCount));
                     });
                     await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
                     {

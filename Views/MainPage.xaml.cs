@@ -285,6 +285,8 @@ namespace 随机抽取学号
             {
                 button.IsChecked = true;//上次点击的按钮和本次一样，保持选中状态
             }
+            NumbersIcon.Visibility = Visibility.Collapsed;
+            NumbersIconChecked.Visibility = Visibility.Visible;
         }
         private void CharactersPage_Click(object sender, RoutedEventArgs e)
         {
@@ -351,6 +353,8 @@ namespace 随机抽取学号
 
                 _lastSelectedButton = button; // 更新最后选中的按钮
                 HomeIcon.Glyph = "\uE80F";
+                NumbersIcon.Visibility = Visibility.Visible;
+                NumbersIconChecked.Visibility = Visibility.Collapsed;
                 SettingsIcon.Glyph = "\uE713";
             }
         }

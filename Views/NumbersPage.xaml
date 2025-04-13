@@ -9,6 +9,13 @@
     xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     xmlns:ui="using:CommunityToolkit.WinUI"
     mc:Ignorable="d">
+    <Page.Resources>
+        <!--<DataTemplate x:Key="RandomNumbersGridViewItemTemplate" x:DataType="local:NumbersPage">
+            <Grid >
+                <TextBlock FontFamily="{StaticResource HarmonyOSSans}" FontSize="16" Text="{x:Bind RandomNumbersList}"></TextBlock>
+                </Grid>
+        </DataTemplate>-->
+    </Page.Resources>
     <Grid x:Name="ContentGrid" Background="{ThemeResource GridBackground}">
         <muxc:NumberBox
             x:Name="RangeFromNumberBox"
@@ -88,15 +95,34 @@
             FontSize="16"
             Maximum="10000"
             Minimum="0" />
-        <ListView Margin="0,180,0,0"
-                x:Name="RandomNumbersListView"
-                Width="Auto"
-                Height="Auto"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top"
-                Visibility="Collapsed">
-        </ListView>
-        <GridView x:Name="RandomNumbersGridView" Margin="0,180,0,0" />
+        <ListView
+            x:Name="RandomNumbersListView"
+            Width="Auto"
+            Height="Auto"
+            Margin="0,180,0,0"
+            HorizontalAlignment="Left"
+            VerticalAlignment="Top"
+            Visibility="Collapsed" />
+        <GridView
+            x:Name="RandomNumbersGridView"
+            Margin="0,180,0,0"
+            ItemsSource="{x:Bind RandomNumbersList}">
+            <GridView.ItemTemplate>
+                <DataTemplate x:DataType="x:Int32">
+                    <Border
+                        HorizontalAlignment="Stretch"
+                        BorderBrush="{ThemeResource SystemAccentColor}"
+                        BorderThickness="2">
+                        <TextBlock
+                            Padding="10"
+                            HorizontalAlignment="Stretch"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="24"
+                            Text="{x:Bind}" />
+                    </Border>
+                </DataTemplate>
+            </GridView.ItemTemplate>
+        </GridView>
         <Grid
             x:Name="RandomNumbersTextBoxGrid"
             Width="Auto"
