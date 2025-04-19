@@ -13,11 +13,9 @@ using Windows.System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
 using 随机抽取学号.Classes;
 
@@ -45,12 +43,12 @@ namespace 随机抽取学号.Views
 
         private async void StudentList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
+            UpdateStudentId();
             await UpdateSaveButton();
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            //StudentListView.ItemsSource = StudentManager.StudentList;
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -81,8 +79,8 @@ namespace 随机抽取学号.Views
             {
                 StudentManager.StudentList[i].StudentNumber = i + 1;
             }
-            StudentListView.ItemsSource = null;
-            StudentListView.ItemsSource = StudentManager.StudentList;
+            //StudentListView.ItemsSource = null;
+            //StudentListView.ItemsSource = StudentManager.StudentList;
         }
         public void UpdateLineNumbers()
         {
@@ -224,8 +222,8 @@ namespace 随机抽取学号.Views
                         i++;
                     }
                     await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
-                    StudentListView.ItemsSource = null;
-                    StudentListView.ItemsSource = StudentManager.StudentList;
+                    //StudentListView.ItemsSource = null;
+                    //StudentListView.ItemsSource = StudentManager.StudentList;
                 }
             }
             else
@@ -324,8 +322,8 @@ namespace 随机抽取学号.Views
                         }
                     }
                     await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
-                    StudentListView.ItemsSource = null;
-                    StudentListView.ItemsSource = StudentManager.StudentList;
+                    //StudentListView.ItemsSource = null;
+                    //StudentListView.ItemsSource = StudentManager.StudentList;
                 }
             }
             else
@@ -406,9 +404,9 @@ namespace 随机抽取学号.Views
         }
         private async Task UpdateSaveButton()
         {
-            var focusedElement = FocusManager.GetFocusedElement() as Control;
-            focusedElement.Focus(FocusState.Programmatic);
-            StudentListView.SelectedItem = null;
+            //var focusedElement = FocusManager.GetFocusedElement() as Control;
+            //focusedElement.Focus(FocusState.Programmatic);
+            //StudentListView.SelectedItem = null;
             if (SaveProcessBar.Value == 100)
             {
                 SaveProcessBar.Value = 0;
@@ -417,16 +415,7 @@ namespace 随机抽取学号.Views
             timer.Interval = TimeSpan.FromSeconds(0.1);
             timer.Tick += Timer_Tick;
             timer.Start();
-            try
-            {
-                await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
-            }
-            catch (Exception)
-            {
-                PopupNotice popupNotice = new PopupNotice("保存失败");
-                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
-                popupNotice.ShowPopup();
-            }
+            await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
         }
         private async void Timer_Tick(object sender, object e)
         {
@@ -469,9 +458,9 @@ namespace 随机抽取学号.Views
 
         private void StudentListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
-            double scrollOffset = GetScrollViewerVerticalOffset(StudentListView);
+            //double scrollOffset = GetScrollViewerVerticalOffset(StudentListView);
             UpdateStudentId();
-            SetScrollViewerVerticalOffset(StudentListView, scrollOffset);
+            //SetScrollViewerVerticalOffset(StudentListView, scrollOffset);
         }
         private double GetScrollViewerVerticalOffset(ListView listView)
         {
@@ -630,7 +619,7 @@ namespace 随机抽取学号.Views
                         }
                     }
                     StudentManager.StudentList = await StudentManager.LoadStudentsAsync();
-                    StudentListView.ItemsSource = StudentManager.StudentList;
+                    //StudentListView.ItemsSource = StudentManager.StudentList;
                     PopupNotice popupNotice = new PopupNotice("打开数据库成功");
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
                     popupNotice.ShowPopup();

@@ -357,9 +357,9 @@
                     <TextBlock
                         Grid.Column="0"
                         FontFamily="{StaticResource HarmonyOSSans}"
-                        Foreground="{ThemeResource StudentNumberTextBlockForeground}"
                         FontSize="16"
-                        Text="{x:Bind StudentNumber}" />
+                        Foreground="{ThemeResource StudentNumberTextBlockForeground}"
+                        Text="{x:Bind StudentNumber, Mode=OneWay}" />
                     <TextBlock
                         Grid.Column="1"
                         Margin="5,0,0,0"
@@ -367,7 +367,7 @@
                         FontFamily="{StaticResource HarmonyOSSans}"
                         FontSize="16"
                         Style="{StaticResource CaptionTextBlockStyle}"
-                        Text="{x:Bind Name}"
+                        Text="{x:Bind Name, Mode=OneWay}"
                         TextWrapping="NoWrap" />
                 </Grid>
             </DataTemplate>

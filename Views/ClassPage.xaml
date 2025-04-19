@@ -78,7 +78,7 @@
                             HorizontalAlignment="Center"
                             FontFamily="{StaticResource HarmonyOSSans}"
                             FontSize="20"
-                            Text="{x:Bind StudentNumber}"
+                            Text="{x:Bind StudentNumber, Mode=OneWay}"
                             TextAlignment="Center" />
                     </StackPanel>
                     <Border
@@ -116,7 +116,7 @@
                                 VerticalAlignment="Center"
                                 FontFamily="{StaticResource HarmonyOSSans}"
                                 FontSize="24"
-                                Text="{Binding Name, Mode=TwoWay}" />
+                                Text="{x:Bind Name, Mode=TwoWay}" />
                         </StackPanel>
                     </StackPanel>
                 </Grid>
@@ -1076,12 +1076,11 @@
                     DragItemsCompleted="StudentListView_DragItemsCompleted"
                     DragOver="StudentListView_DragOver"
                     Drop="StudentListView_Drop"
-                    ItemTemplate="{StaticResource CollapsedTemplate}"
+                    ItemTemplate="{StaticResource StudentListTemplate}"
                     ItemsSource="{x:Bind classes:StudentManager.StudentList}"
-                    
                     SelectionChanged="StudentListView_SelectionChanged"
                     SelectionMode="Single">
-                    <ListView.ItemContainerStyle>
+                    <!--<ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="Template">
                                 <Setter.Value>
@@ -1091,7 +1090,7 @@
                                 </Setter.Value>
                             </Setter>
                         </Style>
-                    </ListView.ItemContainerStyle>
+                    </ListView.ItemContainerStyle>-->
                     <!--<ListView.Transitions>
                         <TransitionCollection>
                             <EntranceThemeTransition FromVerticalOffset="500" IsStaggeringEnabled="True" />
@@ -1100,6 +1099,11 @@
                     <ListView.ItemContainerTransitions>
                         <TransitionCollection>
                             <RepositionThemeTransition />
+                            <AddDeleteThemeTransition >
+                                
+                            </AddDeleteThemeTransition>
+                            <ContentThemeTransition />
+                            <EntranceThemeTransition FromVerticalOffset="4000" IsStaggeringEnabled="True" />
                         </TransitionCollection>
                     </ListView.ItemContainerTransitions>
                 </ListView>

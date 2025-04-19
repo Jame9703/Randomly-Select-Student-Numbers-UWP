@@ -3,6 +3,7 @@ using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
+using System.ComponentModel;
 using System.Data.Common;
 using System.IO;
 using System.Threading.Tasks;
@@ -12,12 +13,71 @@ using 随机抽取学号.Views;
 
 namespace 随机抽取学号.Classes
 {
-    public class Student
+    public class Student : INotifyPropertyChanged
     {
-        public int StudentNumber { get; set; }//学号
-        public string Name { get; set; }//姓名
-        public int Gender { get; set; }//性别
-        public string PhotoPath { get; set; }//图片路径
+        private int studentNumber;
+        private string name;
+        private int gender;
+        private string photoPath;
+
+        public int StudentNumber
+        {
+            get { return studentNumber; }
+            set
+            {
+                if (studentNumber != value)
+                {
+                    studentNumber = value;
+                    OnPropertyChanged(nameof(StudentNumber));
+                }
+            }
+        }
+
+        public string Name
+        {
+            get { return name; }
+            set
+            {
+                if (name != value)
+                {
+                    name = value;
+                    OnPropertyChanged(nameof(Name));
+                }
+            }
+        }
+
+        public int Gender
+        {
+            get { return gender; }
+            set
+            {
+                if (gender != value)
+                {
+                    gender = value;
+                    OnPropertyChanged(nameof(Gender));
+                }
+            }
+        }
+
+        public string PhotoPath
+        {
+            get { return photoPath; }
+            set
+            {
+                if (photoPath != value)
+                {
+                    photoPath = value;
+                    OnPropertyChanged(nameof(PhotoPath));
+                }
+            }
+        }
+
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
     public static class StudentManager
     {
