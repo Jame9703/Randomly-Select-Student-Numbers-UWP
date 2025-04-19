@@ -441,13 +441,14 @@
                         Visibility="Collapsed">
                         <StackPanel
                             x:Name="SettingsStackPanel"
-                            MinWidth="0"
+                            Width="Auto"
+                            MinWidth="150"
                             MaxWidth="400"
                             HorizontalAlignment="Stretch"
                             Spacing="10">
                             <StackPanel.ChildrenTransitions>
                                 <TransitionCollection>
-                                    <EntranceThemeTransition IsStaggeringEnabled="True" FromVerticalOffset="-500"/>
+                                    <EntranceThemeTransition FromHorizontalOffset="500" IsStaggeringEnabled="True" />
                                 </TransitionCollection>
                             </StackPanel.ChildrenTransitions>
                             <communitytoolkitcontrols:SettingsCard
@@ -563,7 +564,10 @@
                             SelectionMode="Multiple">
                             <ListView.ItemContainerTransitions>
                                 <TransitionCollection>
-                                    <EntranceThemeTransition FromVerticalOffset="-500" IsStaggeringEnabled="True" />
+                                    <EntranceThemeTransition
+                                        FromHorizontalOffset="100"
+                                        FromVerticalOffset="-500"
+                                        IsStaggeringEnabled="True" />
                                 </TransitionCollection>
                             </ListView.ItemContainerTransitions>
                         </ListView>

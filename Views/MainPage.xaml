@@ -125,6 +125,12 @@
                     </Setter.Value>
                 </Setter>
             </Style>
+            <!--<ControlTemplate x:Key="AutoSuggestBoxTemplate" TargetType="AutoSuggestBox">
+                <Grid>
+                    <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xF78B;" />
+                    <TextBox  PlaceholderText="搜索" FontFamily="{StaticResource HarmonyOSSans}" />
+                </Grid>
+            </ControlTemplate>-->
         </ResourceDictionary>
 
     </Page.Resources>
@@ -147,6 +153,11 @@
                         <ColumnDefinition Width="Auto" />
                         <ColumnDefinition Width="*" />
                     </Grid.ColumnDefinitions>
+                    <Grid.Transitions>
+                        <TransitionCollection>
+                            <PaneThemeTransition Edge="Top" />
+                        </TransitionCollection>
+                    </Grid.Transitions>
                     <Image
                         Width="26"
                         Height="26"
@@ -187,10 +198,21 @@
                         MaxWidth="350"
                         VerticalAlignment="Center"
                         AutoMaximizeSuggestionArea="True"
+                        BorderBrush="{ThemeResource SystemAccentColor}"
+                        BorderThickness="2"
+                        CornerRadius="16"
+                        FlyoutBase.AttachedFlyout="{StaticResource TextControlCommandBarContextFlyout}"
                         FontFamily="{StaticResource HarmonyOSSans}"
                         FontSize="14"
                         PlaceholderText="搜索"
-                        QueryIcon="Find" />
+                        QueryIcon="Find">
+                        <AutoSuggestBox.Transitions>
+                            <TransitionCollection>
+                                <PaneThemeTransition Edge="Top" />
+                            </TransitionCollection>
+                        </AutoSuggestBox.Transitions>
+                        <ListViewItem />
+                    </AutoSuggestBox>
                     <Button
                         Grid.Column="1"
                         Padding="2"
@@ -198,6 +220,11 @@
                         BorderBrush="{ThemeResource SystemAccentColor}"
                         BorderThickness="1.5"
                         CornerRadius="16">
+                        <Button.Transitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition FromVerticalOffset="-100" />
+                            </TransitionCollection>
+                        </Button.Transitions>
                         <StackPanel Orientation="Horizontal">
                             <PersonPicture
                                 x:Name="SmallClassPicture"
@@ -317,6 +344,14 @@
                 Width="65"
                 Margin="0,45,0,0"
                 HorizontalAlignment="Left">
+                <StackPanel.ChildrenTransitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition
+                            FromHorizontalOffset="-500"
+                            FromVerticalOffset="-100"
+                            IsStaggeringEnabled="True" />
+                    </TransitionCollection>
+                </StackPanel.ChildrenTransitions>
                 <ToggleButton
                     x:Name="HomePageButton"
                     Grid.Row="0"
@@ -330,10 +365,12 @@
                     CornerRadius="6,6,6,6"
                     FontFamily="{StaticResource HarmonyOSSans}"
                     Style="{StaticResource ToggleButtonStyle}">
-                    <FontIcon
-                        x:Name="HomeIcon"
-                        FontFamily="{StaticResource SegoeFluentIcons}"
-                        Glyph="&#xEA8A;" />
+                    <Viewbox Height="24">
+                        <FontIcon
+                            x:Name="HomeIcon"
+                            FontFamily="{StaticResource SegoeFluentIcons}"
+                            Glyph="&#xEA8A;" />
+                    </Viewbox>
                 </ToggleButton>
                 <ToggleButton
                     x:Name="ClassPageButton"
@@ -348,10 +385,12 @@
                     CornerRadius="6,6,6,6"
                     FontFamily="{StaticResource HarmonyOSSans}"
                     Style="{StaticResource ToggleButtonStyle}">
-                    <FontIcon
-                        x:Name="ClassIcon"
-                        FontFamily="{StaticResource SegoeFluentIcons}"
-                        Glyph="&#xE7EE;" />
+                    <Viewbox Height="24">
+                        <FontIcon
+                            x:Name="ClassIcon"
+                            FontFamily="{StaticResource SegoeFluentIcons}"
+                            Glyph="&#xE7EE;" />
+                    </Viewbox>
                 </ToggleButton>
                 <ToggleButton
                     x:Name="NumbersPageButton"
@@ -367,14 +406,18 @@
                     FontFamily="{StaticResource HarmonyOSSans}"
                     Style="{StaticResource ToggleButtonStyle}">
                     <Grid>
-                        <FontIcon
-                            x:Name="NumbersIcon"
-                            FontFamily="{StaticResource SegoeFluentIcons}"
-                            Glyph="&#xF4A5;" />
-                        <PathIcon
-                            x:Name="NumbersIconChecked"
-                            Data="{StaticResource NumbersIconData}"
-                            Visibility="Collapsed" />
+                        <Viewbox Height="24">
+                            <FontIcon
+                                x:Name="NumbersIcon"
+                                FontFamily="{StaticResource SegoeFluentIcons}"
+                                Glyph="&#xF4A5;" />
+                        </Viewbox>
+                        <Viewbox Height="24">
+                            <PathIcon
+                                x:Name="NumbersIconChecked"
+                                Data="{StaticResource NumbersIconData}"
+                                Visibility="Collapsed" />
+                        </Viewbox>
                     </Grid>
                 </ToggleButton>
                 <ToggleButton
@@ -390,7 +433,9 @@
                     CornerRadius="6,6,6,6"
                     FontFamily="{StaticResource HarmonyOSSans}"
                     Style="{StaticResource ToggleButtonStyle}">
-                    <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE8C1;" />
+                    <Viewbox Height="24">
+                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE8C1;" />
+                    </Viewbox>
                 </ToggleButton>
                 <ToggleButton
                     x:Name="HelpPageButton"
@@ -405,7 +450,9 @@
                     CornerRadius="6,6,6,6"
                     FontFamily="{StaticResource HarmonyOSSans}"
                     Style="{StaticResource ToggleButtonStyle}">
-                    <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xEB68;" />
+                    <Viewbox Height="24">
+                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xEB68;" />
+                    </Viewbox>
                 </ToggleButton>
                 <Grid Height="Auto" />
 
@@ -424,10 +471,17 @@
                 CornerRadius="6,6,6,6"
                 FontFamily="{StaticResource HarmonyOSSans}"
                 Style="{StaticResource ToggleButtonStyle}">
-                <FontIcon
-                    x:Name="SettingsIcon"
-                    FontFamily="{StaticResource SegoeFluentIcons}"
-                    Glyph="&#xE713;" />
+                <ToggleButton.Transitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition FromVerticalOffset="500" />
+                    </TransitionCollection>
+                </ToggleButton.Transitions>
+                <Viewbox Height="24">
+                    <FontIcon
+                        x:Name="SettingsIcon"
+                        FontFamily="{StaticResource SegoeFluentIcons}"
+                        Glyph="&#xE713;" />
+                </Viewbox>
             </ToggleButton>
             <Rectangle
                 x:Name="MovingRectangle"

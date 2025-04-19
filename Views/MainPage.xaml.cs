@@ -146,10 +146,6 @@ namespace 随机抽取学号
             }
             ContentGrid.Visibility = Visibility.Visible;
             LoadProgressRing.Visibility = Visibility.Collapsed;
-            EntranceThemeTransition entranceTransition = new EntranceThemeTransition();
-            entranceTransition.IsStaggeringEnabled = true;
-            entranceTransition.FromHorizontalOffset = -250;
-            Canvas.ChildrenTransitions.Add(entranceTransition);
         }
         // 用于存储背景笔刷的公共属性
         public Brush MainPageBackground
