@@ -445,6 +445,11 @@
                             MaxWidth="400"
                             HorizontalAlignment="Stretch"
                             Spacing="10">
+                            <StackPanel.ChildrenTransitions>
+                                <TransitionCollection>
+                                    <EntranceThemeTransition IsStaggeringEnabled="True" FromVerticalOffset="-500"/>
+                                </TransitionCollection>
+                            </StackPanel.ChildrenTransitions>
                             <communitytoolkitcontrols:SettingsCard
                                 HorizontalAlignment="Stretch"
                                 classes:RippleHelper.RippleColor="Gray"
@@ -557,7 +562,9 @@
                             ScrollViewer.VerticalScrollBarVisibility="Auto"
                             SelectionMode="Multiple">
                             <ListView.ItemContainerTransitions>
-                                <TransitionCollection />
+                                <TransitionCollection>
+                                    <EntranceThemeTransition FromVerticalOffset="-500" IsStaggeringEnabled="True" />
+                                </TransitionCollection>
                             </ListView.ItemContainerTransitions>
                         </ListView>
                         <Button

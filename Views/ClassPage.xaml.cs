@@ -79,8 +79,6 @@ namespace 随机抽取学号.Views
             {
                 StudentManager.StudentList[i].StudentNumber = i + 1;
             }
-            //StudentListView.ItemsSource = null;
-            //StudentListView.ItemsSource = StudentManager.StudentList;
         }
         public void UpdateLineNumbers()
         {
@@ -185,7 +183,7 @@ namespace 随机抽取学号.Views
 
         private async void FolderPickerButton_Click(object sender, RoutedEventArgs e)
         {
-            if(StudentListView.SelectedItem != null)
+            if (StudentListView.SelectedItem != null)
             {
                 FolderPicker folderPicker = new FolderPicker();
                 folderPicker.FileTypeFilter.Add(".jpg");
@@ -426,7 +424,7 @@ namespace 随机抽取学号.Views
                 SaveStackPanel.Visibility = Visibility.Collapsed;
                 SavedStackPanel.Visibility = Visibility.Collapsed;
                 SaveButtonGrid.Background = new SolidColorBrush
-                { 
+                {
                     Color = Colors.LightBlue,
                     Opacity = 0.5
                 };
@@ -494,9 +492,9 @@ namespace 随机抽取学号.Views
             }
             return null;
         }
-        private async  void AddItemButton_Click(object sender, RoutedEventArgs e)
+        private async void AddItemButton_Click(object sender, RoutedEventArgs e)
         {
-            if(AddModeSegmented.SelectedIndex == 0)//逐个添加
+            if (AddModeSegmented.SelectedIndex == 0)//逐个添加
             {
                 var student = new Student
                 {
@@ -573,7 +571,7 @@ namespace 随机抽取学号.Views
         {
             try
             {
-                
+
                 bool success = await Launcher.LaunchFolderAsync(folder);// 尝试使用文件管理器打开文件夹
                 if (!success)
                 {
@@ -614,7 +612,7 @@ namespace 随机抽取学号.Views
                         using (Stream destinationStream = await destinationFile.OpenStreamForWriteAsync())
                         {
                             //复制流内容
-                           await sourceStream.CopyToAsync(destinationStream);
+                            await sourceStream.CopyToAsync(destinationStream);
 
                         }
                     }
@@ -650,7 +648,7 @@ namespace 随机抽取学号.Views
             savePicker.SuggestedFileName = "students.db";
             // 显示选取器并等待用户选择保存位置和文件名
             StorageFile saveFile = await savePicker.PickSaveFileAsync();
-            if(saveFile != null)
+            if (saveFile != null)
             {
                 try
                 {

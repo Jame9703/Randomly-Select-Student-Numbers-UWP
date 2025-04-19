@@ -91,7 +91,7 @@
                             x:Name="StudentPhoto"
                             Width="75"
                             Height="100"
-                            Source="{x:Bind PhotoPath}"
+                            Source="{x:Bind PhotoPath, Mode=OneWay}"
                             Stretch="UniformToFill" />
                     </Border>
                     <StackPanel
@@ -1099,11 +1099,10 @@
                     <ListView.ItemContainerTransitions>
                         <TransitionCollection>
                             <RepositionThemeTransition />
-                            <AddDeleteThemeTransition >
-                                
-                            </AddDeleteThemeTransition>
+                            <AddDeleteThemeTransition />
                             <ContentThemeTransition />
-                            <EntranceThemeTransition FromVerticalOffset="4000" IsStaggeringEnabled="True" />
+                            <EntranceThemeTransition FromVerticalOffset="1000" IsStaggeringEnabled="True" />
+                            <ReorderThemeTransition />
                         </TransitionCollection>
                     </ListView.ItemContainerTransitions>
                 </ListView>
