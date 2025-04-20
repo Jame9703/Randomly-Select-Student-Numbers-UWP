@@ -347,8 +347,8 @@
                 <StackPanel.ChildrenTransitions>
                     <TransitionCollection>
                         <EntranceThemeTransition
-                            FromHorizontalOffset="-500"
-                            FromVerticalOffset="-100"
+                            FromHorizontalOffset="-100"
+                            FromVerticalOffset="0"
                             IsStaggeringEnabled="True" />
                     </TransitionCollection>
                 </StackPanel.ChildrenTransitions>
@@ -454,9 +454,25 @@
                         <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xEB68;" />
                     </Viewbox>
                 </ToggleButton>
-                <Grid Height="Auto" />
-
-
+                <ToggleButton
+                    x:Name="MorePageButton"
+                    Grid.Row="4"
+                    Grid.ColumnSpan="2"
+                    Width="65"
+                    Height="60"
+                    HorizontalAlignment="Center"
+                    x:FieldModifier="public"
+                    Background="Transparent"
+                    Click="MorePage_Click"
+                    CornerRadius="6,6,6,6"
+                    FontFamily="{StaticResource HarmonyOSSans}"
+                    Style="{StaticResource ToggleButtonStyle}">
+                    <Grid>
+                        <Viewbox Height="24">
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE712;" />
+                        </Viewbox>
+                    </Grid>
+                </ToggleButton>
             </StackPanel>
             <ToggleButton
                 x:Name="SettingsPageButton"
@@ -473,7 +489,7 @@
                 Style="{StaticResource ToggleButtonStyle}">
                 <ToggleButton.Transitions>
                     <TransitionCollection>
-                        <EntranceThemeTransition FromVerticalOffset="500" />
+                        <EntranceThemeTransition FromHorizontalOffset="-666" FromVerticalOffset="0" />
                     </TransitionCollection>
                 </ToggleButton.Transitions>
                 <Viewbox Height="24">

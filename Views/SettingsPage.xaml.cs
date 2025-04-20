@@ -9,9 +9,7 @@ using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Navigation;
-using 随机抽取学号.Controls;
 using 随机抽取学号.Media;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
@@ -23,11 +21,15 @@ namespace 随机抽取学号.Views
     /// </summary>
     public sealed partial class SettingsPage : Page
     {
+        private MainPage mainPage = ((Frame)Window.Current.Content).Content as MainPage;
         public SettingsPage()
         {
             this.InitializeComponent();
+            //MainPage加载时已判断localSettings项是否存在
             AppearanceRadioButtons.SelectedIndex = (int)ApplicationData.Current.LocalSettings.Values["Theme"];
             BackgroundRadioButtons.SelectedIndex = (int)ApplicationData.Current.LocalSettings.Values["MainPageBackground"];
+            BackgroundOpacitySlider.Value = (double)ApplicationData.Current.LocalSettings.Values["MainPageBackgroundOpacity"];
+            BackgroundOpacityTextBlock.Text = BackgroundOpacitySlider.Value.ToString() + "%";
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -95,14 +97,18 @@ namespace 随机抽取学号.Views
 
         private void BackgroundRadioButtons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            var mainPage = ((Frame)Window.Current.Content).Content as MainPage;
             if (mainPage != null)
             {
                 if (BackgroundRadioButtons.SelectedIndex == 0)// 无背景
                 {
-                        // 创建一个新的纯色笔刷来设置MainPage的背景
-                        var newBrush = new SolidColorBrush(Colors.White);
-                        mainPage.MainPageBackground = newBrush;
+                    // 创建一个新的纯色笔刷来设置MainPage的背景
+                    var newBrush = new SolidColorBrush()
+                    {
+                        Color = Colors.White,
+                        Opacity = BackgroundOpacitySlider.Value / 100
+
+                    };
+                    mainPage.Background = newBrush;
                     localSettings.Values["MainPageBackground"] = 0;
                 }
                 else if (BackgroundRadioButtons.SelectedIndex == 1)// 亚克力背景
@@ -110,11 +116,11 @@ namespace 随机抽取学号.Views
                     var acrylicBrush = new AcrylicBrush
                     {
                         BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
-                        Opacity = 1,
+                        Opacity = BackgroundOpacitySlider.Value / 100,
                         TintOpacity = 0.6,
                         TintColor = Colors.Transparent
                     };
-                    mainPage.MainPageBackground = acrylicBrush;
+                    mainPage.Background = acrylicBrush;
                     localSettings.Values["MainPageBackground"] = 1;
                 }
                 else if (BackgroundRadioButtons.SelectedIndex == 2)// 云母背景
@@ -122,8 +128,9 @@ namespace 随机抽取学号.Views
                     var backdropMicaBrush = new BackdropMicaBrush
                     {
                         BackgroundSource = BackgroundSource.WallpaperBackdrop,
+                        Opacity = BackgroundOpacitySlider.Value / 100,
                     };
-                    mainPage.MainPageBackground = backdropMicaBrush;
+                    mainPage.Background = backdropMicaBrush;
                     localSettings.Values["MainPageBackground"] = 2;
                 }
             }
@@ -148,6 +155,16 @@ namespace 随机抽取学号.Views
         {
             // 阻止事件冒泡
             e.Handled = true;
+        }
+
+        private void BackgroundOpacitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            BackgroundOpacityTextBlock.Text = BackgroundOpacitySlider.Value.ToString() + "%";
+            if (mainPage != null)
+            {
+                mainPage.Background.Opacity = BackgroundOpacitySlider.Value / 100;
+                localSettings.Values["MainPageBackgroundOpacity"] = BackgroundOpacitySlider.Value;
+            }
         }
     }
 }

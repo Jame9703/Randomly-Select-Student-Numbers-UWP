@@ -30,18 +30,16 @@ namespace 随机抽取学号
         public static MainPage Current;
         private ToggleButton _lastSelectedButton;
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
-        public delegate void UpdateTextEventHandler(string text);// 定义委托
-        public event UpdateTextEventHandler UpdateTextBoxEvent;// 定义事件
         public static StackPanel PopupContainerInstance;
-        public void TriggerUpdateTextEvent(string text)
+        public new Brush Background
         {
-            UpdateTextBoxEvent?.Invoke(text);
+            get { return base.Background; }
+            set { base.Background = value; }
         }
 
         public MainPage()
         {
             this.InitializeComponent();
-
         }
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
@@ -52,7 +50,6 @@ namespace 随机抽取学号
             StudentManager.SelectedRanges = await StudentManager.LoadCheckedStudentsAsync();
             //LoadBackground();
             //PopupContainerInstance = PopupContainer;
-            UpdateTextBoxEvent += OnUpdateTextBox; // 订阅事件
             // 隐藏系统标题栏并设置新的标题栏
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
@@ -68,14 +65,13 @@ namespace 随机抽取学号
             HomePageButton.IsChecked = true;
             this.SizeChanged += MainPage_SizeChanged;
             _lastSelectedButton = HomePageButton;//确保开始时_lastSelectedButton不为null
-            ClassNameTextBox.Text = (string)localSettings.Values["ClassName"] as string;
             StorageFolder localFolder = ApplicationData.Current.LocalFolder;
             StorageFolder imageFolder = await localFolder.CreateFolderAsync("ClassPictures", CreationCollisionOption.OpenIfExists);
             IStorageItem item = await imageFolder.TryGetItemAsync("ClassEmblem.png");
             if (item != null && item is StorageFile imageFile)
             {
                 BitmapImage bitmapImage = new BitmapImage()
-                { 
+                {
                     DecodePixelHeight = 72,
                     DecodePixelWidth = 72,
                     UriSource = new Uri(imageFile.Path)
@@ -134,6 +130,24 @@ namespace 随机抽取学号
                     };
                     this.Background = backdropMicaBrush;
                     localSettings.Values["MainPageBackground"] = 2;//设置默认MainPage背景
+                }
+                if (localSettings.Values.ContainsKey("MainPageBackgroundOpacity"))
+                {
+                    this.Background.Opacity = (double)localSettings.Values["MainPageBackgroundOpacity"];
+                }
+                else
+                {
+                    this.Background.Opacity = 0.5;
+                    localSettings.Values["MainPageBackgroundOpacity"] = 0.5;//设置默认MainPage背景不透明度
+                }
+                if (localSettings.Values["ClassName"] != null)
+                {
+                    ClassNameTextBox.Text = (string)localSettings.Values["ClassName"] as string;
+                }
+                else
+                {
+                    ClassNameTextBox.Text = "我的班级";
+                    localSettings.Values["ClassName"] = "我的班级";//默认班级名称
                 }
             }
             else
@@ -433,6 +447,21 @@ namespace 随机抽取学号
         private void ClassNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
             localSettings.Values["ClassName"] = ClassNameTextBox.Text;
+        }
+
+
+        private void MorePage_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as ToggleButton;
+            if (_lastSelectedButton != button)
+            {
+                StartAnimation(button);
+                ContentFrame.Navigate(typeof(MorePage));
+            }
+            else
+            {
+                button.IsChecked = true;//上次点击的按钮和本次一样，保持选中状态
+            }
         }
     }
 }

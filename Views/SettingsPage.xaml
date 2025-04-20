@@ -73,6 +73,26 @@
                                 </muxc:RadioButtons>
                             </StackPanel>
                         </controls:SettingsCard>
+                        <controls:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
+                            <StackPanel
+                                Margin="-12,0,0,0"
+                                Orientation="Horizontal"
+                                Spacing="10">
+
+                                <Slider
+                                    x:Name="BackgroundOpacitySlider"
+                                    Width="250"
+                                    ValueChanged="BackgroundOpacitySlider_ValueChanged" />
+                                <TextBlock
+                                    VerticalAlignment="Center"
+                                    FontFamily="{StaticResource HarmonyOSSans}"
+                                    Text="透明度" />
+                                <TextBlock
+                                    x:Name="BackgroundOpacityTextBlock"
+                                    VerticalAlignment="Center"
+                                    FontFamily="{StaticResource HarmonyOSSans}" />
+                            </StackPanel>
+                        </controls:SettingsCard>
                     </controls:SettingsExpander.Items>
                 </controls:SettingsExpander>
                 <TextBlock
@@ -93,19 +113,20 @@
                     <controls:SettingsExpander.HeaderIcon>
                         <ui:BitmapIconExtension Source="ms-appx:///Assets/RSSN_Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png" />
                     </controls:SettingsExpander.HeaderIcon>
-                      <!--IsTextSelectionEnabled="True"-->  
+                    <!--  IsTextSelectionEnabled="True"  -->
                     <controls:SettingsExpander.Items>
                         <controls:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
-                            <StackPanel Margin="-12,0,0,0" Orientation="Vertical">
+                            <StackPanel
+                                Margin="-12,0,0,0"
+                                Orientation="Vertical"
+                                Spacing="5">
                                 <TextBlock
-                                    Margin="0,5,0,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     FontFamily="{StaticResource HarmonyOSSans}"
                                     Text="平台：Universal Windows Platform(通用Windows平台)"
                                     TextWrapping="Wrap" />
                                 <TextBlock
-                                    Margin="0,10,0,0"
                                     HorizontalAlignment="Left"
                                     VerticalAlignment="Top"
                                     FontFamily="{StaticResource HarmonyOSSans}"
@@ -113,6 +134,62 @@
                                     TextWrapping="Wrap" />
                             </StackPanel>
                         </controls:SettingsCard>
+                        <controls:SettingsCard
+                            Margin="-12,0,0,0"
+                            HorizontalContentAlignment="Left"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            Header="HarmonyOS Sans字体">
+                            <HyperlinkButton
+                                HorizontalAlignment="Right"
+                                Content="详情"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                NavigateUri="https://developer.huawei.com/consumer/cn/doc/design-guides-V1/font-0000001157868583-V1" />
+                        </controls:SettingsCard>
+                        <controls:SettingsCard
+                            Margin="-12,0,0,0"
+                            HorizontalContentAlignment="Left"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            Header="Microsoft.Data.Sqlite">
+                            <HyperlinkButton
+                                HorizontalAlignment="Right"
+                                Content="Apache License"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                NavigateUri="https://github.com/aspnet/Microsoft.Data.Sqlite/blob/master/LICENSE.txt" />
+                        </controls:SettingsCard>
+                        <controls:SettingsCard
+                            Margin="-12,0,0,0"
+                            HorizontalContentAlignment="Left"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            Header="Microsoft.UI.Xaml">
+                            <HyperlinkButton
+                                HorizontalAlignment="Right"
+                                Content="MIT License"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                NavigateUri="https://github.com/microsoft/microsoft-ui-xaml/blob/main/LICENSE" />
+                        </controls:SettingsCard>
+                        <controls:SettingsCard
+                            Margin="-12,0,0,0"
+                            HorizontalContentAlignment="Left"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            Header="Win2D.uwp">
+                            <HyperlinkButton
+                                HorizontalAlignment="Right"
+                                Content="MIT License"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                NavigateUri="https://github.com/microsoft/Win2D/blob/uwp/main/LICENSE.txt" />
+                        </controls:SettingsCard>
+                        <controls:SettingsCard
+                            Margin="-12,0,0,0"
+                            HorizontalContentAlignment="Left"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            Header="Windows Commnuity Toolkit">
+                            <HyperlinkButton
+                                HorizontalAlignment="Right"
+                                Content="MIT License"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                NavigateUri="https://github.com/CommunityToolkit/WindowsCommunityToolkit/blob/main/License.md" />
+                        </controls:SettingsCard>
+
                     </controls:SettingsExpander.Items>
                     <TextBlock
                         FontFamily="{StaticResource HarmonyOSSans}"

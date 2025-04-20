@@ -40,6 +40,7 @@ namespace 随机抽取学号.Views
         }
         private void Page_Loaded(object sender, RoutedEventArgs e)
         {
+            CheckBoxListView.ItemsSource = StudentManager.StudentList;
             if (StudentManager.CheckedStudents.Count <= StudentManager.StudentList.Count)
             {
                 CheckBoxListView.SelectionChanged -= CheckBoxListView_SelectionChanged;
