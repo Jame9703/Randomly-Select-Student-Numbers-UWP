@@ -28,7 +28,7 @@ namespace 随机抽取学号.Views
             //MainPage加载时已判断localSettings项是否存在
             AppearanceRadioButtons.SelectedIndex = (int)ApplicationData.Current.LocalSettings.Values["Theme"];
             BackgroundRadioButtons.SelectedIndex = (int)ApplicationData.Current.LocalSettings.Values["MainPageBackground"];
-            BackgroundOpacitySlider.Value = (double)ApplicationData.Current.LocalSettings.Values["MainPageBackgroundOpacity"];
+            BackgroundOpacitySlider.Value = (double)ApplicationData.Current.LocalSettings.Values["MainPageBackgroundOpacity"] * 100;
             BackgroundOpacityTextBlock.Text = BackgroundOpacitySlider.Value.ToString() + "%";
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
@@ -163,7 +163,7 @@ namespace 随机抽取学号.Views
             if (mainPage != null)
             {
                 mainPage.Background.Opacity = BackgroundOpacitySlider.Value / 100;
-                localSettings.Values["MainPageBackgroundOpacity"] = BackgroundOpacitySlider.Value;
+                localSettings.Values["MainPageBackgroundOpacity"] = BackgroundOpacitySlider.Value / 100;
             }
         }
     }

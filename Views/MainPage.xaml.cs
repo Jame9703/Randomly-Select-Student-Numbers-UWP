@@ -53,18 +53,24 @@ namespace 随机抽取学号
             // 隐藏系统标题栏并设置新的标题栏
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;
-            ////设置标题栏边距
-            var view = ApplicationView.GetForCurrentView();
-            view.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             Window.Current.SetTitleBar(AppTitleBar);
-            //将标题栏右上角的3个按钮改为透明（显示Mica）
+            //将标题栏右上角的3个按钮改为透明
             ApplicationViewTitleBar formattableTitleBar = ApplicationView.GetForCurrentView().TitleBar;
             formattableTitleBar.ButtonBackgroundColor = Colors.Transparent;
-
             ContentFrame.Navigate(typeof(HomePage));
             HomePageButton.IsChecked = true;
             this.SizeChanged += MainPage_SizeChanged;
             _lastSelectedButton = HomePageButton;//确保开始时_lastSelectedButton不为null
+            if (localSettings.Values.ContainsKey("IsFirstRun"))//判断是否是第一次运行
+            {
+                //不是第一次运行
+                NotFirstRun();
+            }
+            else
+            {
+                //第一次运行
+                FirstRun();
+            }
             StorageFolder localFolder = ApplicationData.Current.LocalFolder;
             StorageFolder imageFolder = await localFolder.CreateFolderAsync("ClassPictures", CreationCollisionOption.OpenIfExists);
             IStorageItem item = await imageFolder.TryGetItemAsync("ClassEmblem.png");
@@ -79,84 +85,10 @@ namespace 随机抽取学号
                 SmallClassPicture.ProfilePicture = bitmapImage;
                 BigClassPicture.ProfilePicture = bitmapImage;
             }
-
-            if (localSettings.Values["Theme"] != null)
-            {
-                if ((int)localSettings.Values["Theme"] == 0)
-                {
-                    view.TitleBar.ButtonForegroundColor = ((Color)Application.Current.Resources["SystemAccentColor"]);
-                }
-                else if ((int)localSettings.Values["Theme"] == 1)
-                {
-                    view.TitleBar.ButtonForegroundColor = Colors.White;
-                }
-               (Window.Current.Content as Frame).RequestedTheme = (int)localSettings.Values["Theme"] switch
-               {
-                   0 => ElementTheme.Light,
-                   1 => ElementTheme.Dark,
-                   _ => ElementTheme.Default
-               };
-                if (localSettings.Values.ContainsKey("MainPageBackground"))
-                {
-                    if ((int)localSettings.Values["MainPageBackground"] == 0)
-                    {
-                        this.Background = new SolidColorBrush(Colors.White);
-                    }
-                    else if ((int)localSettings.Values["MainPageBackground"] == 1)
-                    {
-                        var acrylicBrush = new AcrylicBrush
-                        {
-                            BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
-                            Opacity = 1,
-                            TintOpacity = 0.6,
-                            TintColor = Colors.Transparent
-                        };
-                        this.Background = acrylicBrush;
-                    }
-                    else if ((int)localSettings.Values["MainPageBackground"] == 2)
-                    {
-                        var backdropMicaBrush = new BackdropMicaBrush
-                        {
-                            BackgroundSource = BackgroundSource.WallpaperBackdrop,
-                        };
-                        this.Background = backdropMicaBrush;
-                    }
-                }
-                else
-                {
-                    var backdropMicaBrush = new BackdropMicaBrush
-                    {
-                        BackgroundSource = BackgroundSource.WallpaperBackdrop,
-                    };
-                    this.Background = backdropMicaBrush;
-                    localSettings.Values["MainPageBackground"] = 2;//设置默认MainPage背景
-                }
-                if (localSettings.Values.ContainsKey("MainPageBackgroundOpacity"))
-                {
-                    this.Background.Opacity = (double)localSettings.Values["MainPageBackgroundOpacity"];
-                }
-                else
-                {
-                    this.Background.Opacity = 0.5;
-                    localSettings.Values["MainPageBackgroundOpacity"] = 0.5;//设置默认MainPage背景不透明度
-                }
-                if (localSettings.Values["ClassName"] != null)
-                {
-                    ClassNameTextBox.Text = (string)localSettings.Values["ClassName"] as string;
-                }
-                else
-                {
-                    ClassNameTextBox.Text = "我的班级";
-                    localSettings.Values["ClassName"] = "我的班级";//默认班级名称
-                }
-            }
             else
             {
                 //找不到值，第一次启动，显示欢迎界面
-                WelcomeContentDialog welcomeDialog = new WelcomeContentDialog();
-                await welcomeDialog.ShowAsync();
-                localSettings.Values["Theme"] = 2;//确保下次打开不显示欢迎界面
-                localSettings.Values["MainPageBackground"] = 2;//设置默认MainPage背景
+
             }
             ContentGrid.Visibility = Visibility.Visible;
             LoadProgressRing.Visibility = Visibility.Collapsed;
@@ -182,7 +114,95 @@ namespace 随机抽取学号
                 mainPage.Background = e.NewValue as Brush;
             }
         }
-
+        private async void FirstRun()
+        {
+            //设置默认应用主题
+            (Window.Current.Content as Frame).RequestedTheme = ElementTheme.Default;
+            //获取当前视图并设置标题栏为透明
+            var view = ApplicationView.GetForCurrentView();
+            view.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+            //设置默认MainPage背景
+            var backdropMicaBrush = new BackdropMicaBrush
+            {
+                BackgroundSource = BackgroundSource.WallpaperBackdrop,
+            };
+            this.Background = backdropMicaBrush;
+            WelcomeContentDialog welcomeDialog = new WelcomeContentDialog();
+            await welcomeDialog.ShowAsync();
+            localSettings.Values["Theme"] = 2;//确保下次打开不显示欢迎界面
+            localSettings.Values["MainPageBackground"] = 2;//设置默认MainPage背景
+            localSettings.Values["MainPageBackgroundOpacity"] = 0.5;//设置默认MainPage背景不透明度
+            ClassNameTextBox.Text = "我的班级";
+            localSettings.Values["ClassName"] = "我的班级";//默认班级名称
+            localSettings.Values["IsFirstRun"] = false;//设置不是第一次运行
+        }
+        private void NotFirstRun()
+        {
+            //获取当前视图并设置标题栏为透明
+            var view = ApplicationView.GetForCurrentView();
+            view.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+            if (localSettings.Values["Theme"] != null)
+            {
+                if ((int)localSettings.Values["Theme"] == 0)
+                {
+                    view.TitleBar.ButtonForegroundColor = ((Color)Application.Current.Resources["SystemAccentColor"]);
+                }
+                else if ((int)localSettings.Values["Theme"] == 1)
+                {
+                    view.TitleBar.ButtonForegroundColor = Colors.White;
+                }
+(Window.Current.Content as Frame).RequestedTheme = (int)localSettings.Values["Theme"] switch
+{
+    0 => ElementTheme.Light,
+    1 => ElementTheme.Dark,
+    _ => ElementTheme.Default
+};
+                if (localSettings.Values.ContainsKey("MainPageBackground") && localSettings.Values.ContainsKey("MainPageBackgroundOpacity"))
+                {
+                    if ((int)localSettings.Values["MainPageBackground"] == 0)
+                    {
+                        this.Background = new SolidColorBrush(Colors.White);
+                    }
+                    else if ((int)localSettings.Values["MainPageBackground"] == 1)
+                    {
+                        var acrylicBrush = new AcrylicBrush
+                        {
+                            BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                            TintOpacity = 0.6,
+                            TintColor = Colors.Transparent
+                        };
+                        this.Background = acrylicBrush;
+                    }
+                    else if ((int)localSettings.Values["MainPageBackground"] == 2)
+                    {
+                        var backdropMicaBrush = new BackdropMicaBrush
+                        {
+                            BackgroundSource = BackgroundSource.WallpaperBackdrop,
+                        };
+                        this.Background = backdropMicaBrush;
+                    }
+                }
+                else
+                {
+                    var backdropMicaBrush = new BackdropMicaBrush
+                    {
+                        BackgroundSource = BackgroundSource.WallpaperBackdrop,
+                    };
+                    this.Background = backdropMicaBrush;
+                    localSettings.Values["MainPageBackground"] = 2;//设置默认MainPage背景
+                }
+                this.Background.Opacity = (double)localSettings.Values["MainPageBackgroundOpacity"];
+                if (localSettings.Values["ClassName"] != null)
+                {
+                    ClassNameTextBox.Text = (string)localSettings.Values["ClassName"] as string;
+                }
+                else
+                {
+                    ClassNameTextBox.Text = "我的班级";
+                    localSettings.Values["ClassName"] = "我的班级";//默认班级名称
+                }
+            }
+        }
         private void LoadBackground()
         {
             // 创建线性渐变画刷
@@ -245,11 +265,6 @@ namespace 随机抽取学号
 
             // 开始动画
             storyboard.Begin();
-        }
-
-        private void OnUpdateTextBox(string text)
-        {
-            //ClassNameHyperlinkButton.Content = text;
         }
         private void ContentFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)
         {
