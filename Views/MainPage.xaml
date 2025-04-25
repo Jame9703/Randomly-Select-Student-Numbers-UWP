@@ -158,150 +158,126 @@
                     </TransitionCollection>
                 </Grid.Transitions>
                 <Image
-                        Width="26"
-                        Height="26"
-                        Margin="7,7,0,7"
-                        HorizontalAlignment="Left"
-                        Source="ms-appx:///Assets/RSSN_Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png" />
+                    Width="26"
+                    Height="26"
+                    Margin="7,7,0,7"
+                    HorizontalAlignment="Left"
+                    Source="ms-appx:///Assets/RSSN_Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png" />
                 <TextBlock
-                        x:Name="AppTitleTextBlock_1"
-                        Margin="40,5,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        FontFamily="{StaticResource HarmonyOSSans}"
-                        FontSize="14"
-                        Style="{StaticResource CaptionTextBlockStyle}"
-                        Text="随机抽取学号 2025" />
+                    x:Name="AppTitleTextBlock_1"
+                    Margin="40,5,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    FontFamily="{StaticResource HarmonyOSSans}"
+                    FontSize="14"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="随机抽取学号 2025" />
                 <TextBlock
-                        x:Name="AppTitleTextBlock_2"
-                        Grid.ColumnSpan="2"
-                        Width="136"
-                        Height="17"
-                        Margin="40,25,0,0"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        FontFamily="{StaticResource HarmonyOSSans}"
-                        FontSize="8"
-                        Style="{StaticResource CaptionTextBlockStyle}"
-                        Text="Randomly Select Student Numbers" />
+                    x:Name="AppTitleTextBlock_2"
+                    Grid.ColumnSpan="2"
+                    Width="136"
+                    Height="17"
+                    Margin="40,25,0,0"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Top"
+                    FontFamily="{StaticResource HarmonyOSSans}"
+                    FontSize="8"
+                    Style="{StaticResource CaptionTextBlockStyle}"
+                    Text="Randomly Select Student Numbers" />
             </Grid>
-            <Grid Margin="180,0,150,0" HorizontalAlignment="Stretch">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
-                <AutoSuggestBox
-                        Grid.Column="0"
+        </Grid>
+        <Grid Margin="180,0,150,0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+            <Grid.ColumnDefinitions>
+                <ColumnDefinition Width="Auto" />
+                <ColumnDefinition Width="*" />
+            </Grid.ColumnDefinitions>
+            <Button
+                Grid.Column="1"
+                Padding="2"
+                HorizontalAlignment="Right"
+                BorderBrush="{ThemeResource SystemAccentColor}"
+                BorderThickness="1.5"
+                CornerRadius="16">
+                <Button.Transitions>
+                    <TransitionCollection>
+                        <EntranceThemeTransition FromVerticalOffset="-100" />
+                    </TransitionCollection>
+                </Button.Transitions>
+                <StackPanel Orientation="Horizontal">
+                    <PersonPicture
+                        x:Name="SmallClassPicture"
+                        Width="32"
                         Height="32"
-                        MinWidth="150"
-                        MaxWidth="350"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center" />
+                    <TextBlock
+                        MaxWidth="100"
+                        Margin="0,0,0,0"
+                        HorizontalAlignment="Stretch"
                         VerticalAlignment="Center"
-                        AutoMaximizeSuggestionArea="True"
-                        BorderBrush="{ThemeResource SystemAccentColor}"
-                        BorderThickness="2"
-                        CornerRadius="16"
-                        FlyoutBase.AttachedFlyout="{StaticResource TextControlCommandBarContextFlyout}"
                         FontFamily="{StaticResource HarmonyOSSans}"
-                        FontSize="14"
-                        PlaceholderText="搜索"
-                        QueryIcon="Find">
-                    <AutoSuggestBox.Transitions>
-                        <TransitionCollection>
-                            <PaneThemeTransition Edge="Top" />
-                        </TransitionCollection>
-                    </AutoSuggestBox.Transitions>
-                    <ListViewItem />
-                </AutoSuggestBox>
-                <Button
-                        Grid.Column="1"
-                        Padding="2"
-                        HorizontalAlignment="Right"
-                        BorderBrush="{ThemeResource SystemAccentColor}"
-                        BorderThickness="1.5"
-                        CornerRadius="16">
-                    <Button.Transitions>
-                        <TransitionCollection>
-                            <EntranceThemeTransition FromVerticalOffset="-100" />
-                        </TransitionCollection>
-                    </Button.Transitions>
-                    <StackPanel Orientation="Horizontal">
-                        <PersonPicture
-                                x:Name="SmallClassPicture"
-                                Width="32"
-                                Height="32"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center" />
-                        <TextBlock
-                                MaxWidth="100"
-                                Margin="0,0,0,0"
-                                HorizontalAlignment="Stretch"
-                                VerticalAlignment="Center"
+                        FontSize="15"
+                        Text="{x:Bind ClassNameTextBox.Text, Mode=OneWay}"
+                        TextTrimming="CharacterEllipsis" />
+                </StackPanel>
+                <Button.Flyout>
+
+                    <Flyout Placement="Bottom">
+                        <StackPanel Width="200">
+                            <PersonPicture
+                                x:Name="BigClassPicture"
+                                Height="72"
+                                HorizontalAlignment="Center" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
                                 FontFamily="{StaticResource HarmonyOSSans}"
-                                FontSize="15"
-                                Text="{x:Bind ClassNameTextBox.Text, Mode=OneWay}"
-                                TextTrimming="CharacterEllipsis" />
-                    </StackPanel>
-                    <Button.Flyout>
-
-                        <Flyout Placement="Bottom">
-                            <StackPanel Width="200">
-                                <PersonPicture
-                                        x:Name="BigClassPicture"
-                                        Height="72"
-                                        HorizontalAlignment="Center" />
-                                <TextBlock
-                                        HorizontalAlignment="Center"
+                                FontSize="20"
+                                Text="{x:Bind ClassNameTextBox.Text, Mode=OneWay}" />
+                            <TextBlock
+                                Margin="5"
+                                HorizontalAlignment="Left"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                FontSize="14"
+                                Foreground="{ThemeResource TextFillColorSecondaryBrush}"
+                                Text="更改班级名称：" />
+                            <TextBox
+                                x:Name="ClassNameTextBox"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                TextChanged="ClassNameTextBox_TextChanged" />
+                            <Button
+                                x:Name="EditPictureButton"
+                                Margin="0,5,0,0"
+                                HorizontalAlignment="Stretch"
+                                Click="EditPictureButton_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE70F;" />
+                                    <TextBlock
+                                        Margin="5,0,0,0"
                                         FontFamily="{StaticResource HarmonyOSSans}"
-                                        FontSize="20"
-                                        Text="{x:Bind ClassNameTextBox.Text, Mode=OneWay}" />
-                                <TextBlock
-                                        Margin="5"
-                                        HorizontalAlignment="Left"
+                                        Text="更改班徽" />
+                                </StackPanel>
+                            </Button>
+                            <Button
+                                x:Name="ManageStudentsButton"
+                                Margin="0,5,0,0"
+                                HorizontalAlignment="Stretch"
+                                Click="ManageStudentsButton_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <FontIcon
+                                        FontFamily="{StaticResource SegoeFluentIcons}"
+                                        Foreground="{ThemeResource SystemAccentColor}"
+                                        Glyph="&#xE7EE;" />
+                                    <TextBlock
+                                        Margin="5,0,0,0"
                                         FontFamily="{StaticResource HarmonyOSSans}"
-                                        FontSize="14"
-                                        Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                        Text="更改班级名称：" />
-                                <TextBox
-                                        x:Name="ClassNameTextBox"
-                                        FontFamily="{StaticResource HarmonyOSSans}"
-                                        TextChanged="ClassNameTextBox_TextChanged" />
-                                <Button
-                                        x:Name="EditPictureButton"
-                                        Margin="0,5,0,0"
-                                        HorizontalAlignment="Stretch"
-                                        Click="EditPictureButton_Click">
-                                    <StackPanel Orientation="Horizontal">
-                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE70F;" />
-                                        <TextBlock
-                                                Margin="5,0,0,0"
-                                                FontFamily="{StaticResource HarmonyOSSans}"
-                                                Text="更改班徽" />
-                                    </StackPanel>
-                                </Button>
-                                <Button
-                                        x:Name="ManageStudentsButton"
-                                        Margin="0,5,0,0"
-                                        HorizontalAlignment="Stretch"
-                                        Click="ManageStudentsButton_Click">
-                                    <StackPanel Orientation="Horizontal">
-                                        <FontIcon
-                                                FontFamily="{StaticResource SegoeFluentIcons}"
-                                                Foreground="{ThemeResource SystemAccentColor}"
-                                                Glyph="&#xE7EE;" />
-                                        <TextBlock
-                                                Margin="5,0,0,0"
-                                                FontFamily="{StaticResource HarmonyOSSans}"
-                                                Foreground="{ThemeResource SystemAccentColor}"
-                                                Text="管理班级学生" />
-                                    </StackPanel>
-                                </Button>
-                            </StackPanel>
-                        </Flyout>
-                    </Button.Flyout>
-                </Button>
-
-            </Grid>
-
+                                        Foreground="{ThemeResource SystemAccentColor}"
+                                        Text="管理班级学生" />
+                                </StackPanel>
+                            </Button>
+                        </StackPanel>
+                    </Flyout>
+                </Button.Flyout>
+            </Button>
 
         </Grid>
         <Grid x:Name="ContentGrid" Visibility="Collapsed">
@@ -364,14 +340,19 @@
                     Background="Transparent"
                     Click="HomePage_Click"
                     CornerRadius="6,6,6,6"
-                    FontFamily="{StaticResource HarmonyOSSans}"
                     Style="{StaticResource ToggleButtonStyle}">
-                    <Viewbox Height="24">
-                        <FontIcon
-                            x:Name="HomeIcon"
-                            FontFamily="{StaticResource SegoeFluentIcons}"
-                            Glyph="&#xEA8A;" />
-                    </Viewbox>
+                    <StackPanel>
+                        <Viewbox Height="24">
+                            <FontIcon
+                                x:Name="HomeIcon"
+                                FontFamily="{StaticResource SegoeFluentIcons}"
+                                Glyph="&#xEA8A;" />
+                        </Viewbox>
+                        <TextBlock
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="12"
+                            Text="主页" />
+                    </StackPanel>
                 </ToggleButton>
                 <ToggleButton
                     x:Name="ClassPageButton"
@@ -386,12 +367,18 @@
                     CornerRadius="6,6,6,6"
                     FontFamily="{StaticResource HarmonyOSSans}"
                     Style="{StaticResource ToggleButtonStyle}">
-                    <Viewbox Height="24">
-                        <FontIcon
-                            x:Name="ClassIcon"
-                            FontFamily="{StaticResource SegoeFluentIcons}"
-                            Glyph="&#xE7EE;" />
-                    </Viewbox>
+                    <StackPanel>
+                        <Viewbox Height="24">
+                            <FontIcon
+                                x:Name="ClassIcon"
+                                FontFamily="{StaticResource SegoeFluentIcons}"
+                                Glyph="&#xE7EE;" />
+                        </Viewbox>
+                        <TextBlock
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="12"
+                            Text="班级" />
+                    </StackPanel>
                 </ToggleButton>
                 <ToggleButton
                     x:Name="NumbersPageButton"
@@ -406,20 +393,26 @@
                     CornerRadius="6,6,6,6"
                     FontFamily="{StaticResource HarmonyOSSans}"
                     Style="{StaticResource ToggleButtonStyle}">
-                    <Grid>
-                        <Viewbox Height="24">
-                            <FontIcon
-                                x:Name="NumbersIcon"
-                                FontFamily="{StaticResource SegoeFluentIcons}"
-                                Glyph="&#xF4A5;" />
-                        </Viewbox>
-                        <Viewbox Height="24">
-                            <PathIcon
-                                x:Name="NumbersIconChecked"
-                                Data="{StaticResource NumbersIconData}"
-                                Visibility="Collapsed" />
-                        </Viewbox>
-                    </Grid>
+                    <StackPanel>
+                        <Grid>
+                            <Viewbox Height="24">
+                                <FontIcon
+                                    x:Name="NumbersIcon"
+                                    FontFamily="{StaticResource SegoeFluentIcons}"
+                                    Glyph="&#xF4A5;" />
+                            </Viewbox>
+                            <Viewbox Height="24">
+                                <PathIcon
+                                    x:Name="NumbersIconChecked"
+                                    Data="{StaticResource NumbersIconData}"
+                                    Visibility="Collapsed" />
+                            </Viewbox>
+                        </Grid>
+                        <TextBlock
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="12"
+                            Text="数字" />
+                    </StackPanel>
                 </ToggleButton>
                 <ToggleButton
                     x:Name="CharactersPageButton"
@@ -434,9 +427,15 @@
                     CornerRadius="6,6,6,6"
                     FontFamily="{StaticResource HarmonyOSSans}"
                     Style="{StaticResource ToggleButtonStyle}">
-                    <Viewbox Height="24">
-                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE8C1;" />
-                    </Viewbox>
+                    <StackPanel>
+                        <Viewbox Height="24">
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE8C1;" />
+                        </Viewbox>
+                        <TextBlock
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="12"
+                            Text="文字" />
+                    </StackPanel>
                 </ToggleButton>
                 <ToggleButton
                     x:Name="HelpPageButton"
@@ -451,9 +450,15 @@
                     CornerRadius="6,6,6,6"
                     FontFamily="{StaticResource HarmonyOSSans}"
                     Style="{StaticResource ToggleButtonStyle}">
-                    <Viewbox Height="24">
-                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xEB68;" />
-                    </Viewbox>
+                    <StackPanel>
+                        <Viewbox Height="24">
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xEB68;" />
+                        </Viewbox>
+                        <TextBlock
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="12"
+                            Text="帮助" />
+                    </StackPanel>
                 </ToggleButton>
                 <ToggleButton
                     x:Name="MorePageButton"
@@ -468,11 +473,15 @@
                     CornerRadius="6,6,6,6"
                     FontFamily="{StaticResource HarmonyOSSans}"
                     Style="{StaticResource ToggleButtonStyle}">
-                    <Grid>
+                    <StackPanel>
                         <Viewbox Height="24">
                             <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE712;" />
                         </Viewbox>
-                    </Grid>
+                        <TextBlock
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="12"
+                            Text="更多" />
+                    </StackPanel>
                 </ToggleButton>
             </StackPanel>
             <ToggleButton
@@ -493,12 +502,18 @@
                         <EntranceThemeTransition FromHorizontalOffset="-666" FromVerticalOffset="0" />
                     </TransitionCollection>
                 </ToggleButton.Transitions>
-                <Viewbox Height="24">
-                    <FontIcon
-                        x:Name="SettingsIcon"
-                        FontFamily="{StaticResource SegoeFluentIcons}"
-                        Glyph="&#xE713;" />
-                </Viewbox>
+                <StackPanel>
+                    <Viewbox Height="24">
+                        <FontIcon
+                            x:Name="SettingsIcon"
+                            FontFamily="{StaticResource SegoeFluentIcons}"
+                            Glyph="&#xE713;" />
+                    </Viewbox>
+                    <TextBlock
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        FontSize="12"
+                        Text="设置" />
+                </StackPanel>
             </ToggleButton>
             <Rectangle
                 x:Name="MovingRectangle"

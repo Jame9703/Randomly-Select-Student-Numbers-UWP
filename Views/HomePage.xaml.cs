@@ -33,7 +33,6 @@ namespace 随机抽取学号.Views
         public HomePage()
         {
             this.InitializeComponent();
-            SideBarSegmented.SelectedIndex = 0;
             timer.Interval = TimeSpan.FromMilliseconds(20);//默认每秒50次
             timer.Tick += Timer_Tick;
             segmented.SelectedIndex = 0;//在xaml中设置会导致后面的控件未加载就被调用//System.NullReferenceException:“Object reference not set to an instance of an object.”
@@ -59,26 +58,6 @@ namespace 随机抽取学号.Views
                     Numbers.Maximum = StudentManager.CheckedStudents.Count;
                 }
                 Numbers.Minimum = 1;
-                if (localSettings.Values.ContainsKey("NoReturn")
-                && localSettings.Values.ContainsKey("AutoStop")
-                && localSettings.Values.ContainsKey("Optimize")
-                && localSettings.Values.ContainsKey("SaveRange")
-                && localSettings.Values.ContainsKey("SaveHistory"))
-                {
-                    NoReturnToggleSwitch.IsOn = (bool)localSettings.Values["NoReturn"];
-                    AutoStopToggleSwitch.IsOn = (bool)localSettings.Values["AutoStop"];
-                    OptimizeToggleSwitch.IsOn = (bool)localSettings.Values["Optimize"];
-                    SaveRangeToggleSwitch.IsOn = (bool)localSettings.Values["SaveRange"];
-                    SaveHistoryToggleSwitch.IsOn = (bool)localSettings.Values["SaveHistory"];
-                }
-                else
-                {
-                    localSettings.Values["NoReturn"] = false;
-                    localSettings.Values["AutoStop"] = false;
-                    localSettings.Values["Optimize"] = false;
-                    localSettings.Values["SaveRange"] = false;
-                    localSettings.Values["SaveHistory"] = false;
-                }
                 ContentGrid.Visibility = Visibility.Visible;
                 LoadProgressRing.Visibility = Visibility.Collapsed;
             }
@@ -133,7 +112,7 @@ namespace 随机抽取学号.Views
                 SelectAllCheckBox.IsChecked = null;
             }
             //更新已选人数
-            CheckedStudentsCount.Text = "已选择" + StudentManager.CheckedStudents.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
+            SelectAllCheckBox.Content = StudentManager.CheckedStudents.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
         }
         private void LoadPhotosGridView()//多人模式下加载PhotosGridView
         {
@@ -180,16 +159,16 @@ namespace 随机抽取学号.Views
                     StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 236, G = 179, B = 1 });
                     //根据SelectedRanges更新CheckedStudents
                     UpdateCheckedStudents();
-                    if (OptimizeToggleSwitch.IsOn == true)//优化开关打开
-                    {
-                        for (int i = 0; i < StudentManager.CheckedStudents.Count; i++)//洗牌算法，全部打乱
-                        {
-                            int j = random.Next(StudentManager.CheckedStudents.Count);
-                            var temp = StudentManager.CheckedStudents[i];
-                            StudentManager.CheckedStudents[i] = StudentManager.CheckedStudents[j];
-                            StudentManager.CheckedStudents[j] = temp;
-                        }
-                    }
+                    //if (OptimizeToggleSwitch.IsOn == true)//优化开关打开
+                    //{
+                    //    for (int i = 0; i < StudentManager.CheckedStudents.Count; i++)//洗牌算法，全部打乱
+                    //    {
+                    //        int j = random.Next(StudentManager.CheckedStudents.Count);
+                    //        var temp = StudentManager.CheckedStudents[i];
+                    //        StudentManager.CheckedStudents[i] = StudentManager.CheckedStudents[j];
+                    //        StudentManager.CheckedStudents[j] = temp;
+                    //    }
+                    //}
                 }
                 else if (isRandomizing)
                 {
@@ -199,11 +178,11 @@ namespace 随机抽取学号.Views
                     StartorStopButtonContent.Text = "开始";
                     StartorStopButtonIcon.Symbol = Symbol.Play;
                     StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
-                    if (NoReturnToggleSwitch.IsOn == true)//抽完不放回
-                    {
-                        var randomstudent = StudentManager.StudentList[randomIndex];
-                        CheckBoxListView.SelectedItems.Remove(randomstudent);
-                    }
+                    //if (NoReturnToggleSwitch.IsOn == true)//抽完不放回
+                    //{
+                    //    var randomstudent = StudentManager.StudentList[randomIndex];
+                    //    CheckBoxListView.SelectedItems.Remove(randomstudent);
+                    //}
                 }
             }
         }
@@ -222,16 +201,16 @@ namespace 随机抽取学号.Views
         {
             if (StudentManager.CheckedStudents.Count != 0)
             {
-                if (OptimizeToggleSwitch.IsOn == false)//优化开关关闭
-                {
-                    var randomIndexinCheckedStudents = random.Next(StudentManager.CheckedStudents.Count);
-                    randomIndex = StudentManager.CheckedStudents[randomIndexinCheckedStudents];
-                    var randomstudent = StudentManager.StudentList[randomIndex];
-                    StudentPhoto.Source = new BitmapImage(new Uri(randomstudent.PhotoPath));
-                    ResultTextBox.Text = (randomIndex + 1).ToString() + "." + randomstudent.Name;
-                }
-                else //优化开关打开
-                {
+                //if (OptimizeToggleSwitch.IsOn == false)//优化开关关闭
+                //{
+                //    var randomIndexinCheckedStudents = random.Next(StudentManager.CheckedStudents.Count);
+                //    randomIndex = StudentManager.CheckedStudents[randomIndexinCheckedStudents];
+                //    var randomstudent = StudentManager.StudentList[randomIndex];
+                //    StudentPhoto.Source = new BitmapImage(new Uri(randomstudent.PhotoPath));
+                //    ResultTextBox.Text = (randomIndex + 1).ToString() + "." + randomstudent.Name;
+                //}
+                //else //优化开关打开
+                //{
                     if (currentIndex + 1 > StudentManager.CheckedStudents.Count)
                     {
                         currentIndex = 0;
@@ -240,7 +219,7 @@ namespace 随机抽取学号.Views
                     StudentPhoto.Source = new BitmapImage(new Uri(StudentManager.StudentList[randomIndex].PhotoPath));
                     ResultTextBox.Text = (randomIndex + 1).ToString() + "." + StudentManager.StudentList[randomIndex].Name;
                     currentIndex++;
-                }
+                //}
             }
             else
             {
@@ -278,7 +257,7 @@ namespace 随机抽取学号.Views
             }
         }
 
-        private async void changeCheckBoxes_Click(object sender, RoutedEventArgs e)
+        private void changeCheckBoxes_Click(object sender, RoutedEventArgs e)
         {
             if (StudentManager.StudentList.Count > 0)
             {
@@ -294,7 +273,6 @@ namespace 随机抽取学号.Views
                     PopupNotice popupNotice = new PopupNotice("成功应用更改");
                     popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
                     popupNotice.ShowPopup();
-                    CheckedStudentsCount.Text = "已选择" + StudentManager.CheckedStudents.Count.ToString() + "/" + StudentManager.StudentList.Count.ToString();
                 }
                 else
                 {
@@ -370,10 +348,10 @@ namespace 随机抽取学号.Views
                             var result = Result[i];
                             var student = StudentManager.StudentList[result];
                             selectedStudentList.Add(student);
-                            if (NoReturnToggleSwitch.IsOn == true)//抽完不放回
-                            {
-                                CheckBoxListView.SelectedItems.Remove(student);
-                            }
+                            //if (NoReturnToggleSwitch.IsOn == true)//抽完不放回
+                            //{
+                            //    CheckBoxListView.SelectedItems.Remove(student);
+                            //}
                         }
                         LoadPhotosGridView();
                     }
@@ -398,46 +376,46 @@ namespace 随机抽取学号.Views
                 popupNotice.ShowPopup();
             }
         }
-        #region ToggledEvents
-        private void NoReturnToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        {
-            localSettings.Values["NoReturn"] = NoReturnToggleSwitch.IsOn;
-        }
+        //#region ToggledEvents
+        //private void NoReturnToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        //{
+        //    localSettings.Values["NoReturn"] = NoReturnToggleSwitch.IsOn;
+        //}
 
-        private void AutoStopToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        {
-            localSettings.Values["AutoStop"] = AutoStopToggleSwitch.IsOn;
-        }
+        //private void AutoStopToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        //{
+        //    localSettings.Values["AutoStop"] = AutoStopToggleSwitch.IsOn;
+        //}
 
-        private void OptimizeToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        {
-            localSettings.Values["Optimize"] = OptimizeToggleSwitch.IsOn;
-        }
+        //private void OptimizeToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        //{
+        //    localSettings.Values["Optimize"] = OptimizeToggleSwitch.IsOn;
+        //}
 
-        private void SaveRangeToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        {
-            localSettings.Values["SaveRange"] = SaveRangeToggleSwitch.IsOn;
-        }
+        //private void SaveRangeToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        //{
+        //    localSettings.Values["SaveRange"] = SaveRangeToggleSwitch.IsOn;
+        //}
 
-        private void SaveHistoryToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        {
-            localSettings.Values["SaveHistory"] = SaveHistoryToggleSwitch.IsOn;
-        }
-        #endregion
+        //private void SaveHistoryToggleSwitch_Toggled(object sender, RoutedEventArgs e)
+        //{
+        //    localSettings.Values["SaveHistory"] = SaveHistoryToggleSwitch.IsOn;
+        //}
+        //#endregion
 
-        private void SideBarSegmented_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (SideBarSegmented.SelectedIndex == 0)
-            {
-                SettingsScrollViewer.Visibility = Visibility.Collapsed;
-                checkBoxesGrid.Visibility = Visibility.Visible;
-            }
-            else
-            {
-                checkBoxesGrid.Visibility = Visibility.Collapsed;
-                SettingsScrollViewer.Visibility = Visibility.Visible;
-            }
-        }
+        //private void SideBarSegmented_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        //{
+        //    if (SideBarSegmented.SelectedIndex == 0)
+        //    {
+        //        SettingsScrollViewer.Visibility = Visibility.Collapsed;
+        //        checkBoxesGrid.Visibility = Visibility.Visible;
+        //    }
+        //    else
+        //    {
+        //        checkBoxesGrid.Visibility = Visibility.Collapsed;
+        //        SettingsScrollViewer.Visibility = Visibility.Visible;
+        //    }
+        //}
 
         private async void CheckBoxListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
@@ -452,6 +430,18 @@ namespace 随机抽取学号.Views
             StudentManager.SelectedRanges = CheckBoxListView.SelectedRanges.ToList();
             UpdateCheckedStudentsCount();
             await SaveCheckedStudentsAsync();
+        }
+
+        private void FoldSplitViewButton_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBoxSplitView.IsPaneOpen = false;
+            CheckBoxSplitViewGridSplitter.Visibility = Visibility.Collapsed;
+        }
+
+        private void ExpandSplitViewButton_Click(object sender, RoutedEventArgs e)
+        {
+            CheckBoxSplitView.IsPaneOpen = true;
+            CheckBoxSplitViewGridSplitter.Visibility = Visibility.Visible;
         }
     }
 }

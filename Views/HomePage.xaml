@@ -380,7 +380,10 @@
             Background="{ThemeResource GridBackground}"
             Visibility="Collapsed">
             <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="*" MinWidth="300" />
+                <ColumnDefinition
+                    x:Name="MainColumn"
+                    Width="*"
+                    MinWidth="300" />
                 <ColumnDefinition Width="12" />
                 <ColumnDefinition
                     Width="Auto"
@@ -407,31 +410,154 @@
                 FontFamily="{StaticResource HarmonyOSSans}"
                 Text="人数:"
                 TextWrapping="Wrap" />
+            <Button
+                x:Name="ExpandSplitViewButton"
+                Grid.Column="2"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
+                Click="ExpandSplitViewButton_Click">
+                <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE700;" />
+            </Button>
+            <SplitView
+                x:Name="CheckBoxSplitView"
+                Grid.Column="2"
+                HorizontalAlignment="Right"
+                DisplayMode="Inline"
+                IsPaneOpen="True"
+                PanePlacement="Right">
+                <SplitView.Pane>
+                    <Grid>
+                        <Button
+                            x:Name="FoldSplitViewButton"
+                            VerticalAlignment="Top"
+                            Click="FoldSplitViewButton_Click">
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE700;" />
+                        </Button>
 
-            <!--<communitytoolkitcontrols:GridSplitter
-                Grid.Column="1"
-                Width="16"
-                HorizontalAlignment="Left"
-                Cursor="Hand"
-                ResizeBehavior="BasedOnAlignment"
-                ResizeDirection="Columns">
-            -->
-            <!--<communitytoolkitcontrols:GridSplitter.RenderTransform>
-                <TranslateTransform X="16" />
-            </communitytoolkitcontrols:GridSplitter.RenderTransform>-->
-            <!--
-            </communitytoolkitcontrols:GridSplitter>-->
-            <Grid Grid.Column="2">
-                <communitytoolkitcontrols:Segmented
-                    x:Name="SideBarSegmented"
-                    HorizontalAlignment="Stretch"
-                    VerticalAlignment="Top"
-                    SelectionChanged="SideBarSegmented_SelectionChanged">
-                    <communitytoolkitcontrols:SegmentedItem Content="范围" FontFamily="{StaticResource HarmonyOSSans}" />
-                    <communitytoolkitcontrols:SegmentedItem Content="选项" FontFamily="{StaticResource HarmonyOSSans}" />
-                </communitytoolkitcontrols:Segmented>
-                <Grid Margin="0,30,0,0">
-                    <ScrollViewer
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="16"
+                            Text="抽取范围" />
+                        <CheckBox
+                            x:Name="SelectAllCheckBox"
+                            Width="Auto"
+                            Margin="15,20,0,0"
+                            HorizontalAlignment="Center"
+                            VerticalAlignment="Top"
+                            Click="SelectAllCheckBox_Click"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="16"
+                            IsThreeState="True" />
+                        <Button
+                            Margin="70,45,0,0"
+                            VerticalAlignment="Top"
+                            Content="选择"
+                            FontFamily="{StaticResource HarmonyOSSans}">
+                            <Button.Flyout>
+                                <Flyout>
+                                    <Grid>
+                                        <Grid.RowDefinitions>
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                            <RowDefinition Height="Auto" />
+                                        </Grid.RowDefinitions>
+                                        <muxc:InfoBar
+                                            Title="提示"
+                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                            IsClosable="False"
+                                            IsOpen="True"
+                                            Message="按住Shift再选择可以选择连续范围"
+                                            Severity="Informational" />
+                                        <TextBlock
+                                            Grid.Row="1"
+                                            Margin="0,6,0,0"
+                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                            Text="开始值：" />
+                                        <TextBlock
+                                            Grid.Row="2"
+                                            Margin="0,8,0,0"
+                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                            Text="结束值：" />
+                                        <muxc:NumberBox
+                                            x:Name="BeginNumberBox"
+                                            Grid.Row="1"
+                                            Height="30"
+                                            MinWidth="110"
+                                            Margin="55,0,0,0"
+                                            Padding="5,5,0,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top"
+                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                            Minimum="1"
+                                            SmallChange="1"
+                                            SpinButtonPlacementMode="Compact"
+                                            Value="1" />
+                                        <muxc:NumberBox
+                                            x:Name="EndNumberBox"
+                                            Grid.Row="2"
+                                            Height="30"
+                                            MinWidth="110"
+                                            Margin="55,5,0,0"
+                                            Padding="5,5,0,0"
+                                            HorizontalAlignment="Left"
+                                            VerticalAlignment="Top"
+                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                            Minimum="1"
+                                            SmallChange="1"
+                                            SpinButtonPlacementMode="Compact" />
+                                        <CheckBox
+                                            x:Name="isOnlyThisRangeCheckBox"
+                                            Grid.Row="3"
+                                            Padding="5,6,0,0"
+                                            Content="仅选择此范围"
+                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                            FontSize="14" />
+                                        <Button
+                                            x:Name="changeCheckBoxes"
+                                            Grid.Row="3"
+                                            Height="26"
+                                            Margin="120,5,0,0"
+                                            HorizontalAlignment="Left"
+                                            Click="changeCheckBoxes_Click"
+                                            Content="确定"
+                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                            FontSize="12"
+                                            Style="{StaticResource AccentButtonStyle}" />
+                                    </Grid>
+                                </Flyout>
+                            </Button.Flyout>
+                        </Button>
+                        <Button
+                            Margin="0,45,0,0"
+                            VerticalAlignment="Top"
+                            Content="保存"
+                            FontFamily="{StaticResource HarmonyOSSans}" />
+                        <Grid
+                            x:Name="checkBoxesGrid"
+                            Margin="0,30,0,-30"
+                            HorizontalAlignment="Stretch">
+                            <ListView
+                                x:Name="CheckBoxListView"
+                                Margin="0,50,0,0"
+                                ItemTemplate="{StaticResource CheckBoxListViewItem}"
+                                ItemsSource="{x:Bind classes:StudentManager.StudentList}"
+                                ScrollViewer.VerticalScrollBarVisibility="Auto"
+                                SelectionMode="Multiple">
+                                <ListView.ItemContainerTransitions>
+                                    <TransitionCollection>
+                                        <EntranceThemeTransition
+                                            FromHorizontalOffset="100"
+                                            FromVerticalOffset="-500"
+                                            IsStaggeringEnabled="True" />
+                                    </TransitionCollection>
+                                </ListView.ItemContainerTransitions>
+                            </ListView>
+
+                        </Grid>
+                        <Grid Margin="0,30,0,0">
+                            <!--<ScrollViewer
                         x:Name="SettingsScrollViewer"
                         Margin="0,30,0,-30"
                         animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
@@ -527,126 +653,14 @@
                                     Toggled="SaveHistoryToggleSwitch_Toggled" />
                             </communitytoolkitcontrols:SettingsCard>
                         </StackPanel>
-                    </ScrollViewer>
-                    <Grid
-                        x:Name="checkBoxesGrid"
-                        Margin="0,30,0,-30"
-                        HorizontalAlignment="Stretch"
-                        animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
-                        animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
-                        <CheckBox
-                            x:Name="SelectAllCheckBox"
-                            Width="50"
-                            Margin="5,23,0,0"
-                            VerticalAlignment="Top"
-                            Click="SelectAllCheckBox_Click"
-                            Content="全选"
-                            FontFamily="{StaticResource HarmonyOSSans}"
-                            FontSize="16"
-                            IsThreeState="True" />
-                        <TextBlock
-                            x:Name="CheckedStudentsCount"
-                            Width="Auto"
-                            Height="27"
-                            Margin="5,0,0,0"
-                            HorizontalAlignment="Left"
-                            VerticalAlignment="Top"
-                            FontFamily="{StaticResource HarmonyOSSans}"
-                            FontSize="16"
-                            Text="已选择0/0"
-                            TextWrapping="NoWrap" />
-                        <ListView
-                            x:Name="CheckBoxListView"
-                            Margin="0,50,0,0"
-                            ItemTemplate="{StaticResource CheckBoxListViewItem}"
-                            ItemsSource="{x:Bind classes:StudentManager.StudentList}"
-                            ScrollViewer.VerticalScrollBarVisibility="Auto"
-                            SelectionMode="Multiple">
-                            <ListView.ItemContainerTransitions>
-                                <TransitionCollection>
-                                    <EntranceThemeTransition
-                                        FromHorizontalOffset="100"
-                                        FromVerticalOffset="-500"
-                                        IsStaggeringEnabled="True" />
-                                </TransitionCollection>
-                            </ListView.ItemContainerTransitions>
-                        </ListView>
-                        <Button
-                            Margin="70,22,0,0"
-                            VerticalAlignment="Top"
-                            Content="快速选择"
-                            FontFamily="{StaticResource HarmonyOSSans}">
-                            <Button.Flyout>
-                                <Flyout>
-                                    <Grid>
-                                        <Grid.RowDefinitions>
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                            <RowDefinition Height="Auto" />
-                                        </Grid.RowDefinitions>
-                                        <TextBlock
-                                            Grid.Row="0"
-                                            Margin="0,6,0,0"
-                                            FontFamily="{StaticResource HarmonyOSSans}"
-                                            Text="开始值：" />
-                                        <TextBlock
-                                            Grid.Row="1"
-                                            Margin="0,8,0,0"
-                                            FontFamily="{StaticResource HarmonyOSSans}"
-                                            Text="结束值：" />
-                                        <muxc:NumberBox
-                                            x:Name="BeginNumberBox"
-                                            Grid.Row="0"
-                                            Height="30"
-                                            MinWidth="110"
-                                            Margin="55,0,0,0"
-                                            Padding="5,5,0,0"
-                                            HorizontalAlignment="Left"
-                                            VerticalAlignment="Top"
-                                            FontFamily="{StaticResource HarmonyOSSans}"
-                                            Minimum="1"
-                                            SmallChange="1"
-                                            SpinButtonPlacementMode="Compact"
-                                            Value="1" />
-                                        <muxc:NumberBox
-                                            x:Name="EndNumberBox"
-                                            Grid.Row="1"
-                                            Height="30"
-                                            MinWidth="110"
-                                            Margin="55,5,0,0"
-                                            Padding="5,5,0,0"
-                                            HorizontalAlignment="Left"
-                                            VerticalAlignment="Top"
-                                            FontFamily="{StaticResource HarmonyOSSans}"
-                                            Minimum="1"
-                                            SmallChange="1"
-                                            SpinButtonPlacementMode="Compact" />
-                                        <CheckBox
-                                            x:Name="isOnlyThisRangeCheckBox"
-                                            Grid.Row="2"
-                                            Padding="5,6,0,0"
-                                            Content="仅选择此范围"
-                                            FontFamily="{StaticResource HarmonyOSSans}"
-                                            FontSize="14" />
-                                        <Button
-                                            x:Name="changeCheckBoxes"
-                                            Grid.Row="2"
-                                            Height="26"
-                                            Margin="120,5,0,0"
-                                            HorizontalAlignment="Left"
-                                            Click="changeCheckBoxes_Click"
-                                            Content="确定"
-                                            FontFamily="{StaticResource HarmonyOSSans}"
-                                            FontSize="12"
-                                            Style="{StaticResource AccentButtonStyle}" />
-                                    </Grid>
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
-                    </Grid>
-                </Grid>
+                    </ScrollViewer>-->
 
-            </Grid>
+                        </Grid>
+
+                    </Grid>
+                </SplitView.Pane>
+            </SplitView>
+
 
 
 
@@ -792,6 +806,7 @@
                 </Button>
             </Grid>
             <communitytoolkitcontrols:GridSplitter
+                x:Name="CheckBoxSplitViewGridSplitter"
                 Grid.Column="1"
                 HorizontalAlignment="Left"
                 Cursor="Hand"

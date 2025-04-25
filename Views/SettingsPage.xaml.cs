@@ -1,4 +1,5 @@
 ﻿using System;
+//using System.Drawing;
 using Windows.Storage;
 using Windows.System;
 using Windows.UI;
@@ -30,6 +31,28 @@ namespace 随机抽取学号.Views
             BackgroundRadioButtons.SelectedIndex = (int)ApplicationData.Current.LocalSettings.Values["MainPageBackground"];
             BackgroundOpacitySlider.Value = (double)ApplicationData.Current.LocalSettings.Values["MainPageBackgroundOpacity"] * 100;
             BackgroundOpacityTextBlock.Text = BackgroundOpacitySlider.Value.ToString() + "%";
+            //ColorPaletteResources co = new ColorPaletteResources();
+            //co.Accent = Colors.Red;
+            //            if (localSettings.Values.ContainsKey("NoReturn")
+            //&& localSettings.Values.ContainsKey("AutoStop")
+            //&& localSettings.Values.ContainsKey("Optimize")
+            //&& localSettings.Values.ContainsKey("SaveRange")
+            //&& localSettings.Values.ContainsKey("SaveHistory"))
+            //            {
+            //                NoReturnToggleSwitch.IsOn = (bool)localSettings.Values["NoReturn"];
+            //                AutoStopToggleSwitch.IsOn = (bool)localSettings.Values["AutoStop"];
+            //                OptimizeToggleSwitch.IsOn = (bool)localSettings.Values["Optimize"];
+            //                SaveRangeToggleSwitch.IsOn = (bool)localSettings.Values["SaveRange"];
+            //                SaveHistoryToggleSwitch.IsOn = (bool)localSettings.Values["SaveHistory"];
+            //            }
+            //            else
+            //            {
+            //                localSettings.Values["NoReturn"] = false;
+            //                localSettings.Values["AutoStop"] = false;
+            //                localSettings.Values["Optimize"] = false;
+            //                localSettings.Values["SaveRange"] = false;
+            //                localSettings.Values["SaveHistory"] = false;
+            //            }
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
