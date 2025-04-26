@@ -478,6 +478,12 @@ namespace 随机抽取学号
                 button.IsChecked = true;//上次点击的按钮和本次一样，保持选中状态
             }
         }
+
+        private async void SwitchClassButton_Click(object sender, RoutedEventArgs e)
+        {
+            SwitchClassContentDialog switchClassContentDialog = new SwitchClassContentDialog();
+            await switchClassContentDialog.ShowAsync();
+        }
     }
 }
 

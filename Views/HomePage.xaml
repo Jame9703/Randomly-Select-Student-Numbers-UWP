@@ -576,7 +576,6 @@
                                     <TransitionCollection>
                                         <EntranceThemeTransition
                                             FromHorizontalOffset="100"
-                                            FromVerticalOffset="-500"
                                             IsStaggeringEnabled="True" />
                                     </TransitionCollection>
                                 </ListView.ItemContainerTransitions>

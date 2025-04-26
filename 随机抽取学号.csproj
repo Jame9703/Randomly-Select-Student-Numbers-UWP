@@ -168,6 +168,9 @@
     <Compile Include="Views\PopupNotice.xaml.cs">
       <DependentUpon>PopupNotice.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Views\SwitchClassContentDialog.xaml.cs">
+      <DependentUpon>SwitchClassContentDialog.xaml</DependentUpon>
+    </Compile>
     <Compile Include="Views\WelcomeContentDialog.xaml.cs">
       <DependentUpon>WelcomeContentDialog.xaml</DependentUpon>
     </Compile>
@@ -281,6 +284,10 @@
       <Generator>MSBuild:Compile</Generator>
     </Page>
     <Page Include="Views\PopupNotice.xaml">
+      <SubType>Designer</SubType>
+      <Generator>MSBuild:Compile</Generator>
+    </Page>
+    <Page Include="Views\SwitchClassContentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>

@@ -231,42 +231,46 @@
                         TextTrimming="CharacterEllipsis" />
                 </StackPanel>
                 <Button.Flyout>
-
                     <Flyout Placement="Bottom">
                         <StackPanel Width="200">
-                            <PersonPicture
-                                x:Name="BigClassPicture"
-                                Height="72"
-                                HorizontalAlignment="Center" />
-                            <TextBlock
+                            <Grid>
+                                <PersonPicture
+                                    x:Name="BigClassPicture"
+                                    Height="72"
+                                    HorizontalAlignment="Center" />
+                                <Button
+                                    Width="42"
+                                    Height="42"
+                                    Margin="60,30,0,0"
+                                    HorizontalAlignment="Center"
+                                    Background="{StaticResource SystemControlBackgroundAltMediumBrush}"
+                                    Click="EditPictureButton_Click"
+                                    CornerRadius="21">
+                                    <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE712;" />
+                                </Button>
+                            </Grid>
+                            <!--<TextBlock
                                 HorizontalAlignment="Center"
                                 FontFamily="{StaticResource HarmonyOSSans}"
                                 FontSize="20"
-                                Text="{x:Bind ClassNameTextBox.Text, Mode=OneWay}" />
-                            <TextBlock
+                                Text="{x:Bind ClassNameTextBox.Text, Mode=OneWay}" />-->
+                            <!--<TextBlock
                                 Margin="5"
                                 HorizontalAlignment="Left"
                                 FontFamily="{StaticResource HarmonyOSSans}"
                                 FontSize="14"
                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                Text="更改班级名称：" />
-                            <TextBox
-                                x:Name="ClassNameTextBox"
-                                FontFamily="{StaticResource HarmonyOSSans}"
-                                TextChanged="ClassNameTextBox_TextChanged" />
-                            <Button
-                                x:Name="EditPictureButton"
-                                Margin="0,5,0,0"
-                                HorizontalAlignment="Stretch"
-                                Click="EditPictureButton_Click">
-                                <StackPanel Orientation="Horizontal">
+                                Text="更改班级名称：" />-->
+                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                <TextBox
+                                    x:Name="ClassNameTextBox"
+                                    MaxWidth="150"
+                                    FontFamily="{StaticResource HarmonyOSSans}"
+                                    TextChanged="ClassNameTextBox_TextChanged" />
+                                <Button>
                                     <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE70F;" />
-                                    <TextBlock
-                                        Margin="5,0,0,0"
-                                        FontFamily="{StaticResource HarmonyOSSans}"
-                                        Text="更改班徽" />
-                                </StackPanel>
-                            </Button>
+                                </Button>
+                            </StackPanel>
                             <Button
                                 x:Name="ManageStudentsButton"
                                 Margin="0,5,0,0"
@@ -282,6 +286,23 @@
                                         FontFamily="{StaticResource HarmonyOSSans}"
                                         Foreground="{ThemeResource SystemAccentColor}"
                                         Text="管理班级学生" />
+                                </StackPanel>
+                            </Button>
+                            <Button
+                                x:Name="SwitchClassButton"
+                                Margin="0,5,0,0"
+                                HorizontalAlignment="Stretch"
+                                Click="SwitchClassButton_Click">
+                                <StackPanel Orientation="Horizontal">
+                                    <FontIcon
+                                        FontFamily="{StaticResource SegoeFluentIcons}"
+                                        Foreground="{ThemeResource SystemAccentColor}"
+                                        Glyph="&#xE9E9;" />
+                                    <TextBlock
+                                        Margin="5,0,0,0"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        Foreground="{ThemeResource SystemAccentColor}"
+                                        Text="切换班级" />
                                 </StackPanel>
                             </Button>
                         </StackPanel>
