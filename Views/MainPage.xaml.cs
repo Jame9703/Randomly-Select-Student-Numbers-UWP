@@ -132,8 +132,8 @@ namespace 随机抽取学号
             localSettings.Values["Theme"] = 2;//确保下次打开不显示欢迎界面
             localSettings.Values["MainPageBackground"] = 2;//设置默认MainPage背景
             localSettings.Values["MainPageBackgroundOpacity"] = 0.5;//设置默认MainPage背景不透明度
-            ClassNameTextBox.Text = "我的班级";
-            localSettings.Values["ClassName"] = "我的班级";//默认班级名称
+            CurrentClassNameTextBox.Text = "我的班级";
+            localSettings.Values["CurrentClassName"] = "我的班级";//默认班级名称
             localSettings.Values["IsFirstRun"] = false;//设置不是第一次运行
         }
         private void NotFirstRun()
@@ -192,14 +192,14 @@ namespace 随机抽取学号
                     localSettings.Values["MainPageBackground"] = 2;//设置默认MainPage背景
                 }
                 this.Background.Opacity = (double)localSettings.Values["MainPageBackgroundOpacity"];
-                if (localSettings.Values["ClassName"] != null)
+                if (localSettings.Values["CurrentClassName"] != null)
                 {
-                    ClassNameTextBox.Text = (string)localSettings.Values["ClassName"] as string;
+                    CurrentClassNameTextBox.Text = (string)localSettings.Values["CurrentClassName"] as string;
                 }
                 else
                 {
-                    ClassNameTextBox.Text = "我的班级";
-                    localSettings.Values["ClassName"] = "我的班级";//默认班级名称
+                    CurrentClassNameTextBox.Text = "我的班级";
+                    localSettings.Values["CurrentClassName"] = "我的班级";//默认班级名称
                 }
             }
         }
@@ -459,9 +459,9 @@ namespace 随机抽取学号
             }
         }
 
-        private void ClassNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
+        private void CurrentClassNameTextBox_TextChanged(object sender, TextChangedEventArgs e)
         {
-            localSettings.Values["ClassName"] = ClassNameTextBox.Text;
+            localSettings.Values["CurrentClassName"] = CurrentClassNameTextBox.Text;
         }
 
 

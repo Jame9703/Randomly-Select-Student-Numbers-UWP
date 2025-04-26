@@ -227,7 +227,7 @@
                         VerticalAlignment="Center"
                         FontFamily="{StaticResource HarmonyOSSans}"
                         FontSize="15"
-                        Text="{x:Bind ClassNameTextBox.Text, Mode=OneWay}"
+                        Text="{x:Bind CurrentClassNameTextBox.Text, Mode=OneWay}"
                         TextTrimming="CharacterEllipsis" />
                 </StackPanel>
                 <Button.Flyout>
@@ -253,7 +253,7 @@
                                 HorizontalAlignment="Center"
                                 FontFamily="{StaticResource HarmonyOSSans}"
                                 FontSize="20"
-                                Text="{x:Bind ClassNameTextBox.Text, Mode=OneWay}" />-->
+                                Text="{x:Bind CurrentClassNameTextBox.Text, Mode=OneWay}" />-->
                             <!--<TextBlock
                                 Margin="5"
                                 HorizontalAlignment="Left"
@@ -263,10 +263,10 @@
                                 Text="更改班级名称：" />-->
                             <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                 <TextBox
-                                    x:Name="ClassNameTextBox"
+                                    x:Name="CurrentClassNameTextBox"
                                     MaxWidth="150"
                                     FontFamily="{StaticResource HarmonyOSSans}"
-                                    TextChanged="ClassNameTextBox_TextChanged" />
+                                    TextChanged="CurrentClassNameTextBox_TextChanged" />
                                 <Button>
                                     <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE70F;" />
                                 </Button>

@@ -128,7 +128,7 @@ namespace 随机抽取学号.Views
             var savePicker = new FileSavePicker();
             savePicker.SuggestedStartLocation = PickerLocationId.DocumentsLibrary;
             savePicker.FileTypeChoices.Add("文本文档", new List<string>() { ".txt" });
-            string filename = (string)localSettings.Values["ClassName"];
+            string filename = (string)localSettings.Values["CurrentClassName"];
             savePicker.SuggestedFileName = filename;
 
             // 显示文件选取器并等待用户选择文件

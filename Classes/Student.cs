@@ -20,7 +20,7 @@ namespace 随机抽取学号.Classes
         private int gender;
         private string photoPath;
 
-        public int StudentNumber
+        public int StudentNumber//学号
         {
             get { return studentNumber; }
             set
@@ -33,7 +33,7 @@ namespace 随机抽取学号.Classes
             }
         }
 
-        public string Name
+        public string Name//姓名
         {
             get { return name; }
             set
@@ -46,7 +46,7 @@ namespace 随机抽取学号.Classes
             }
         }
 
-        public int Gender
+        public int Gender//性别
         {
             get { return gender; }
             set
@@ -59,7 +59,7 @@ namespace 随机抽取学号.Classes
             }
         }
 
-        public string PhotoPath
+        public string PhotoPath//照片路径
         {
             get { return photoPath; }
             set
@@ -79,28 +79,58 @@ namespace 随机抽取学号.Classes
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
+    public class Class
+    {
+        public string ClassName { get; set; }//班级名称
+        public string ClassEmblemPath { get; set; }//班徽路径
+    }
     public static class StudentManager
     {
+        #region 变量声明
+        public static string ClassDataBasePath;// 记录班级信息数据库路径
         public static string StudentDataBasePath;// 记录学生信息数据库路径
         public static string CheckedStudentDataBasePath;// 记录抽取范围中的学生信息数据库路径
         public static int SaveStudentsProcess;// 记录保存学生信息进度
         public static int SaveCheckedStudentsProcess;// 记录保存抽取范围中的学生信息进度
+        public static ObservableCollection<Class> ClassList = new ObservableCollection<Class>();// 记录所有班级信息
         public static ObservableCollection<Student> StudentList = new ObservableCollection<Student>();// 记录所有学生信息
         public static List<ItemIndexRange> SelectedRanges = new List<ItemIndexRange>();// 记录抽取范围中的连续范围，如[1,1],[2,3]等
         public static List<int> CheckedStudents = new List<int>();// 记录抽取范围中的学生的学号
+        #endregion
+
+        #region 初始化数据库
         public static async Task InitializeDatabase()
         {
             StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-            StorageFile StudentDBFile = Task.Run(async () => await localFolder.CreateFileAsync("students.db", CreationCollisionOption.OpenIfExists)).Result;
-            StudentDataBasePath = StudentDBFile.Path;
-            StorageFile CheckedStudentDBFile = Task.Run(async () => await localFolder.CreateFileAsync("checkedstudents.db", CreationCollisionOption.OpenIfExists)).Result;
-            CheckedStudentDataBasePath = CheckedStudentDBFile.Path;
-            await CreateTablesAsync();
+            if (ApplicationData.Current.LocalSettings.Values.ContainsKey("CurrentClassName"))
+            {
+                //创建班级信息数据库，若已存在则打开
+                StorageFile ClassDBFile = await localFolder.CreateFileAsync("classes.db", CreationCollisionOption.OpenIfExists);
+                ClassDataBasePath = ClassDBFile.Path;
+                //获取当前班级对应文件夹
+                string CurrentClassName = ApplicationData.Current.LocalSettings.Values["CurrentClassName"].ToString();
+                StorageFolder CurrentClassFolder = await localFolder.CreateFolderAsync(CurrentClassName, CreationCollisionOption.OpenIfExists);
+                //创建学生信息数据库，若已存在则打开
+                StorageFile StudentDBFile = await CurrentClassFolder.CreateFileAsync("students.db", CreationCollisionOption.OpenIfExists);
+                StudentDataBasePath = StudentDBFile.Path;
+                //创建抽取范围中的学生信息数据库，若已存在则打开
+                StorageFile CheckedStudentDBFile = await CurrentClassFolder.CreateFileAsync("checkedstudents.db", CreationCollisionOption.OpenIfExists);
+                CheckedStudentDataBasePath = CheckedStudentDBFile.Path;
+                await CreateTablesAsync();
+            }
         }
         private static async Task CreateTablesAsync()
         {
             try
             {
+                using (SqliteConnection db = new SqliteConnection($"Filename={ClassDataBasePath}"))
+                {
+                    await db.OpenAsync();
+                    string createStudentsTable = "CREATE TABLE IF NOT EXISTS Classes (ClassName NVARCHAR(2048),ClassEmblemPath NVARCHAR(2048))";
+                    SqliteCommand createStudentsTableCmd = new SqliteCommand(createStudentsTable, db);
+                    await createStudentsTableCmd.ExecuteNonQueryAsync();
+                }
+
                 using (SqliteConnection db = new SqliteConnection($"Filename={StudentDataBasePath}"))
                 {
                     await db.OpenAsync();
@@ -125,7 +155,141 @@ namespace 随机抽取学号.Classes
                 popupNotice.ShowPopup();
             }
         }
+        #endregion
 
+        #region 读取和保存班级信息
+        public static async Task<ObservableCollection<Class>> LoadClassesAsync()
+        {
+            try
+            {
+                ObservableCollection<Class> classes = new ObservableCollection<Class>();
+                using (SqliteConnection db = new SqliteConnection($"Filename={ClassDataBasePath}"))
+                {
+                    await db.OpenAsync();
+                    string selectCommand = "SELECT * FROM Classes";
+                    SqliteCommand selectCmd = new SqliteCommand(selectCommand, db);
+                    using (SqliteDataReader query = await selectCmd.ExecuteReaderAsync())
+                    {
+                        while (await query.ReadAsync())
+                        {
+                            Class _class = new Class
+                            {
+                                ClassName = query.GetString(0),
+                                ClassEmblemPath = query.GetString(1),
+                            };
+                            classes.Add(_class);
+                        }
+                    }
+                }
+                return classes;
+            }
+            catch (SqliteException sqliteEx)
+            {
+                //处理数据库异常
+                PopupNotice popupNotice = new PopupNotice("加载班级信息失败,发生数据库异常" + sqliteEx.Message);
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.ShowPopup();
+            }
+            catch (UnauthorizedAccessException unauthorizedEx)
+            {
+                // 处理权限不足异常
+                PopupNotice popupNotice = new PopupNotice("加载班级信息失败,权限不足" + unauthorizedEx.Message);
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.ShowPopup();
+            }
+            catch (IOException ioEx)
+            {
+                // 处理输入输出异常，如文件损坏
+                PopupNotice popupNotice = new PopupNotice("加载班级信息失败,发生文件操作异常" + ioEx.Message);
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.ShowPopup();
+            }
+            catch (Exception ex)
+            {
+                PopupNotice popupNotice = new PopupNotice("加载班级信息失败,发生未知错误" + ex.Message);
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.ShowPopup();
+            }
+            return new ObservableCollection<Class>();
+        }
+        public static async Task SaveClassesAsync(ObservableCollection<Class> classes)
+        {
+            using (SqliteConnection connection = new SqliteConnection($"Filename={ClassDataBasePath}"))
+            {
+                try
+                {
+                    await connection.OpenAsync();
+                    // 开始事务
+                    using (DbTransaction transaction = connection.BeginTransaction())
+                    {
+                        try
+                        {
+                            // 清空数据库中的数据
+                            string clearQuery = "DELETE FROM Classes";
+                            using (SqliteCommand clearCommand = new SqliteCommand(clearQuery, connection, (SqliteTransaction)transaction))
+                            {
+                                await clearCommand.ExecuteNonQueryAsync();
+                            }
+                            string insertQuery = "INSERT INTO CLasses (ClassName, ClassEmblemPath) VALUES (@ClassName, @ClassEmblemPath)";
+                            using (SqliteCommand insertCommand = new SqliteCommand(insertQuery, connection, (SqliteTransaction)transaction))
+                            {
+                                insertCommand.Parameters.Add("@ClassName", SqliteType.Text);
+                                insertCommand.Parameters.Add("@ClassEmblemPath", SqliteType.Text);
+
+                                foreach (var _class in classes)
+                                {
+                                    insertCommand.Parameters["@ClassName"].Value = _class.ClassName;
+                                    insertCommand.Parameters["@ClassEmblemPath"].Value = _class.ClassEmblemPath;
+                                    await insertCommand.ExecuteNonQueryAsync();
+                                }
+                            }
+                            // 提交事务
+                            transaction.Commit();
+                        }
+                        catch (SqliteException sqliteEx)
+                        {
+                            transaction.Rollback(); // 发生错误时回滚事务
+                                                    //处理数据库异常
+                            PopupNotice popupNotice = new PopupNotice("保存班级信息失败,发生数据库异常" + sqliteEx.Message);
+                            popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                            popupNotice.ShowPopup();
+                        }
+                        catch (UnauthorizedAccessException unauthorizedEx)
+                        {
+                            transaction.Rollback(); // 发生错误时回滚事务
+                                                    // 处理权限不足异常
+                            PopupNotice popupNotice = new PopupNotice("保存班级信息失败,权限不足" + unauthorizedEx.Message);
+                            popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                            popupNotice.ShowPopup();
+                        }
+                        catch (IOException ioEx)
+                        {
+                            transaction.Rollback(); // 发生错误时回滚事务
+                                                    // 处理输入输出异常，如文件损坏
+                            PopupNotice popupNotice = new PopupNotice("保存班级信息失败,发生文件操作异常" + ioEx.Message);
+                            popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                            popupNotice.ShowPopup();
+                        }
+                        catch (Exception ex)
+                        {
+                            transaction.Rollback(); // 发生错误时回滚事务
+                            PopupNotice popupNotice = new PopupNotice("保存班级信息数据库失败" + ex.Message);
+                            popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                            popupNotice.ShowPopup();
+                        }
+                    }
+                }
+                catch (Exception ex)
+                {
+                    PopupNotice popupNotice = new PopupNotice("连接班级信息数据库失败" + ex.Message);
+                    popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                    popupNotice.ShowPopup();
+                }
+            }
+        }
+        #endregion
+
+        #region 读取和保存学生信息
         public static async Task<ObservableCollection<Student>> LoadStudentsAsync()
         {
             try
@@ -274,6 +438,9 @@ namespace 随机抽取学号.Classes
                 }
             }
         }
+        #endregion
+
+        #region 读取和保存抽取范围中的学生
 
         public static async Task SaveCheckedStudentsAsync(List<ItemIndexRange> checkedstudents)
         {
@@ -408,5 +575,6 @@ namespace 随机抽取学号.Classes
             }
             return new List<ItemIndexRange>();
         }
+        #endregion
     }
 }
