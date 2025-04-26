@@ -376,46 +376,6 @@ namespace 随机抽取学号.Views
                 popupNotice.ShowPopup();
             }
         }
-        //#region ToggledEvents
-        //private void NoReturnToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        //{
-        //    localSettings.Values["NoReturn"] = NoReturnToggleSwitch.IsOn;
-        //}
-
-        //private void AutoStopToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        //{
-        //    localSettings.Values["AutoStop"] = AutoStopToggleSwitch.IsOn;
-        //}
-
-        //private void OptimizeToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        //{
-        //    localSettings.Values["Optimize"] = OptimizeToggleSwitch.IsOn;
-        //}
-
-        //private void SaveRangeToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        //{
-        //    localSettings.Values["SaveRange"] = SaveRangeToggleSwitch.IsOn;
-        //}
-
-        //private void SaveHistoryToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        //{
-        //    localSettings.Values["SaveHistory"] = SaveHistoryToggleSwitch.IsOn;
-        //}
-        //#endregion
-
-        //private void SideBarSegmented_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        //{
-        //    if (SideBarSegmented.SelectedIndex == 0)
-        //    {
-        //        SettingsScrollViewer.Visibility = Visibility.Collapsed;
-        //        checkBoxesGrid.Visibility = Visibility.Visible;
-        //    }
-        //    else
-        //    {
-        //        checkBoxesGrid.Visibility = Visibility.Collapsed;
-        //        SettingsScrollViewer.Visibility = Visibility.Visible;
-        //    }
-        //}
 
         private async void CheckBoxListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {

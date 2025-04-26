@@ -186,7 +186,10 @@
                     Text="Randomly Select Student Numbers" />
             </Grid>
         </Grid>
-        <Grid Margin="180,0,150,0" HorizontalAlignment="Stretch" VerticalAlignment="Top">
+        <Grid
+            Margin="180,0,150,0"
+            HorizontalAlignment="Stretch"
+            VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
                 <ColumnDefinition Width="*" />
@@ -198,6 +201,13 @@
                 BorderBrush="{ThemeResource SystemAccentColor}"
                 BorderThickness="1.5"
                 CornerRadius="16">
+                <ToolTipService.ToolTip>
+                    <ToolTip
+                        Content="更改或切换班级"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        FontSize="14"
+                        Placement="Mouse" />
+                </ToolTipService.ToolTip>
                 <Button.Transitions>
                     <TransitionCollection>
                         <EntranceThemeTransition FromVerticalOffset="-100" />

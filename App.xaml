@@ -12,6 +12,11 @@
                     <Style TargetType="controls:NumberBox">
                         <Setter Property="Foreground" Value="{ThemeResource SystemBaseHighColor}" />
                     </Style>
+                    <Style TargetType="ToolTip">
+                        <Setter Property="FontFamily" Value="{StaticResource HarmonyOSSans}"/>
+                        <Setter Property="FontSize" Value="20"/>
+                        <Setter Property="Foreground" Value="Red"/>
+                    </Style>
                     <FontFamily x:Key="HarmonyOSSans">ms-appx:///Fonts/HarmonyOS_Sans_SC_Medium.ttf#HarmonyOS Sans SC</FontFamily>
                     <FontFamily x:Key="SegoeFluentIcons">ms-appx:///Fonts/Segoe Fluent Icons.ttf#Segoe Fluent Icons</FontFamily>
                 </ResourceDictionary>

@@ -402,7 +402,15 @@
                 Minimum="1"
                 SmallChange="1"
                 SpinButtonPlacementMode="Inline"
-                Value="1" />
+                Value="1">
+                <ToolTipService.ToolTip>
+                    <ToolTip
+                        Content="设置抽取人数"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        FontSize="14"
+                        Placement="Mouse" />
+                </ToolTipService.ToolTip>
+            </muxc:NumberBox>
             <TextBlock
                 Margin="150,45,0,0"
                 HorizontalAlignment="Left"
@@ -416,6 +424,13 @@
                 HorizontalAlignment="Right"
                 VerticalAlignment="Top"
                 Click="ExpandSplitViewButton_Click">
+                <ToolTipService.ToolTip>
+                    <ToolTip
+                        Content="展开"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        FontSize="14"
+                        Placement="Mouse" />
+                </ToolTipService.ToolTip>
                 <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE700;" />
             </Button>
             <SplitView
@@ -425,12 +440,24 @@
                 DisplayMode="Inline"
                 IsPaneOpen="True"
                 PanePlacement="Right">
+                <SplitView.Transitions>
+                    <TransitionCollection>
+                        <PaneThemeTransition Edge="Right" />
+                    </TransitionCollection>
+                </SplitView.Transitions>
                 <SplitView.Pane>
                     <Grid>
                         <Button
                             x:Name="FoldSplitViewButton"
                             VerticalAlignment="Top"
                             Click="FoldSplitViewButton_Click">
+                            <ToolTipService.ToolTip>
+                                <ToolTip
+                                    Content="折叠"
+                                    FontFamily="{StaticResource HarmonyOSSans}"
+                                    FontSize="14"
+                                    Placement="Mouse" />
+                            </ToolTipService.ToolTip>
                             <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE700;" />
                         </Button>
 
@@ -557,103 +584,7 @@
 
                         </Grid>
                         <Grid Margin="0,30,0,0">
-                            <!--<ScrollViewer
-                        x:Name="SettingsScrollViewer"
-                        Margin="0,30,0,-30"
-                        animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
-                        animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}"
-                        VerticalScrollBarVisibility="Auto"
-                        VerticalScrollMode="Auto"
-                        Visibility="Collapsed">
-                        <StackPanel
-                            x:Name="SettingsStackPanel"
-                            Width="Auto"
-                            MinWidth="150"
-                            MaxWidth="400"
-                            HorizontalAlignment="Stretch"
-                            Spacing="10">
-                            <StackPanel.ChildrenTransitions>
-                                <TransitionCollection>
-                                    <EntranceThemeTransition FromHorizontalOffset="500" IsStaggeringEnabled="True" />
-                                </TransitionCollection>
-                            </StackPanel.ChildrenTransitions>
-                            <communitytoolkitcontrols:SettingsCard
-                                HorizontalAlignment="Stretch"
-                                classes:RippleHelper.RippleColor="Gray"
-                                classes:RippleHelper.RippleDuration="0:0:0.5"
-                                classes:RippleHelper.RippleHelperState="Pressed"
-                                ContentAlignment="Left"
-                                Description="停止抽取时从抽取范围中移除抽到的同学"
-                                FontFamily="{StaticResource HarmonyOSSans}"
-                                Header="抽完不放回">
-                                <ToggleSwitch
-                                    x:Name="NoReturnToggleSwitch"
-                                    Margin="0,-10,0,0"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    Toggled="NoReturnToggleSwitch_Toggled" />
-                            </communitytoolkitcontrols:SettingsCard>
-                            <communitytoolkitcontrols:SettingsCard
-                                HorizontalAlignment="Stretch"
-                                classes:RippleHelper.RippleColor="Gray"
-                                classes:RippleHelper.RippleDuration="0:0:0.5"
-                                classes:RippleHelper.RippleHelperState="Pressed"
-                                ContentAlignment="Left"
-                                Description="开始抽取后过一段时间自动停止"
-                                FontFamily="{StaticResource HarmonyOSSans}"
-                                Header="自动停止">
-                                <ToggleSwitch
-                                    x:Name="AutoStopToggleSwitch"
-                                    Margin="0,-10,0,0"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    Toggled="AutoStopToggleSwitch_Toggled" />
-                            </communitytoolkitcontrols:SettingsCard>
-                            <communitytoolkitcontrols:SettingsCard
-                                HorizontalAlignment="Stretch"
-                                classes:RippleHelper.RippleColor="Gray"
-                                classes:RippleHelper.RippleDuration="0:0:0.5"
-                                classes:RippleHelper.RippleHelperState="Pressed"
-                                ContentAlignment="Left"
-                                Description="先将抽取范围中的学生打乱再按顺序输出，这可能会提高性能"
-                                FontFamily="{StaticResource HarmonyOSSans}"
-                                Header="优化抽取性能">
-                                <ToggleSwitch
-                                    x:Name="OptimizeToggleSwitch"
-                                    Margin="0,-10,0,0"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    Toggled="OptimizeToggleSwitch_Toggled" />
-                            </communitytoolkitcontrols:SettingsCard>
-                            <communitytoolkitcontrols:SettingsCard
-                                HorizontalAlignment="Stretch"
-                                classes:RippleHelper.RippleColor="Gray"
-                                classes:RippleHelper.RippleDuration="0:0:0.5"
-                                classes:RippleHelper.RippleHelperState="Pressed"
-                                ContentAlignment="Left"
-                                Description="将抽取范围保存到本地"
-                                FontFamily="{StaticResource HarmonyOSSans}"
-                                Header="保存抽取范围">
-                                <ToggleSwitch
-                                    x:Name="SaveRangeToggleSwitch"
-                                    Margin="0,-10,0,0"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    Toggled="SaveRangeToggleSwitch_Toggled" />
-                            </communitytoolkitcontrols:SettingsCard>
-                            <communitytoolkitcontrols:SettingsCard
-                                HorizontalAlignment="Stretch"
-                                classes:RippleHelper.RippleColor="Gray"
-                                classes:RippleHelper.RippleDuration="0:0:0.5"
-                                classes:RippleHelper.RippleHelperState="Pressed"
-                                ContentAlignment="Left"
-                                Description="将历史抽取记录保存到本地"
-                                FontFamily="{StaticResource HarmonyOSSans}"
-                                Header="保存历史记录">
-                                <ToggleSwitch
-                                    x:Name="SaveHistoryToggleSwitch"
-                                    Margin="0,-10,0,0"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    Toggled="SaveHistoryToggleSwitch_Toggled" />
-                            </communitytoolkitcontrols:SettingsCard>
-                        </StackPanel>
-                    </ScrollViewer>-->
+
 
                         </Grid>
 

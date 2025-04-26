@@ -293,6 +293,9 @@
     <PackageReference Include="CommunityToolkit.Uwp.Animations">
       <Version>8.2.250402</Version>
     </PackageReference>
+    <PackageReference Include="CommunityToolkit.Uwp.Controls.Primitives">
+      <Version>8.2.250402</Version>
+    </PackageReference>
     <PackageReference Include="CommunityToolkit.Uwp.Controls.RadialGauge">
       <Version>8.2.250402</Version>
     </PackageReference>
