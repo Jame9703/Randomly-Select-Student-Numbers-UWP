@@ -79,10 +79,40 @@ namespace 随机抽取学号.Classes
             PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
         }
     }
-    public class Class
+    public class Class : INotifyPropertyChanged
     {
-        public string ClassName { get; set; }//班级名称
-        public string ClassEmblemPath { get; set; }//班徽路径
+        private string className;
+        private string classEmblemPath;
+        public string ClassName//班级名称
+        {
+            get { return className; }
+            set
+            {
+                if (className != value)
+                {
+                    className = value;
+                    OnPropertyChanged(nameof(ClassName));
+                }
+            }
+        }
+        public string ClassEmblemPath//班徽路径
+        {
+            get { return classEmblemPath; }
+            set
+            {
+                if (classEmblemPath != value)
+                {
+                    classEmblemPath = value;
+                    OnPropertyChanged(nameof(ClassEmblemPath));
+                }
+            }
+        }
+        public event PropertyChangedEventHandler PropertyChanged;
+
+        protected virtual void OnPropertyChanged(string propertyName)
+        {
+            PropertyChanged?.Invoke(this, new PropertyChangedEventArgs(propertyName));
+        }
     }
     public static class StudentManager
     {

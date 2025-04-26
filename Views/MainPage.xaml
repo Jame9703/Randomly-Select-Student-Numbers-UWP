@@ -208,11 +208,6 @@
                         FontSize="14"
                         Placement="Mouse" />
                 </ToolTipService.ToolTip>
-                <Button.Transitions>
-                    <TransitionCollection>
-                        <EntranceThemeTransition FromVerticalOffset="-100" />
-                    </TransitionCollection>
-                </Button.Transitions>
                 <StackPanel Orientation="Horizontal">
                     <PersonPicture
                         x:Name="SmallClassPicture"

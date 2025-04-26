@@ -129,6 +129,7 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
+    <Compile Include="Classes\RippleControl.cs" />
     <Compile Include="Classes\RippleHelper.cs" />
     <Compile Include="Classes\Student.cs" />
     <Compile Include="Controls\PomodoroStateButton.cs" />

@@ -245,14 +245,10 @@
                             <communitytoolkitcontrols:SettingsExpander.Items>
                                 <communitytoolkitcontrols:SettingsCard
                                     Margin="-12,0,0,0"
-                                    HorizontalContentAlignment="Left"
-                                    ContentAlignment="Left"
                                     FontFamily="{StaticResource HarmonyOSSans}"
                                     Header="平台：Universal Windows Platform(通用Windows平台)" />
                                 <communitytoolkitcontrols:SettingsCard
                                     Margin="-12,0,0,0"
-                                    HorizontalContentAlignment="Left"
-                                    ContentAlignment="Left"
                                     FontFamily="{StaticResource HarmonyOSSans}"
                                     Header="最低支持版本：Windows10，Version1809" />
                             </communitytoolkitcontrols:SettingsExpander.Items>
@@ -260,7 +256,6 @@
                                 FontFamily="{StaticResource HarmonyOSSans}"
                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
                                 Text="Version 1.1.0   2025/4/26" />
-
                         </communitytoolkitcontrols:SettingsExpander>
                         <communitytoolkitcontrols:SettingsExpander
                             Margin="10,0,20,0"

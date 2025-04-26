@@ -43,11 +43,6 @@ namespace 随机抽取学号
         }
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            //确保数据库正常加载
-            await StudentManager.InitializeDatabase();
-            //在MainPage初始化时加载学生信息，确保不重复加载
-            StudentManager.StudentList = await StudentManager.LoadStudentsAsync();
-            StudentManager.SelectedRanges = await StudentManager.LoadCheckedStudentsAsync();
             //LoadBackground();
             //PopupContainerInstance = PopupContainer;
             // 隐藏系统标题栏并设置新的标题栏
@@ -71,25 +66,32 @@ namespace 随机抽取学号
                 //第一次运行
                 FirstRun();
             }
-            StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-            StorageFolder imageFolder = await localFolder.CreateFolderAsync("ClassPictures", CreationCollisionOption.OpenIfExists);
-            IStorageItem item = await imageFolder.TryGetItemAsync("ClassEmblem.png");
-            if (item != null && item is StorageFile imageFile)
-            {
-                BitmapImage bitmapImage = new BitmapImage()
-                {
-                    DecodePixelHeight = 72,
-                    DecodePixelWidth = 72,
-                    UriSource = new Uri(imageFile.Path)
-                };
-                SmallClassPicture.ProfilePicture = bitmapImage;
-                BigClassPicture.ProfilePicture = bitmapImage;
-            }
-            else
-            {
-                //找不到值，第一次启动，显示欢迎界面
+            //确保数据库正常加载
+            await StudentManager.InitializeDatabase();
+            //在MainPage初始化时加载学生信息，确保不重复加载
+            StudentManager.StudentList = await StudentManager.LoadStudentsAsync();
+            StudentManager.SelectedRanges = await StudentManager.LoadCheckedStudentsAsync();
+            //加载所有班级信息
+            StudentManager.ClassList = await StudentManager.LoadClassesAsync();
+            //StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+            //StorageFolder imageFolder = await localFolder.CreateFolderAsync("ClassPictures", CreationCollisionOption.OpenIfExists);
+            //IStorageItem item = await imageFolder.TryGetItemAsync("ClassEmblem.png");
+            //if (item != null && item is StorageFile imageFile)
+            //{
+            //    BitmapImage bitmapImage = new BitmapImage()
+            //    {
+            //        DecodePixelHeight = 72,
+            //        DecodePixelWidth = 72,
+            //        UriSource = new Uri(imageFile.Path)
+            //    };
+            //    SmallClassPicture.ProfilePicture = bitmapImage;
+            //    BigClassPicture.ProfilePicture = bitmapImage;
+            //}
+            //else
+            //{
+            //    //找不到值，第一次启动，显示欢迎界面
 
-            }
+            //}
             ContentGrid.Visibility = Visibility.Visible;
             LoadProgressRing.Visibility = Visibility.Collapsed;
         }
