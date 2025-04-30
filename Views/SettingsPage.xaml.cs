@@ -215,5 +215,60 @@ namespace 随机抽取学号.Views
             localSettings.Values["SaveHistory"] = SaveHistoryToggleSwitch.IsOn;
         }
         #endregion
+
+        private void PageBackgroundOpacitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            PageBackgroundOpacityTextBlock.Text = PageBackgroundOpacitySlider.Value.ToString() + "%";
+            if (mainPage != null)
+            {
+                mainPage.Background.Opacity = PageBackgroundOpacitySlider.Value / 100;
+                localSettings.Values["MainPageBackgroundOpacity"] = PageBackgroundOpacitySlider.Value / 100;
+            }
+        }
+
+        private void PageBackgroundRadioButtons_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (mainPage != null)
+            {
+                if (PageBackgroundRadioButtons.SelectedIndex == 0)// 无背景
+                {
+                    // 创建一个新的纯色笔刷来设置MainPage的背景
+                    var newBrush = new SolidColorBrush()
+                    {
+                        Color = Colors.White,
+                        Opacity = BackgroundOpacitySlider.Value / 100
+
+                    };
+                    mainPage.Background = newBrush;
+                    localSettings.Values["MainPageBackground"] = 0;
+                }
+                else if (PageBackgroundRadioButtons.SelectedIndex == 1)// 亚克力背景
+                {
+                    var acrylicBrush = new AcrylicBrush
+                    {
+                        BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                        Opacity = BackgroundOpacitySlider.Value / 100,
+                        TintOpacity = 0.6,
+                        TintColor = Colors.Transparent
+                    };
+                    mainPage.Background = acrylicBrush;
+                    localSettings.Values["MainPageBackground"] = 1;
+                }
+                else if (PageBackgroundRadioButtons.SelectedIndex == 2)// 云母背景
+                {
+                    var backdropMicaBrush = new BackdropMicaBrush
+                    {
+                        BackgroundSource = BackgroundSource.WallpaperBackdrop,
+                        Opacity = BackgroundOpacitySlider.Value / 100,
+                    };
+                    mainPage.Background = backdropMicaBrush;
+                    localSettings.Values["MainPageBackground"] = 2;
+                }
+            }
+            else
+            {
+                //PopupMessage.ShowPopupMessage("更改背景失败");
+            }
+        }
     }
 }

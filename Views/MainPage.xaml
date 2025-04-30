@@ -320,7 +320,8 @@
                 NavigationFailed="ContentFrame_NavigationFailed">
                 <Frame.ContentTransitions>
                     <TransitionCollection>
-                        <NavigationThemeTransition />
+                        <!--<NavigationThemeTransition />-->
+
                     </TransitionCollection>
                 </Frame.ContentTransitions>
 

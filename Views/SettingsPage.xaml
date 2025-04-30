@@ -72,12 +72,15 @@
                         animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
                         animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}"
                         Spacing="10">
+                        <StackPanel.ChildrenTransitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition FromVerticalOffset="50" />
+                                <RepositionThemeTransition IsStaggeringEnabled="False" />
+                            </TransitionCollection>
+                        </StackPanel.ChildrenTransitions>
+
                         <communitytoolkitcontrols:SettingsExpander
                             Margin="10,0,20,0"
-                            classes:RippleHelper.IsFillEnable="True"
-                            classes:RippleHelper.RippleColor="Gray"
-                            classes:RippleHelper.RippleDuration="0:0:0.5"
-                            classes:RippleHelper.RippleHelperState="Pressed"
                             Description="选择要显示的应用主题"
                             FontFamily="{StaticResource HarmonyOSSans}"
                             Header="应用程序主题"
@@ -100,10 +103,6 @@
                         </communitytoolkitcontrols:SettingsExpander>
                         <communitytoolkitcontrols:SettingsExpander
                             Margin="10,0,20,0"
-                            classes:RippleHelper.IsFillEnable="True"
-                            classes:RippleHelper.RippleColor="Gray"
-                            classes:RippleHelper.RippleDuration="0:0:0.5"
-                            classes:RippleHelper.RippleHelperState="Pressed"
                             Description="选择要显示的应用背景"
                             FontFamily="{StaticResource HarmonyOSSans}"
                             Header="应用程序背景"
@@ -146,6 +145,51 @@
                                 </communitytoolkitcontrols:SettingsCard>
                             </communitytoolkitcontrols:SettingsExpander.Items>
                         </communitytoolkitcontrols:SettingsExpander>
+                        <communitytoolkitcontrols:SettingsExpander
+                            Margin="10,0,20,0"
+                            Description="选择要显示的应用背景"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            Header="应用程序背景"
+                            IsTabStop="True">
+                            <communitytoolkitcontrols:SettingsExpander.HeaderIcon>
+                                <SymbolIcon Symbol="Pictures" />
+                            </communitytoolkitcontrols:SettingsExpander.HeaderIcon>
+                            <communitytoolkitcontrols:SettingsExpander.Items>
+                                <communitytoolkitcontrols:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
+                                    <StackPanel Margin="-12,0,0,0" Orientation="Vertical">
+                                        <muxc:RadioButtons
+                                            x:Name="PageBackgroundRadioButtons"
+                                            MaxColumns="3"
+                                            SelectionChanged="PageBackgroundRadioButtons_SelectionChanged">
+                                            <RadioButton Content="无背景" FontFamily="{StaticResource HarmonyOSSans}" />
+                                            <RadioButton Content="Acrylic" FontFamily="{StaticResource HarmonyOSSans}" />
+                                            <RadioButton Content="Mica" FontFamily="{StaticResource HarmonyOSSans}" />
+                                        </muxc:RadioButtons>
+                                    </StackPanel>
+                                </communitytoolkitcontrols:SettingsCard>
+                                <communitytoolkitcontrols:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
+                                    <StackPanel
+                                        Margin="-12,0,0,0"
+                                        Orientation="Horizontal"
+                                        Spacing="10">
+
+                                        <Slider
+                                            x:Name="PageBackgroundOpacitySlider"
+                                            Width="250"
+                                            ValueChanged="PageBackgroundOpacitySlider_ValueChanged" />
+                                        <TextBlock
+                                            VerticalAlignment="Center"
+                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                            Text="透明度" />
+                                        <TextBlock
+                                            x:Name="PageBackgroundOpacityTextBlock"
+                                            VerticalAlignment="Center"
+                                            FontFamily="{StaticResource HarmonyOSSans}" />
+                                    </StackPanel>
+                                </communitytoolkitcontrols:SettingsCard>
+                            </communitytoolkitcontrols:SettingsExpander.Items>
+                        </communitytoolkitcontrols:SettingsExpander>
+
                     </StackPanel>
                 </communitytoolkitcontrols:Case>
                 <communitytoolkitcontrols:Case Value="选项">
@@ -153,11 +197,14 @@
                         animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
                         animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}"
                         Spacing="10">
+                        <StackPanel.ChildrenTransitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition FromVerticalOffset="50" />
+                                <RepositionThemeTransition IsStaggeringEnabled="False" />
+                            </TransitionCollection>
+                        </StackPanel.ChildrenTransitions>
                         <communitytoolkitcontrols:SettingsCard
                             Margin="10,0,20,0"
-                            classes:RippleHelper.RippleColor="Gray"
-                            classes:RippleHelper.RippleDuration="0:0:0.5"
-                            classes:RippleHelper.RippleHelperState="Pressed"
                             Description="停止抽取时从抽取范围中移除抽到的同学"
                             FontFamily="{StaticResource HarmonyOSSans}"
                             Header="抽完不放回">
@@ -169,9 +216,6 @@
                         </communitytoolkitcontrols:SettingsCard>
                         <communitytoolkitcontrols:SettingsCard
                             Margin="10,0,20,0"
-                            classes:RippleHelper.RippleColor="Gray"
-                            classes:RippleHelper.RippleDuration="0:0:0.5"
-                            classes:RippleHelper.RippleHelperState="Pressed"
                             Description="开始抽取后过一段时间自动停止"
                             FontFamily="{StaticResource HarmonyOSSans}"
                             Header="自动停止">
@@ -183,9 +227,6 @@
                         </communitytoolkitcontrols:SettingsCard>
                         <communitytoolkitcontrols:SettingsCard
                             Margin="10,0,20,0"
-                            classes:RippleHelper.RippleColor="Gray"
-                            classes:RippleHelper.RippleDuration="0:0:0.5"
-                            classes:RippleHelper.RippleHelperState="Pressed"
                             Description="先将抽取范围中的学生打乱再按顺序输出，这可能会提高性能"
                             FontFamily="{StaticResource HarmonyOSSans}"
                             Header="优化抽取性能">
@@ -197,9 +238,6 @@
                         </communitytoolkitcontrols:SettingsCard>
                         <communitytoolkitcontrols:SettingsCard
                             Margin="10,0,20,0"
-                            classes:RippleHelper.RippleColor="Gray"
-                            classes:RippleHelper.RippleDuration="0:0:0.5"
-                            classes:RippleHelper.RippleHelperState="Pressed"
                             Description="将抽取范围保存到本地"
                             FontFamily="{StaticResource HarmonyOSSans}"
                             Header="保存抽取范围">
@@ -211,9 +249,6 @@
                         </communitytoolkitcontrols:SettingsCard>
                         <communitytoolkitcontrols:SettingsCard
                             Margin="10,0,20,0"
-                            classes:RippleHelper.RippleColor="Gray"
-                            classes:RippleHelper.RippleDuration="0:0:0.5"
-                            classes:RippleHelper.RippleHelperState="Pressed"
                             Description="将历史抽取记录保存到本地"
                             FontFamily="{StaticResource HarmonyOSSans}"
                             Header="保存历史记录">
@@ -230,12 +265,14 @@
                         animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
                         animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}"
                         Spacing="10">
+                        <StackPanel.ChildrenTransitions>
+                            <TransitionCollection>
+                                <EntranceThemeTransition FromVerticalOffset="50" />
+                                <RepositionThemeTransition IsStaggeringEnabled="False" />
+                            </TransitionCollection>
+                        </StackPanel.ChildrenTransitions>
                         <communitytoolkitcontrols:SettingsExpander
                             Margin="10,0,20,0"
-                            classes:RippleHelper.IsFillEnable="True"
-                            classes:RippleHelper.RippleColor="Gray"
-                            classes:RippleHelper.RippleDuration="0:0:0.5"
-                            classes:RippleHelper.RippleHelperState="Pressed"
                             Description="© 2022-2025. All rights reserved."
                             FontFamily="{StaticResource HarmonyOSSans}"
                             Header="Randomly Select Student Numbers">
@@ -260,9 +297,6 @@
                         <communitytoolkitcontrols:SettingsExpander
                             Margin="10,0,20,0"
                             classes:RippleHelper.IsFillEnable="True"
-                            classes:RippleHelper.RippleColor="Gray"
-                            classes:RippleHelper.RippleDuration="0:0:0.5"
-                            classes:RippleHelper.RippleHelperState="Pressed"
                             Description="查看此应用使用的开源库"
                             FontFamily="{StaticResource HarmonyOSSans}"
                             Header="许可协议">
@@ -333,9 +367,6 @@
                             x:Name="GoToGithubSettingsCard"
                             Margin="10,0,20,0"
                             classes:RippleHelper.IsFillEnable="True"
-                            classes:RippleHelper.RippleColor="Gray"
-                            classes:RippleHelper.RippleDuration="0:0:0.5"
-                            classes:RippleHelper.RippleHelperState="Pressed"
                             Click="GoToGithubSettingsCard_Click"
                             Description="https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP"
                             FontFamily="{StaticResource HarmonyOSSans}"

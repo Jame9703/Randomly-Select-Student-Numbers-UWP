@@ -440,11 +440,6 @@
                 DisplayMode="Inline"
                 IsPaneOpen="True"
                 PanePlacement="Right">
-                <SplitView.Transitions>
-                    <TransitionCollection>
-                        <PaneThemeTransition Edge="Right" />
-                    </TransitionCollection>
-                </SplitView.Transitions>
                 <SplitView.Pane>
                     <Grid>
                         <Button
