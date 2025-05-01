@@ -201,7 +201,7 @@ namespace 随机抽取学号
                     CurrentClassNameTextBox.Text = "我的班级";
                     localSettings.Values["CurrentClassName"] = "我的班级";//默认班级名称
                 }
-                if(localSettings.Values.ContainsKey("ContentFrameBackground") && localSettings.Values.ContainsKey("ContentFrameBackgroundOpacity"))
+                if (localSettings.Values.ContainsKey("ContentFrameBackground") && localSettings.Values.ContainsKey("ContentFrameBackgroundOpacity"))
                 {
                     if ((int)localSettings.Values["ContentFrameBackground"] == 0)
                     {
@@ -322,6 +322,7 @@ namespace 随机抽取学号
             {
                 button.IsChecked = true;//上次点击的按钮和本次一样，保持选中状态
             }
+            ClassIcon.Glyph = "\uEA8C";
         }
 
         private void NumbersPage_Click(object sender, RoutedEventArgs e)
@@ -406,6 +407,7 @@ namespace 随机抽取学号
 
                 _lastSelectedButton = button; // 更新最后选中的按钮
                 HomeIcon.Glyph = "\uE80F";
+                ClassIcon.Glyph = "\uE77B";
                 NumbersIcon.Visibility = Visibility.Visible;
                 NumbersIconChecked.Visibility = Visibility.Collapsed;
                 SettingsIcon.Glyph = "\uE713";
@@ -513,14 +515,35 @@ namespace 随机抽取学号
             await switchClassContentDialog.ShowAsync();
         }
 
-        private void SettingsPageButton_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private void ContentFrame_Navigating(object sender, NavigatingCancelEventArgs e)
         {
-            AnimatedIcon.SetState(SettingsIcon, "PointerOver");
+            var oldPage = ContentFrame.Content as Page;
+
+            //childrenOutStoryboard.Begin();
+            if(oldPage != null)
+            {
+                var exitAnimation = (Storyboard)this.Resources["PageExitStoryboard"];
+                CompositeTransform compositeTransform = new CompositeTransform();
+                oldPage.RenderTransform = compositeTransform;
+                PageEnterStoryboard.Stop();
+                PageExitStoryboard.Stop();
+                Storyboard.SetTargetName(PageEnterAnimation, "compositeTransform");
+                exitAnimation.Begin();
+            }
         }
 
-        private void SettingsPageButton_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
         {
-            AnimatedIcon.SetState(SettingsIcon, "Normal");
+            var newPage = ContentFrame.Content as Page;
+            var enterAnimation = (Storyboard)this.Resources["PageEnterStoryboard"];
+
+            CompositeTransform compositeTransform = new CompositeTransform();
+            newPage.RenderTransform = compositeTransform;
+            PageEnterStoryboard.Stop();
+            PageExitStoryboard.Stop();
+            //Storyboard.SetTarget(PageEnterAnimation, compositeTransform);
+            Storyboard.SetTargetName(PageExitAnimation, "compositeTransform");
+            enterAnimation.Begin();
         }
     }
 }
