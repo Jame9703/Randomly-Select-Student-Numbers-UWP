@@ -108,7 +108,7 @@
                             Header="应用程序背景"
                             IsTabStop="True">
                             <communitytoolkitcontrols:SettingsExpander.HeaderIcon>
-                                <SymbolIcon Symbol="Pictures" />
+                                <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE91B;" />
                             </communitytoolkitcontrols:SettingsExpander.HeaderIcon>
                             <communitytoolkitcontrols:SettingsExpander.Items>
                                 <communitytoolkitcontrols:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
@@ -147,12 +147,13 @@
                         </communitytoolkitcontrols:SettingsExpander>
                         <communitytoolkitcontrols:SettingsExpander
                             Margin="10,0,20,0"
-                            Description="选择要显示的应用背景"
+                            Description="更改所有页面的背景"
                             FontFamily="{StaticResource HarmonyOSSans}"
-                            Header="应用程序背景"
+                            Header="页面背景"
                             IsTabStop="True">
                             <communitytoolkitcontrols:SettingsExpander.HeaderIcon>
-                                <SymbolIcon Symbol="Pictures" />
+
+                                <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE7AA;" />
                             </communitytoolkitcontrols:SettingsExpander.HeaderIcon>
                             <communitytoolkitcontrols:SettingsExpander.Items>
                                 <communitytoolkitcontrols:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">

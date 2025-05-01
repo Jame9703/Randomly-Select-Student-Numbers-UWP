@@ -8,7 +8,7 @@
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
     mc:Ignorable="d">
 
-    <Grid x:Name="ContentGrid"  Background="{ThemeResource GridBackground}">
+    <Grid x:Name="ContentGrid">
         <TextBlock
             Margin="10,13,0,0"
             HorizontalAlignment="Left"

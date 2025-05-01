@@ -1,5 +1,6 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using System;
+using System.Linq;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Storage;
@@ -31,11 +32,6 @@ namespace 随机抽取学号
         private ToggleButton _lastSelectedButton;
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         public static StackPanel PopupContainerInstance;
-        public new Brush Background
-        {
-            get { return base.Background; }
-            set { base.Background = value; }
-        }
 
         public MainPage()
         {
@@ -131,10 +127,12 @@ namespace 随机抽取学号
             this.Background = backdropMicaBrush;
             WelcomeContentDialog welcomeDialog = new WelcomeContentDialog();
             await welcomeDialog.ShowAsync();
-            localSettings.Values["Theme"] = 2;//确保下次打开不显示欢迎界面
+            CurrentClassNameTextBox.Text = "我的班级";
+            localSettings.Values["Theme"] = 2;//设置默认主题
             localSettings.Values["MainPageBackground"] = 2;//设置默认MainPage背景
             localSettings.Values["MainPageBackgroundOpacity"] = 0.5;//设置默认MainPage背景不透明度
-            CurrentClassNameTextBox.Text = "我的班级";
+            localSettings.Values["'ContentFrameBackground"] = 2;//设置默认ContentFrame背景
+            localSettings.Values["ContentFrameBackgroundOpacity"] = 0.5;//设置默认ContentFrame背景不透明度
             localSettings.Values["CurrentClassName"] = "我的班级";//默认班级名称
             localSettings.Values["IsFirstRun"] = false;//设置不是第一次运行
         }
@@ -202,6 +200,32 @@ namespace 随机抽取学号
                 {
                     CurrentClassNameTextBox.Text = "我的班级";
                     localSettings.Values["CurrentClassName"] = "我的班级";//默认班级名称
+                }
+                if(localSettings.Values.ContainsKey("ContentFrameBackground") && localSettings.Values.ContainsKey("ContentFrameBackgroundOpacity"))
+                {
+                    if ((int)localSettings.Values["ContentFrameBackground"] == 0)
+                    {
+                        ContentFrame.Background = new SolidColorBrush(Colors.White);
+                    }
+                    else if ((int)localSettings.Values["ContentFrameBackground"] == 1)
+                    {
+                        var acrylicBrush = new AcrylicBrush
+                        {
+                            BackgroundSource = AcrylicBackgroundSource.Backdrop,
+                            TintOpacity = 0.6,
+                            TintColor = Colors.Transparent
+                        };
+                        ContentFrame.Background = acrylicBrush;
+                    }
+                    else if ((int)localSettings.Values["ContentFrameBackground"] == 2)
+                    {
+                        var backdropMicaBrush = new BackdropMicaBrush
+                        {
+                            BackgroundSource = BackgroundSource.Backdrop,
+                        };
+                        ContentFrame.Background = backdropMicaBrush;
+                    }
+                    ContentFrame.Background.Opacity = (double)localSettings.Values["ContentFrameBackgroundOpacity"];
                 }
             }
         }
@@ -364,6 +388,8 @@ namespace 随机抽取学号
                 {
                     // 如果之前有选中的按钮，取消其选中状态
                     _lastSelectedButton.IsChecked = false;
+                    ((StackPanel)_lastSelectedButton.Content).Children.OfType<TextBlock>().First().Visibility = Visibility.Visible;
+                    ((StackPanel)button.Content).Children.OfType<TextBlock>().First().Visibility = Visibility.Collapsed;
                 }
 
                 button.IsChecked = true; // 设置当前按钮为选中状态
@@ -485,6 +511,16 @@ namespace 随机抽取学号
         {
             SwitchClassContentDialog switchClassContentDialog = new SwitchClassContentDialog();
             await switchClassContentDialog.ShowAsync();
+        }
+
+        private void SettingsPageButton_PointerEntered(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            AnimatedIcon.SetState(SettingsIcon, "PointerOver");
+        }
+
+        private void SettingsPageButton_PointerExited(object sender, Windows.UI.Xaml.Input.PointerRoutedEventArgs e)
+        {
+            AnimatedIcon.SetState(SettingsIcon, "Normal");
         }
     }
 }

@@ -1,5 +1,4 @@
 ﻿using System;
-//using System.Drawing;
 using Windows.Storage;
 using Windows.System;
 using Windows.UI;
@@ -30,7 +29,10 @@ namespace 随机抽取学号.Views
             AppearanceRadioButtons.SelectedIndex = (int)ApplicationData.Current.LocalSettings.Values["Theme"];
             BackgroundRadioButtons.SelectedIndex = (int)ApplicationData.Current.LocalSettings.Values["MainPageBackground"];
             BackgroundOpacitySlider.Value = (double)ApplicationData.Current.LocalSettings.Values["MainPageBackgroundOpacity"] * 100;
+            PageBackgroundRadioButtons.SelectedIndex = (int)ApplicationData.Current.LocalSettings.Values["ContentFrameBackground"];
+            PageBackgroundOpacitySlider.Value = (double)ApplicationData.Current.LocalSettings.Values["ContentFrameBackgroundOpacity"] * 100;
             BackgroundOpacityTextBlock.Text = BackgroundOpacitySlider.Value.ToString() + "%";
+            PageBackgroundOpacityTextBlock.Text = BackgroundOpacitySlider.Value.ToString() + "%";
             //ColorPaletteResources co = new ColorPaletteResources();
             //co.Accent = Colors.Red;
             if (localSettings.Values.ContainsKey("NoReturn")
@@ -221,8 +223,8 @@ namespace 随机抽取学号.Views
             PageBackgroundOpacityTextBlock.Text = PageBackgroundOpacitySlider.Value.ToString() + "%";
             if (mainPage != null)
             {
-                mainPage.Background.Opacity = PageBackgroundOpacitySlider.Value / 100;
-                localSettings.Values["MainPageBackgroundOpacity"] = PageBackgroundOpacitySlider.Value / 100;
+                mainPage.ContentFrame.Background.Opacity = PageBackgroundOpacitySlider.Value / 100;
+                localSettings.Values["ContentFrameBackgroundOpacity"] = PageBackgroundOpacitySlider.Value / 100;
             }
         }
 
@@ -239,30 +241,30 @@ namespace 随机抽取学号.Views
                         Opacity = BackgroundOpacitySlider.Value / 100
 
                     };
-                    mainPage.Background = newBrush;
-                    localSettings.Values["MainPageBackground"] = 0;
+                    mainPage.ContentFrame.Background = newBrush;
+                    localSettings.Values["ContentFrameBackground"] = 0;
                 }
                 else if (PageBackgroundRadioButtons.SelectedIndex == 1)// 亚克力背景
                 {
                     var acrylicBrush = new AcrylicBrush
                     {
-                        BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                        BackgroundSource = AcrylicBackgroundSource.Backdrop,
                         Opacity = BackgroundOpacitySlider.Value / 100,
                         TintOpacity = 0.6,
                         TintColor = Colors.Transparent
                     };
-                    mainPage.Background = acrylicBrush;
-                    localSettings.Values["MainPageBackground"] = 1;
+                    mainPage.ContentFrame.Background = acrylicBrush;
+                    localSettings.Values["ContentFrameBackground"] = 1;
                 }
                 else if (PageBackgroundRadioButtons.SelectedIndex == 2)// 云母背景
                 {
                     var backdropMicaBrush = new BackdropMicaBrush
                     {
-                        BackgroundSource = BackgroundSource.WallpaperBackdrop,
+                        BackgroundSource = BackgroundSource.Backdrop,
                         Opacity = BackgroundOpacitySlider.Value / 100,
                     };
-                    mainPage.Background = backdropMicaBrush;
-                    localSettings.Values["MainPageBackground"] = 2;
+                    mainPage.ContentFrame.Background = backdropMicaBrush;
+                    localSettings.Values["ContentFrameBackground"] = 2;
                 }
             }
             else

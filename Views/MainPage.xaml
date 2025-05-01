@@ -320,8 +320,7 @@
                 NavigationFailed="ContentFrame_NavigationFailed">
                 <Frame.ContentTransitions>
                     <TransitionCollection>
-                        <!--<NavigationThemeTransition />-->
-
+                        <NavigationThemeTransition />
                     </TransitionCollection>
                 </Frame.ContentTransitions>
 
@@ -378,7 +377,8 @@
                         <TextBlock
                             FontFamily="{StaticResource HarmonyOSSans}"
                             FontSize="12"
-                            Text="主页" />
+                            Text="主页"
+                            Visibility="Collapsed" />
                     </StackPanel>
                 </ToggleButton>
                 <ToggleButton
@@ -521,6 +521,8 @@
                 x:FieldModifier="Public"
                 Background="Transparent"
                 Click="SettingsPage_Click"
+                PointerEntered="SettingsPageButton_PointerEntered"
+                PointerExited="SettingsPageButton_PointerExited"
                 CornerRadius="6,6,6,6"
                 FontFamily="{StaticResource HarmonyOSSans}"
                 Style="{StaticResource ToggleButtonStyle}">
@@ -531,10 +533,22 @@
                 </ToggleButton.Transitions>
                 <StackPanel>
                     <Viewbox Height="24">
-                        <FontIcon
+                        <!--<FontIcon
                             x:Name="SettingsIcon"
                             FontFamily="{StaticResource SegoeFluentIcons}"
-                            Glyph="&#xE713;" />
+                            Glyph="&#xE713;" />-->
+                        <muxc:AnimatedIcon>
+                            <muxc:AnimatedIcon.Source>
+                                <animatedvisuals:AnimatedSettingsVisualSource/>
+                            </muxc:AnimatedIcon.Source>
+                            <muxc:AnimatedIcon.FallbackIconSource>
+                                <muxc:FontIconSource
+                                    x:Name="SettingsIcon"
+                                    FontFamily="{StaticResource SegoeFluentIcons}"
+                                    Glyph="&#xE713;" />
+                            </muxc:AnimatedIcon.FallbackIconSource>
+                        </muxc:AnimatedIcon>
+
                     </Viewbox>
                     <TextBlock
                         FontFamily="{StaticResource HarmonyOSSans}"

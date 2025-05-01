@@ -375,10 +375,7 @@
 
     </Page.Resources>
     <Grid>
-        <Grid
-            x:Name="ContentGrid"
-            Background="{ThemeResource GridBackground}"
-            Visibility="Collapsed">
+        <Grid x:Name="ContentGrid" Visibility="Collapsed">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition
                     x:Name="MainColumn"
@@ -569,18 +566,13 @@
                                 SelectionMode="Multiple">
                                 <ListView.ItemContainerTransitions>
                                     <TransitionCollection>
-                                        <EntranceThemeTransition
-                                            FromHorizontalOffset="100"
-                                            IsStaggeringEnabled="True" />
+                                        <EntranceThemeTransition FromHorizontalOffset="100" IsStaggeringEnabled="True" />
                                     </TransitionCollection>
                                 </ListView.ItemContainerTransitions>
                             </ListView>
 
                         </Grid>
-                        <Grid Margin="0,30,0,0">
-
-
-                        </Grid>
+                        <Grid Margin="0,30,0,0" />
 
                     </Grid>
                 </SplitView.Pane>
