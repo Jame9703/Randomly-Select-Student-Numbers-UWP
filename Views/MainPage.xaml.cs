@@ -1,19 +1,16 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Linq;
-using System.Numerics;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI;
-using Windows.UI.Composition;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
@@ -438,6 +435,7 @@ namespace 随机抽取学号
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
                 popupNotice.ShowPopup();
             }
+            ClassIcon.Glyph = "\uEA8C";
         }
 
         private async void EditPictureButton_Click(object sender, RoutedEventArgs e)

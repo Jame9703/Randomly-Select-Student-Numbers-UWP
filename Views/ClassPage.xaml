@@ -1004,38 +1004,21 @@
     </Page.Resources>
 
     <Grid x:Name="ContentGrid">
-        <Grid
-            Width="Auto"
-            HorizontalAlignment="Left"
+        <StackPanel
+            HorizontalAlignment="Stretch"
             VerticalAlignment="Top"
-            CornerRadius="8,8,8,8">
-            <Grid.Background>
+            CornerRadius="8,8,8,8"
+            Orientation="Horizontal"
+            Spacing="5">
+            <StackPanel.Background>
                 <SolidColorBrush Opacity="0.5" Color="White" />
-            </Grid.Background>
-            <Grid>
-                <TextBlock
-                    Margin="7,10,0,0"
-                    HorizontalAlignment="Left"
-                    FontFamily="{StaticResource HarmonyOSSans}"
-                    Text="自动保存" />
-                <ToggleSwitch
-                    x:Name="AutoSaveToggleSwitch"
-                    Width="40"
-                    Height="30"
-                    MinWidth="40"
-                    MinHeight="30"
-                    Margin="70,0,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    FontFamily="{StaticResource HarmonyOSSans}" />
-            </Grid>
+            </StackPanel.Background>
             <controls:Segmented
                 x:Name="FileEditSegmented"
-                Margin="115,0,0,0"
                 VerticalAlignment="Top"
                 SelectionChanged="FileEditSegmented_SelectionChanged"
                 Style="{StaticResource PivotSegmentedStyle}">
-                <controls:SegmentedItem>
+                <controls:SegmentedItem Tag="File">
                     <StackPanel Orientation="Horizontal">
                         <SymbolIcon Margin="0,2,0,0" Symbol="Page2">
                             <SymbolIcon.RenderTransform>
@@ -1048,7 +1031,7 @@
                             Text="文件" />
                     </StackPanel>
                 </controls:SegmentedItem>
-                <controls:SegmentedItem>
+                <controls:SegmentedItem Tag="Edit">
                     <StackPanel Orientation="Horizontal">
                         <SymbolIcon Margin="0,2,0,0" Symbol="Edit">
                             <SymbolIcon.RenderTransform>
@@ -1062,7 +1045,86 @@
                     </StackPanel>
                 </controls:SegmentedItem>
             </controls:Segmented>
-        </Grid>
+            <Grid
+                x:Name="SaveButtonGrid"
+                Width="120"
+                Height="45"
+                Margin="0,0,0,0"
+                HorizontalAlignment="Left"
+                VerticalAlignment="Top">
+                <Button
+                    x:Name="SaveButton"
+                    Width="120"
+                    Height="40"
+                    classes:RippleHelper.IsFillEnable="True"
+                    classes:RippleHelper.RippleColor="Green"
+                    classes:RippleHelper.RippleDuration="0:0:0.5"
+                    classes:RippleHelper.RippleHelperState="Pressed"
+                    Background="Transparent"
+                    Click="SaveButton_Click"
+                    FontFamily="{StaticResource HarmonyOSSans}">
+                    <Grid>
+                        <StackPanel
+                            x:Name="SaveStackPanel"
+                            HorizontalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="5">
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE74E;" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                Text="保存更改" />
+                        </StackPanel>
+                        <StackPanel
+                            x:Name="SavingStackPanel"
+                            Orientation="Horizontal"
+                            Spacing=" 5"
+                            Visibility="Collapsed">
+                            <muxc:ProgressRing IsActive="True" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                Text="正在保存" />
+                        </StackPanel>
+                        <StackPanel
+                            x:Name="SavedStackPanel"
+                            Orientation="Horizontal"
+                            Spacing="5"
+                            Visibility="Collapsed">
+                            <SymbolIcon
+                                HorizontalAlignment="Center"
+                                Foreground="Green"
+                                Symbol="Accept" />
+                            <TextBlock
+                                HorizontalAlignment="Center"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                Foreground="Green"
+                                Text="保存成功" />
+                        </StackPanel>
+                    </Grid>
+                </Button>
+                <ProgressBar
+                    x:Name="SaveProcessBar"
+                    Width="Auto"
+                    Height="2"
+                    VerticalAlignment="Bottom" />
+            </Grid>
+            <Grid>
+                <!--<TextBlock
+                    Margin="7,10,0,0"
+                    HorizontalAlignment="Left"
+                    FontFamily="{StaticResource HarmonyOSSans}"
+                    Text="自动保存" />-->
+                <ToggleSwitch
+                    x:Name="AutoSaveToggleSwitch"
+                    HorizontalAlignment="Left"
+                    VerticalAlignment="Center"
+                    FontFamily="{StaticResource HarmonyOSSans}"
+                    OffContent="自动保存:关"
+                    OnContent="自动保存:开" />
+            </Grid>
+
+        </StackPanel>
 
         <Grid MinWidth="400" MinHeight="300">
 
@@ -1109,327 +1171,273 @@
             </Grid>
 
             <Grid Margin="0,45,0,0">
-                <Grid
-                    x:Name="SaveButtonGrid"
-                    Width="100"
-                    Height="80"
-                    Margin="0,0,0,0"
-                    Padding="0,0,0,0"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Top"
-                    CornerRadius="8,0,0,0">
-                    <Button
-                        x:Name="SaveButton"
-                        Width="100"
-                        Height="80"
-                        classes:RippleHelper.IsFillEnable="True"
-                        classes:RippleHelper.RippleColor="Green"
-                        classes:RippleHelper.RippleDuration="0:0:0.5"
-                        classes:RippleHelper.RippleHelperState="Pressed"
-                        Background="Transparent"
-                        Click="SaveButton_Click"
-                        CornerRadius="8,0,0,0"
-                        FontFamily="{StaticResource HarmonyOSSans}">
-                        <Grid>
-                            <StackPanel x:Name="SaveStackPanel" Orientation="Vertical">
-                                <SymbolIcon
-                                    HorizontalAlignment="Center"
-                                    Foreground="#FF009AFF"
-                                    Symbol="Save" />
-                                <TextBlock
-                                    HorizontalAlignment="Center"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    FontSize="16"
-                                    Foreground="#FF009AFF"
-                                    Text="保存更改" />
-                            </StackPanel>
+                <Grid>
+                    <controls:SwitchPresenter Value="{Binding SelectedItem.Tag, ElementName=FileEditSegmented}">
+                        <controls:Case Value="Edit">
                             <StackPanel
-                                x:Name="SavingStackPanel"
-                                Orientation="Vertical"
-                                Visibility="Collapsed">
-                                <muxc:ProgressRing IsActive="True" />
-                                <TextBlock
-                                    HorizontalAlignment="Center"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    FontSize="16"
-                                    Foreground="#FF009AFF"
-                                    Text="正在保存" />
-                            </StackPanel>
-                            <StackPanel
-                                x:Name="SavedStackPanel"
-                                Orientation="Vertical"
-                                Visibility="Collapsed">
-                                <SymbolIcon
-                                    HorizontalAlignment="Center"
-                                    Foreground="Green"
-                                    Symbol="Accept" />
-                                <TextBlock
-                                    HorizontalAlignment="Center"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    FontSize="16"
-                                    Foreground="Green"
-                                    Text="保存成功" />
-                            </StackPanel>
-                        </Grid>
-                    </Button>
-                    <ProgressBar
-                        x:Name="SaveProcessBar"
-                        Width="Auto"
-                        Height="5"
-                        VerticalAlignment="Bottom" />
-                </Grid>
-                <Grid Margin="100,0,0,0">
-                    <StackPanel
-                        x:Name="EditStackPanel"
-                        Height="80"
-                        VerticalAlignment="Top"
-                        animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
-                        animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}"
-                        Orientation="Horizontal"
-                        Style="{StaticResource PanelStyle}">
-                        <Button
-                            x:Name="AddItemButton"
-                            Grid.Column="2"
-                            Width="90"
-                            Height="60"
-                            VerticalAlignment="Center"
-                            FontFamily="{StaticResource HarmonyOSSans}">
-                            <StackPanel>
-                                <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE8FA;" />
-                                <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="添加学生" />
-                            </StackPanel>
-                            <Button.Flyout>
-                                <Flyout>
+                                x:Name="EditStackPanel"
+                                Height="80"
+                                VerticalAlignment="Top"
+                                animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
+                                animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}"
+                                Orientation="Horizontal"
+                                Style="{StaticResource PanelStyle}">
+                                <ToggleButton x:Name="MultiSelectButton" Unchecked="MultiSelectButton_Unchecked">
                                     <StackPanel>
-                                        <controls:Segmented
-                                            x:Name="AddModeSegmented"
-                                            HorizontalAlignment="Center"
-                                            VerticalAlignment="Top"
-                                            SelectionChanged="AddModeSegmented_SelectionChanged">
-                                            <controls:SegmentedItem Content="逐个添加" FontFamily="{StaticResource HarmonyOSSans}" />
-                                            <controls:SegmentedItem Content="批量添加" FontFamily="{StaticResource HarmonyOSSans}" />
-                                        </controls:Segmented>
-                                        <Grid x:Name="SingleAddGrid" Margin="0,15,0,0">
-                                            <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="姓名:" />
-                                            <TextBox
-                                                x:Name="NameTextBox"
-                                                Height="30"
-                                                Margin="0,15,0,0" />
-                                        </Grid>
-                                        <Grid x:Name="BatchAddGrid" Margin="0,15,0,0">
-                                            <Grid>
-                                                <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                                    <Button
-                                                        x:Name="OpenFileButton"
-                                                        VerticalAlignment="Top"
-                                                        Click="OpenFileButton_Click">
-                                                        <Grid>
-                                                            <SymbolIcon HorizontalAlignment="Left" Symbol="Read" />
-                                                            <TextBlock
-                                                                Margin="25,0,0,0"
-                                                                HorizontalAlignment="Left"
-                                                                FontFamily="{StaticResource HarmonyOSSans}"
-                                                                Text="打开文件" />
-                                                        </Grid>
-                                                    </Button>
-                                                    <Button VerticalAlignment="Top" Click="SaveFileButton_Click">
-                                                        <Grid>
-                                                            <SymbolIcon HorizontalAlignment="Left" Symbol="Save" />
-                                                            <TextBlock
-                                                                Margin="25,0,0,0"
-                                                                HorizontalAlignment="Left"
-                                                                FontFamily="{StaticResource HarmonyOSSans}"
-                                                                Text="保存副本" />
-                                                        </Grid>
-                                                    </Button>
-                                                </StackPanel>
-
-                                                <ScrollViewer
-                                                    MaxWidth="200"
-                                                    MaxHeight="400"
-                                                    Margin="0,50,0,0"
-                                                    VerticalScrollBarVisibility="Auto"
-                                                    VerticalScrollMode="Enabled">
-
-                                                    <Grid
-                                                        x:Name="NamesGrid"
-                                                        MinWidth="120"
-                                                        MaxWidth="300"
-                                                        CornerRadius="0,0,0,0">
-                                                        <Grid.ColumnDefinitions>
-                                                            <ColumnDefinition Width="Auto" />
-                                                            <ColumnDefinition Width="*" />
-                                                        </Grid.ColumnDefinitions>
-
-                                                        <Border
-                                                            x:Name="lineNumberBorder"
-                                                            Grid.Column="0"
-                                                            CornerRadius="8,0,0,8">
-                                                            <TextBlock
-                                                                x:Name="lineNumberTextBlock"
-                                                                Margin="0,5"
+                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE762;" />
+                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="多选模式" />
+                                    </StackPanel>
+                                </ToggleButton>
+                                <Button
+                                    x:Name="AddItemButton"
+                                    Grid.Column="2"
+                                    Width="90"
+                                    Height="60"
+                                    VerticalAlignment="Center"
+                                    FontFamily="{StaticResource HarmonyOSSans}">
+                                    <StackPanel>
+                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE8FA;" />
+                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="添加学生" />
+                                    </StackPanel>
+                                    <Button.Flyout>
+                                        <Flyout>
+                                            <StackPanel>
+                                                <controls:Segmented
+                                                    x:Name="AddModeSegmented"
+                                                    HorizontalAlignment="Center"
+                                                    VerticalAlignment="Top"
+                                                    SelectionChanged="AddModeSegmented_SelectionChanged">
+                                                    <controls:SegmentedItem Content="逐个添加" FontFamily="{StaticResource HarmonyOSSans}" />
+                                                    <controls:SegmentedItem Content="批量添加" FontFamily="{StaticResource HarmonyOSSans}" />
+                                                </controls:Segmented>
+                                                <Grid x:Name="SingleAddGrid" Margin="0,15,0,0">
+                                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="姓名:" />
+                                                    <TextBox
+                                                        x:Name="NameTextBox"
+                                                        Height="30"
+                                                        Margin="0,15,0,0" />
+                                                </Grid>
+                                                <Grid x:Name="BatchAddGrid" Margin="0,15,0,0">
+                                                    <Grid>
+                                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                            <Button
+                                                                x:Name="OpenFileButton"
                                                                 VerticalAlignment="Top"
-                                                                FontFamily="{StaticResource HarmonyOSSans}"
-                                                                FontSize="16"
-                                                                Foreground="{ThemeResource LineNumberForeground}"
-                                                                IsTextSelectionEnabled="False"
-                                                                TextAlignment="Right" />
-                                                        </Border>
+                                                                Click="OpenFileButton_Click">
+                                                                <Grid>
+                                                                    <SymbolIcon HorizontalAlignment="Left" Symbol="Read" />
+                                                                    <TextBlock
+                                                                        Margin="25,0,0,0"
+                                                                        HorizontalAlignment="Left"
+                                                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                                                        Text="打开文件" />
+                                                                </Grid>
+                                                            </Button>
+                                                            <Button VerticalAlignment="Top" Click="SaveFileButton_Click">
+                                                                <Grid>
+                                                                    <SymbolIcon HorizontalAlignment="Left" Symbol="Save" />
+                                                                    <TextBlock
+                                                                        Margin="25,0,0,0"
+                                                                        HorizontalAlignment="Left"
+                                                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                                                        Text="保存副本" />
+                                                                </Grid>
+                                                            </Button>
+                                                        </StackPanel>
 
-                                                        <TextBox
-                                                            x:Name="Editor"
-                                                            Grid.Column="1"
-                                                            x:FieldModifier="public"
-                                                            AcceptsReturn="True"
-                                                            CornerRadius="0,0,0,0"
-                                                            FontFamily="{StaticResource HarmonyOSSans}"
-                                                            FontSize="16"
-                                                            Loaded="Editor_Loaded"
-                                                            Style="{StaticResource EditorStyle}"
-                                                            TextChanged="Editor_TextChanged" />
+                                                        <ScrollViewer
+                                                            MaxWidth="200"
+                                                            MaxHeight="400"
+                                                            Margin="0,50,0,0"
+                                                            VerticalScrollBarVisibility="Auto"
+                                                            VerticalScrollMode="Enabled">
 
+                                                            <Grid
+                                                                x:Name="NamesGrid"
+                                                                MinWidth="120"
+                                                                MaxWidth="300"
+                                                                CornerRadius="0,0,0,0">
+                                                                <Grid.ColumnDefinitions>
+                                                                    <ColumnDefinition Width="Auto" />
+                                                                    <ColumnDefinition Width="*" />
+                                                                </Grid.ColumnDefinitions>
+
+                                                                <Border
+                                                                    x:Name="lineNumberBorder"
+                                                                    Grid.Column="0"
+                                                                    CornerRadius="8,0,0,8">
+                                                                    <TextBlock
+                                                                        x:Name="lineNumberTextBlock"
+                                                                        Margin="0,5"
+                                                                        VerticalAlignment="Top"
+                                                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                                                        FontSize="16"
+                                                                        Foreground="{ThemeResource LineNumberForeground}"
+                                                                        IsTextSelectionEnabled="False"
+                                                                        TextAlignment="Right" />
+                                                                </Border>
+
+                                                                <TextBox
+                                                                    x:Name="Editor"
+                                                                    Grid.Column="1"
+                                                                    x:FieldModifier="public"
+                                                                    AcceptsReturn="True"
+                                                                    CornerRadius="0,0,0,0"
+                                                                    FontFamily="{StaticResource HarmonyOSSans}"
+                                                                    FontSize="16"
+                                                                    Loaded="Editor_Loaded"
+                                                                    Style="{StaticResource EditorStyle}"
+                                                                    TextChanged="Editor_TextChanged" />
+
+                                                            </Grid>
+                                                        </ScrollViewer>
                                                     </Grid>
-                                                </ScrollViewer>
-                                            </Grid>
-                                        </Grid>
+                                                </Grid>
 
-                                        <Button
-                                            Margin="0,10,0,0"
-                                            HorizontalAlignment="Center"
-                                            Click="AddItemButton_Click">
-                                            <StackPanel Orientation="Horizontal">
-                                                <SymbolIcon Symbol="Accept" />
-                                                <TextBlock
-                                                    Margin="5,0,0,0"
-                                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                                    Text="确定" />
+                                                <Button
+                                                    Margin="0,10,0,0"
+                                                    HorizontalAlignment="Center"
+                                                    Click="AddItemButton_Click">
+                                                    <StackPanel Orientation="Horizontal">
+                                                        <SymbolIcon Symbol="Accept" />
+                                                        <TextBlock
+                                                            Margin="5,0,0,0"
+                                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                                            Text="确定" />
+                                                    </StackPanel>
+                                                </Button>
                                             </StackPanel>
-                                        </Button>
-                                    </StackPanel>
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
-                        <Button
-                            x:Name="DeleteItemButton"
-                            Grid.Column="2"
-                            Width="90"
-                            Height="60"
-                            Click="DeleteItemButton_Click"
-                            FontFamily="{StaticResource HarmonyOSSans}">
-                            <StackPanel>
-                                <FontIcon
-                                    FontFamily="{StaticResource SegoeFluentIcons}"
-                                    Foreground="#FFFC5665"
-                                    Glyph="&#xE74D;" />
-                                <TextBlock
-                                    HorizontalAlignment="Center"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    Foreground="#FFFC5665"
-                                    Text="删除此项" />
-                            </StackPanel>
-                        </Button>
-
-                        <Button
-                            x:Name="FolderPickerButton"
-                            Width="100"
-                            Height="60"
-                            FontFamily="{StaticResource HarmonyOSSans}">
-                            <StackPanel>
-                                <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE838;" />
-                                <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="打开文件夹" />
-                            </StackPanel>
-                            <Button.Flyout>
-                                <Flyout>
-                                    <StackPanel Orientation="Vertical">
-                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="选择一个文件夹，将文件夹下所有图片从当前被选择的项开始填充" />
-                                        <Button
-                                            Click="FolderPickerButton_Click"
-                                            Content="确定"
-                                            FontFamily="{StaticResource HarmonyOSSans}" />
-                                    </StackPanel>
-                                </Flyout>
-                            </Button.Flyout>
-                        </Button>
-                        <TextBlock
-                            x:Name="CurrentSelectionTextBlock"
-                            Height="30"
-                            FontFamily="{StaticResource HarmonyOSSans}"
-                            Text="当前选择项:无" />
-                        <TextBlock
-                            Width="1270"
-                            Height="30"
-                            FontFamily="{StaticResource HarmonyOSSans}"
-                            Text="Tips:可以直接拖动一个或多个图片从当前被选择项开始填充" />
-                    </StackPanel>
-                    <StackPanel
-                        x:Name="FileStackPanel"
-                        Height="80"
-                        VerticalAlignment="Top"
-                        animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
-                        animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}"
-                        Style="{StaticResource PanelStyle}">
-                        <Button
-                            x:Name="AddFileButton"
-                            Grid.Column="2"
-                            Width="95"
-                            Height="60"
-                            VerticalAlignment="Center">
-                            <Button.Flyout>
-                                <Flyout>
+                                        </Flyout>
+                                    </Button.Flyout>
+                                </Button>
+                                <Button
+                                    x:Name="DeleteItemButton"
+                                    Grid.Column="2"
+                                    Width="90"
+                                    Height="60"
+                                    Click="DeleteItemButton_Click"
+                                    FontFamily="{StaticResource HarmonyOSSans}">
                                     <StackPanel>
-                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="警告：此操作将清空学生列表" />
-                                        <Button
-                                            Margin="0,5,0,0"
+                                        <FontIcon
+                                            FontFamily="{StaticResource SegoeFluentIcons}"
+                                            Foreground="#FFFC5665"
+                                            Glyph="&#xE74D;" />
+                                        <TextBlock
                                             HorizontalAlignment="Center"
-                                            Click="AddFileButton_Click"
-                                            Content="确定"
                                             FontFamily="{StaticResource HarmonyOSSans}"
-                                            Style="{StaticResource AccentButtonStyle}" />
+                                            Foreground="#FFFC5665"
+                                            Text="删除此项" />
                                     </StackPanel>
-                                </Flyout>
-                            </Button.Flyout>
-                            <StackPanel>
-                                <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE82E;" />
-                                <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="新建数据库" />
+                                </Button>
+
+                                <Button
+                                    x:Name="FolderPickerButton"
+                                    Width="100"
+                                    Height="60"
+                                    FontFamily="{StaticResource HarmonyOSSans}">
+                                    <StackPanel>
+                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE838;" />
+                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="打开文件夹" />
+                                    </StackPanel>
+                                    <Button.Flyout>
+                                        <Flyout>
+                                            <StackPanel Orientation="Vertical">
+                                                <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="选择一个文件夹，将文件夹下所有图片从当前被选择的项开始填充" />
+                                                <Button
+                                                    Click="FolderPickerButton_Click"
+                                                    Content="确定"
+                                                    FontFamily="{StaticResource HarmonyOSSans}" />
+                                            </StackPanel>
+                                        </Flyout>
+                                    </Button.Flyout>
+                                </Button>
+                                <TextBlock
+                                    x:Name="CurrentSelectionTextBlock"
+                                    Height="30"
+                                    FontFamily="{StaticResource HarmonyOSSans}"
+                                    Text="当前选择项:无" />
+                                <TextBlock
+                                    Width="1270"
+                                    Height="30"
+                                    FontFamily="{StaticResource HarmonyOSSans}"
+                                    Text="Tips:可以直接拖动一个或多个图片从当前被选择项开始填充" />
                             </StackPanel>
-                        </Button>
-                        <Button
-                            x:Name="OpenDataFileButton"
-                            Grid.Column="2"
-                            Width="95"
-                            Height="60"
-                            VerticalAlignment="Center"
-                            Click="OpenDataFileButton_Click">
-                            <StackPanel>
-                                <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE82D;" />
-                                <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="打开数据库" />
+                        </controls:Case>
+                        <controls:Case Value="File">
+                            <StackPanel
+                                x:Name="FileStackPanel"
+                                Height="80"
+                                VerticalAlignment="Top"
+                                animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
+                                animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}"
+                                Style="{StaticResource PanelStyle}">
+                                <Button
+                                    x:Name="AddFileButton"
+                                    Grid.Column="2"
+                                    Width="95"
+                                    Height="60"
+                                    VerticalAlignment="Center">
+                                    <Button.Flyout>
+                                        <Flyout>
+                                            <StackPanel>
+                                                <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="警告：此操作将清空学生列表" />
+                                                <Button
+                                                    Margin="0,5,0,0"
+                                                    HorizontalAlignment="Center"
+                                                    Click="AddFileButton_Click"
+                                                    Content="确定"
+                                                    FontFamily="{StaticResource HarmonyOSSans}"
+                                                    Style="{StaticResource AccentButtonStyle}" />
+                                            </StackPanel>
+                                        </Flyout>
+                                    </Button.Flyout>
+                                    <StackPanel>
+                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE82E;" />
+                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="新建数据库" />
+                                    </StackPanel>
+                                </Button>
+                                <Button
+                                    x:Name="OpenDataFileButton"
+                                    Grid.Column="2"
+                                    Width="95"
+                                    Height="60"
+                                    VerticalAlignment="Center"
+                                    Click="OpenDataFileButton_Click">
+                                    <StackPanel>
+                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE82D;" />
+                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="打开数据库" />
+                                    </StackPanel>
+                                </Button>
+                                <Button
+                                    x:Name="SaveDataFileButton"
+                                    Grid.Column="2"
+                                    Width="95"
+                                    Height="60"
+                                    VerticalAlignment="Center"
+                                    Click="SaveDataFileButton_Click">
+                                    <StackPanel>
+                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE792;" />
+                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="另存数据库" />
+                                    </StackPanel>
+                                </Button>
+                                <Button
+                                    x:Name="OpenLocalFolderButton"
+                                    Grid.Column="2"
+                                    Width="95"
+                                    Height="60"
+                                    VerticalAlignment="Center"
+                                    Click="OpenLocalFolderButton_Click">
+                                    <StackPanel>
+                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xEC25;" />
+                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="本地文件夹" />
+                                    </StackPanel>
+                                </Button>
                             </StackPanel>
-                        </Button>
-                        <Button
-                            x:Name="SaveDataFileButton"
-                            Grid.Column="2"
-                            Width="95"
-                            Height="60"
-                            VerticalAlignment="Center"
-                            Click="SaveDataFileButton_Click">
-                            <StackPanel>
-                                <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE792;" />
-                                <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="另存数据库" />
-                            </StackPanel>
-                        </Button>
-                        <Button
-                            x:Name="OpenLocalFolderButton"
-                            Grid.Column="2"
-                            Width="95"
-                            Height="60"
-                            VerticalAlignment="Center"
-                            Click="OpenLocalFolderButton_Click">
-                            <StackPanel>
-                                <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xEC25;" />
-                                <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="本地文件夹" />
-                            </StackPanel>
-                        </Button>
-                    </StackPanel>
+                        </controls:Case>
+                    </controls:SwitchPresenter>
+
+
+
                 </Grid>
             </Grid>
         </Grid>

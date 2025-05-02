@@ -235,14 +235,18 @@ namespace 随机抽取学号.Views
 
         private void StudentListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (StudentListView.SelectedItems.Count > 1)
+            if(MultiSelectButton.IsChecked == false)
             {
-                var lastselecteditem = StudentListView.SelectedItems.Last();
-                StudentListView.SelectionChanged -= StudentListView_SelectionChanged;
-                StudentListView.DeselectAll();
-                StudentListView.SelectionChanged += StudentListView_SelectionChanged;
-                StudentListView.SelectedItems.Add(lastselecteditem);
+                if (StudentListView.SelectedItems.Count > 1)
+                {
+                    var lastselecteditem = StudentListView.SelectedItems.Last();
+                    StudentListView.SelectionChanged -= StudentListView_SelectionChanged;
+                    StudentListView.DeselectAll();
+                    StudentListView.SelectionChanged += StudentListView_SelectionChanged;
+                    StudentListView.SelectedItems.Add(lastselecteditem);
+                }
             }
+
             if (StudentListView.SelectedItem != null)
             {
                 CurrentSelectionTextBlock.Text = "当前选择项:" + (StudentListView.SelectedIndex + 1).ToString();
@@ -410,16 +414,16 @@ namespace 随机抽取学号.Views
                 SavedStackPanel.Visibility = Visibility.Visible;
                 SavingStackPanel.Visibility = Visibility.Collapsed;
                 SaveStackPanel.Visibility = Visibility.Collapsed;
-                SaveButtonGrid.Background = new SolidColorBrush
+                SaveButton.Background = new SolidColorBrush
                 {
-                    Color = Colors.LightGreen,
+                    Color = Colors.LightGreen, 
                     Opacity = 0.5
                 };
                 await Task.Delay(5000);
                 SaveStackPanel.Visibility = Visibility.Visible;
                 SavedStackPanel.Visibility = Visibility.Collapsed;
                 SavingStackPanel.Visibility = Visibility.Collapsed;
-                SaveButtonGrid.Background = new SolidColorBrush
+                SaveButton.Background = new SolidColorBrush
                 {
                     Color = Colors.LightYellow,
                     Opacity = 0.5
@@ -671,6 +675,16 @@ namespace 随机抽取学号.Views
         {
             previousExpandedItem.ContentTemplate = (DataTemplate)Resources["CollapsedTemplate"];
             //selectedListViewItem.ContentTemplate = (DataTemplate)Resources["ExpandedTemplate"];
+        }
+
+        private void MultiSelectButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (StudentListView.SelectedItems.Count > 1)
+            {
+                var lastselecteditem = StudentListView.SelectedItems.Last();
+                StudentListView.DeselectAll();
+                StudentListView.SelectedItems.Add(lastselecteditem);
+            }
         }
     }
 
