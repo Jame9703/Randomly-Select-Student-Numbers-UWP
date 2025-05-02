@@ -1,16 +1,19 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Linq;
+using System.Numerics;
 using Windows.ApplicationModel.Core;
 using Windows.Foundation;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI;
+using Windows.UI.Composition;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
@@ -513,37 +516,6 @@ namespace 随机抽取学号
         {
             SwitchClassContentDialog switchClassContentDialog = new SwitchClassContentDialog();
             await switchClassContentDialog.ShowAsync();
-        }
-
-        private void ContentFrame_Navigating(object sender, NavigatingCancelEventArgs e)
-        {
-            var oldPage = ContentFrame.Content as Page;
-
-            //childrenOutStoryboard.Begin();
-            if(oldPage != null)
-            {
-                var exitAnimation = (Storyboard)this.Resources["PageExitStoryboard"];
-                CompositeTransform compositeTransform = new CompositeTransform();
-                oldPage.RenderTransform = compositeTransform;
-                PageEnterStoryboard.Stop();
-                PageExitStoryboard.Stop();
-                Storyboard.SetTargetName(PageEnterAnimation, "compositeTransform");
-                exitAnimation.Begin();
-            }
-        }
-
-        private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
-        {
-            var newPage = ContentFrame.Content as Page;
-            var enterAnimation = (Storyboard)this.Resources["PageEnterStoryboard"];
-
-            CompositeTransform compositeTransform = new CompositeTransform();
-            newPage.RenderTransform = compositeTransform;
-            PageEnterStoryboard.Stop();
-            PageExitStoryboard.Stop();
-            //Storyboard.SetTarget(PageEnterAnimation, compositeTransform);
-            Storyboard.SetTargetName(PageExitAnimation, "compositeTransform");
-            enterAnimation.Begin();
         }
     }
 }

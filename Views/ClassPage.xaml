@@ -61,7 +61,7 @@
                         MinWidth="50"
                         Margin="10,0,0,0"
                         VerticalAlignment="Center"
-                        BorderBrush="LightBlue"
+                        BorderBrush="{ThemeResource SystemAccentColor}"
                         BorderThickness="2"
                         CornerRadius="4"
                         Orientation="Vertical">
@@ -1079,7 +1079,7 @@
                     ItemTemplate="{StaticResource StudentListTemplate}"
                     ItemsSource="{x:Bind classes:StudentManager.StudentList}"
                     SelectionChanged="StudentListView_SelectionChanged"
-                    SelectionMode="Single">
+                    SelectionMode="Multiple">
                     <!--<ListView.ItemContainerStyle>
                         <Style TargetType="ListViewItem">
                             <Setter Property="Template">

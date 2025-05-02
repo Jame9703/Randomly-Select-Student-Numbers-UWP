@@ -1,4 +1,5 @@
-﻿using Microsoft.Data.Sqlite;
+﻿using CommunityToolkit.WinUI;
+using Microsoft.Data.Sqlite;
 using Microsoft.UI.Xaml.Controls;
 using System;
 using System.Collections.Generic;
@@ -29,6 +30,7 @@ namespace 随机抽取学号.Views
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         StorageFolder localFolder = ApplicationData.Current.LocalFolder;
         private ListViewItem previousExpandedItem;
+
 
         public ClassPage()
         {
@@ -233,49 +235,22 @@ namespace 随机抽取学号.Views
 
         private void StudentListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //if (StudentListView.SelectedItem != null)
-            //{
-            //    CurrentSelectionTextBlock.Text = "当前选择项:"+(StudentListView.SelectedIndex+1).ToString();
-            //}
-            //else
-            //{
-            //    CurrentSelectionTextBlock.Text = "当前选择项:无";
-            //}
-            //// 还原前一项
-            ////if (previousExpandedItem != null)
-            ////{
-
-
-            ////}
-            //CollapseStudentListViewItemStorybord.Stop();
-            //ExpandStudentListViewItemStorybord.Stop();
-            //// 获取当前选中项
-            //var selectedItem = StudentListView.SelectedItem;
-            //if (selectedItem != null)
-            //{
-            //    // 获取当前选中项的 ListViewItem
-            //    var selectedListViewItem = (ListViewItem)StudentListView.ContainerFromItem(selectedItem);
-            //    if (selectedListViewItem != null)
-            //    {
-            //        if(previousExpandedItem != null)
-            //        {
-            //            //将前一项折叠，将当前项展开
-            //            //Storyboard.SetTarget(CollapseStudentListViewItemStorybord, previousExpandedItem);
-            //            //Storyboard.SetTarget(ExpandStudentListViewItemStorybord, selectedListViewItem);
-            //            //CollapseStudentListViewItemStorybord.Begin();
-            //            //ExpandStudentListViewItemStorybord.Begin();
-            //            previousExpandedItem.ContentTemplate = (DataTemplate)Resources["CollapsedTemplate"];
-            //            selectedListViewItem.ContentTemplate = (DataTemplate)Resources["ExpandedTemplate"];
-            //        }
-            //        else
-            //        {
-            //            //Storyboard.SetTarget(ExpandStudentListViewItemStorybord, selectedListViewItem);
-            //            //ExpandStudentListViewItemStorybord.Begin();
-            //            selectedListViewItem.ContentTemplate = (DataTemplate)Resources["ExpandedTemplate"];
-            //        }
-            //        previousExpandedItem = selectedListViewItem;
-            //    }
-            //}
+            if (StudentListView.SelectedItems.Count > 1)
+            {
+                var lastselecteditem = StudentListView.SelectedItems.Last();
+                StudentListView.SelectionChanged -= StudentListView_SelectionChanged;
+                StudentListView.DeselectAll();
+                StudentListView.SelectionChanged += StudentListView_SelectionChanged;
+                StudentListView.SelectedItems.Add(lastselecteditem);
+            }
+            if (StudentListView.SelectedItem != null)
+            {
+                CurrentSelectionTextBlock.Text = "当前选择项:" + (StudentListView.SelectedIndex + 1).ToString();
+            }
+            else
+            {
+                CurrentSelectionTextBlock.Text = "当前选择项:无";
+            }
         }
 
         private async void StudentListView_Drop(object sender, DragEventArgs e)

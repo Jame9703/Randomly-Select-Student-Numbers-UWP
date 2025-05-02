@@ -137,43 +137,6 @@
                     <TextBox  PlaceholderText="搜索" FontFamily="{StaticResource HarmonyOSSans}" />
                 </Grid>
             </ControlTemplate>-->
-            <!--#region 子框架进入动画-->
-            <Storyboard x:Name="PageEnterStoryboard" x:FieldModifier="public">
-                <DoubleAnimation
-                    x:Name="PageEnterAnimation"
-                    Storyboard.TargetProperty="TranslateY"
-                    To="0"
-                    Duration="0:0:0.1">
-                    <DoubleAnimation.EasingFunction>
-                        <QuarticEase EasingMode="EaseIn" />
-                    </DoubleAnimation.EasingFunction>
-                </DoubleAnimation>
-                <DoubleAnimation
-                    Storyboard.TargetName="ContentFrame"
-                    Storyboard.TargetProperty="Opacity"
-                    Duration="0:0:0.5"
-                    From="0"
-                    To="1" />
-            </Storyboard>
-            <!--#endregion-->
-            <!--#region 子框架退出动画-->
-            <Storyboard x:Name="PageExitStoryboard" x:FieldModifier="public">
-                <DoubleAnimation
-                    x:Name="PageExitAnimation"
-                    Storyboard.TargetProperty="TranslateY"
-                    From="0"
-                    Duration="0:0:0.5">
-                    <DoubleAnimation.EasingFunction>
-                        <QuarticEase EasingMode="EaseInOut" />
-                    </DoubleAnimation.EasingFunction>
-                </DoubleAnimation>
-                <!--<DoubleAnimation
-                    Storyboard.TargetName="ContentFrame"
-                    Storyboard.TargetProperty="Opacity"
-                    From="1"
-                    To="0" />-->
-            </Storyboard>
-            <!--#endregion-->
         </ResourceDictionary>
 
     </Page.Resources>
@@ -363,10 +326,7 @@
                 BorderBrush="Transparent"
                 BorderThickness="0"
                 CornerRadius="8,0,0,0"
-                Navigating="ContentFrame_Navigating"
-                Navigated="ContentFrame_Navigated"
-                NavigationFailed="ContentFrame_NavigationFailed">
-            </Frame>
+                NavigationFailed="ContentFrame_NavigationFailed" />
             <!--<ScrollViewer
            Margin="0,45,0,0"
            HorizontalAlignment="Right"
