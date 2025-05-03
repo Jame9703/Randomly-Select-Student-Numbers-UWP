@@ -2,10 +2,10 @@
 using System.Collections.Generic;
 using System.Collections.ObjectModel;
 using System.Linq;
+using System.Text;
 using System.Threading.Tasks;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Navigation;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
@@ -27,6 +27,7 @@ namespace 随机抽取学号.Views
             isGridViewUpdated = false;
             isListUpdated = false;
             isTextBoxUpdated = false;
+            segmented.SelectionChanged += segmented_SelectionChanged;
         }
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
@@ -40,7 +41,7 @@ namespace 随机抽取学号.Views
         {
             RangeFromNumberBox.Text = "";
             SelectCountNumberBox.Text = "";
-            ResultTextBox.Text = "";
+            ResultTextBlock.Text = "";
             RangeToNumberBox.Text = "";
         }
         private async void StartButton_Click(object sender, RoutedEventArgs e)
@@ -85,10 +86,8 @@ namespace 随机抽取学号.Views
                         // 清除旧的网格内容
                         //RandomNumbersGridView.Items.Clear();
                         //按需清除文本内容
-                        if (CheckBox.IsChecked != true)
-                        {
-                            ResultTextBox.Text = "";
-                        }
+
+                        ResultTextBlock.Text = "";
                         if (segmented.SelectedIndex == 0)
                         {
                             if (isGridViewUpdated == false)
@@ -131,7 +130,7 @@ namespace 随机抽取学号.Views
 
         private void ClearResult_Click(object sender, RoutedEventArgs e)
         {
-            ResultTextBox.Text = "";
+            ResultTextBlock.Text = "";
             RandomNumbersGridView.ItemsSource = null;
             RandomNumbersListView.ItemsSource = null;
         }
@@ -141,7 +140,7 @@ namespace 随机抽取学号.Views
             Slider slider = sender as Slider;
             if (slider != null)
             {
-                ResultTextBox.FontSize = slider.Value;
+                ResultTextBlock.FontSize = slider.Value;
             }
         }
 
@@ -199,24 +198,48 @@ namespace 随机抽取学号.Views
 
         private void ShowRandomNumbersInTextBox()
         {
-            foreach (int result in RandomNumbersList)
+            StringBuilder sb = new StringBuilder();
+            //文本
+            RandomNumbersGridView.Visibility = Visibility.Collapsed;
+            RandomNumbersListView.Visibility = Visibility.Collapsed;
+            RandomNumbersTextBoxGrid.Visibility = Visibility.Visible;
+            switch (SpanModeComboBox.SelectedIndex)
             {
-                //文本
-                RandomNumbersGridView.Visibility = Visibility.Collapsed;
-                RandomNumbersListView.Visibility = Visibility.Collapsed;
-                RandomNumbersTextBoxGrid.Visibility = Visibility.Visible;
-                if (ComboBox2.SelectedItem.ToString() == "-- --")
-                {
-                    ResultTextBox.Text += "--" + result.ToString() + "--";
-                }
-                else if (ComboBox2.SelectedItem.ToString() == "“ ”")
-                {
-                    ResultTextBox.Text += "“" + result.ToString() + "”";
-                }
-                else if (ComboBox2.SelectedItem.ToString() == "‘ ’")
-                {
-                    ResultTextBox.Text += "‘" + result.ToString() + "’";
-                }
+                case 0:
+                    foreach (int result in RandomNumbersList)
+                    {
+                        sb.Append("--" + result.ToString() + "--");
+                    }
+                    ResultTextBlock.Text = sb.ToString();
+                    break;
+                case 1:
+                    foreach (int result in RandomNumbersList)
+                    {
+                        sb.Append("“" + result.ToString() + "”");
+                    }
+                    ResultTextBlock.Text = sb.ToString();
+                    break;
+                case 2:
+                    foreach (int result in RandomNumbersList)
+                    {
+                        sb.Append("‘" + result.ToString() + "’");
+                    }
+                    ResultTextBlock.Text = sb.ToString();
+                    break;
+                case 3:
+                    foreach (int result in RandomNumbersList)
+                    {
+                        sb.Append(result.ToString() + " ");
+                    }
+                    ResultTextBlock.Text = sb.ToString();
+                    break;
+                case 4:
+                    foreach (int result in RandomNumbersList)
+                    {
+                        sb.Append(result.ToString() + "\n");
+                    }
+                    ResultTextBlock.Text = sb.ToString();
+                    break;
             }
         }
     }
