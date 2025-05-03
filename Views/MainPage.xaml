@@ -587,7 +587,7 @@
                 x:Name="MovingRectangle"
                 Width="6"
                 Height="30"
-                Margin="0,60,0,0"
+                Margin="0,55,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Fill="{ThemeResource ToggleButtonBackgroundChecked}"

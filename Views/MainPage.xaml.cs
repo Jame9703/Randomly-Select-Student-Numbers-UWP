@@ -34,7 +34,10 @@ namespace 随机抽取学号
         private ToggleButton _lastSelectedButton;
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         public static StackPanel PopupContainerInstance;
-
+        private Compositor _compositor;
+        private Visual _oldPageVisual;
+        private Visual _newPageVisual;
+        private bool isFirstNavigate = true;
         public MainPage()
         {
             this.InitializeComponent();
@@ -134,11 +137,11 @@ namespace 随机抽取学号
                     view.TitleBar.ButtonForegroundColor = Colors.White;
                 }
                 (Window.Current.Content as Frame).RequestedTheme = (int)localSettings.Values["Theme"] switch
-{
-    0 => ElementTheme.Light,
-    1 => ElementTheme.Dark,
-    _ => ElementTheme.Default
-};
+                {
+                    0 => ElementTheme.Light,
+                    1 => ElementTheme.Dark,
+                    _ => ElementTheme.Default
+                };
                 if (localSettings.Values.ContainsKey("MainPageBackground") && localSettings.Values.ContainsKey("MainPageBackgroundOpacity"))
                 {
                     if ((int)localSettings.Values["MainPageBackground"] == 0)
@@ -497,49 +500,70 @@ namespace 随机抽取学号
             SwitchClassContentDialog switchClassContentDialog = new SwitchClassContentDialog();
             await switchClassContentDialog.ShowAsync();
         }
-        private Compositor _compositor;
-        private Visual _oldPageVisual;
-        private Visual _newPageVisual;
+
         private void ContentFrame_Navigating(object sender, NavigatingCancelEventArgs e)
         {
             if (ContentFrame.Content != null)
             {
-                _compositor = ElementCompositionPreview.GetElementVisual(ContentFrame).Compositor;
+                //_compositor = ElementCompositionPreview.GetElementVisual(ContentFrame).Compositor;
                 _oldPageVisual = ElementCompositionPreview.GetElementVisual(ContentFrame.Content as Page);
 
                 // 旧页面的透明度动画
                 ScalarKeyFrameAnimation oldPageOpacityAnimation = _compositor.CreateScalarKeyFrameAnimation();
-                oldPageOpacityAnimation.Duration = TimeSpan.FromSeconds(3);
+                oldPageOpacityAnimation.Duration = TimeSpan.FromSeconds(0.2);
                 oldPageOpacityAnimation.InsertKeyFrame(1f, 0f);
                 _oldPageVisual.StartAnimation("Opacity", oldPageOpacityAnimation);
 
                 // 旧页面的位移动画
                 Vector3KeyFrameAnimation oldPageOffsetAnimation = _compositor.CreateVector3KeyFrameAnimation();
-                oldPageOffsetAnimation.Duration = TimeSpan.FromSeconds(3);
-                // 修改为竖向移动，将 Y 轴偏移 -100
+                oldPageOffsetAnimation.Duration = TimeSpan.FromSeconds(0.5);
+                oldPageOffsetAnimation.InsertKeyFrame(0f, new System.Numerics.Vector3(0, 0, 0));
                 oldPageOffsetAnimation.InsertKeyFrame(1f, new System.Numerics.Vector3(0, -100, 0));
                 _oldPageVisual.StartAnimation("Offset", oldPageOffsetAnimation);
+                isFirstNavigate = false;
+            }
+            else
+            {
+                isFirstNavigate = true;
             }
         }
 
         private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
         {
-            _compositor = ElementCompositionPreview.GetElementVisual(ContentFrame).Compositor;
-            if (e.Content != null)
+            if (e.Content != null && isFirstNavigate == false)
             {
                 _newPageVisual = ElementCompositionPreview.GetElementVisual((UIElement)e.Content);
                 _newPageVisual.Opacity = 0f;
-                _newPageVisual.Offset = new System.Numerics.Vector3(100, 0, 0);
+                _newPageVisual.Offset = new System.Numerics.Vector3(0, 100, 0);
 
                 // 新页面的透明度动画
                 ScalarKeyFrameAnimation newPageOpacityAnimation = _compositor.CreateScalarKeyFrameAnimation();
-                newPageOpacityAnimation.Duration = TimeSpan.FromSeconds(3);
+                newPageOpacityAnimation.Duration = TimeSpan.FromSeconds(1.5);
                 newPageOpacityAnimation.InsertKeyFrame(1f, 1f);
                 _newPageVisual.StartAnimation("Opacity", newPageOpacityAnimation);
 
                 // 新页面的位移动画
                 Vector3KeyFrameAnimation newPageOffsetAnimation = _compositor.CreateVector3KeyFrameAnimation();
-                newPageOffsetAnimation.Duration = TimeSpan.FromSeconds(3);
+                newPageOffsetAnimation.Duration = TimeSpan.FromSeconds(0.8);
+                newPageOffsetAnimation.InsertKeyFrame(1f, new System.Numerics.Vector3(0, 0, 0));
+                _newPageVisual.StartAnimation("Offset", newPageOffsetAnimation);
+            }
+            else
+            {
+                _compositor = ElementCompositionPreview.GetElementVisual(ContentFrame).Compositor;
+                _newPageVisual = ElementCompositionPreview.GetElementVisual((UIElement)e.Content);
+                _newPageVisual.Opacity = 0f;
+                _newPageVisual.Offset = new System.Numerics.Vector3(0, 500, 0);
+
+                // 新页面的透明度动画
+                ScalarKeyFrameAnimation newPageOpacityAnimation = _compositor.CreateScalarKeyFrameAnimation();
+                newPageOpacityAnimation.Duration = TimeSpan.FromSeconds(2);
+                newPageOpacityAnimation.InsertKeyFrame(1f, 1f);
+                _newPageVisual.StartAnimation("Opacity", newPageOpacityAnimation);
+
+                // 新页面的位移动画
+                Vector3KeyFrameAnimation newPageOffsetAnimation = _compositor.CreateVector3KeyFrameAnimation();
+                newPageOffsetAnimation.Duration = TimeSpan.FromSeconds(1.2);
                 newPageOffsetAnimation.InsertKeyFrame(1f, new System.Numerics.Vector3(0, 0, 0));
                 _newPageVisual.StartAnimation("Offset", newPageOffsetAnimation);
             }

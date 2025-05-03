@@ -7,7 +7,6 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI;
-using Windows.UI.Composition;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
@@ -69,31 +68,11 @@ namespace 随机抽取学号.Views
         protected override void OnNavigatedFrom(NavigationEventArgs e)
         {
             timer.Stop();
-            var compositor = ElementCompositionPreview.GetElementVisual(ContentGrid).Compositor;
-            var animation = compositor.CreateScalarKeyFrameAnimation();
-            animation.InsertKeyFrame(0f, 1f);
-            animation.InsertKeyFrame(1f, 0f);
-            animation.Duration = TimeSpan.FromSeconds(1.5);
-            var visual = ElementCompositionPreview.GetElementVisual(ContentGrid);
-            visual.StartAnimation("Opacity", animation);
             GC.Collect();
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
             base.OnNavigatedTo(e);
-            var compositor = ElementCompositionPreview.GetElementVisual(ContentGrid).Compositor;
-            var opacityAnimation = compositor.CreateScalarKeyFrameAnimation();
-            opacityAnimation.InsertKeyFrame(0f, 0f);
-            opacityAnimation.InsertKeyFrame(1f, 1f);
-            opacityAnimation.Duration = TimeSpan.FromSeconds(1.5);
-            // 创建位移动画
-            //Vector3KeyFrameAnimation offsetAnimation = compositor.CreateVector3KeyFrameAnimation();
-            //offsetAnimation.Duration = TimeSpan.FromSeconds(2);
-            //offsetAnimation.InsertKeyFrame(1f, new System.Numerics.Vector3(0, -100, 0));
-            //offsetAnimation.Target = "Offset";
-            var visual = ElementCompositionPreview.GetElementVisual(ContentGrid);
-            visual.StartAnimation("Opacity", opacityAnimation );
-            //visual.StartAnimation("Offset", offsetAnimation);
         }
         private void UpdateCheckedStudentsCount()
         {

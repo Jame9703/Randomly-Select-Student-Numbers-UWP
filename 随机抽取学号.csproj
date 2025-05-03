@@ -129,7 +129,6 @@
     <Compile Include="App.xaml.cs">
       <DependentUpon>App.xaml</DependentUpon>
     </Compile>
-    <Compile Include="Classes\PageNavigationTransitionInfo.cs" />
     <Compile Include="Classes\RippleControl.cs" />
     <Compile Include="Classes\RippleHelper.cs" />
     <Compile Include="Classes\Student.cs" />
