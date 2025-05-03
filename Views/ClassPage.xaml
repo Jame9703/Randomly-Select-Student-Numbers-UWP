@@ -65,9 +65,6 @@
                         BorderThickness="2"
                         CornerRadius="4"
                         Orientation="Vertical">
-                        <StackPanel.Background>
-                            <SolidColorBrush Opacity="0.1" Color="LightBlue" />
-                        </StackPanel.Background>
                         <TextBlock
                             HorizontalAlignment="Center"
                             FontFamily="{StaticResource HarmonyOSSans}"
@@ -84,7 +81,7 @@
                     <Border
                         Grid.Column="1"
                         Height="100"
-                        Margin="40,0,0,0"
+                        Margin="20,0,0,0"
                         Background="Transparent"
                         CornerRadius="4">
                         <Image
@@ -96,13 +93,31 @@
                     </Border>
                     <StackPanel
                         Grid.Column="2"
-                        Margin="12,0,0,0"
+                        Margin="20,0,0,0"
+                        VerticalAlignment="Center"
                         Orientation="Vertical">
-
                         <StackPanel
-                            Margin="0,22,0,0"
                             VerticalAlignment="Center"
-                            Orientation="Vertical">
+                            Orientation="Horizontal"
+                            Spacing="10">
+                            <TextBlock
+                                Margin="0,5,0,0"
+                                VerticalAlignment="Center"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                FontSize="16"
+                                Text="性别:" />
+                            <muxc:RadioButtons
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                MaxColumns="2"
+                                SelectedIndex="{x:Bind Gender, Mode=TwoWay}">
+                                <RadioButton Content="女" FontFamily="{StaticResource HarmonyOSSans}" />
+                                <RadioButton Content="男" FontFamily="{StaticResource HarmonyOSSans}" />
+                            </muxc:RadioButtons>
+                        </StackPanel>
+                        <StackPanel
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="10">
                             <TextBlock
                                 VerticalAlignment="Center"
                                 FontFamily="{StaticResource HarmonyOSSans}"
@@ -115,7 +130,7 @@
                                 HorizontalAlignment="Left"
                                 VerticalAlignment="Center"
                                 FontFamily="{StaticResource HarmonyOSSans}"
-                                FontSize="24"
+                                FontSize="20"
                                 Text="{x:Bind Name, Mode=TwoWay}" />
                         </StackPanel>
                     </StackPanel>

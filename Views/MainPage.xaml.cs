@@ -44,8 +44,6 @@ namespace 随机抽取学号
         }
         private async void Page_Loaded(object sender, RoutedEventArgs e)
         {
-            //LoadBackground();
-            //PopupContainerInstance = PopupContainer;
             // 隐藏系统标题栏并设置新的标题栏
             var coreTitleBar = CoreApplication.GetCurrentView().TitleBar;
             coreTitleBar.ExtendViewIntoTitleBar = true;

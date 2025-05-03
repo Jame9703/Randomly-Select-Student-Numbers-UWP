@@ -27,7 +27,7 @@
                     x:Name="doubleAnimation"
                     Storyboard.TargetName="MovingRectangle"
                     Storyboard.TargetProperty="(UIElement.RenderTransform).(CompositeTransform.TranslateY)"
-                    Duration="0:0:0.2" />
+                    Duration="0:0:0.16" />
             </Storyboard>
             <Style x:Key="BaseTextBlockStyle" TargetType="TextBlock">
                 <Setter Property="FontFamily" Value="XamlAutoFontFamily" />
@@ -576,7 +576,11 @@
                         x:Name="SettingsIcon"
                         FontFamily="{StaticResource SegoeFluentIcons}"
                         FontSize=" 24"
-                        Glyph="&#xE713;" />
+                        Glyph="&#xE713;">
+                        <!--<FontIcon.RenderTransform>
+                            <
+                        </FontIcon.RenderTransform>-->
+                    </FontIcon>
                     <TextBlock
                         FontFamily="{StaticResource HarmonyOSSans}"
                         FontSize="12"

@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI;
+using Windows.UI.Composition;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
@@ -238,9 +239,7 @@ namespace 随机抽取学号.Views
             {
                 if (isOnlyThisRangeCheckBox.IsChecked == true)
                 {
-                    //CheckBoxListView.DeselectAll();
-                    CheckBoxListView.SelectionMode = ListViewSelectionMode.Single;
-                    CheckBoxListView.SelectionMode = ListViewSelectionMode.Multiple;
+                    CheckBoxListView.DeselectAll();
                 }
                 if (int.TryParse(BeginNumberBox.Text, out int beginnum) == true && int.TryParse(EndNumberBox.Text, out int endnum) == true)
                 {
@@ -367,16 +366,39 @@ namespace 随机抽取学号.Views
             RangeListView.ItemsSource = selectedranges_string;
         }
 
-        private void FoldSplitViewButton_Click(object sender, RoutedEventArgs e)
+        private  void FoldButton_Click(object sender, RoutedEventArgs e)
         {
-            CheckBoxSplitView.IsPaneOpen = false;
+            FoldButton.Visibility = Visibility.Collapsed;
+            ExpandButton.Visibility = Visibility.Visible;
             CheckBoxSplitViewGridSplitter.Visibility = Visibility.Collapsed;
+            CheckBoxGrid.Visibility = Visibility.Collapsed;
+            ContentGrid.ColumnDefinitions.Clear();
         }
 
-        private void ExpandSplitViewButton_Click(object sender, RoutedEventArgs e)
+        private void ExpandButton_Click(object sender, RoutedEventArgs e)
         {
-            CheckBoxSplitView.IsPaneOpen = true;
+            var _compositor = ElementCompositionPreview.GetElementVisual(CheckBoxGrid).Compositor;
+            var _splitViewVisual = ElementCompositionPreview.GetElementVisual(CheckBoxGridContent);
+            // 展开透明度动画
+            ScalarKeyFrameAnimation splitViewOpacityAnimation = _compositor.CreateScalarKeyFrameAnimation();
+            splitViewOpacityAnimation.Duration = TimeSpan.FromSeconds(0.5);
+            splitViewOpacityAnimation.InsertKeyFrame(0f, 0f);
+            splitViewOpacityAnimation.InsertKeyFrame(1f, 1f);
+            _splitViewVisual.StartAnimation("Opacity", splitViewOpacityAnimation);
+
+            // 展开位移动画
+            Vector3KeyFrameAnimation splitViewOffsetAnimation = _compositor.CreateVector3KeyFrameAnimation();
+            splitViewOffsetAnimation.Duration = TimeSpan.FromSeconds(0.5);
+            splitViewOffsetAnimation.InsertKeyFrame(0f, new System.Numerics.Vector3((float)CheckBoxGrid.ActualWidth, 0, 0));
+            splitViewOffsetAnimation.InsertKeyFrame(1f, new System.Numerics.Vector3(0, 0, 0));
+            _splitViewVisual.StartAnimation("Offset", splitViewOffsetAnimation);
+            FoldButton.Visibility = Visibility.Visible;
+            ExpandButton.Visibility = Visibility.Collapsed;
             CheckBoxSplitViewGridSplitter.Visibility = Visibility.Visible;
+            CheckBoxGrid.Visibility = Visibility.Visible;
+            ContentGrid.ColumnDefinitions.Insert(0, new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star), MinWidth = 300 });
+            ContentGrid.ColumnDefinitions.Insert(1, new ColumnDefinition() { Width = new GridLength(12) });
+            ContentGrid.ColumnDefinitions.Insert(2, new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto), MinWidth = 150, MaxWidth = 500 });
         }
 
         private void SelectFlyout_Opened(object sender, object e)
