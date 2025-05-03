@@ -58,7 +58,7 @@ namespace 随机抽取学号.Views
             var animation = compositor.CreateScalarKeyFrameAnimation();
             animation.InsertKeyFrame(0f, 0f);
             animation.InsertKeyFrame(1f, 1f);
-            animation.Duration = TimeSpan.FromSeconds(1);
+            animation.Duration = TimeSpan.FromSeconds(1.5);
             var visual = ElementCompositionPreview.GetElementVisual(ContentGrid);
             visual.StartAnimation("Opacity", animation);
         }
@@ -69,7 +69,7 @@ namespace 随机抽取学号.Views
             var animation = compositor.CreateScalarKeyFrameAnimation();
             animation.InsertKeyFrame(0f, 1f);
             animation.InsertKeyFrame(1f, 0f);
-            animation.Duration = TimeSpan.FromSeconds(1);
+            animation.Duration = TimeSpan.FromSeconds(1.5);
             var visual = ElementCompositionPreview.GetElementVisual(ContentGrid);
             visual.StartAnimation("Opacity", animation);
             GC.Collect();
@@ -235,7 +235,7 @@ namespace 随机抽取学号.Views
 
         private void StudentListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if(MultiSelectButton.IsChecked == false)
+            if (MultiSelectButton.IsChecked == false)
             {
                 if (StudentListView.SelectedItems.Count > 1)
                 {
@@ -340,29 +340,43 @@ namespace 随机抽取学号.Views
         {
             if (StudentListView.SelectedItem != null)
             {
-                var selectedIndex = StudentListView.SelectedIndex;
-                var selectedItem = StudentListView.SelectedItem as Student;
-                StudentManager.StudentList.Remove(selectedItem);
-                //if (StudentManager.ch.Contains(selectedItem.Name))
-                //{
-                //    StudentManager.checkedCheckBoxes.Remove(selectedItem.Name);
-                //    await StudentManager.SaveCheckedStudentsAsync(StudentManager.checkedCheckBoxes);
-                //}
-                try
+                if (MultiSelectButton.IsChecked == false)//单选模式
                 {
-                    StorageFile file = await StorageFile.GetFileFromPathAsync(selectedItem.PhotoPath);//一并删除存入LocalFolder的照片
-                    await file.DeleteAsync(StorageDeleteOption.Default);
+                    var selectedIndex = StudentListView.SelectedIndex;
+                    var selectedItem = StudentListView.SelectedItem as Student;
+                    StudentManager.StudentList.Remove(selectedItem);
+                    try
+                    {
+                        StorageFile file = await StorageFile.GetFileFromPathAsync(selectedItem.PhotoPath);//一并删除存入LocalFolder的照片
+                        await file.DeleteAsync(StorageDeleteOption.Default);
+                    }
+                    catch (Exception)
+                    {
+                        //使用的是默认照片,无需删除
+                    }
+                    if (selectedIndex < StudentListView.Items.Count)
+                    {
+                        StudentListView.SelectedItem = StudentListView.Items[selectedIndex];//默认选择被删除项的下一项
+                    }
                 }
-                catch (Exception)
+                else//多选模式
                 {
-                    //使用的是默认照片
+                    var items = StudentListView.SelectedItems.ToList();
+                    foreach (var item in items)
+                    {
+                        StudentManager.StudentList.Remove(item as Student);
+                        try
+                        {
+                            StorageFile file = await StorageFile.GetFileFromPathAsync((item as Student).PhotoPath);//一并删除存入LocalFolder的照片
+                            await file.DeleteAsync(StorageDeleteOption.Default);
+                        }
+                        catch (Exception)
+                        {
+                            //使用的是默认照片,无需删除
+                        }
+                    }
                 }
-
                 UpdateStudentId();
-                if (selectedIndex < StudentListView.Items.Count)
-                {
-                    StudentListView.SelectedItem = StudentListView.Items[selectedIndex];//默认选择被删除项的下一项
-                }
 
             }
             else
@@ -416,7 +430,7 @@ namespace 随机抽取学号.Views
                 SaveStackPanel.Visibility = Visibility.Collapsed;
                 SaveButton.Background = new SolidColorBrush
                 {
-                    Color = Colors.LightGreen, 
+                    Color = Colors.LightGreen,
                     Opacity = 0.5
                 };
                 await Task.Delay(5000);

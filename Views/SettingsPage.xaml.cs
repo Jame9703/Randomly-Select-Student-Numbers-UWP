@@ -63,7 +63,7 @@ namespace 随机抽取学号.Views
             var animation = compositor.CreateScalarKeyFrameAnimation();
             animation.InsertKeyFrame(0f, 0f);
             animation.InsertKeyFrame(1f, 1f);
-            animation.Duration = TimeSpan.FromSeconds(1);
+            animation.Duration = TimeSpan.FromSeconds(1.5);
             var visual = ElementCompositionPreview.GetElementVisual(ContentGrid);
             visual.StartAnimation("Opacity", animation);
         }
@@ -73,7 +73,7 @@ namespace 随机抽取学号.Views
             var animation = compositor.CreateScalarKeyFrameAnimation();
             animation.InsertKeyFrame(0f, 1f);
             animation.InsertKeyFrame(1f, 0f);
-            animation.Duration = TimeSpan.FromSeconds(1);
+            animation.Duration = TimeSpan.FromSeconds(1.5);
             var visual = ElementCompositionPreview.GetElementVisual(ContentGrid);
             visual.StartAnimation("Opacity", animation);
             GC.Collect();

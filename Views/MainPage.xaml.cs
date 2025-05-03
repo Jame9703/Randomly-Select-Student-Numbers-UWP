@@ -7,10 +7,12 @@ using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.Storage.Streams;
 using Windows.UI;
+using Windows.UI.Composition;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
+using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
@@ -91,27 +93,7 @@ namespace 随机抽取学号
             ContentGrid.Visibility = Visibility.Visible;
             LoadProgressRing.Visibility = Visibility.Collapsed;
         }
-        // 用于存储背景笔刷的公共属性
-        public Brush MainPageBackground
-        {
-            get { return (Brush)GetValue(MainPageBackgroundProperty); }
-            set { SetValue(MainPageBackgroundProperty, value); }
-        }
 
-        // 注册依赖属性
-        public static readonly DependencyProperty MainPageBackgroundProperty =
-            DependencyProperty.Register("MainPageBackground", typeof(Brush), typeof(MainPage), new PropertyMetadata(null, OnMainPageBackgroundChanged));
-
-        // 依赖属性更改时的回调方法
-        private static void OnMainPageBackgroundChanged(DependencyObject d, DependencyPropertyChangedEventArgs e)
-        {
-            var mainPage = d as MainPage;
-            if (mainPage != null)
-            {
-                // 当属性值更改时，更新MainPage的背景
-                mainPage.Background = e.NewValue as Brush;
-            }
-        }
         private async void FirstRun()
         {
             //设置默认应用主题
@@ -151,7 +133,7 @@ namespace 随机抽取学号
                 {
                     view.TitleBar.ButtonForegroundColor = Colors.White;
                 }
-(Window.Current.Content as Frame).RequestedTheme = (int)localSettings.Values["Theme"] switch
+                (Window.Current.Content as Frame).RequestedTheme = (int)localSettings.Values["Theme"] switch
 {
     0 => ElementTheme.Light,
     1 => ElementTheme.Dark,
@@ -514,6 +496,53 @@ namespace 随机抽取学号
         {
             SwitchClassContentDialog switchClassContentDialog = new SwitchClassContentDialog();
             await switchClassContentDialog.ShowAsync();
+        }
+        private Compositor _compositor;
+        private Visual _oldPageVisual;
+        private Visual _newPageVisual;
+        private void ContentFrame_Navigating(object sender, NavigatingCancelEventArgs e)
+        {
+            if (ContentFrame.Content != null)
+            {
+                _compositor = ElementCompositionPreview.GetElementVisual(ContentFrame).Compositor;
+                _oldPageVisual = ElementCompositionPreview.GetElementVisual(ContentFrame.Content as Page);
+
+                // 旧页面的透明度动画
+                ScalarKeyFrameAnimation oldPageOpacityAnimation = _compositor.CreateScalarKeyFrameAnimation();
+                oldPageOpacityAnimation.Duration = TimeSpan.FromSeconds(3);
+                oldPageOpacityAnimation.InsertKeyFrame(1f, 0f);
+                _oldPageVisual.StartAnimation("Opacity", oldPageOpacityAnimation);
+
+                // 旧页面的位移动画
+                Vector3KeyFrameAnimation oldPageOffsetAnimation = _compositor.CreateVector3KeyFrameAnimation();
+                oldPageOffsetAnimation.Duration = TimeSpan.FromSeconds(3);
+                // 修改为竖向移动，将 Y 轴偏移 -100
+                oldPageOffsetAnimation.InsertKeyFrame(1f, new System.Numerics.Vector3(0, -100, 0));
+                _oldPageVisual.StartAnimation("Offset", oldPageOffsetAnimation);
+            }
+        }
+
+        private void ContentFrame_Navigated(object sender, NavigationEventArgs e)
+        {
+            _compositor = ElementCompositionPreview.GetElementVisual(ContentFrame).Compositor;
+            if (e.Content != null)
+            {
+                _newPageVisual = ElementCompositionPreview.GetElementVisual((UIElement)e.Content);
+                _newPageVisual.Opacity = 0f;
+                _newPageVisual.Offset = new System.Numerics.Vector3(100, 0, 0);
+
+                // 新页面的透明度动画
+                ScalarKeyFrameAnimation newPageOpacityAnimation = _compositor.CreateScalarKeyFrameAnimation();
+                newPageOpacityAnimation.Duration = TimeSpan.FromSeconds(3);
+                newPageOpacityAnimation.InsertKeyFrame(1f, 1f);
+                _newPageVisual.StartAnimation("Opacity", newPageOpacityAnimation);
+
+                // 新页面的位移动画
+                Vector3KeyFrameAnimation newPageOffsetAnimation = _compositor.CreateVector3KeyFrameAnimation();
+                newPageOffsetAnimation.Duration = TimeSpan.FromSeconds(3);
+                newPageOffsetAnimation.InsertKeyFrame(1f, new System.Numerics.Vector3(0, 0, 0));
+                _newPageVisual.StartAnimation("Offset", newPageOffsetAnimation);
+            }
         }
     }
 }

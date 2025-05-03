@@ -199,7 +199,7 @@
         </Grid>
         <Grid
             Margin="180,0,150,0"
-            HorizontalAlignment="Stretch"
+            HorizontalAlignment="Right"
             VerticalAlignment="Top">
             <Grid.ColumnDefinitions>
                 <ColumnDefinition Width="Auto" />
@@ -207,10 +207,8 @@
             </Grid.ColumnDefinitions>
             <Button
                 Grid.Column="1"
+                Height="40"
                 Padding="2"
-                HorizontalAlignment="Right"
-                BorderBrush="{ThemeResource SystemAccentColor}"
-                BorderThickness="1.5"
                 CornerRadius="16">
                 <ToolTipService.ToolTip>
                     <ToolTip
@@ -273,9 +271,6 @@
                                     MaxWidth="150"
                                     FontFamily="{StaticResource HarmonyOSSans}"
                                     TextChanged="CurrentClassNameTextBox_TextChanged" />
-                                <Button>
-                                    <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE70F;" />
-                                </Button>
                             </StackPanel>
                             <Button
                                 x:Name="ManageStudentsButton"
@@ -321,12 +316,22 @@
             <Frame
                 x:Name="ContentFrame"
                 Grid.Row="0"
-                Margin="70,45,0,0"
+                Margin="65,40,0,0"
                 x:FieldModifier="public"
                 BorderBrush="Transparent"
                 BorderThickness="0"
                 CornerRadius="8,0,0,0"
-                NavigationFailed="ContentFrame_NavigationFailed" />
+                Navigated="ContentFrame_Navigated"
+                Navigating="ContentFrame_Navigating"
+                NavigationFailed="ContentFrame_NavigationFailed">
+                <Frame.ContentTransitions>
+                    <TransitionCollection>
+                        <NavigationThemeTransition>
+                            <SuppressNavigationTransitionInfo />
+                        </NavigationThemeTransition>
+                    </TransitionCollection>
+                </Frame.ContentTransitions>
+            </Frame>
             <!--<ScrollViewer
            Margin="0,45,0,0"
            HorizontalAlignment="Right"
@@ -347,7 +352,7 @@
             <StackPanel
                 x:Name="Canvas"
                 Width="65"
-                Margin="0,45,0,0"
+                Margin="0,40,0,0"
                 HorizontalAlignment="Left">
                 <StackPanel.ChildrenTransitions>
                     <TransitionCollection>

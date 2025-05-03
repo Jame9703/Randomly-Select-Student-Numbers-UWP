@@ -7,6 +7,7 @@ using System.Linq;
 using System.Threading.Tasks;
 using Windows.Storage;
 using Windows.UI;
+using Windows.UI.Composition;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Data;
@@ -72,7 +73,7 @@ namespace 随机抽取学号.Views
             var animation = compositor.CreateScalarKeyFrameAnimation();
             animation.InsertKeyFrame(0f, 1f);
             animation.InsertKeyFrame(1f, 0f);
-            animation.Duration = TimeSpan.FromSeconds(1);
+            animation.Duration = TimeSpan.FromSeconds(1.5);
             var visual = ElementCompositionPreview.GetElementVisual(ContentGrid);
             visual.StartAnimation("Opacity", animation);
             GC.Collect();
@@ -81,12 +82,18 @@ namespace 随机抽取学号.Views
         {
             base.OnNavigatedTo(e);
             var compositor = ElementCompositionPreview.GetElementVisual(ContentGrid).Compositor;
-            var animation = compositor.CreateScalarKeyFrameAnimation();
-            animation.InsertKeyFrame(0f, 0f);
-            animation.InsertKeyFrame(1f, 1f);
-            animation.Duration = TimeSpan.FromSeconds(1);
+            var opacityAnimation = compositor.CreateScalarKeyFrameAnimation();
+            opacityAnimation.InsertKeyFrame(0f, 0f);
+            opacityAnimation.InsertKeyFrame(1f, 1f);
+            opacityAnimation.Duration = TimeSpan.FromSeconds(1.5);
+            // 创建位移动画
+            //Vector3KeyFrameAnimation offsetAnimation = compositor.CreateVector3KeyFrameAnimation();
+            //offsetAnimation.Duration = TimeSpan.FromSeconds(2);
+            //offsetAnimation.InsertKeyFrame(1f, new System.Numerics.Vector3(0, -100, 0));
+            //offsetAnimation.Target = "Offset";
             var visual = ElementCompositionPreview.GetElementVisual(ContentGrid);
-            visual.StartAnimation("Opacity", animation);
+            visual.StartAnimation("Opacity", opacityAnimation );
+            //visual.StartAnimation("Offset", offsetAnimation);
         }
         private void UpdateCheckedStudentsCount()
         {
@@ -252,7 +259,9 @@ namespace 随机抽取学号.Views
             {
                 if (isOnlyThisRangeCheckBox.IsChecked == true)
                 {
-                    CheckBoxListView.DeselectAll();
+                    //CheckBoxListView.DeselectAll();
+                    CheckBoxListView.SelectionMode = ListViewSelectionMode.Single;
+                    CheckBoxListView.SelectionMode = ListViewSelectionMode.Multiple;
                 }
                 if (int.TryParse(BeginNumberBox.Text, out int beginnum) == true && int.TryParse(EndNumberBox.Text, out int endnum) == true)
                 {
