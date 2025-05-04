@@ -316,6 +316,9 @@
     <PackageReference Include="CommunityToolkit.Uwp.Controls.Sizers">
       <Version>8.2.250402</Version>
     </PackageReference>
+    <PackageReference Include="CommunityToolkit.Uwp.Controls.TabbedCommandBar">
+      <Version>8.2.250402</Version>
+    </PackageReference>
     <PackageReference Include="Microsoft.Data.Sqlite">
       <Version>9.0.4</Version>
     </PackageReference>

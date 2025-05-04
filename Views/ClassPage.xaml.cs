@@ -168,7 +168,7 @@ namespace 随机抽取学号.Views
             UpdateLineNumbers();
         }
 
-        private async void FolderPickerButton_Click(object sender, RoutedEventArgs e)
+        private async void PhotoFolderPickerButton_Click(object sender, RoutedEventArgs e)
         {
             if (StudentListView.SelectedItem != null)
             {
@@ -207,8 +207,6 @@ namespace 随机抽取学号.Views
                         i++;
                     }
                     await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
-                    //StudentListView.ItemsSource = null;
-                    //StudentListView.ItemsSource = StudentManager.StudentList;
                 }
             }
             else
@@ -221,7 +219,7 @@ namespace 随机抽取学号.Views
 
         private void StudentListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            if (MultiSelectButton.IsChecked == false)
+            if (MultiSelectStudentsButton.IsChecked == false)
             {
                 if (StudentListView.SelectedItems.Count > 1)
                 {
@@ -322,11 +320,11 @@ namespace 随机抽取学号.Views
             e.DragUIOverride.Caption = "替换被选择项的照片";
         }
 
-        private async void DeleteItemButton_Click(object sender, RoutedEventArgs e)
+        private async void DeleteStudentButton_Click(object sender, RoutedEventArgs e)
         {
             if (StudentListView.SelectedItem != null)
             {
-                if (MultiSelectButton.IsChecked == false)//单选模式
+                if (MultiSelectStudentsButton.IsChecked == false)//单选模式
                 {
                     var selectedIndex = StudentListView.SelectedIndex;
                     var selectedItem = StudentListView.SelectedItem as Student;
@@ -375,14 +373,10 @@ namespace 随机抽取学号.Views
 
         private async void SaveButton_Click(object sender, RoutedEventArgs e)
         {
-            //UpdateStudentId();
             await UpdateSaveButton();
         }
         private async Task UpdateSaveButton()
         {
-            //var focusedElement = FocusManager.GetFocusedElement() as Control;
-            //focusedElement.Focus(FocusState.Programmatic);
-            //StudentListView.SelectedItem = null;
             if (SaveProcessBar.Value == 100)
             {
                 SaveProcessBar.Value = 0;
@@ -401,11 +395,6 @@ namespace 随机抽取学号.Views
                 SavingStackPanel.Visibility = Visibility.Visible;
                 SaveStackPanel.Visibility = Visibility.Collapsed;
                 SavedStackPanel.Visibility = Visibility.Collapsed;
-                SaveButtonGrid.Background = new SolidColorBrush
-                {
-                    Color = Colors.LightBlue,
-                    Opacity = 0.5
-                };
             }
             else
             {
@@ -414,20 +403,10 @@ namespace 随机抽取学号.Views
                 SavedStackPanel.Visibility = Visibility.Visible;
                 SavingStackPanel.Visibility = Visibility.Collapsed;
                 SaveStackPanel.Visibility = Visibility.Collapsed;
-                SaveButton.Background = new SolidColorBrush
-                {
-                    Color = Colors.LightGreen,
-                    Opacity = 0.5
-                };
                 await Task.Delay(5000);
                 SaveStackPanel.Visibility = Visibility.Visible;
                 SavedStackPanel.Visibility = Visibility.Collapsed;
                 SavingStackPanel.Visibility = Visibility.Collapsed;
-                SaveButton.Background = new SolidColorBrush
-                {
-                    Color = Colors.LightYellow,
-                    Opacity = 0.5
-                };
                 SaveProcessBar.Value = 0;
             }
         }
@@ -663,21 +642,7 @@ namespace 随机抽取学号.Views
                 popupNotice.ShowPopup();
             }
         }
-
-        private void ExpandStudentListViewItemStorybord_Completed(object sender, object e)
-        {
-            var selectedListViewItem = (ListViewItem)StudentListView.ContainerFromItem(StudentListView.SelectedItem);
-            //previousExpandedItem.ContentTemplate = (DataTemplate)Resources["CollapsedTemplate"];
-            selectedListViewItem.ContentTemplate = (DataTemplate)Resources["ExpandedTemplate"];
-        }
-
-        private void CollapseStudentListViewItemStorybord_Completed(object sender, object e)
-        {
-            previousExpandedItem.ContentTemplate = (DataTemplate)Resources["CollapsedTemplate"];
-            //selectedListViewItem.ContentTemplate = (DataTemplate)Resources["ExpandedTemplate"];
-        }
-
-        private void MultiSelectButton_Unchecked(object sender, RoutedEventArgs e)
+        private void MultiSelectStudentsButton_Unchecked(object sender, RoutedEventArgs e)
         {
             if (StudentListView.SelectedItems.Count > 1)
             {
@@ -685,6 +650,26 @@ namespace 随机抽取学号.Views
                 StudentListView.DeselectAll();
                 StudentListView.SelectedItems.Add(lastselecteditem);
             }
+        }
+
+        private void MultiSelectClassesButton_Unchecked(object sender, RoutedEventArgs e)
+        {
+            if (ClassListView.SelectedItems.Count > 1)
+            {
+                var lastselecteditem = ClassListView.SelectedItems.Last();
+                ClassListView.DeselectAll();
+                ClassListView.SelectedItems.Add(lastselecteditem);
+            }
+        }
+
+        private void DeleteClassButton_Click(object sender, RoutedEventArgs e)
+        {
+
+        }
+
+        private void ClassEmblemFolderPickerButton_Click(object sender, RoutedEventArgs e)
+        {
+
         }
     }
 

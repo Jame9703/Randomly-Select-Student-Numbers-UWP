@@ -373,6 +373,23 @@ namespace 随机抽取学号.Views
             CheckBoxSplitViewGridSplitter.Visibility = Visibility.Collapsed;
             CheckBoxGrid.Visibility = Visibility.Collapsed;
             ContentGrid.ColumnDefinitions.Clear();
+            Grid.SetColumn(CheckBoxGrid,0);
+
+            var _compositor = ElementCompositionPreview.GetElementVisual(CheckBoxGrid).Compositor;
+            var _splitViewVisual = ElementCompositionPreview.GetElementVisual(CheckBoxGridContent);
+            // 展开透明度动画
+            ScalarKeyFrameAnimation splitViewOpacityAnimation = _compositor.CreateScalarKeyFrameAnimation();
+            splitViewOpacityAnimation.Duration = TimeSpan.FromSeconds(0.5);
+            splitViewOpacityAnimation.InsertKeyFrame(0f, 1f);
+            splitViewOpacityAnimation.InsertKeyFrame(1f, 0f);
+            _splitViewVisual.StartAnimation("Opacity", splitViewOpacityAnimation);
+
+            // 展开位移动画
+            Vector3KeyFrameAnimation splitViewOffsetAnimation = _compositor.CreateVector3KeyFrameAnimation();
+            splitViewOffsetAnimation.Duration = TimeSpan.FromSeconds(0.5);
+            splitViewOffsetAnimation.InsertKeyFrame(0f, new System.Numerics.Vector3((float)CheckBoxGrid.ActualWidth, 0, 0));
+            splitViewOffsetAnimation.InsertKeyFrame(1f, new System.Numerics.Vector3(0, 0, 0));
+            _splitViewVisual.StartAnimation("Offset", splitViewOffsetAnimation);
         }
 
         private void ExpandButton_Click(object sender, RoutedEventArgs e)
@@ -399,6 +416,7 @@ namespace 随机抽取学号.Views
             ContentGrid.ColumnDefinitions.Insert(0, new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Star), MinWidth = 300 });
             ContentGrid.ColumnDefinitions.Insert(1, new ColumnDefinition() { Width = new GridLength(12) });
             ContentGrid.ColumnDefinitions.Insert(2, new ColumnDefinition() { Width = new GridLength(1, GridUnitType.Auto), MinWidth = 150, MaxWidth = 500 });
+            Grid.SetColumn(CheckBoxGrid, 2);
         }
 
         private void SelectFlyout_Opened(object sender, object e)

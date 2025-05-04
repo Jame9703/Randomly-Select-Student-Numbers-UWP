@@ -387,1076 +387,581 @@
                     </Setter.Value>
                 </Setter>
             </Style>
-            <!--  折叠状态模板  -->
-            <DataTemplate x:Key="CollapsedTemplate" x:DataType="classes:Student">
-                <Grid Height="60" Background="Transparent">
-                    <TextBlock VerticalAlignment="Center" Text="{x:Bind Name}" />
-                </Grid>
+            <DataTemplate x:Key="ClassListViewItemTemplate" x:DataType="classes:Class">
+                <StackPanel
+                    Height="50"
+                    Orientation="Horizontal"
+                    Spacing="10">
+                    <muxc:PersonPicture Width="40" ProfilePicture="{x:Bind ClassEmblemPath}" />
+                    <TextBlock
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        FontSize="16"
+                        Text="{x:Bind ClassName}" />
+                </StackPanel>
             </DataTemplate>
-
-            <!--  展开状态模板  -->
-            <DataTemplate x:Key="ExpandedTemplate" x:DataType="classes:Student">
-                <Grid Height="120" Background="#FFE1F5FE">
-                    <StackPanel>
-                        <TextBlock FontSize="18" Text="{x:Bind Name}" />
-                        <TextBlock Margin="0,10,0,0" Text="详细信息..." />
-                        <Button Margin="0,10" Content="操作按钮" />
-                    </StackPanel>
-                </Grid>
-            </DataTemplate>
-            <Style x:Key="StudentListViewItemExpanded" TargetType="ListViewItem">
-                <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
-                <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
-                <Setter Property="BorderBrush" Value="{x:Null}" />
-                <Setter Property="BorderThickness" Value="0" />
-                <Setter Property="Background" Value="Transparent" />
-                <Setter Property="Foreground" Value="{ThemeResource SystemControlForegroundBaseHighBrush}" />
-                <Setter Property="TabNavigation" Value="Local" />
-                <Setter Property="IsHoldingEnabled" Value="True" />
-                <Setter Property="Padding" Value="12,0,12,0" />
-                <Setter Property="HorizontalContentAlignment" Value="Left" />
-                <Setter Property="VerticalContentAlignment" Value="Center" />
-                <Setter Property="MinWidth" Value="{ThemeResource ListViewItemMinWidth}" />
-                <Setter Property="MinHeight" Value="{ThemeResource ListViewItemMinHeight}" />
-                <Setter Property="AllowDrop" Value="False" />
-                <Setter Property="UseSystemFocusVisuals" Value="{StaticResource UseSystemFocusVisuals}" />
-                <Setter Property="FocusVisualMargin" Value="0" />
-                <Setter Property="Template">
-                    <Setter.Value>
-                        <ControlTemplate TargetType="ListViewItem">
-                            <Grid
-                                x:Name="ContentBorder"
-                                Background="{TemplateBinding Background}"
-                                BorderBrush="{TemplateBinding BorderBrush}"
-                                BorderThickness="{TemplateBinding BorderThickness}"
-                                Control.IsTemplateFocusTarget="True"
-                                CornerRadius="{TemplateBinding CornerRadius}"
-                                FocusVisualMargin="{TemplateBinding FocusVisualMargin}"
-                                RenderTransformOrigin="0.5,0.5">
-                                <Grid.RenderTransform>
-                                    <ScaleTransform x:Name="ContentBorderScale" />
-                                </Grid.RenderTransform>
-                                <Rectangle
-                                    x:Name="BorderBackground"
-                                    Control.IsTemplateFocusTarget="True"
-                                    Fill="{ThemeResource SystemControlHighlightListAccentLowBrush}"
-                                    IsHitTestVisible="False"
-                                    Opacity="0" />
-                                <Grid
-                                    x:Name="ContentPresenterGrid"
-                                    Margin="0,0,0,0"
-                                    Background="Transparent">
-                                    <Grid.RenderTransform>
-                                        <TranslateTransform x:Name="ContentPresenterTranslateTransform" />
-                                    </Grid.RenderTransform>
-                                    <ContentPresenter
-                                        x:Name="ContentPresenter"
-                                        Margin="{TemplateBinding Padding}"
-                                        HorizontalAlignment="{TemplateBinding HorizontalContentAlignment}"
-                                        VerticalAlignment="{TemplateBinding VerticalContentAlignment}"
-                                        Content="{TemplateBinding Content}"
-                                        ContentTemplate="{TemplateBinding ContentTemplate}"
-                                        ContentTransitions="{TemplateBinding ContentTransitions}" />
-
-                                </Grid>
-                                <!--
-                                    The 'Xg' text simulates the amount of space one line of text will occupy.
-                                    In the DataPlaceholder state, the Content is not loaded yet so we
-                                    approximate the size of the item using placeholder text.
-                                -->
-                                <TextBlock
-                                    x:Name="PlaceholderTextBlock"
-                                    Margin="{TemplateBinding Padding}"
-                                    AutomationProperties.AccessibilityView="Raw"
-                                    Foreground="{x:Null}"
-                                    IsHitTestVisible="False"
-                                    Opacity="0"
-                                    Text="Xg" />
-                                <Rectangle
-                                    x:Name="PlaceholderRect"
-                                    Fill="{ThemeResource ListViewItemPlaceholderBackground}"
-                                    Visibility="Collapsed" />
-                                <Border
-                                    x:Name="MultiSelectSquare"
-                                    Width="20"
-                                    Height="20"
-                                    Margin="12,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    BorderBrush="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
-                                    BorderThickness="2"
-                                    Visibility="Collapsed">
-                                    <Border.Clip>
-                                        <RectangleGeometry Rect="0,0,20,20">
-                                            <RectangleGeometry.Transform>
-                                                <TranslateTransform x:Name="MultiSelectClipTransform" />
-                                            </RectangleGeometry.Transform>
-                                        </RectangleGeometry>
-                                    </Border.Clip>
-                                    <Border.RenderTransform>
-                                        <TranslateTransform x:Name="MultiSelectCheckBoxTransform" />
-                                    </Border.RenderTransform>
-                                    <FontIcon
-                                        x:Name="MultiSelectCheck"
-                                        FontFamily="{ThemeResource SymbolThemeFontFamily}"
-                                        FontSize="16"
-                                        Foreground="{ThemeResource SystemControlForegroundBaseMediumHighBrush}"
-                                        Glyph="&#xE73E;"
-                                        Opacity="0"
-                                        Visibility="Collapsed" />
-                                </Border>
-                                <Border
-                                    x:Name="MultiArrangeOverlayTextBorder"
-                                    Height="20"
-                                    MinWidth="20"
-                                    Margin="12,0,0,0"
-                                    HorizontalAlignment="Left"
-                                    VerticalAlignment="Center"
-                                    Background="{ThemeResource SystemControlBackgroundAccentBrush}"
-                                    BorderBrush="{ThemeResource SystemControlBackgroundChromeWhiteBrush}"
-                                    BorderThickness="2"
-                                    IsHitTestVisible="False"
-                                    Opacity="0">
-                                    <TextBlock
-                                        x:Name="MultiArrangeOverlayText"
-                                        HorizontalAlignment="Center"
-                                        VerticalAlignment="Center"
-                                        AutomationProperties.AccessibilityView="Raw"
-                                        IsHitTestVisible="False"
-                                        Opacity="0"
-                                        Style="{ThemeResource CaptionTextBlockStyle}"
-                                        Text="{Binding RelativeSource={RelativeSource TemplatedParent}, Path=TemplateSettings.DragItemsCount}" />
-                                </Border>
-
-                                <VisualStateManager.VisualStateGroups>
-                                    <VisualStateGroup x:Name="CommonStates">
-                                        <VisualState x:Name="Normal">
-
-                                            <Storyboard>
-                                                <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualState x:Name="PointerOver">
-
-                                            <Storyboard>
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="BorderBackground"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="1"
-                                                    Duration="0" />
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderBackground" Storyboard.TargetProperty="Fill">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightListLowBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectSquare" Storyboard.TargetProperty="BorderBrush">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectCheck" Storyboard.TargetProperty="Foreground">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualState x:Name="Pressed">
-
-                                            <Storyboard>
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="BorderBackground"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="1"
-                                                    Duration="0" />
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderBackground" Storyboard.TargetProperty="Fill">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightListMediumBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectSquare" Storyboard.TargetProperty="BorderBrush">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectCheck" Storyboard.TargetProperty="Foreground">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <PointerDownThemeAnimation TargetName="ContentPresenter" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualState x:Name="Selected">
-
-                                            <Storyboard>
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="MultiSelectCheck"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="1"
-                                                    Duration="0:0:0" />
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="BorderBackground"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="1"
-                                                    Duration="0" />
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderBackground" Storyboard.TargetProperty="Fill">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightListAccentLowBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectSquare" Storyboard.TargetProperty="BorderBrush">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectCheck" Storyboard.TargetProperty="Foreground">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualState x:Name="PointerOverSelected">
-
-                                            <Storyboard>
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="MultiSelectCheck"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="1"
-                                                    Duration="0:0:0" />
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="BorderBackground"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="1"
-                                                    Duration="0" />
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderBackground" Storyboard.TargetProperty="Fill">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightListAccentMediumBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectSquare" Storyboard.TargetProperty="BorderBrush">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectCheck" Storyboard.TargetProperty="Foreground">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <PointerUpThemeAnimation Storyboard.TargetName="ContentPresenter" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualState x:Name="PressedSelected">
-
-                                            <Storyboard>
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="MultiSelectCheck"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="1"
-                                                    Duration="0:0:0" />
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="BorderBackground"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="1"
-                                                    Duration="0" />
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderBackground" Storyboard.TargetProperty="Fill">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightListAccentHighBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenter" Storyboard.TargetProperty="Foreground">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectSquare" Storyboard.TargetProperty="BorderBrush">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectCheck" Storyboard.TargetProperty="Foreground">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource SystemControlHighlightAltBaseHighBrush}" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <PointerDownThemeAnimation TargetName="ContentPresenter" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                    </VisualStateGroup>
-
-                                    <VisualStateGroup x:Name="DisabledStates">
-                                        <VisualState x:Name="Enabled" />
-
-                                        <VisualState x:Name="Disabled">
-
-                                            <Storyboard>
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="ContentBorder"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="{ThemeResource ListViewItemDisabledThemeOpacity}"
-                                                    Duration="0" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                    </VisualStateGroup>
-
-                                    <VisualStateGroup x:Name="MultiSelectStates">
-                                        <VisualState x:Name="MultiSelectDisabled">
-
-                                            <Storyboard>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectCheckBoxTransform" Storyboard.TargetProperty="X">
-                                                    <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0" />
-                                                    <SplineDoubleKeyFrame
-                                                        KeySpline="0.1,0.9,0.2,1"
-                                                        KeyTime="0:0:0.333"
-                                                        Value="-32" />
-                                                </DoubleAnimationUsingKeyFrames>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectClipTransform" Storyboard.TargetProperty="X">
-                                                    <EasingDoubleKeyFrame KeyTime="0:0:0" Value="0" />
-                                                    <SplineDoubleKeyFrame
-                                                        KeySpline="0.1,0.9,0.2,1"
-                                                        KeyTime="0:0:0.333"
-                                                        Value="32" />
-                                                </DoubleAnimationUsingKeyFrames>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenterTranslateTransform" Storyboard.TargetProperty="X">
-                                                    <EasingDoubleKeyFrame KeyTime="0:0:0" Value="32" />
-                                                    <SplineDoubleKeyFrame
-                                                        KeySpline="0.1,0.9,0.2,1"
-                                                        KeyTime="0:0:0.333"
-                                                        Value="0" />
-                                                </DoubleAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectSquare" Storyboard.TargetProperty="Visibility">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
-                                                    <DiscreteObjectKeyFrame KeyTime="0:0:0.333" Value="Collapsed" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualState x:Name="MultiSelectEnabled">
-
-                                            <Storyboard>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectCheckBoxTransform" Storyboard.TargetProperty="X">
-                                                    <EasingDoubleKeyFrame KeyTime="0:0:0" Value="-32" />
-                                                    <SplineDoubleKeyFrame
-                                                        KeySpline="0.1,0.9,0.2,1"
-                                                        KeyTime="0:0:0.333"
-                                                        Value="0" />
-                                                </DoubleAnimationUsingKeyFrames>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectClipTransform" Storyboard.TargetProperty="X">
-                                                    <EasingDoubleKeyFrame KeyTime="0:0:0" Value="32" />
-                                                    <SplineDoubleKeyFrame
-                                                        KeySpline="0.1,0.9,0.2,1"
-                                                        KeyTime="0:0:0.333"
-                                                        Value="0" />
-                                                </DoubleAnimationUsingKeyFrames>
-                                                <DoubleAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenterTranslateTransform" Storyboard.TargetProperty="X">
-                                                    <EasingDoubleKeyFrame KeyTime="0:0:0" Value="-32" />
-                                                    <SplineDoubleKeyFrame
-                                                        KeySpline="0.1,0.9,0.2,1"
-                                                        KeyTime="0:0:0.333"
-                                                        Value="0" />
-                                                </DoubleAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectSquare" Storyboard.TargetProperty="Visibility">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="MultiSelectCheck" Storyboard.TargetProperty="Visibility">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentPresenterGrid" Storyboard.TargetProperty="Margin">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="32,0,0,0" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </VisualState>
-
-                                    </VisualStateGroup>
-
-                                    <VisualStateGroup x:Name="DataVirtualizationStates">
-                                        <VisualState x:Name="DataAvailable" />
-
-                                        <VisualState x:Name="DataPlaceholder">
-
-                                            <Storyboard>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PlaceholderTextBlock" Storyboard.TargetProperty="Visibility">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PlaceholderRect" Storyboard.TargetProperty="Visibility">
-                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="Visible" />
-                                                </ObjectAnimationUsingKeyFrames>
-                                            </Storyboard>
-                                        </VisualState>
-
-                                    </VisualStateGroup>
-
-                                    <VisualStateGroup x:Name="ReorderHintStates">
-                                        <VisualState x:Name="NoReorderHint" />
-
-                                        <VisualState x:Name="BottomReorderHint">
-
-                                            <Storyboard>
-                                                <DragOverThemeAnimation
-                                                    Direction="Bottom"
-                                                    ToOffset="{ThemeResource ListViewItemReorderHintThemeOffset}"
-                                                    TargetName="ContentBorder" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualState x:Name="TopReorderHint">
-
-                                            <Storyboard>
-                                                <DragOverThemeAnimation
-                                                    Direction="Top"
-                                                    ToOffset="{ThemeResource ListViewItemReorderHintThemeOffset}"
-                                                    TargetName="ContentBorder" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualState x:Name="RightReorderHint">
-
-                                            <Storyboard>
-                                                <DragOverThemeAnimation
-                                                    Direction="Right"
-                                                    ToOffset="{ThemeResource ListViewItemReorderHintThemeOffset}"
-                                                    TargetName="ContentBorder" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualState x:Name="LeftReorderHint">
-
-                                            <Storyboard>
-                                                <DragOverThemeAnimation
-                                                    Direction="Left"
-                                                    ToOffset="{ThemeResource ListViewItemReorderHintThemeOffset}"
-                                                    TargetName="ContentBorder" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualStateGroup.Transitions>
-                                            <VisualTransition GeneratedDuration="0:0:0.2" To="NoReorderHint" />
-                                        </VisualStateGroup.Transitions>
-
-                                    </VisualStateGroup>
-
-                                    <VisualStateGroup x:Name="DragStates">
-                                        <VisualState x:Name="NotDragging" />
-
-                                        <VisualState x:Name="Dragging">
-
-                                            <Storyboard>
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="ContentBorder"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="{ThemeResource ListViewItemDragThemeOpacity}"
-                                                    Duration="0" />
-                                                <DragItemThemeAnimation TargetName="ContentBorder" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualState x:Name="DraggingTarget" />
-
-                                        <VisualState x:Name="MultipleDraggingPrimary">
-
-                                            <Storyboard>
-                                                <!--
-                                                    These two Opacity animations are required - the FadeInThemeAnimations
-                                                    on the same elements animate an internal Opacity.
-                                                -->
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="MultiArrangeOverlayText"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="1"
-                                                    Duration="0" />
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="MultiArrangeOverlayTextBorder"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="1"
-                                                    Duration="0" />
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="MultiSelectSquare"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="0"
-                                                    Duration="0" />
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="MultiSelectCheck"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="0"
-                                                    Duration="0" />
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="ContentBorder"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="{ThemeResource ListViewItemDragThemeOpacity}"
-                                                    Duration="0" />
-                                                <FadeInThemeAnimation TargetName="MultiArrangeOverlayText" />
-                                                <FadeInThemeAnimation TargetName="MultiArrangeOverlayTextBorder" />
-                                                <DragItemThemeAnimation TargetName="ContentBorder" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualState x:Name="MultipleDraggingSecondary" />
-
-                                        <VisualState x:Name="DraggedPlaceholder" />
-
-                                        <VisualState x:Name="Reordering">
-
-                                            <Storyboard>
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="ContentBorder"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="{ThemeResource ListViewItemReorderThemeOpacity}"
-                                                    Duration="0:0:0.240" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualState x:Name="ReorderingTarget">
-
-                                            <Storyboard>
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="ContentBorder"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="{ThemeResource ListViewItemReorderTargetThemeOpacity}"
-                                                    Duration="0:0:0.240" />
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="ContentBorderScale"
-                                                    Storyboard.TargetProperty="ScaleX"
-                                                    To="{ThemeResource ListViewItemReorderTargetThemeScale}"
-                                                    Duration="0:0:0.240" />
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="ContentBorderScale"
-                                                    Storyboard.TargetProperty="ScaleY"
-                                                    To="{ThemeResource ListViewItemReorderTargetThemeScale}"
-                                                    Duration="0:0:0.240" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualState x:Name="MultipleReorderingPrimary">
-
-                                            <Storyboard>
-                                                <!--
-                                                    These two Opacity animations are required - the FadeInThemeAnimations
-                                                    on the same elements animate an internal Opacity.
-                                                -->
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="MultiArrangeOverlayText"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="1"
-                                                    Duration="0" />
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="MultiArrangeOverlayTextBorder"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="1"
-                                                    Duration="0" />
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="MultiSelectSquare"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="0"
-                                                    Duration="0" />
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="MultiSelectCheck"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="0"
-                                                    Duration="0" />
-                                                <DoubleAnimation
-                                                    Storyboard.TargetName="ContentBorder"
-                                                    Storyboard.TargetProperty="Opacity"
-                                                    To="{ThemeResource ListViewItemDragThemeOpacity}"
-                                                    Duration="0:0:0.240" />
-                                                <FadeInThemeAnimation TargetName="MultiArrangeOverlayText" />
-                                                <FadeInThemeAnimation TargetName="MultiArrangeOverlayTextBorder" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualState x:Name="ReorderedPlaceholder">
-
-                                            <Storyboard>
-                                                <FadeOutThemeAnimation TargetName="ContentBorder" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualState x:Name="DragOver">
-
-                                            <Storyboard>
-                                                <DropTargetItemThemeAnimation TargetName="ContentBorder" />
-                                            </Storyboard>
-                                        </VisualState>
-
-                                        <VisualStateGroup.Transitions>
-                                            <VisualTransition GeneratedDuration="0:0:0.2" To="NotDragging" />
-                                        </VisualStateGroup.Transitions>
-
-                                    </VisualStateGroup>
-
-                                </VisualStateManager.VisualStateGroups>
-                            </Grid>
-
-                        </ControlTemplate>
-                    </Setter.Value>
-                </Setter>
-            </Style>
-            <Storyboard
-                x:Key="ExpandStudentListViewItemStorybord"
-                x:Name="ExpandStudentListViewItemStorybord"
-                Completed="ExpandStudentListViewItemStorybord_Completed">
-                <DoubleAnimation
-                    Storyboard.TargetProperty="Height"
-                    From="60"
-                    To="120"
-                    Duration="0:0:0.01" />
-                <!--<DoubleAnimation
-                    BeginTime="0:0:0.1"
-                    Storyboard.TargetProperty="Opacity"
-                    From="0"
-                    To="1"
-                    Duration="0:0:0.3" />-->
-            </Storyboard>
-            <Storyboard
-                x:Key="CollapseStudentListViewItemStorybord"
-                x:Name="CollapseStudentListViewItemStorybord"
-                Completed="CollapseStudentListViewItemStorybord_Completed">
-                <DoubleAnimation
-                    Storyboard.TargetProperty="Height"
-                    From="120"
-                    To="60"
-                    Duration="0:0:0.01" />
-                <!--<DoubleAnimation
-                    BeginTime="0:0:0.1"
-                    Storyboard.TargetProperty="Opacity"
-                    From="1"
-                    To="0"
-                    Duration="0:0:0.3" />-->
-            </Storyboard>
         </ResourceDictionary>
-
-
     </Page.Resources>
 
     <Grid x:Name="ContentGrid">
-        <StackPanel
-            HorizontalAlignment="Stretch"
-            VerticalAlignment="Top"
-            CornerRadius="8,8,8,8"
-            Orientation="Horizontal"
-            Spacing="5">
-            <StackPanel.Background>
-                <SolidColorBrush Opacity="0.5" Color="White" />
-            </StackPanel.Background>
-            <controls:Segmented
-                x:Name="FileEditSegmented"
-                VerticalAlignment="Top"
-                SelectionChanged="FileEditSegmented_SelectionChanged"
-                Style="{StaticResource PivotSegmentedStyle}">
-                <controls:SegmentedItem Tag="File">
-                    <StackPanel Orientation="Horizontal">
-                        <SymbolIcon Margin="0,2,0,0" Symbol="Page2">
-                            <SymbolIcon.RenderTransform>
-                                <ScaleTransform ScaleX="0.8" ScaleY="0.8" />
-                            </SymbolIcon.RenderTransform>
-                        </SymbolIcon>
-                        <TextBlock
-                            FontFamily="{StaticResource HarmonyOSSans}"
-                            FontSize="15"
-                            Text="文件" />
-                    </StackPanel>
-                </controls:SegmentedItem>
-                <controls:SegmentedItem Tag="Edit">
-                    <StackPanel Orientation="Horizontal">
-                        <SymbolIcon Margin="0,2,0,0" Symbol="Edit">
-                            <SymbolIcon.RenderTransform>
-                                <ScaleTransform ScaleX="0.8" ScaleY="0.8" />
-                            </SymbolIcon.RenderTransform>
-                        </SymbolIcon>
-                        <TextBlock
-                            FontFamily="{StaticResource HarmonyOSSans}"
-                            FontSize="15"
-                            Text="编辑" />
-                    </StackPanel>
-                </controls:SegmentedItem>
-            </controls:Segmented>
-            <Grid
-                x:Name="SaveButtonGrid"
-                Width="120"
-                Height="45"
-                Margin="0,0,0,0"
-                HorizontalAlignment="Left"
-                VerticalAlignment="Top">
-                <Button
-                    x:Name="SaveButton"
-                    Width="120"
-                    Height="40"
-                    classes:RippleHelper.IsFillEnable="True"
-                    classes:RippleHelper.RippleColor="Green"
-                    classes:RippleHelper.RippleDuration="0:0:0.5"
-                    classes:RippleHelper.RippleHelperState="Pressed"
-                    Background="Transparent"
-                    Click="SaveButton_Click"
-                    FontFamily="{StaticResource HarmonyOSSans}">
-                    <Grid>
-                        <StackPanel
-                            x:Name="SaveStackPanel"
-                            HorizontalAlignment="Center"
-                            Orientation="Horizontal"
-                            Spacing="5">
-                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE74E;" />
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                FontFamily="{StaticResource HarmonyOSSans}"
-                                Text="保存更改" />
-                        </StackPanel>
-                        <StackPanel
-                            x:Name="SavingStackPanel"
-                            Orientation="Horizontal"
-                            Spacing=" 5"
-                            Visibility="Collapsed">
-                            <muxc:ProgressRing IsActive="True" />
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                FontFamily="{StaticResource HarmonyOSSans}"
-                                Text="正在保存" />
-                        </StackPanel>
-                        <StackPanel
-                            x:Name="SavedStackPanel"
-                            Orientation="Horizontal"
-                            Spacing="5"
-                            Visibility="Collapsed">
-                            <SymbolIcon
-                                HorizontalAlignment="Center"
-                                Foreground="Green"
-                                Symbol="Accept" />
-                            <TextBlock
-                                HorizontalAlignment="Center"
-                                FontFamily="{StaticResource HarmonyOSSans}"
-                                Foreground="Green"
-                                Text="保存成功" />
-                        </StackPanel>
-                    </Grid>
-                </Button>
-                <ProgressBar
-                    x:Name="SaveProcessBar"
-                    Width="Auto"
-                    Height="2"
-                    VerticalAlignment="Bottom" />
-            </Grid>
-            <Grid>
-                <!--<TextBlock
-                    Margin="7,10,0,0"
-                    HorizontalAlignment="Left"
-                    FontFamily="{StaticResource HarmonyOSSans}"
-                    Text="自动保存" />-->
-                <ToggleSwitch
-                    x:Name="AutoSaveToggleSwitch"
-                    HorizontalAlignment="Left"
-                    VerticalAlignment="Center"
-                    FontFamily="{StaticResource HarmonyOSSans}"
-                    OffContent="自动保存:关"
-                    OnContent="自动保存:开" />
-            </Grid>
+        <controls:TabbedCommandBar
+            x:Name="tabbedCommandBar"
+            Height="100"
+            VerticalAlignment="Top">
+            <controls:TabbedCommandBar.AutoSuggestBox>
+                <AutoSuggestBox AutomationProperties.Name="Search" QueryIcon="Find" />
+            </controls:TabbedCommandBar.AutoSuggestBox>
+            <controls:TabbedCommandBar.PaneFooter>
+                <CommandBar Background="Transparent" DefaultLabelPosition="Right">
+                    <AppBarButton FontFamily="{StaticResource HarmonyOSSans}" Label="帮助">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE9CE;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                </CommandBar>
+            </controls:TabbedCommandBar.PaneFooter>
 
-        </StackPanel>
-
-        <Grid MinWidth="400" MinHeight="300">
-
-            <Grid x:Name="PhotosGrid" Margin="0,125,0,0">
-                <ListView
-                    x:Name="StudentListView"
-                    AllowDrop="True"
-                    Background="Transparent"
-                    CanDragItems="True"
-                    CanReorderItems="True"
-                    DragItemsCompleted="StudentListView_DragItemsCompleted"
-                    DragOver="StudentListView_DragOver"
-                    Drop="StudentListView_Drop"
-                    ItemTemplate="{StaticResource StudentListTemplate}"
-                    ItemsSource="{x:Bind classes:StudentManager.StudentList}"
-                    SelectionChanged="StudentListView_SelectionChanged"
-                    SelectionMode="Multiple">
-                    <!--<ListView.ItemContainerStyle>
-                        <Style TargetType="ListViewItem">
-                            <Setter Property="Template">
-                                <Setter.Value>
-                                    <ControlTemplate TargetType="ListViewItem">
-                                        <ListViewItemPresenter SelectedBackground="Orange" SelectionCheckMarkVisualEnabled="False" />
-                                    </ControlTemplate>
-                                </Setter.Value>
-                            </Setter>
-                        </Style>
-                    </ListView.ItemContainerStyle>-->
-                    <!--<ListView.Transitions>
-                        <TransitionCollection>
-                            <EntranceThemeTransition FromVerticalOffset="500" IsStaggeringEnabled="True" />
-                        </TransitionCollection>
-                    </ListView.Transitions>-->
-                    <ListView.ItemContainerTransitions>
-                        <TransitionCollection>
-                            <RepositionThemeTransition />
-                            <AddDeleteThemeTransition />
-                            <ContentThemeTransition />
-                            <EntranceThemeTransition FromVerticalOffset="1000" IsStaggeringEnabled="True" />
-                            <ReorderThemeTransition />
-                        </TransitionCollection>
-                    </ListView.ItemContainerTransitions>
-                </ListView>
-            </Grid>
-
-            <Grid Margin="0,45,0,0">
-                <Grid>
-                    <controls:SwitchPresenter Value="{Binding SelectedItem.Tag, ElementName=FileEditSegmented}">
-                        <controls:Case Value="Edit">
-                            <StackPanel
-                                x:Name="EditStackPanel"
-                                Height="80"
-                                VerticalAlignment="Top"
-                                animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
-                                animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}"
-                                Orientation="Horizontal"
-                                Style="{StaticResource PanelStyle}">
-                                <ToggleButton x:Name="MultiSelectButton" Unchecked="MultiSelectButton_Unchecked">
-                                    <StackPanel>
-                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE762;" />
-                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="多选模式" />
-                                    </StackPanel>
-                                </ToggleButton>
+            <controls:TabbedCommandBar.MenuItems>
+                <controls:TabbedCommandBarItem>
+                    <controls:TabbedCommandBarItem.Header>
+                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="文件" />
+                    </controls:TabbedCommandBarItem.Header>
+                    <AppBarElementContainer>
+                        <StackPanel Orientation="Horizontal" Spacing="10">
+                            <Grid x:Name="SaveButtonGrid">
                                 <Button
-                                    x:Name="AddItemButton"
-                                    Grid.Column="2"
-                                    Width="90"
-                                    Height="60"
-                                    VerticalAlignment="Center"
+                                    x:Name="SaveButton"
+                                    Width="120"
+                                    Height="40"
+                                    Padding="0,0,0,0"
+                                    classes:RippleHelper.IsFillEnable="True"
+                                    classes:RippleHelper.RippleColor="Green"
+                                    classes:RippleHelper.RippleDuration="0:0:0.5"
+                                    classes:RippleHelper.RippleHelperState="Pressed"
+                                    Click="SaveButton_Click"
                                     FontFamily="{StaticResource HarmonyOSSans}">
-                                    <StackPanel>
-                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE8FA;" />
-                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="添加学生" />
-                                    </StackPanel>
-                                    <Button.Flyout>
-                                        <Flyout>
-                                            <StackPanel>
-                                                <controls:Segmented
-                                                    x:Name="AddModeSegmented"
-                                                    HorizontalAlignment="Center"
-                                                    VerticalAlignment="Top"
-                                                    SelectionChanged="AddModeSegmented_SelectionChanged">
-                                                    <controls:SegmentedItem Content="逐个添加" FontFamily="{StaticResource HarmonyOSSans}" />
-                                                    <controls:SegmentedItem Content="批量添加" FontFamily="{StaticResource HarmonyOSSans}" />
-                                                </controls:Segmented>
-                                                <Grid x:Name="SingleAddGrid" Margin="0,15,0,0">
-                                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="姓名:" />
-                                                    <TextBox
-                                                        x:Name="NameTextBox"
-                                                        Height="30"
-                                                        Margin="0,15,0,0" />
-                                                </Grid>
-                                                <Grid x:Name="BatchAddGrid" Margin="0,15,0,0">
-                                                    <Grid>
-                                                        <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
-                                                            <Button
-                                                                x:Name="OpenFileButton"
-                                                                VerticalAlignment="Top"
-                                                                Click="OpenFileButton_Click">
-                                                                <Grid>
-                                                                    <SymbolIcon HorizontalAlignment="Left" Symbol="Read" />
-                                                                    <TextBlock
-                                                                        Margin="25,0,0,0"
-                                                                        HorizontalAlignment="Left"
-                                                                        FontFamily="{StaticResource HarmonyOSSans}"
-                                                                        Text="打开文件" />
-                                                                </Grid>
-                                                            </Button>
-                                                            <Button VerticalAlignment="Top" Click="SaveFileButton_Click">
-                                                                <Grid>
-                                                                    <SymbolIcon HorizontalAlignment="Left" Symbol="Save" />
-                                                                    <TextBlock
-                                                                        Margin="25,0,0,0"
-                                                                        HorizontalAlignment="Left"
-                                                                        FontFamily="{StaticResource HarmonyOSSans}"
-                                                                        Text="保存副本" />
-                                                                </Grid>
-                                                            </Button>
-                                                        </StackPanel>
+                                    <Grid>
+                                        <StackPanel
+                                            x:Name="SaveStackPanel"
+                                            Width="120"
+                                            Height="40"
+                                            Background="LightYellow"
+                                            Orientation="Horizontal"
+                                            Spacing="5">
+                                            <FontIcon
+                                                Margin="20,0,0,0"
+                                                FontFamily="{StaticResource SegoeFluentIcons}"
+                                                Glyph="&#xE74E;" />
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                FontFamily="{StaticResource HarmonyOSSans}"
+                                                Text="保存更改" />
+                                        </StackPanel>
+                                        <StackPanel
+                                            x:Name="SavingStackPanel"
+                                            Width="120"
+                                            Height="40"
+                                            Background="LightBlue"
+                                            Orientation="Horizontal"
+                                            Spacing=" 5"
+                                            Visibility="Collapsed">
+                                            <muxc:ProgressRing Margin="20,0,0,0" IsActive="True" />
+                                            <TextBlock
+                                                HorizontalAlignment="Center"
+                                                FontFamily="{StaticResource HarmonyOSSans}"
+                                                Text="正在保存" />
+                                        </StackPanel>
+                                        <StackPanel
+                                            x:Name="SavedStackPanel"
+                                            Width="120"
+                                            Height="40"
+                                            Background="LightGreen"
+                                            Orientation="Horizontal"
+                                            Spacing="5"
+                                            Visibility="Collapsed">
+                                            <FontIcon
+                                                Margin="20,0,0,0"
+                                                FontFamily="{StaticResource SegoeFluentIcons}"
+                                                Glyph="&#xE8FB;" />
+                                            <TextBlock
+                                                VerticalAlignment="Center"
+                                                FontFamily="{StaticResource HarmonyOSSans}"
+                                                Foreground="Green"
+                                                Text="保存成功" />
+                                        </StackPanel>
+                                    </Grid>
+                                </Button>
+                                <ProgressBar
+                                    x:Name="SaveProcessBar"
+                                    Width="Auto"
+                                    Height="2"
+                                    VerticalAlignment="Bottom" />
+                            </Grid>
+                            <ToggleSwitch
+                                x:Name="AutoSaveToggleSwitch"
+                                Width="120"
+                                MinWidth=" 130"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                OffContent="自动保存:关"
+                                OnContent="自动保存:开" />
+                        </StackPanel>
+                    </AppBarElementContainer>
+                    <AppBarSeparator />
+                    <AppBarButton
+                        x:Name="AddFileButton"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Label="新建班级">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE82E;" />
+                        </AppBarButton.Icon>
+                        <AppBarButton.Flyout>
+                            <Flyout>
+                                <StackPanel>
+                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="警告：此操作将清空学生列表" />
+                                    <Button
+                                        Margin="0,5,0,0"
+                                        HorizontalAlignment="Center"
+                                        Click="AddFileButton_Click"
+                                        Content="确定"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        Style="{StaticResource AccentButtonStyle}" />
+                                </StackPanel>
+                            </Flyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
 
-                                                        <ScrollViewer
-                                                            MaxWidth="200"
-                                                            MaxHeight="400"
-                                                            Margin="0,50,0,0"
-                                                            VerticalScrollBarVisibility="Auto"
-                                                            VerticalScrollMode="Enabled">
-
-                                                            <Grid
-                                                                x:Name="NamesGrid"
-                                                                MinWidth="120"
-                                                                MaxWidth="300"
-                                                                CornerRadius="0,0,0,0">
-                                                                <Grid.ColumnDefinitions>
-                                                                    <ColumnDefinition Width="Auto" />
-                                                                    <ColumnDefinition Width="*" />
-                                                                </Grid.ColumnDefinitions>
-
-                                                                <Border
-                                                                    x:Name="lineNumberBorder"
-                                                                    Grid.Column="0"
-                                                                    CornerRadius="8,0,0,8">
-                                                                    <TextBlock
-                                                                        x:Name="lineNumberTextBlock"
-                                                                        Margin="0,5"
-                                                                        VerticalAlignment="Top"
-                                                                        FontFamily="{StaticResource HarmonyOSSans}"
-                                                                        FontSize="16"
-                                                                        Foreground="{ThemeResource LineNumberForeground}"
-                                                                        IsTextSelectionEnabled="False"
-                                                                        TextAlignment="Right" />
-                                                                </Border>
-
-                                                                <TextBox
-                                                                    x:Name="Editor"
-                                                                    Grid.Column="1"
-                                                                    x:FieldModifier="public"
-                                                                    AcceptsReturn="True"
-                                                                    CornerRadius="0,0,0,0"
-                                                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                                                    FontSize="16"
-                                                                    Loaded="Editor_Loaded"
-                                                                    Style="{StaticResource EditorStyle}"
-                                                                    TextChanged="Editor_TextChanged" />
-
-                                                            </Grid>
-                                                        </ScrollViewer>
-                                                    </Grid>
-                                                </Grid>
-
+                    <AppBarButton FontFamily="{StaticResource HarmonyOSSans}" Label="打开">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE7A7;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton FontFamily="{StaticResource HarmonyOSSans}" Label="另存为">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE7A7;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarSeparator />
+                    <AppBarButton
+                        x:Name="OpenLocalFolderButton"
+                        Click="OpenLocalFolderButton_Click"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Label="打开本地文件夹">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xEC25;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                </controls:TabbedCommandBarItem>
+                <controls:TabbedCommandBarItem IsContextual="True" Tag="Student">
+                    <controls:TabbedCommandBarItem.Header>
+                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="学生" />
+                    </controls:TabbedCommandBarItem.Header>
+                    <AppBarToggleButton
+                        x:Name="MultiSelectStudentsButton"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Label="多选模式"
+                        Unchecked="MultiSelectStudentsButton_Unchecked">
+                        <AppBarToggleButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE762;" />
+                        </AppBarToggleButton.Icon>
+                    </AppBarToggleButton>
+                    <AppBarButton
+                        x:Name="AddItemButton"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Label="添加">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE8FA;" />
+                        </AppBarButton.Icon>
+                        <AppBarButton.Flyout>
+                            <Flyout>
+                                <StackPanel>
+                                    <controls:Segmented
+                                        x:Name="AddModeSegmented"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        SelectionChanged="AddModeSegmented_SelectionChanged">
+                                        <controls:SegmentedItem Content="逐个添加" FontFamily="{StaticResource HarmonyOSSans}" />
+                                        <controls:SegmentedItem Content="批量添加" FontFamily="{StaticResource HarmonyOSSans}" />
+                                    </controls:Segmented>
+                                    <Grid x:Name="SingleAddGrid" Margin="0,15,0,0">
+                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="姓名:" />
+                                        <TextBox
+                                            x:Name="NameTextBox"
+                                            Height="30"
+                                            Margin="0,15,0,0" />
+                                    </Grid>
+                                    <Grid x:Name="BatchAddGrid" Margin="0,15,0,0">
+                                        <Grid>
+                                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
                                                 <Button
-                                                    Margin="0,10,0,0"
-                                                    HorizontalAlignment="Center"
-                                                    Click="AddItemButton_Click">
-                                                    <StackPanel Orientation="Horizontal">
-                                                        <SymbolIcon Symbol="Accept" />
+                                                    x:Name="OpenFileButton"
+                                                    VerticalAlignment="Top"
+                                                    Click="OpenFileButton_Click">
+                                                    <Grid>
+                                                        <SymbolIcon HorizontalAlignment="Left" Symbol="Read" />
                                                         <TextBlock
-                                                            Margin="5,0,0,0"
+                                                            Margin="25,0,0,0"
+                                                            HorizontalAlignment="Left"
                                                             FontFamily="{StaticResource HarmonyOSSans}"
-                                                            Text="确定" />
-                                                    </StackPanel>
+                                                            Text="打开文件" />
+                                                    </Grid>
+                                                </Button>
+                                                <Button VerticalAlignment="Top" Click="SaveFileButton_Click">
+                                                    <Grid>
+                                                        <SymbolIcon HorizontalAlignment="Left" Symbol="Save" />
+                                                        <TextBlock
+                                                            Margin="25,0,0,0"
+                                                            HorizontalAlignment="Left"
+                                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                                            Text="保存副本" />
+                                                    </Grid>
                                                 </Button>
                                             </StackPanel>
-                                        </Flyout>
-                                    </Button.Flyout>
-                                </Button>
-                                <Button
-                                    x:Name="DeleteItemButton"
-                                    Grid.Column="2"
-                                    Width="90"
-                                    Height="60"
-                                    Click="DeleteItemButton_Click"
-                                    FontFamily="{StaticResource HarmonyOSSans}">
-                                    <StackPanel>
-                                        <FontIcon
-                                            FontFamily="{StaticResource SegoeFluentIcons}"
-                                            Foreground="#FFFC5665"
-                                            Glyph="&#xE74D;" />
-                                        <TextBlock
-                                            HorizontalAlignment="Center"
-                                            FontFamily="{StaticResource HarmonyOSSans}"
-                                            Foreground="#FFFC5665"
-                                            Text="删除此项" />
-                                    </StackPanel>
-                                </Button>
 
-                                <Button
-                                    x:Name="FolderPickerButton"
-                                    Width="100"
-                                    Height="60"
-                                    FontFamily="{StaticResource HarmonyOSSans}">
-                                    <StackPanel>
-                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE838;" />
-                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="打开文件夹" />
-                                    </StackPanel>
-                                    <Button.Flyout>
-                                        <Flyout>
-                                            <StackPanel Orientation="Vertical">
-                                                <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="选择一个文件夹，将文件夹下所有图片从当前被选择的项开始填充" />
-                                                <Button
-                                                    Click="FolderPickerButton_Click"
-                                                    Content="确定"
-                                                    FontFamily="{StaticResource HarmonyOSSans}" />
-                                            </StackPanel>
-                                        </Flyout>
-                                    </Button.Flyout>
-                                </Button>
-                                <TextBlock
-                                    x:Name="CurrentSelectionTextBlock"
-                                    Height="30"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    Text="当前选择项:无" />
-                                <TextBlock
-                                    Width="1270"
-                                    Height="30"
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    Text="Tips:可以直接拖动一个或多个图片从当前被选择项开始填充" />
-                            </StackPanel>
-                        </controls:Case>
-                        <controls:Case Value="File">
-                            <StackPanel
-                                x:Name="FileStackPanel"
-                                Height="80"
+                                            <ScrollViewer
+                                                MaxWidth="200"
+                                                MaxHeight="400"
+                                                Margin="0,50,0,0"
+                                                VerticalScrollBarVisibility="Auto"
+                                                VerticalScrollMode="Enabled">
+
+                                                <Grid
+                                                    x:Name="NamesGrid"
+                                                    MinWidth="120"
+                                                    MaxWidth="300"
+                                                    CornerRadius="0,0,0,0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Border
+                                                        x:Name="lineNumberBorder"
+                                                        Grid.Column="0"
+                                                        CornerRadius="8,0,0,8">
+                                                        <TextBlock
+                                                            x:Name="lineNumberTextBlock"
+                                                            Margin="0,5"
+                                                            VerticalAlignment="Top"
+                                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                                            FontSize="16"
+                                                            Foreground="{ThemeResource LineNumberForeground}"
+                                                            IsTextSelectionEnabled="False"
+                                                            TextAlignment="Right" />
+                                                    </Border>
+
+                                                    <TextBox
+                                                        x:Name="Editor"
+                                                        Grid.Column="1"
+                                                        x:FieldModifier="public"
+                                                        AcceptsReturn="True"
+                                                        CornerRadius="0,0,0,0"
+                                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                                        FontSize="16"
+                                                        Loaded="Editor_Loaded"
+                                                        Style="{StaticResource EditorStyle}"
+                                                        TextChanged="Editor_TextChanged" />
+
+                                                </Grid>
+                                            </ScrollViewer>
+                                        </Grid>
+                                    </Grid>
+
+                                    <Button
+                                        Margin="0,10,0,0"
+                                        HorizontalAlignment="Center"
+                                        Click="AddItemButton_Click">
+                                        <StackPanel Orientation="Horizontal">
+                                            <SymbolIcon Symbol="Accept" />
+                                            <TextBlock
+                                                Margin="5,0,0,0"
+                                                FontFamily="{StaticResource HarmonyOSSans}"
+                                                Text="确定" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </Flyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
+                    <AppBarButton
+                        x:Name="DeleteStudentButton"
+                        Click="DeleteStudentButton_Click"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Foreground="#FFFC5665"
+                        Label="删除">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE74D;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton
+                        x:Name="PhotoFolderPickerButton"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Label="选择照片文件夹">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE838;" />
+                        </AppBarButton.Icon>
+                        <AppBarButton.Flyout>
+                            <Flyout>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="选择一个文件夹，将文件夹下所有图片从当前被选择的项开始填充" />
+                                    <Button
+                                        Click="PhotoFolderPickerButton_Click"
+                                        Content="确定"
+                                        FontFamily="{StaticResource HarmonyOSSans}" />
+                                </StackPanel>
+                            </Flyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
+                    <AppBarSeparator />
+                </controls:TabbedCommandBarItem>
+                <controls:TabbedCommandBarItem IsContextual="True" Tag="Class">
+                    <controls:TabbedCommandBarItem.Header>
+                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="班级" />
+                    </controls:TabbedCommandBarItem.Header>
+                    <AppBarToggleButton
+                        x:Name="MultiSelectClassesButton"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Label="多选模式"
+                        Unchecked="MultiSelectClassesButton_Unchecked">
+                        <AppBarToggleButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE762;" />
+                        </AppBarToggleButton.Icon>
+                    </AppBarToggleButton>
+                    <AppBarButton
+                        x:Name="AddClassButton"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Label="新建">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE82E;" />
+                        </AppBarButton.Icon>
+                        <AppBarButton.Flyout>
+                            <Flyout>
+                                <StackPanel>
+                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="警告：此操作将清空学生列表" />
+                                    <Button
+                                        Margin="0,5,0,0"
+                                        HorizontalAlignment="Center"
+                                        Click="AddFileButton_Click"
+                                        Content="确定"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        Style="{StaticResource AccentButtonStyle}" />
+                                </StackPanel>
+                            </Flyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
+                    <AppBarButton
+                        x:Name="DeleteClassButton"
+                        Click="DeleteClassButton_Click"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Foreground="#FFFC5665"
+                        Label="删除">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE74D;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton
+                        x:Name="ClassEmblemFolderPickerButton"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Label="选择班徽文件夹">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE838;" />
+                        </AppBarButton.Icon>
+                        <AppBarButton.Flyout>
+                            <Flyout>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="选择一个文件夹，将文件夹下所有图片从当前被选择的项开始填充" />
+                                    <Button
+                                        Click="ClassEmblemFolderPickerButton_Click"
+                                        Content="确定"
+                                        FontFamily="{StaticResource HarmonyOSSans}" />
+                                </StackPanel>
+                            </Flyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
+                    <AppBarButton Label="Undo">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE7A7;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Label="Redo">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE7A7;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Label="Paste">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE7A7;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarSeparator />
+                </controls:TabbedCommandBarItem>
+            </controls:TabbedCommandBar.MenuItems>
+        </controls:TabbedCommandBar>
+
+        <Grid Margin="0,100,0,0">
+            <controls:SwitchPresenter Value="{Binding SelectedItem.Tag, ElementName=tabbedCommandBar}">
+                <controls:Case Value="Student">
+                    <Grid
+                        x:Name="StudentGrid"
+                        animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
+                        animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+                        <StackPanel
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Top"
+                            CornerRadius="8,8,8,8"
+                            Orientation="Horizontal"
+                            Spacing="5">
+                            <StackPanel.Background>
+                                <SolidColorBrush Opacity="0.5" Color="White" />
+                            </StackPanel.Background>
+                            <controls:Segmented
+                                x:Name="FileEditSegmented"
                                 VerticalAlignment="Top"
-                                animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
-                                animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}"
-                                Style="{StaticResource PanelStyle}">
-                                <Button
-                                    x:Name="AddFileButton"
-                                    Grid.Column="2"
-                                    Width="95"
-                                    Height="60"
-                                    VerticalAlignment="Center">
-                                    <Button.Flyout>
-                                        <Flyout>
-                                            <StackPanel>
-                                                <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="警告：此操作将清空学生列表" />
-                                                <Button
-                                                    Margin="0,5,0,0"
-                                                    HorizontalAlignment="Center"
-                                                    Click="AddFileButton_Click"
-                                                    Content="确定"
-                                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                                    Style="{StaticResource AccentButtonStyle}" />
-                                            </StackPanel>
-                                        </Flyout>
-                                    </Button.Flyout>
-                                    <StackPanel>
-                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE82E;" />
-                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="新建数据库" />
+                                SelectionChanged="FileEditSegmented_SelectionChanged"
+                                Style="{StaticResource PivotSegmentedStyle}"
+                                Visibility="Collapsed">
+                                <controls:SegmentedItem Tag="File">
+                                    <StackPanel Orientation="Horizontal">
+                                        <SymbolIcon Margin="0,2,0,0" Symbol="Page2">
+                                            <SymbolIcon.RenderTransform>
+                                                <ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+                                            </SymbolIcon.RenderTransform>
+                                        </SymbolIcon>
+                                        <TextBlock
+                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                            FontSize="15"
+                                            Text="文件" />
                                     </StackPanel>
-                                </Button>
-                                <Button
-                                    x:Name="OpenDataFileButton"
-                                    Grid.Column="2"
-                                    Width="95"
-                                    Height="60"
-                                    VerticalAlignment="Center"
-                                    Click="OpenDataFileButton_Click">
-                                    <StackPanel>
-                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE82D;" />
-                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="打开数据库" />
+                                </controls:SegmentedItem>
+                                <controls:SegmentedItem Tag="Edit">
+                                    <StackPanel Orientation="Horizontal">
+                                        <SymbolIcon Margin="0,2,0,0" Symbol="Edit">
+                                            <SymbolIcon.RenderTransform>
+                                                <ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+                                            </SymbolIcon.RenderTransform>
+                                        </SymbolIcon>
+                                        <TextBlock
+                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                            FontSize="15"
+                                            Text="编辑" />
                                     </StackPanel>
-                                </Button>
-                                <Button
-                                    x:Name="SaveDataFileButton"
-                                    Grid.Column="2"
-                                    Width="95"
-                                    Height="60"
-                                    VerticalAlignment="Center"
-                                    Click="SaveDataFileButton_Click">
-                                    <StackPanel>
-                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE792;" />
-                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="另存数据库" />
-                                    </StackPanel>
-                                </Button>
-                                <Button
-                                    x:Name="OpenLocalFolderButton"
-                                    Grid.Column="2"
-                                    Width="95"
-                                    Height="60"
-                                    VerticalAlignment="Center"
-                                    Click="OpenLocalFolderButton_Click">
-                                    <StackPanel>
-                                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xEC25;" />
-                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="本地文件夹" />
-                                    </StackPanel>
-                                </Button>
-                            </StackPanel>
-                        </controls:Case>
-                    </controls:SwitchPresenter>
+                                </controls:SegmentedItem>
+                            </controls:Segmented>
+                        </StackPanel>
+                        <Grid Margin="0,45,0,0" Visibility="Collapsed">
+                            <Grid>
+                                <controls:SwitchPresenter Value="{Binding SelectedItem.Tag, ElementName=FileEditSegmented}">
+                                    <controls:Case Value="Edit">
+                                        <StackPanel
+                                            x:Name="EditStackPanel"
+                                            Height="80"
+                                            VerticalAlignment="Top"
+                                            animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
+                                            animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}"
+                                            Orientation="Horizontal"
+                                            Style="{StaticResource PanelStyle}">
 
+                                            <TextBlock
+                                                x:Name="CurrentSelectionTextBlock"
+                                                Height="30"
+                                                FontFamily="{StaticResource HarmonyOSSans}"
+                                                Text="当前选择项:无" />
+                                            <TextBlock
+                                                Width="1270"
+                                                Height="30"
+                                                FontFamily="{StaticResource HarmonyOSSans}"
+                                                Text="Tips:可以直接拖动一个或多个图片从当前被选择项开始填充" />
+                                        </StackPanel>
+                                    </controls:Case>
+                                    <controls:Case Value="File">
+                                        <StackPanel
+                                            x:Name="FileStackPanel"
+                                            Height="80"
+                                            VerticalAlignment="Top"
+                                            animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
+                                            animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}"
+                                            Style="{StaticResource PanelStyle}">
 
+                                            <Button
+                                                x:Name="OpenDataFileButton"
+                                                Grid.Column="2"
+                                                Width="95"
+                                                Height="60"
+                                                VerticalAlignment="Center"
+                                                Click="OpenDataFileButton_Click">
+                                                <StackPanel>
+                                                    <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE82D;" />
+                                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="打开数据库" />
+                                                </StackPanel>
+                                            </Button>
+                                            <Button
+                                                x:Name="SaveDataFileButton"
+                                                Grid.Column="2"
+                                                Width="95"
+                                                Height="60"
+                                                VerticalAlignment="Center"
+                                                Click="SaveDataFileButton_Click">
+                                                <StackPanel>
+                                                    <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE792;" />
+                                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="另存数据库" />
+                                                </StackPanel>
+                                            </Button>
 
-                </Grid>
-            </Grid>
+                                        </StackPanel>
+                                    </controls:Case>
+                                </controls:SwitchPresenter>
+                            </Grid>
+                        </Grid>
+                        <ListView
+                            x:Name="StudentListView"
+                            AllowDrop="True"
+                            Background="Transparent"
+                            CanDragItems="True"
+                            CanReorderItems="True"
+                            DragItemsCompleted="StudentListView_DragItemsCompleted"
+                            DragOver="StudentListView_DragOver"
+                            Drop="StudentListView_Drop"
+                            ItemTemplate="{StaticResource StudentListTemplate}"
+                            ItemsSource="{x:Bind classes:StudentManager.StudentList}"
+                            SelectionChanged="StudentListView_SelectionChanged"
+                            SelectionMode="Multiple">
+                            <ListView.ItemContainerTransitions>
+                                <TransitionCollection>
+                                    <RepositionThemeTransition />
+                                    <AddDeleteThemeTransition />
+                                    <ContentThemeTransition />
+                                    <EntranceThemeTransition IsStaggeringEnabled="True" />
+                                    <ReorderThemeTransition />
+                                </TransitionCollection>
+                            </ListView.ItemContainerTransitions>
+                        </ListView>
+                    </Grid>
+                </controls:Case>
+                <controls:Case Value="Class">
+                    <Grid
+                        x:Name="ClassGrid"
+                        animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
+                        animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+                        <ListView
+                            x:Name="ClassListView"
+                            ItemTemplate="{StaticResource ClassListViewItemTemplate}"
+                            ItemsSource="{x:Bind classes:StudentManager.ClassList}"
+                            SelectionMode="Multiple">
+                            <ListView.ItemContainerTransitions>
+                                <TransitionCollection>
+                                    <RepositionThemeTransition />
+                                    <AddDeleteThemeTransition />
+                                    <ContentThemeTransition />
+                                    <EntranceThemeTransition IsStaggeringEnabled="True" />
+                                    <ReorderThemeTransition />
+                                </TransitionCollection>
+                            </ListView.ItemContainerTransitions>
+                        </ListView>
+                    </Grid>
+                </controls:Case>
+            </controls:SwitchPresenter>
+
         </Grid>
-
-
     </Grid>
 </Page>
