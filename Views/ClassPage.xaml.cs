@@ -8,12 +8,14 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
+using Windows.Management.Deployment;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.System;
 using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
+using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
@@ -322,51 +324,54 @@ namespace 随机抽取学号.Views
 
         private async void DeleteStudentButton_Click(object sender, RoutedEventArgs e)
         {
-            if (StudentListView.SelectedItem != null)
+            if (localSettings.Values.ContainsKey("CurrentClassName"))
             {
-                if (MultiSelectStudentsButton.IsChecked == false)//单选模式
+                if (StudentListView.SelectedItem != null)
                 {
-                    var selectedIndex = StudentListView.SelectedIndex;
-                    var selectedItem = StudentListView.SelectedItem as Student;
-                    StudentManager.StudentList.Remove(selectedItem);
-                    try
+                    if (MultiSelectStudentsButton.IsChecked == false)//单选模式
                     {
-                        StorageFile file = await StorageFile.GetFileFromPathAsync(selectedItem.PhotoPath);//一并删除存入LocalFolder的照片
-                        await file.DeleteAsync(StorageDeleteOption.Default);
-                    }
-                    catch (Exception)
-                    {
-                        //使用的是默认照片,无需删除
-                    }
-                    if (selectedIndex < StudentListView.Items.Count)
-                    {
-                        StudentListView.SelectedItem = StudentListView.Items[selectedIndex];//默认选择被删除项的下一项
-                    }
-                }
-                else//多选模式
-                {
-                    var items = StudentListView.SelectedItems.ToList();
-                    foreach (var item in items)
-                    {
-                        StudentManager.StudentList.Remove(item as Student);
-                        try
+                        var selectedIndex = StudentListView.SelectedIndex;
+                        var selectedItem = StudentListView.SelectedItem as Student;
+                        StudentManager.StudentList.Remove(selectedItem);
+                        var path = Path.GetFileName(selectedItem.PhotoPath);
+                        var file = await StudentManager.CurrentClassFolder.TryGetItemAsync(path);
+                        if (file != null)
                         {
-                            StorageFile file = await StorageFile.GetFileFromPathAsync((item as Student).PhotoPath);//一并删除存入LocalFolder的照片
-                            await file.DeleteAsync(StorageDeleteOption.Default);
+                            await file.DeleteAsync();//一并删除存入LocalFolder的照片
                         }
-                        catch (Exception)
-                        {
-                            //使用的是默认照片,无需删除
-                        }
-                    }
-                }
-                UpdateStudentId();
 
+                        if (selectedIndex < StudentListView.Items.Count)
+                        {
+                            StudentListView.SelectedItem = StudentListView.Items[selectedIndex];//默认选择被删除项的下一项
+                        }
+                    }
+                    else//多选模式
+                    {
+                        var items = StudentListView.SelectedItems.ToList();
+                        foreach (var item in items)
+                        {
+                            StudentManager.StudentList.Remove(item as Student);
+                            var name = Path.GetFileName((item as Student).PhotoPath);
+                            var file = await StudentManager.CurrentClassFolder.TryGetItemAsync(name);
+                            if (file != null)
+                            {
+                                await file.DeleteAsync();//一并删除存入LocalFolder的照片
+                            }
+                        }
+                    }
+                    UpdateStudentId();
+                }
+                else
+                {
+                    PopupNotice popupNotice = new PopupNotice("请先选择要删除的项");
+                    popupNotice.PopupContent.Severity = InfoBarSeverity.Warning;
+                    popupNotice.ShowPopup();
+                }
             }
             else
             {
-                PopupNotice popupNotice = new PopupNotice("请先选择要删除的项");
-                popupNotice.PopupContent.Severity = InfoBarSeverity.Warning;
+                PopupNotice popupNotice = new PopupNotice("当前班级不存在");
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
                 popupNotice.ShowPopup();
             }
         }
@@ -413,41 +418,7 @@ namespace 随机抽取学号.Views
 
         private void StudentListView_DragItemsCompleted(ListViewBase sender, DragItemsCompletedEventArgs args)
         {
-            //double scrollOffset = GetScrollViewerVerticalOffset(StudentListView);
             UpdateStudentId();
-            //SetScrollViewerVerticalOffset(StudentListView, scrollOffset);
-        }
-        private double GetScrollViewerVerticalOffset(ListView listView)
-        {
-            ScrollViewer scrollViewer = FindVisualChild<ScrollViewer>(listView);
-            return scrollViewer?.VerticalOffset ?? 0;
-        }
-
-        private void SetScrollViewerVerticalOffset(ListView listView, double offset)
-        {
-            ScrollViewer scrollViewer = FindVisualChild<ScrollViewer>(listView);
-            if (scrollViewer != null)
-            {
-                scrollViewer.ChangeView(null, offset, null);
-            }
-        }
-
-        private T FindVisualChild<T>(DependencyObject parent) where T : DependencyObject
-        {
-            for (int i = 0; i < VisualTreeHelper.GetChildrenCount(parent); i++)
-            {
-                DependencyObject child = VisualTreeHelper.GetChild(parent, i);
-                if (child != null && child is T)
-                {
-                    return (T)child;
-                }
-                T childOfChild = FindVisualChild<T>(child);
-                if (childOfChild != null)
-                {
-                    return childOfChild;
-                }
-            }
-            return null;
         }
         private async void AddItemButton_Click(object sender, RoutedEventArgs e)
         {
@@ -478,20 +449,6 @@ namespace 随机抽取学号.Views
                 StudentManager.StudentList.CollectionChanged += StudentList_CollectionChanged;
             }
             UpdateStudentId();
-        }
-
-        private void FileEditSegmented_SelectionChanged(object sender, SelectionChangedEventArgs e)
-        {
-            if (FileEditSegmented.SelectedIndex == 0)//文件
-            {
-                EditStackPanel.Visibility = Visibility.Collapsed;
-                FileStackPanel.Visibility = Visibility.Visible;
-            }
-            else//编辑
-            {
-                FileStackPanel.Visibility = Visibility.Collapsed;
-                EditStackPanel.Visibility = Visibility.Visible;
-            }
         }
 
         private void AddModeSegmented_SelectionChanged(object sender, SelectionChangedEventArgs e)
@@ -662,16 +619,86 @@ namespace 随机抽取学号.Views
             }
         }
 
-        private void DeleteClassButton_Click(object sender, RoutedEventArgs e)
+        private async void DeleteClassButton_Click(object sender, RoutedEventArgs e)
         {
+            if (localSettings.Values.ContainsKey("CurrentClassName"))
+            {
+                if (ClassListView.SelectedItem != null)
+                {
+                    if (MultiSelectClassesButton.IsChecked == false)//单选模式
+                    {
+                        var selectedIndex = ClassListView.SelectedIndex;
+                        var selectedItem = ClassListView.SelectedItem as Class;
+                        StudentManager.ClassList.Remove(selectedItem);
+                        var folder = await StudentManager.CurrentClassFolder.TryGetItemAsync(selectedItem.ClassName);
+                        if (folder != null)
+                        {
+                            await folder.DeleteAsync();//一并删除存入LocalFolder的照片
+                        }
 
+                        if (selectedIndex < ClassListView.Items.Count)
+                        {
+                            ClassListView.SelectedItem = ClassListView.Items[selectedIndex];//默认选择被删除项的下一项
+                        }
+                    }
+                    else//多选模式
+                    {
+                        var items = ClassListView.SelectedItems.ToList();
+                        foreach (var item in items)
+                        {
+                            StudentManager.ClassList.Remove(item as Class);
+                            var folder = await StudentManager.CurrentClassFolder.TryGetItemAsync((item as Class).ClassName);
+                            if (folder != null)
+                            {
+                                await folder.DeleteAsync();//一并删除存入LocalFolder的照片
+                            }
+                        }
+                    }
+                }
+                else
+                {
+                    PopupNotice popupNotice = new PopupNotice("请先选择要删除的项");
+                    popupNotice.PopupContent.Severity = InfoBarSeverity.Warning;
+                    popupNotice.ShowPopup();
+                }
+            }
+            else
+            {
+                PopupNotice popupNotice = new PopupNotice("当前班级不存在");
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.ShowPopup();
+            }
         }
 
         private void ClassEmblemFolderPickerButton_Click(object sender, RoutedEventArgs e)
         {
 
         }
-    }
 
+        private void ClassListView_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (MultiSelectClassesButton.IsChecked == false)
+            {
+                if (ClassListView.SelectedItems.Count > 1)
+                {
+                    var lastselecteditem = ClassListView.SelectedItems.Last();
+                    ClassListView.SelectionChanged -= ClassListView_SelectionChanged;
+                    ClassListView.DeselectAll();
+                    ClassListView.SelectionChanged += ClassListView_SelectionChanged;
+                    ClassListView.SelectedItems.Add(lastselecteditem);
+                }
+            }
+        }
+
+        private void AddClassButton_Click(object sender, RoutedEventArgs e)
+        {
+            var _class = new Class()
+            {
+                ClassName = "新班级",
+                ClassEmblemPath = "_"
+            };
+            StudentManager .ClassList.Add(_class);
+        }
+    }
 }
 

@@ -392,12 +392,12 @@
                     Height="50"
                     Orientation="Horizontal"
                     Spacing="10">
-                    <muxc:PersonPicture Width="40" ProfilePicture="{x:Bind ClassEmblemPath}" />
-                    <TextBlock
+                    <muxc:PersonPicture Width="40" ProfilePicture="{x:Bind ClassEmblemPath, Mode=OneWay}" />
+                    <TextBox
                         VerticalAlignment="Center"
                         FontFamily="{StaticResource HarmonyOSSans}"
                         FontSize="16"
-                        Text="{x:Bind ClassName}" />
+                        Text="{x:Bind ClassName, Mode=TwoWay}" />
                 </StackPanel>
             </DataTemplate>
         </ResourceDictionary>
@@ -508,7 +508,7 @@
                                 OnContent="自动保存:开" />
                         </StackPanel>
                     </AppBarElementContainer>
-                    <AppBarSeparator />
+                    <AppBarSeparator d:IsLocked="True" />
                     <AppBarButton
                         x:Name="AddFileButton"
                         FontFamily="{StaticResource HarmonyOSSans}"
@@ -568,6 +568,7 @@
                     </AppBarToggleButton>
                     <AppBarButton
                         x:Name="AddItemButton"
+                        AllowFocusOnInteraction="True"
                         FontFamily="{StaticResource HarmonyOSSans}"
                         Label="添加">
                         <AppBarButton.Icon>
@@ -730,25 +731,12 @@
                     </AppBarToggleButton>
                     <AppBarButton
                         x:Name="AddClassButton"
+                        Click="AddClassButton_Click"
                         FontFamily="{StaticResource HarmonyOSSans}"
                         Label="新建">
                         <AppBarButton.Icon>
                             <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE82E;" />
                         </AppBarButton.Icon>
-                        <AppBarButton.Flyout>
-                            <Flyout>
-                                <StackPanel>
-                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="警告：此操作将清空学生列表" />
-                                    <Button
-                                        Margin="0,5,0,0"
-                                        HorizontalAlignment="Center"
-                                        Click="AddFileButton_Click"
-                                        Content="确定"
-                                        FontFamily="{StaticResource HarmonyOSSans}"
-                                        Style="{StaticResource AccentButtonStyle}" />
-                                </StackPanel>
-                            </Flyout>
-                        </AppBarButton.Flyout>
                     </AppBarButton>
                     <AppBarButton
                         x:Name="DeleteClassButton"
@@ -818,7 +806,6 @@
                             <controls:Segmented
                                 x:Name="FileEditSegmented"
                                 VerticalAlignment="Top"
-                                SelectionChanged="FileEditSegmented_SelectionChanged"
                                 Style="{StaticResource PivotSegmentedStyle}"
                                 Visibility="Collapsed">
                                 <controls:SegmentedItem Tag="File">
@@ -947,6 +934,7 @@
                             x:Name="ClassListView"
                             ItemTemplate="{StaticResource ClassListViewItemTemplate}"
                             ItemsSource="{x:Bind classes:StudentManager.ClassList}"
+                            SelectionChanged="ClassListView_SelectionChanged"
                             SelectionMode="Multiple">
                             <ListView.ItemContainerTransitions>
                                 <TransitionCollection>

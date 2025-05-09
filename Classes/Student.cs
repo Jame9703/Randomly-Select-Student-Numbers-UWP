@@ -117,6 +117,7 @@ namespace 随机抽取学号.Classes
     public static class StudentManager
     {
         #region 变量声明
+        public static StorageFolder CurrentClassFolder;// 记录当前班级对应文件夹
         public static string ClassDataBasePath;// 记录班级信息数据库路径
         public static string StudentDataBasePath;// 记录学生信息数据库路径
         public static string CheckedStudentDataBasePath;// 记录抽取范围中的学生信息数据库路径
@@ -139,7 +140,7 @@ namespace 随机抽取学号.Classes
                 ClassDataBasePath = ClassDBFile.Path;
                 //获取当前班级对应文件夹
                 string CurrentClassName = ApplicationData.Current.LocalSettings.Values["CurrentClassName"].ToString();
-                StorageFolder CurrentClassFolder = await localFolder.CreateFolderAsync(CurrentClassName, CreationCollisionOption.OpenIfExists);
+                CurrentClassFolder = await localFolder.CreateFolderAsync(CurrentClassName, CreationCollisionOption.OpenIfExists);
                 //创建学生信息数据库，若已存在则打开
                 StorageFile StudentDBFile = await CurrentClassFolder.CreateFileAsync("students.db", CreationCollisionOption.OpenIfExists);
                 StudentDataBasePath = StudentDBFile.Path;

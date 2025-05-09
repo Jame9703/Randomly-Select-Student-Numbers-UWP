@@ -182,7 +182,6 @@
     </AppxManifest>
   </ItemGroup>
   <ItemGroup>
-    <Content Include="Photos\background.jpg" />
     <Content Include="Photos\GithubLogo.png" />
     <Content Include="Photos\RippleMask.png" />
     <Content Include="Assets\RSSN_Logos\LargeTile.scale-100.png" />
