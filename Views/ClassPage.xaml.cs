@@ -8,16 +8,11 @@ using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
 using Windows.ApplicationModel.DataTransfer;
-using Windows.Management.Deployment;
 using Windows.Storage;
 using Windows.Storage.Pickers;
 using Windows.System;
-using Windows.UI;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
-using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Hosting;
-using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using 随机抽取学号.Classes;
 
@@ -31,7 +26,6 @@ namespace 随机抽取学号.Views
         public List<string> names = new List<string>();
         ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-        private ListViewItem previousExpandedItem;
 
 
         public ClassPage()
@@ -40,6 +34,7 @@ namespace 随机抽取学号.Views
             // 初始化行号
             UpdateLineNumbers();
             StudentManager.StudentList.CollectionChanged += StudentList_CollectionChanged;
+            StudentManager.ClassList.CollectionChanged += ClassList_CollectionChanged;
             FileEditSegmented.SelectedIndex = 0;
             AddModeSegmented.SelectedIndex = 0;
         }
@@ -47,6 +42,10 @@ namespace 随机抽取学号.Views
         private async void StudentList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             UpdateStudentId();
+            await UpdateSaveButton();
+        }
+        private async void ClassList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
+        {
             await UpdateSaveButton();
         }
 
@@ -391,6 +390,7 @@ namespace 随机抽取学号.Views
             timer.Tick += Timer_Tick;
             timer.Start();
             await StudentManager.SaveStudentsAsync(StudentManager.StudentList);
+            await StudentManager.SaveClassesAsync(StudentManager.ClassList);
         }
         private async void Timer_Tick(object sender, object e)
         {
@@ -465,7 +465,7 @@ namespace 随机抽取学号.Views
             }
         }
 
-        private async void AddFileButton_Click(object sender, RoutedEventArgs e)
+        private async void DeleteAllStudentsButton_Click(object sender, RoutedEventArgs e)
         {
             StudentManager.StudentList.Clear();
             StudentManager.CheckedStudents.Clear();

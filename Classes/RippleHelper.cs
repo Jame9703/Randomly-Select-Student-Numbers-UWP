@@ -1,5 +1,8 @@
-﻿using System;
+﻿using Microsoft.Graphics.Canvas.Geometry;
+using Microsoft.Graphics.Canvas;
+using System;
 using System.Numerics;
+using Windows.Foundation;
 using Windows.UI;
 using Windows.UI.Composition;
 using Windows.UI.Xaml;

@@ -408,151 +408,117 @@
             x:Name="tabbedCommandBar"
             Height="100"
             VerticalAlignment="Top">
-            <controls:TabbedCommandBar.AutoSuggestBox>
+            <controls:TabbedCommandBar.PaneCustomContent>
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Grid x:Name="SaveButtonGrid">
+                        <Button
+                            x:Name="SaveButton"
+                            Width="100"
+                            Height="35"
+                            Padding="0,0,0,0"
+                            classes:RippleHelper.IsFillEnable="True"
+                            classes:RippleHelper.RippleColor="Green"
+                            classes:RippleHelper.RippleDuration="0:0:0.5"
+                            classes:RippleHelper.RippleHelperState="Pressed"
+                            Click="SaveButton_Click"
+                            CornerRadius="8,8,0,0"
+                            FontFamily="{StaticResource HarmonyOSSans}">
+                            <Grid>
+                                <StackPanel
+                                    x:Name="SaveStackPanel"
+                                    Width="100"
+                                    Height="35"
+                                    Background="LightYellow"
+                                    Orientation="Horizontal"
+                                    Spacing="8">
+                                    <FontIcon
+                                        Margin="10,0,0,0"
+                                        FontFamily="{StaticResource SegoeFluentIcons}"
+                                        FontSize="14"
+                                        Glyph="&#xE74E;" />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        FontSize="14"
+                                        Text="保存更改" />
+                                </StackPanel>
+                                <StackPanel
+                                    x:Name="SavingStackPanel"
+                                    Width="120"
+                                    Height="40"
+                                    Background="LightBlue"
+                                    Orientation="Horizontal"
+                                    Spacing=" 8"
+                                    Visibility="Collapsed">
+                                    <muxc:ProgressRing Margin="10,0,0,0" IsActive="True" />
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        Text="正在保存" />
+                                </StackPanel>
+                                <StackPanel
+                                    x:Name="SavedStackPanel"
+                                    Width="120"
+                                    Height="40"
+                                    Background="LightGreen"
+                                    Orientation="Horizontal"
+                                    Spacing="8"
+                                    Visibility="Collapsed">
+                                    <FontIcon
+                                        Margin="10,0,0,0"
+                                        FontFamily="{StaticResource SegoeFluentIcons}"
+                                        FontSize="14"
+                                        Glyph="&#xE8FB;" />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        FontSize="14"
+                                        Foreground="Green"
+                                        Text="保存成功" />
+                                </StackPanel>
+                            </Grid>
+                        </Button>
+                        <ProgressBar
+                            x:Name="SaveProcessBar"
+                            Width="Auto"
+                            Height="2"
+                            VerticalAlignment="Bottom" />
+                    </Grid>
+                    <ToggleSwitch
+                        x:Name="AutoSaveToggleSwitch"
+                        Width="130"
+                        MinWidth="130"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        OffContent="自动保存:关"
+                        OnContent="自动保存:开" />
+                </StackPanel>
+            </controls:TabbedCommandBar.PaneCustomContent>
+            <!--<controls:TabbedCommandBar.AutoSuggestBox>
                 <AutoSuggestBox AutomationProperties.Name="Search" QueryIcon="Find" />
-            </controls:TabbedCommandBar.AutoSuggestBox>
+            </controls:TabbedCommandBar.AutoSuggestBox>-->
             <controls:TabbedCommandBar.PaneFooter>
                 <CommandBar Background="Transparent" DefaultLabelPosition="Right">
+                    <AppBarButton
+                        x:Name="OpenLocalFolderButton"
+                        Click="OpenLocalFolderButton_Click"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Label="本地文件夹">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xEC25;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
                     <AppBarButton FontFamily="{StaticResource HarmonyOSSans}" Label="帮助">
                         <AppBarButton.Icon>
                             <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE9CE;" />
                         </AppBarButton.Icon>
                     </AppBarButton>
+
                 </CommandBar>
             </controls:TabbedCommandBar.PaneFooter>
 
             <controls:TabbedCommandBar.MenuItems>
-                <controls:TabbedCommandBarItem>
-                    <controls:TabbedCommandBarItem.Header>
-                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="文件" />
-                    </controls:TabbedCommandBarItem.Header>
-                    <AppBarElementContainer>
-                        <StackPanel Orientation="Horizontal" Spacing="10">
-                            <Grid x:Name="SaveButtonGrid">
-                                <Button
-                                    x:Name="SaveButton"
-                                    Width="120"
-                                    Height="40"
-                                    Padding="0,0,0,0"
-                                    classes:RippleHelper.IsFillEnable="True"
-                                    classes:RippleHelper.RippleColor="Green"
-                                    classes:RippleHelper.RippleDuration="0:0:0.5"
-                                    classes:RippleHelper.RippleHelperState="Pressed"
-                                    Click="SaveButton_Click"
-                                    FontFamily="{StaticResource HarmonyOSSans}">
-                                    <Grid>
-                                        <StackPanel
-                                            x:Name="SaveStackPanel"
-                                            Width="120"
-                                            Height="40"
-                                            Background="LightYellow"
-                                            Orientation="Horizontal"
-                                            Spacing="5">
-                                            <FontIcon
-                                                Margin="20,0,0,0"
-                                                FontFamily="{StaticResource SegoeFluentIcons}"
-                                                Glyph="&#xE74E;" />
-                                            <TextBlock
-                                                VerticalAlignment="Center"
-                                                FontFamily="{StaticResource HarmonyOSSans}"
-                                                Text="保存更改" />
-                                        </StackPanel>
-                                        <StackPanel
-                                            x:Name="SavingStackPanel"
-                                            Width="120"
-                                            Height="40"
-                                            Background="LightBlue"
-                                            Orientation="Horizontal"
-                                            Spacing=" 5"
-                                            Visibility="Collapsed">
-                                            <muxc:ProgressRing Margin="20,0,0,0" IsActive="True" />
-                                            <TextBlock
-                                                HorizontalAlignment="Center"
-                                                FontFamily="{StaticResource HarmonyOSSans}"
-                                                Text="正在保存" />
-                                        </StackPanel>
-                                        <StackPanel
-                                            x:Name="SavedStackPanel"
-                                            Width="120"
-                                            Height="40"
-                                            Background="LightGreen"
-                                            Orientation="Horizontal"
-                                            Spacing="5"
-                                            Visibility="Collapsed">
-                                            <FontIcon
-                                                Margin="20,0,0,0"
-                                                FontFamily="{StaticResource SegoeFluentIcons}"
-                                                Glyph="&#xE8FB;" />
-                                            <TextBlock
-                                                VerticalAlignment="Center"
-                                                FontFamily="{StaticResource HarmonyOSSans}"
-                                                Foreground="Green"
-                                                Text="保存成功" />
-                                        </StackPanel>
-                                    </Grid>
-                                </Button>
-                                <ProgressBar
-                                    x:Name="SaveProcessBar"
-                                    Width="Auto"
-                                    Height="2"
-                                    VerticalAlignment="Bottom" />
-                            </Grid>
-                            <ToggleSwitch
-                                x:Name="AutoSaveToggleSwitch"
-                                Width="120"
-                                MinWidth=" 130"
-                                HorizontalAlignment="Left"
-                                VerticalAlignment="Center"
-                                FontFamily="{StaticResource HarmonyOSSans}"
-                                OffContent="自动保存:关"
-                                OnContent="自动保存:开" />
-                        </StackPanel>
-                    </AppBarElementContainer>
-                    <AppBarSeparator d:IsLocked="True" />
-                    <AppBarButton
-                        x:Name="AddFileButton"
-                        FontFamily="{StaticResource HarmonyOSSans}"
-                        Label="新建班级">
-                        <AppBarButton.Icon>
-                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE82E;" />
-                        </AppBarButton.Icon>
-                        <AppBarButton.Flyout>
-                            <Flyout>
-                                <StackPanel>
-                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="警告：此操作将清空学生列表" />
-                                    <Button
-                                        Margin="0,5,0,0"
-                                        HorizontalAlignment="Center"
-                                        Click="AddFileButton_Click"
-                                        Content="确定"
-                                        FontFamily="{StaticResource HarmonyOSSans}"
-                                        Style="{StaticResource AccentButtonStyle}" />
-                                </StackPanel>
-                            </Flyout>
-                        </AppBarButton.Flyout>
-                    </AppBarButton>
-
-                    <AppBarButton FontFamily="{StaticResource HarmonyOSSans}" Label="打开">
-                        <AppBarButton.Icon>
-                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE7A7;" />
-                        </AppBarButton.Icon>
-                    </AppBarButton>
-                    <AppBarButton FontFamily="{StaticResource HarmonyOSSans}" Label="另存为">
-                        <AppBarButton.Icon>
-                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE7A7;" />
-                        </AppBarButton.Icon>
-                    </AppBarButton>
-                    <AppBarSeparator />
-                    <AppBarButton
-                        x:Name="OpenLocalFolderButton"
-                        Click="OpenLocalFolderButton_Click"
-                        FontFamily="{StaticResource HarmonyOSSans}"
-                        Label="打开本地文件夹">
-                        <AppBarButton.Icon>
-                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xEC25;" />
-                        </AppBarButton.Icon>
-                    </AppBarButton>
-                </controls:TabbedCommandBarItem>
                 <controls:TabbedCommandBarItem IsContextual="True" Tag="Student">
                     <controls:TabbedCommandBarItem.Header>
                         <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="学生" />
@@ -694,6 +660,29 @@
                         <AppBarButton.Icon>
                             <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE74D;" />
                         </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton
+                        x:Name="DeleteAllStudentsButton"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Foreground="#FFFC5665"
+                        Label="删除所有">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE74D;" />
+                        </AppBarButton.Icon>
+                        <AppBarButton.Flyout>
+                            <Flyout>
+                                <StackPanel>
+                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="警告：此操作将清空学生列表" />
+                                    <Button
+                                        Margin="0,5,0,0"
+                                        HorizontalAlignment="Center"
+                                        Click="DeleteAllStudentsButton_Click"
+                                        Content="确定"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        Style="{StaticResource AccentButtonStyle}" />
+                                </StackPanel>
+                            </Flyout>
+                        </AppBarButton.Flyout>
                     </AppBarButton>
                     <AppBarButton
                         x:Name="PhotoFolderPickerButton"
