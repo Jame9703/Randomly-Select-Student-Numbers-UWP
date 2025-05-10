@@ -1,0 +1,247 @@
+﻿using System;
+using System.Collections.Generic;
+using System.Collections.ObjectModel;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Microsoft.UI.Xaml;
+using Microsoft.UI.Xaml.Controls;
+using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI.Xaml.Navigation;
+
+// https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
+
+namespace 随机抽取学号.Views
+{
+    /// <summary>
+    /// 可用于自身或导航至 Frame 内部的空白页。
+    /// </summary>
+    public sealed partial class NumbersPage : Page
+    {
+        public ObservableCollection<int> RandomNumbersList { get; set; } = new ObservableCollection<int>();
+        bool isGridViewUpdated;
+        bool isListUpdated;
+        bool isTextBoxUpdated;
+        public NumbersPage()
+        {
+            this.InitializeComponent();
+            isGridViewUpdated = false;
+            isListUpdated = false;
+            isTextBoxUpdated = false;
+            segmented.SelectionChanged += segmented_SelectionChanged;
+        }
+        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        {
+            GC.Collect();
+        }
+        protected override void OnNavigatedTo(NavigationEventArgs e)
+        {
+            base.OnNavigatedTo(e);
+        }
+        private void ClearAll()
+        {
+            RangeFromNumberBox.Text = "";
+            SelectCountNumberBox.Text = "";
+            ResultTextBlock.Text = "";
+            RangeToNumberBox.Text = "";
+        }
+        private async void StartButton_Click(object sender, RoutedEventArgs e)
+        {
+            if (RangeFromNumberBox.Text == "" | RangeToNumberBox.Text == "" | SelectCountNumberBox.Text == "")
+            {
+                PopupNotice popupNotice = new PopupNotice("请输入完整信息");
+                popupNotice.ShowPopup();
+            }
+            else
+            {
+                isGridViewUpdated = false;
+                isListUpdated = false;
+                isTextBoxUpdated = false;
+                int Start = int.Parse(RangeFromNumberBox.Text);
+                int End = int.Parse(RangeToNumberBox.Text);
+                if (Start > End)
+                {
+                    PopupNotice popupNotice = new PopupNotice("起始值不能大于终止值");
+                    popupNotice.PopupContent.Severity = InfoBarSeverity.Warning;
+                    popupNotice.ShowPopup();
+                }
+                bool success = int.TryParse(SelectCountNumberBox.Text, out int TakeCount);
+                if (success)
+                {
+                    // 转换成功
+                    await Task.Run(() =>
+                    {
+                        // 生成指定范围内的数字序列
+                        List<int> numbers = Enumerable.Range(Start, End - Start + 1).ToList();
+                        // 使用随机数生成器对数字序列进行打乱
+                        Random random = new Random();
+                        numbers = numbers.OrderBy(x => random.Next()).ToList();
+
+                        // 取前几位数字
+                        RandomNumbersList = new ObservableCollection<int>(numbers.Take(TakeCount));
+                    });
+                    await Dispatcher.RunAsync(Windows.UI.Core.CoreDispatcherPriority.Normal, () =>
+                    {
+                        //清除旧的列表内容
+                        //RandomNumbersListStackPanel.Children.Clear();
+                        // 清除旧的网格内容
+                        //RandomNumbersGridView.Items.Clear();
+                        //按需清除文本内容
+
+                        ResultTextBlock.Text = "";
+                        if (segmented.SelectedIndex == 0)
+                        {
+                            if (isGridViewUpdated == false)
+                            {
+                                ShowRandomNumbersInGridView();
+                                isGridViewUpdated = true;
+                            }
+                        }
+                        else if (segmented.SelectedIndex == 1)
+                        {
+                            if (isListUpdated == false)
+                            {
+                                ShowRandomNumbersInList();
+                                isListUpdated = true;
+                            }
+                        }
+                        else
+                        {
+                            if (isTextBoxUpdated == false)
+                            {
+                                ShowRandomNumbersInTextBox();
+                                isTextBoxUpdated = true;
+                            }
+                        }
+                    });
+
+                }
+                else
+                {
+                    // 转换失败，NumberBox中的值不是有效的整数
+                    SelectCountNumberBox.Text = "10";
+                }
+            }
+        }
+
+        private void ResetAll_Click(object sender, RoutedEventArgs e)
+        {
+            ClearAll();
+        }
+
+        private void ClearResult_Click(object sender, RoutedEventArgs e)
+        {
+            ResultTextBlock.Text = "";
+            RandomNumbersGridView.ItemsSource = null;
+            RandomNumbersListView.ItemsSource = null;
+        }
+
+        private void Slider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            Slider slider = sender as Slider;
+            if (slider != null)
+            {
+                ResultTextBlock.FontSize = slider.Value;
+            }
+        }
+
+        private void segmented_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        {
+            if (segmented.SelectedIndex == 0)
+            {
+                //网格
+                RandomNumbersGridView.Visibility = Visibility.Visible;
+                RandomNumbersListView.Visibility = Visibility.Collapsed;
+                RandomNumbersTextBoxGrid.Visibility = Visibility.Collapsed;
+                if (isGridViewUpdated == false)
+                {
+                    ShowRandomNumbersInGridView();
+                    isGridViewUpdated = true;
+                }
+            }
+            else if (segmented.SelectedIndex == 1)
+            {
+                //列表
+                RandomNumbersGridView.Visibility = Visibility.Collapsed;
+                RandomNumbersListView.Visibility = Visibility.Visible;
+                RandomNumbersTextBoxGrid.Visibility = Visibility.Collapsed;
+                if (isListUpdated == false)
+                {
+                    ShowRandomNumbersInList();
+                    isListUpdated = true;
+                }
+            }
+            else
+            {
+                //文本
+                RandomNumbersGridView.Visibility = Visibility.Collapsed;
+                RandomNumbersListView.Visibility = Visibility.Collapsed;
+                RandomNumbersTextBoxGrid.Visibility = Visibility.Visible;
+                if (isTextBoxUpdated == false)
+                {
+                    ShowRandomNumbersInTextBox();
+                    isTextBoxUpdated = true;
+                }
+            }
+        }
+
+        private void ShowRandomNumbersInGridView()
+        {
+            RandomNumbersGridView.ItemsSource = null;
+            RandomNumbersGridView.ItemsSource = RandomNumbersList;
+        }
+
+        private void ShowRandomNumbersInList()
+        {
+            RandomNumbersListView.ItemsSource = null;
+            RandomNumbersListView.ItemsSource = RandomNumbersList;
+        }
+
+        private void ShowRandomNumbersInTextBox()
+        {
+            StringBuilder sb = new StringBuilder();
+            //文本
+            RandomNumbersGridView.Visibility = Visibility.Collapsed;
+            RandomNumbersListView.Visibility = Visibility.Collapsed;
+            RandomNumbersTextBoxGrid.Visibility = Visibility.Visible;
+            switch (SpanModeComboBox.SelectedIndex)
+            {
+                case 0:
+                    foreach (int result in RandomNumbersList)
+                    {
+                        sb.Append("--" + result.ToString() + "--");
+                    }
+                    ResultTextBlock.Text = sb.ToString();
+                    break;
+                case 1:
+                    foreach (int result in RandomNumbersList)
+                    {
+                        sb.Append("“" + result.ToString() + "”");
+                    }
+                    ResultTextBlock.Text = sb.ToString();
+                    break;
+                case 2:
+                    foreach (int result in RandomNumbersList)
+                    {
+                        sb.Append("‘" + result.ToString() + "’");
+                    }
+                    ResultTextBlock.Text = sb.ToString();
+                    break;
+                case 3:
+                    foreach (int result in RandomNumbersList)
+                    {
+                        sb.Append(result.ToString() + " ");
+                    }
+                    ResultTextBlock.Text = sb.ToString();
+                    break;
+                case 4:
+                    foreach (int result in RandomNumbersList)
+                    {
+                        sb.Append(result.ToString() + "\n");
+                    }
+                    ResultTextBlock.Text = sb.ToString();
+                    break;
+            }
+        }
+    }
+}

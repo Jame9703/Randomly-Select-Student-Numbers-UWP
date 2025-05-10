@@ -1,0 +1,944 @@
+﻿<Page
+    x:Class="随机抽取学号.Views.ClassPage"
+    xmlns="http://schemas.microsoft.com/winfx/2006/xaml/presentation"
+    xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml"
+    xmlns:animations="using:CommunityToolkit.WinUI.Animations"
+    xmlns:classes="using:随机抽取学号.Classes"
+    xmlns:controls="using:CommunityToolkit.WinUI.Controls"
+    xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
+    xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
+    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
+    Loaded="Page_Loaded"
+    NavigationCacheMode="Enabled"
+    mc:Ignorable="d">
+    <Page.Resources>
+        <ResourceDictionary>
+            <ResourceDictionary.MergedDictionaries>
+                <ResourceDictionary Source="ms-appx:///CommunityToolkit.WinUI.Controls.Segmented/Segmented/Segmented.xaml" />
+            </ResourceDictionary.MergedDictionaries>
+            <Style x:Key="PanelStyle" TargetType="StackPanel">
+                <Setter Property="Padding" Value="10" />
+                <Setter Property="BorderThickness" Value="1" />
+                <Setter Property="BorderBrush" Value="{ThemeResource CardStrokeColorDefaultBrush}" />
+                <Setter Property="Orientation" Value="Horizontal" />
+                <Setter Property="Spacing" Value="8" />
+                <Setter Property="animations:Implicit.HideAnimations" Value="{StaticResource ShowTransitions}" />
+            </Style>
+            <animations:ImplicitAnimationSet x:Name="ShowTransitions">
+                <animations:OffsetAnimation
+                    EasingMode="EaseOut"
+                    From="0,24,0"
+                    To="0"
+                    Duration="0:0:0.4" />
+                <animations:OpacityAnimation
+                    EasingMode="EaseOut"
+                    From="0"
+                    To="1"
+                    Duration="0:0:0.2" />
+            </animations:ImplicitAnimationSet>
+            <animations:ImplicitAnimationSet x:Name="HideTransitions">
+                <animations:OffsetAnimation
+                    EasingMode="EaseOut"
+                    From="0"
+                    To="0,24,0"
+                    Duration="0:0:0.2" />
+                <animations:OpacityAnimation
+                    EasingMode="EaseOut"
+                    From="1"
+                    To="0"
+                    Duration="0:0:0.1" />
+            </animations:ImplicitAnimationSet>
+
+            <DataTemplate x:Key="StudentListTemplate" x:DataType="classes:Student">
+                <Grid Height="120">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel
+                        Grid.Column="0"
+                        MinWidth="50"
+                        Margin="10,0,0,0"
+                        VerticalAlignment="Center"
+                        BorderBrush="{ThemeResource SystemAccentColor}"
+                        BorderThickness="2"
+                        CornerRadius="4"
+                        Orientation="Vertical">
+                        <TextBlock
+                            HorizontalAlignment="Center"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="14"
+                            Text="学号" />
+                        <TextBlock
+                            x:Name="IdTextBlock"
+                            HorizontalAlignment="Center"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="20"
+                            Text="{x:Bind StudentNumber, Mode=OneWay}"
+                            TextAlignment="Center" />
+                    </StackPanel>
+                    <Border
+                        Grid.Column="1"
+                        Height="100"
+                        Margin="20,0,0,0"
+                        Background="Transparent"
+                        CornerRadius="4">
+                        <Image
+                            x:Name="StudentPhoto"
+                            Width="75"
+                            Height="100"
+                            Source="{x:Bind PhotoPath, Mode=OneWay}"
+                            Stretch="UniformToFill" />
+                    </Border>
+                    <StackPanel
+                        Grid.Column="2"
+                        Margin="20,0,0,0"
+                        VerticalAlignment="Center"
+                        Orientation="Vertical">
+                        <StackPanel
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="10">
+                            <TextBlock
+                                Margin="0,5,0,0"
+                                VerticalAlignment="Center"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                FontSize="16"
+                                Text="性别:" />
+                            <muxc:RadioButtons
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                MaxColumns="2"
+                                SelectedIndex="{x:Bind Gender, Mode=TwoWay}">
+                                <RadioButton Content="女" FontFamily="{StaticResource HarmonyOSSans}" />
+                                <RadioButton Content="男" FontFamily="{StaticResource HarmonyOSSans}" />
+                            </muxc:RadioButtons>
+                        </StackPanel>
+                        <StackPanel
+                            VerticalAlignment="Center"
+                            Orientation="Horizontal"
+                            Spacing="10">
+                            <TextBlock
+                                VerticalAlignment="Center"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                FontSize="16"
+                                Text="姓名:" />
+                            <TextBox
+                                x:Name="NameTextBlock"
+                                Width="Auto"
+                                Margin="0,0,20,0"
+                                HorizontalAlignment="Left"
+                                VerticalAlignment="Center"
+                                FontFamily="{StaticResource HarmonyOSSans}"
+                                FontSize="20"
+                                Text="{x:Bind Name, Mode=TwoWay}" />
+                        </StackPanel>
+                    </StackPanel>
+                </Grid>
+            </DataTemplate>
+            <Style x:Key="EditorStyle" TargetType="TextBox">
+                <Setter Property="Foreground" Value="{ThemeResource TextControlForeground}" />
+                <Setter Property="Background" Value="{ThemeResource TextControlBackground}" />
+                <Setter Property="BorderBrush" Value="{ThemeResource TextControlBorderBrush}" />
+                <Setter Property="SelectionHighlightColor" Value="{ThemeResource TextControlSelectionHighlightColor}" />
+                <Setter Property="BorderThickness" Value="{ThemeResource TextControlBorderThemeThickness}" />
+                <Setter Property="FontFamily" Value="{ThemeResource ContentControlThemeFontFamily}" />
+                <Setter Property="FontSize" Value="{ThemeResource ControlContentThemeFontSize}" />
+                <Setter Property="ScrollViewer.HorizontalScrollMode" Value="Auto" />
+                <Setter Property="ScrollViewer.VerticalScrollMode" Value="Auto" />
+                <Setter Property="ScrollViewer.HorizontalScrollBarVisibility" Value="Hidden" />
+                <Setter Property="ScrollViewer.VerticalScrollBarVisibility" Value="Hidden" />
+                <Setter Property="ScrollViewer.IsDeferredScrollingEnabled" Value="False" />
+                <Setter Property="Padding" Value="{ThemeResource TextControlThemePadding}" />
+                <Setter Property="UseSystemFocusVisuals" Value="{ThemeResource IsApplicationFocusVisualKindReveal}" />
+                <Setter Property="ContextFlyout" Value="{StaticResource TextControlCommandBarContextFlyout}" />
+                <Setter Property="SelectionFlyout" Value="{StaticResource TextControlCommandBarSelectionFlyout}" />
+                <Setter Property="Template">
+                    <Setter.Value>
+                        <ControlTemplate TargetType="TextBox">
+                            <Grid>
+                                <Grid.Resources>
+                                    <Style x:Name="DeleteButtonStyle" TargetType="Button">
+                                        <Setter Property="Template">
+                                            <Setter.Value>
+                                                <ControlTemplate TargetType="Button">
+                                                    <Grid
+                                                        x:Name="ButtonLayoutGrid"
+                                                        Background="{ThemeResource TextControlButtonBackground}"
+                                                        BorderBrush="{ThemeResource TextControlButtonBorderBrush}"
+                                                        BorderThickness="{TemplateBinding BorderThickness}">
+                                                        <TextBlock
+                                                            x:Name="GlyphElement"
+                                                            HorizontalAlignment="Center"
+                                                            VerticalAlignment="Center"
+                                                            AutomationProperties.AccessibilityView="Raw"
+                                                            FontFamily="{ThemeResource SymbolThemeFontFamily}"
+                                                            FontSize="12"
+                                                            FontStyle="Normal"
+                                                            Foreground="{ThemeResource TextControlButtonForeground}"
+                                                            Text="&#xE10A;" />
+                                                        <VisualStateManager.VisualStateGroups>
+                                                            <VisualStateGroup x:Name="CommonStates">
+                                                                <VisualState x:Name="Normal" />
+                                                                <VisualState x:Name="PointerOver">
+                                                                    <Storyboard>
+                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonLayoutGrid" Storyboard.TargetProperty="Background">
+                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextControlButtonBackgroundPointerOver}" />
+                                                                        </ObjectAnimationUsingKeyFrames>
+                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonLayoutGrid" Storyboard.TargetProperty="BorderBrush">
+                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextControlButtonBorderBrushPointerOver}" />
+                                                                        </ObjectAnimationUsingKeyFrames>
+                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="GlyphElement" Storyboard.TargetProperty="Foreground">
+                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextControlButtonForegroundPointerOver}" />
+                                                                        </ObjectAnimationUsingKeyFrames>
+                                                                    </Storyboard>
+                                                                </VisualState>
+                                                                <VisualState x:Name="Pressed">
+                                                                    <Storyboard>
+                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonLayoutGrid" Storyboard.TargetProperty="Background">
+                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextControlButtonBackgroundPressed}" />
+                                                                        </ObjectAnimationUsingKeyFrames>
+                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ButtonLayoutGrid" Storyboard.TargetProperty="BorderBrush">
+                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextControlButtonBorderBrushPressed}" />
+                                                                        </ObjectAnimationUsingKeyFrames>
+                                                                        <ObjectAnimationUsingKeyFrames Storyboard.TargetName="GlyphElement" Storyboard.TargetProperty="Foreground">
+                                                                            <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextControlButtonForegroundPressed}" />
+                                                                        </ObjectAnimationUsingKeyFrames>
+                                                                    </Storyboard>
+                                                                </VisualState>
+                                                                <VisualState x:Name="Disabled">
+                                                                    <Storyboard>
+                                                                        <DoubleAnimation
+                                                                            Storyboard.TargetName="ButtonLayoutGrid"
+                                                                            Storyboard.TargetProperty="Opacity"
+                                                                            To="0"
+                                                                            Duration="0" />
+                                                                    </Storyboard>
+                                                                </VisualState>
+                                                            </VisualStateGroup>
+                                                        </VisualStateManager.VisualStateGroups>
+                                                    </Grid>
+                                                </ControlTemplate>
+                                            </Setter.Value>
+                                        </Setter>
+                                    </Style>
+                                </Grid.Resources>
+                                <Grid.ColumnDefinitions>
+                                    <ColumnDefinition Width="*" />
+                                    <ColumnDefinition Width="Auto" />
+                                </Grid.ColumnDefinitions>
+                                <Grid.RowDefinitions>
+                                    <RowDefinition Height="Auto" />
+                                    <RowDefinition Height="*" />
+                                    <RowDefinition Height="Auto" />
+                                </Grid.RowDefinitions>
+                                <ContentPresenter
+                                    x:Name="HeaderContentPresenter"
+                                    Grid.Row="0"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    Margin="{ThemeResource TextBoxTopHeaderMargin}"
+                                    VerticalAlignment="Top"
+                                    x:DeferLoadStrategy="Lazy"
+                                    Content="{TemplateBinding Header}"
+                                    ContentTemplate="{TemplateBinding HeaderTemplate}"
+                                    FontWeight="Normal"
+                                    Foreground="{ThemeResource TextControlHeaderForeground}"
+                                    TextWrapping="Wrap"
+                                    Visibility="Collapsed" />
+                                <Border
+                                    x:Name="BorderElement"
+                                    Grid.Row="1"
+                                    Grid.RowSpan="1"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    MinWidth="{ThemeResource TextControlThemeMinWidth}"
+                                    MinHeight="{ThemeResource TextControlThemeMinHeight}"
+                                    Background="{TemplateBinding Background}"
+                                    BorderBrush="{TemplateBinding BorderBrush}"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    Control.IsTemplateFocusTarget="True"
+                                    CornerRadius="{TemplateBinding CornerRadius}" />
+                                <ScrollViewer
+                                    x:Name="ContentElement"
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Margin="{TemplateBinding BorderThickness}"
+                                    Padding="{TemplateBinding Padding}"
+                                    AutomationProperties.AccessibilityView="Raw"
+                                    HorizontalScrollBarVisibility="{TemplateBinding ScrollViewer.HorizontalScrollBarVisibility}"
+                                    HorizontalScrollMode="{TemplateBinding ScrollViewer.HorizontalScrollMode}"
+                                    IsDeferredScrollingEnabled="{TemplateBinding ScrollViewer.IsDeferredScrollingEnabled}"
+                                    IsHorizontalRailEnabled="{TemplateBinding ScrollViewer.IsHorizontalRailEnabled}"
+                                    IsTabStop="False"
+                                    IsVerticalRailEnabled="{TemplateBinding ScrollViewer.IsVerticalRailEnabled}"
+                                    VerticalScrollBarVisibility="{TemplateBinding ScrollViewer.VerticalScrollBarVisibility}"
+                                    VerticalScrollMode="{TemplateBinding ScrollViewer.VerticalScrollMode}"
+                                    ZoomMode="Disabled" />
+                                <TextBlock
+                                    x:Name="PlaceholderTextContentPresenter"
+                                    Grid.Row="1"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    Margin="{TemplateBinding BorderThickness}"
+                                    Padding="{TemplateBinding Padding}"
+                                    Foreground="{Binding PlaceholderForeground, RelativeSource={RelativeSource Mode=TemplatedParent}, TargetNullValue={ThemeResource TextControlPlaceholderForeground}}"
+                                    IsHitTestVisible="False"
+                                    Text="{TemplateBinding PlaceholderText}"
+                                    TextAlignment="{TemplateBinding TextAlignment}"
+                                    TextWrapping="{TemplateBinding TextWrapping}" />
+                                <Button
+                                    x:Name="DeleteButton"
+                                    Grid.Row="1"
+                                    Grid.Column="1"
+                                    MinWidth="34"
+                                    Margin="{ThemeResource HelperButtonThemePadding}"
+                                    VerticalAlignment="Stretch"
+                                    AutomationProperties.AccessibilityView="Raw"
+                                    BorderThickness="{TemplateBinding BorderThickness}"
+                                    FontSize="{TemplateBinding FontSize}"
+                                    IsTabStop="False"
+                                    Style="{StaticResource DeleteButtonStyle}"
+                                    Visibility="Collapsed" />
+                                <ContentPresenter
+                                    x:Name="DescriptionPresenter"
+                                    Grid.Row="2"
+                                    Grid.Column="0"
+                                    Grid.ColumnSpan="2"
+                                    x:Load="False"
+                                    AutomationProperties.AccessibilityView="Raw"
+                                    Content="{TemplateBinding Description}"
+                                    Foreground="{ThemeResource SystemControlDescriptionTextForegroundBrush}" />
+                                <VisualStateManager.VisualStateGroups>
+                                    <VisualStateGroup x:Name="CommonStates">
+                                        <VisualState x:Name="Normal" />
+                                        <VisualState x:Name="Disabled">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="HeaderContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextControlHeaderForegroundDisabled}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderElement" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextControlBackgroundDisabled}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderElement" Storyboard.TargetProperty="BorderBrush">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextControlBorderBrushDisabled}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentElement" Storyboard.TargetProperty="Foreground">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextControlForegroundDisabled}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PlaceholderTextContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{Binding PlaceholderForeground, RelativeSource={RelativeSource Mode=TemplatedParent}, TargetNullValue={ThemeResource TextControlPlaceholderForegroundDisabled}}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="PointerOver">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderElement" Storyboard.TargetProperty="BorderBrush">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextControlBorderBrushPointerOver}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderElement" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextControlBackgroundPointerOver}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PlaceholderTextContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{Binding PlaceholderForeground, RelativeSource={RelativeSource Mode=TemplatedParent}, TargetNullValue={ThemeResource TextControlPlaceholderForegroundPointerOver}}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentElement" Storyboard.TargetProperty="Foreground">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextControlForegroundPointerOver}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="Focused">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="PlaceholderTextContentPresenter" Storyboard.TargetProperty="Foreground">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{Binding PlaceholderForeground, RelativeSource={RelativeSource Mode=TemplatedParent}, TargetNullValue={ThemeResource TextControlPlaceholderForegroundFocused}}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderElement" Storyboard.TargetProperty="Background">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextControlBackgroundFocused}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="BorderElement" Storyboard.TargetProperty="BorderBrush">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextControlBorderBrushFocused}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentElement" Storyboard.TargetProperty="Foreground">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="{ThemeResource TextControlForegroundFocused}" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="ContentElement" Storyboard.TargetProperty="RequestedTheme">
+                                                    <DiscreteObjectKeyFrame KeyTime="0" Value="Light" />
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                    </VisualStateGroup>
+                                    <VisualStateGroup x:Name="ButtonStates">
+                                        <VisualState x:Name="ButtonVisible">
+                                            <Storyboard>
+                                                <ObjectAnimationUsingKeyFrames Storyboard.TargetName="DeleteButton" Storyboard.TargetProperty="Visibility">
+                                                    <DiscreteObjectKeyFrame KeyTime="0">
+                                                        <DiscreteObjectKeyFrame.Value>
+                                                            <Visibility>Visible</Visibility>
+                                                        </DiscreteObjectKeyFrame.Value>
+                                                    </DiscreteObjectKeyFrame>
+                                                </ObjectAnimationUsingKeyFrames>
+                                            </Storyboard>
+                                        </VisualState>
+                                        <VisualState x:Name="ButtonCollapsed" />
+                                    </VisualStateGroup>
+                                </VisualStateManager.VisualStateGroups>
+                            </Grid>
+                        </ControlTemplate>
+                    </Setter.Value>
+                </Setter>
+            </Style>
+            <DataTemplate x:Key="ClassListViewItemTemplate" x:DataType="classes:Class">
+                <StackPanel
+                    Height="50"
+                    Orientation="Horizontal"
+                    Spacing="10">
+                    <muxc:PersonPicture Width="40" ProfilePicture="{x:Bind ClassEmblemPath, Mode=OneWay}" />
+                    <TextBox
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        FontSize="16"
+                        Text="{x:Bind ClassName, Mode=TwoWay}" />
+                </StackPanel>
+            </DataTemplate>
+        </ResourceDictionary>
+    </Page.Resources>
+
+    <Grid x:Name="ContentGrid">
+        <controls:TabbedCommandBar
+            x:Name="tabbedCommandBar"
+            Height="100"
+            VerticalAlignment="Top">
+            <controls:TabbedCommandBar.PaneCustomContent>
+                <StackPanel Orientation="Horizontal" Spacing="10">
+                    <Grid x:Name="SaveButtonGrid">
+                        <Button
+                            x:Name="SaveButton"
+                            Width="100"
+                            Height="35"
+                            Padding="0,0,0,0"
+                            classes:RippleHelper.IsFillEnable="True"
+                            classes:RippleHelper.RippleColor="Green"
+                            classes:RippleHelper.RippleDuration="0:0:0.5"
+                            classes:RippleHelper.RippleHelperState="Pressed"
+                            Click="SaveButton_Click"
+                            CornerRadius="8,8,0,0"
+                            FontFamily="{StaticResource HarmonyOSSans}">
+                            <Grid>
+                                <StackPanel
+                                    x:Name="SaveStackPanel"
+                                    Width="100"
+                                    Height="35"
+                                    Background="LightYellow"
+                                    Orientation="Horizontal"
+                                    Spacing="8">
+                                    <FontIcon
+                                        Margin="10,0,0,0"
+                                        FontFamily="{StaticResource SegoeFluentIcons}"
+                                        FontSize="14"
+                                        Glyph="&#xE74E;" />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        FontSize="14"
+                                        Text="保存更改" />
+                                </StackPanel>
+                                <StackPanel
+                                    x:Name="SavingStackPanel"
+                                    Width="120"
+                                    Height="40"
+                                    Background="LightBlue"
+                                    Orientation="Horizontal"
+                                    Spacing=" 8"
+                                    Visibility="Collapsed">
+                                    <muxc:ProgressRing Margin="10,0,0,0" IsActive="True" />
+                                    <TextBlock
+                                        HorizontalAlignment="Center"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        Text="正在保存" />
+                                </StackPanel>
+                                <StackPanel
+                                    x:Name="SavedStackPanel"
+                                    Width="120"
+                                    Height="40"
+                                    Background="LightGreen"
+                                    Orientation="Horizontal"
+                                    Spacing="8"
+                                    Visibility="Collapsed">
+                                    <FontIcon
+                                        Margin="10,0,0,0"
+                                        FontFamily="{StaticResource SegoeFluentIcons}"
+                                        FontSize="14"
+                                        Glyph="&#xE8FB;" />
+                                    <TextBlock
+                                        VerticalAlignment="Center"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        FontSize="14"
+                                        Foreground="Green"
+                                        Text="保存成功" />
+                                </StackPanel>
+                            </Grid>
+                        </Button>
+                        <ProgressBar
+                            x:Name="SaveProcessBar"
+                            Width="Auto"
+                            Height="2"
+                            VerticalAlignment="Bottom" />
+                    </Grid>
+                    <ToggleSwitch
+                        x:Name="AutoSaveToggleSwitch"
+                        Width="130"
+                        MinWidth="130"
+                        HorizontalAlignment="Left"
+                        VerticalAlignment="Center"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        OffContent="自动保存:关"
+                        OnContent="自动保存:开" />
+                </StackPanel>
+            </controls:TabbedCommandBar.PaneCustomContent>
+            <!--<controls:TabbedCommandBar.AutoSuggestBox>
+                <AutoSuggestBox AutomationProperties.Name="Search" QueryIcon="Find" />
+            </controls:TabbedCommandBar.AutoSuggestBox>-->
+            <controls:TabbedCommandBar.PaneFooter>
+                <CommandBar Background="Transparent" DefaultLabelPosition="Right">
+                    <AppBarButton
+                        x:Name="OpenLocalFolderButton"
+                        Click="OpenLocalFolderButton_Click"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Label="本地文件夹">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xEC25;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton FontFamily="{StaticResource HarmonyOSSans}" Label="帮助">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE9CE;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+
+                </CommandBar>
+            </controls:TabbedCommandBar.PaneFooter>
+
+            <controls:TabbedCommandBar.MenuItems>
+                <controls:TabbedCommandBarItem IsContextual="True" Tag="Student">
+                    <controls:TabbedCommandBarItem.Header>
+                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="学生" />
+                    </controls:TabbedCommandBarItem.Header>
+                    <AppBarToggleButton
+                        x:Name="MultiSelectStudentsButton"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Label="多选模式"
+                        Unchecked="MultiSelectStudentsButton_Unchecked">
+                        <AppBarToggleButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE762;" />
+                        </AppBarToggleButton.Icon>
+                    </AppBarToggleButton>
+                    <AppBarButton
+                        x:Name="AddItemButton"
+                        AllowFocusOnInteraction="True"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Label="添加">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE8FA;" />
+                        </AppBarButton.Icon>
+                        <AppBarButton.Flyout>
+                            <Flyout>
+                                <StackPanel>
+                                    <controls:Segmented
+                                        x:Name="AddModeSegmented"
+                                        HorizontalAlignment="Center"
+                                        VerticalAlignment="Top"
+                                        SelectionChanged="AddModeSegmented_SelectionChanged">
+                                        <controls:SegmentedItem Content="逐个添加" FontFamily="{StaticResource HarmonyOSSans}" />
+                                        <controls:SegmentedItem Content="批量添加" FontFamily="{StaticResource HarmonyOSSans}" />
+                                    </controls:Segmented>
+                                    <Grid x:Name="SingleAddGrid" Margin="0,15,0,0">
+                                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="姓名:" />
+                                        <TextBox
+                                            x:Name="NameTextBox"
+                                            Height="30"
+                                            Margin="0,15,0,0" />
+                                    </Grid>
+                                    <Grid x:Name="BatchAddGrid" Margin="0,15,0,0">
+                                        <Grid>
+                                            <StackPanel HorizontalAlignment="Center" Orientation="Horizontal">
+                                                <Button
+                                                    x:Name="OpenFileButton"
+                                                    VerticalAlignment="Top"
+                                                    Click="OpenFileButton_Click">
+                                                    <Grid>
+                                                        <SymbolIcon HorizontalAlignment="Left" Symbol="Read" />
+                                                        <TextBlock
+                                                            Margin="25,0,0,0"
+                                                            HorizontalAlignment="Left"
+                                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                                            Text="打开文件" />
+                                                    </Grid>
+                                                </Button>
+                                                <Button VerticalAlignment="Top" Click="SaveFileButton_Click">
+                                                    <Grid>
+                                                        <SymbolIcon HorizontalAlignment="Left" Symbol="Save" />
+                                                        <TextBlock
+                                                            Margin="25,0,0,0"
+                                                            HorizontalAlignment="Left"
+                                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                                            Text="保存副本" />
+                                                    </Grid>
+                                                </Button>
+                                            </StackPanel>
+
+                                            <ScrollViewer
+                                                MaxWidth="200"
+                                                MaxHeight="400"
+                                                Margin="0,50,0,0"
+                                                VerticalScrollBarVisibility="Auto"
+                                                VerticalScrollMode="Enabled">
+
+                                                <Grid
+                                                    x:Name="NamesGrid"
+                                                    MinWidth="120"
+                                                    MaxWidth="300"
+                                                    CornerRadius="0,0,0,0">
+                                                    <Grid.ColumnDefinitions>
+                                                        <ColumnDefinition Width="Auto" />
+                                                        <ColumnDefinition Width="*" />
+                                                    </Grid.ColumnDefinitions>
+
+                                                    <Border
+                                                        x:Name="lineNumberBorder"
+                                                        Grid.Column="0"
+                                                        CornerRadius="8,0,0,8">
+                                                        <TextBlock
+                                                            x:Name="lineNumberTextBlock"
+                                                            Margin="0,5"
+                                                            VerticalAlignment="Top"
+                                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                                            FontSize="16"
+                                                            Foreground="{ThemeResource LineNumberForeground}"
+                                                            IsTextSelectionEnabled="False"
+                                                            TextAlignment="Right" />
+                                                    </Border>
+
+                                                    <TextBox
+                                                        x:Name="Editor"
+                                                        Grid.Column="1"
+                                                        x:FieldModifier="public"
+                                                        AcceptsReturn="True"
+                                                        CornerRadius="0,0,0,0"
+                                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                                        FontSize="16"
+                                                        Loaded="Editor_Loaded"
+                                                        Style="{StaticResource EditorStyle}"
+                                                        TextChanged="Editor_TextChanged" />
+
+                                                </Grid>
+                                            </ScrollViewer>
+                                        </Grid>
+                                    </Grid>
+
+                                    <Button
+                                        Margin="0,10,0,0"
+                                        HorizontalAlignment="Center"
+                                        Click="AddItemButton_Click">
+                                        <StackPanel Orientation="Horizontal">
+                                            <SymbolIcon Symbol="Accept" />
+                                            <TextBlock
+                                                Margin="5,0,0,0"
+                                                FontFamily="{StaticResource HarmonyOSSans}"
+                                                Text="确定" />
+                                        </StackPanel>
+                                    </Button>
+                                </StackPanel>
+                            </Flyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
+                    <AppBarButton
+                        x:Name="DeleteStudentButton"
+                        Click="DeleteStudentButton_Click"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Foreground="#FFFC5665"
+                        Label="删除">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE74D;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton
+                        x:Name="DeleteAllStudentsButton"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Foreground="#FFFC5665"
+                        Label="删除所有">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE74D;" />
+                        </AppBarButton.Icon>
+                        <AppBarButton.Flyout>
+                            <Flyout>
+                                <StackPanel>
+                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="警告：此操作将清空学生列表" />
+                                    <Button
+                                        Margin="0,5,0,0"
+                                        HorizontalAlignment="Center"
+                                        Click="DeleteAllStudentsButton_Click"
+                                        Content="确定"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        Style="{StaticResource AccentButtonStyle}" />
+                                </StackPanel>
+                            </Flyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
+                    <AppBarButton
+                        x:Name="PhotoFolderPickerButton"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Label="选择照片文件夹">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE838;" />
+                        </AppBarButton.Icon>
+                        <AppBarButton.Flyout>
+                            <Flyout>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="选择一个文件夹，将文件夹下所有图片从当前被选择的项开始填充" />
+                                    <Button
+                                        Click="PhotoFolderPickerButton_Click"
+                                        Content="确定"
+                                        FontFamily="{StaticResource HarmonyOSSans}" />
+                                </StackPanel>
+                            </Flyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
+                    <AppBarSeparator />
+                </controls:TabbedCommandBarItem>
+                <controls:TabbedCommandBarItem IsContextual="True" Tag="Class">
+                    <controls:TabbedCommandBarItem.Header>
+                        <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="班级" />
+                    </controls:TabbedCommandBarItem.Header>
+                    <AppBarToggleButton
+                        x:Name="MultiSelectClassesButton"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Label="多选模式"
+                        Unchecked="MultiSelectClassesButton_Unchecked">
+                        <AppBarToggleButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE762;" />
+                        </AppBarToggleButton.Icon>
+                    </AppBarToggleButton>
+                    <AppBarButton
+                        x:Name="AddClassButton"
+                        Click="AddClassButton_Click"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Label="新建">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE82E;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton
+                        x:Name="DeleteClassButton"
+                        Click="DeleteClassButton_Click"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Foreground="#FFFC5665"
+                        Label="删除">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE74D;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton
+                        x:Name="ClassEmblemFolderPickerButton"
+                        FontFamily="{StaticResource HarmonyOSSans}"
+                        Label="选择班徽文件夹">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE838;" />
+                        </AppBarButton.Icon>
+                        <AppBarButton.Flyout>
+                            <Flyout>
+                                <StackPanel Orientation="Vertical">
+                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="选择一个文件夹，将文件夹下所有图片从当前被选择的项开始填充" />
+                                    <Button
+                                        Click="ClassEmblemFolderPickerButton_Click"
+                                        Content="确定"
+                                        FontFamily="{StaticResource HarmonyOSSans}" />
+                                </StackPanel>
+                            </Flyout>
+                        </AppBarButton.Flyout>
+                    </AppBarButton>
+                    <AppBarButton Label="Undo">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE7A7;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Label="Redo">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE7A7;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarButton Label="Paste">
+                        <AppBarButton.Icon>
+                            <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE7A7;" />
+                        </AppBarButton.Icon>
+                    </AppBarButton>
+                    <AppBarSeparator />
+                </controls:TabbedCommandBarItem>
+            </controls:TabbedCommandBar.MenuItems>
+        </controls:TabbedCommandBar>
+
+        <Grid Margin="0,100,0,0">
+            <controls:SwitchPresenter Value="{Binding SelectedItem.Tag, ElementName=tabbedCommandBar}">
+                <controls:Case Value="Student">
+                    <Grid
+                        x:Name="StudentGrid"
+                        animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
+                        animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+                        <StackPanel
+                            HorizontalAlignment="Stretch"
+                            VerticalAlignment="Top"
+                            CornerRadius="8,8,8,8"
+                            Orientation="Horizontal"
+                            Spacing="5">
+                            <StackPanel.Background>
+                                <SolidColorBrush Opacity="0.5" Color="White" />
+                            </StackPanel.Background>
+                            <controls:Segmented
+                                x:Name="FileEditSegmented"
+                                VerticalAlignment="Top"
+                                Style="{StaticResource PivotSegmentedStyle}"
+                                Visibility="Collapsed">
+                                <controls:SegmentedItem Tag="File">
+                                    <StackPanel Orientation="Horizontal">
+                                        <SymbolIcon Margin="0,2,0,0" Symbol="Page2">
+                                            <SymbolIcon.RenderTransform>
+                                                <ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+                                            </SymbolIcon.RenderTransform>
+                                        </SymbolIcon>
+                                        <TextBlock
+                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                            FontSize="15"
+                                            Text="文件" />
+                                    </StackPanel>
+                                </controls:SegmentedItem>
+                                <controls:SegmentedItem Tag="Edit">
+                                    <StackPanel Orientation="Horizontal">
+                                        <SymbolIcon Margin="0,2,0,0" Symbol="Edit">
+                                            <SymbolIcon.RenderTransform>
+                                                <ScaleTransform ScaleX="0.8" ScaleY="0.8" />
+                                            </SymbolIcon.RenderTransform>
+                                        </SymbolIcon>
+                                        <TextBlock
+                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                            FontSize="15"
+                                            Text="编辑" />
+                                    </StackPanel>
+                                </controls:SegmentedItem>
+                            </controls:Segmented>
+                        </StackPanel>
+                        <Grid Margin="0,45,0,0" Visibility="Collapsed">
+                            <Grid>
+                                <controls:SwitchPresenter Value="{Binding SelectedItem.Tag, ElementName=FileEditSegmented}">
+                                    <controls:Case Value="Edit">
+                                        <StackPanel
+                                            x:Name="EditStackPanel"
+                                            Height="80"
+                                            VerticalAlignment="Top"
+                                            animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
+                                            animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}"
+                                            Orientation="Horizontal"
+                                            Style="{StaticResource PanelStyle}">
+
+                                            <TextBlock
+                                                x:Name="CurrentSelectionTextBlock"
+                                                Height="30"
+                                                FontFamily="{StaticResource HarmonyOSSans}"
+                                                Text="当前选择项:无" />
+                                            <TextBlock
+                                                Width="1270"
+                                                Height="30"
+                                                FontFamily="{StaticResource HarmonyOSSans}"
+                                                Text="Tips:可以直接拖动一个或多个图片从当前被选择项开始填充" />
+                                        </StackPanel>
+                                    </controls:Case>
+                                    <controls:Case Value="File">
+                                        <StackPanel
+                                            x:Name="FileStackPanel"
+                                            Height="80"
+                                            VerticalAlignment="Top"
+                                            animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
+                                            animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}"
+                                            Style="{StaticResource PanelStyle}">
+
+                                            <Button
+                                                x:Name="OpenDataFileButton"
+                                                Grid.Column="2"
+                                                Width="95"
+                                                Height="60"
+                                                VerticalAlignment="Center"
+                                                Click="OpenDataFileButton_Click">
+                                                <StackPanel>
+                                                    <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE82D;" />
+                                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="打开数据库" />
+                                                </StackPanel>
+                                            </Button>
+                                            <Button
+                                                x:Name="SaveDataFileButton"
+                                                Grid.Column="2"
+                                                Width="95"
+                                                Height="60"
+                                                VerticalAlignment="Center"
+                                                Click="SaveDataFileButton_Click">
+                                                <StackPanel>
+                                                    <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE792;" />
+                                                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="另存数据库" />
+                                                </StackPanel>
+                                            </Button>
+
+                                        </StackPanel>
+                                    </controls:Case>
+                                </controls:SwitchPresenter>
+                            </Grid>
+                        </Grid>
+                        <ListView
+                            x:Name="StudentListView"
+                            AllowDrop="True"
+                            Background="Transparent"
+                            CanDragItems="True"
+                            CanReorderItems="True"
+                            DragItemsCompleted="StudentListView_DragItemsCompleted"
+                            DragOver="StudentListView_DragOver"
+                            Drop="StudentListView_Drop"
+                            ItemTemplate="{StaticResource StudentListTemplate}"
+                            ItemsSource="{x:Bind classes:StudentManager.StudentList}"
+                            SelectionChanged="StudentListView_SelectionChanged"
+                            SelectionMode="Multiple">
+                            <ListView.ItemContainerTransitions>
+                                <TransitionCollection>
+                                    <RepositionThemeTransition />
+                                    <AddDeleteThemeTransition />
+                                    <ContentThemeTransition />
+                                    <EntranceThemeTransition IsStaggeringEnabled="True" />
+                                    <ReorderThemeTransition />
+                                </TransitionCollection>
+                            </ListView.ItemContainerTransitions>
+                        </ListView>
+                    </Grid>
+                </controls:Case>
+                <controls:Case Value="Class">
+                    <Grid
+                        x:Name="ClassGrid"
+                        animations:Implicit.HideAnimations="{StaticResource HideTransitions}"
+                        animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+                        <ListView
+                            x:Name="ClassListView"
+                            ItemTemplate="{StaticResource ClassListViewItemTemplate}"
+                            ItemsSource="{x:Bind classes:StudentManager.ClassList}"
+                            SelectionChanged="ClassListView_SelectionChanged"
+                            SelectionMode="Multiple">
+                            <ListView.ItemContainerTransitions>
+                                <TransitionCollection>
+                                    <RepositionThemeTransition />
+                                    <AddDeleteThemeTransition />
+                                    <ContentThemeTransition />
+                                    <EntranceThemeTransition IsStaggeringEnabled="True" />
+                                    <ReorderThemeTransition />
+                                </TransitionCollection>
+                            </ListView.ItemContainerTransitions>
+                        </ListView>
+                    </Grid>
+                </controls:Case>
+            </controls:SwitchPresenter>
+
+        </Grid>
+    </Grid>
+</Page>
