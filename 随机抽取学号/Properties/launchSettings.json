@@ -1,0 +1,10 @@
+﻿{
+  "profiles": {
+    "随机抽取学号 (Package)": {
+      "commandName": "MsixPackage"
+    },
+    "随机抽取学号 (Unpackaged)": {
+      "commandName": "Project"
+    }
+  }
+}
