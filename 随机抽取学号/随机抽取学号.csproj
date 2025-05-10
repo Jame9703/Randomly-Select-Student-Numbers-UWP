@@ -54,7 +54,6 @@
   <ItemGroup>
     <Folder Include="Photos\" />
     <Folder Include="Controls\" />
-    <Folder Include="Fonts\" />
   </ItemGroup>
   <ItemGroup>
     <Page Update="Views\BlankPage1.xaml">

@@ -52,11 +52,11 @@ namespace 随机抽取学号.Views
                 EndNumberBox.Value = StudentManager.StudentList.Count;
                 BeginNumberBox.Maximum = StudentManager.StudentList.Count;
                 EndNumberBox.Maximum = StudentManager.StudentList.Count;
-                if (StudentManager.CheckedStudents.Count > 0)
-                {
-                    Numbers.Maximum = StudentManager.CheckedStudents.Count;
-                }
-                Numbers.Minimum = 1;
+                //if (StudentManager.CheckedStudents.Count > 0)
+                //{
+                //    Numbers.Maximum = StudentManager.CheckedStudents.Count;
+                //}
+                //Numbers.Minimum = 1;
                 ContentGrid.Visibility = Visibility.Visible;
                 LoadProgressRing.Visibility = Visibility.Collapsed;
             }
@@ -77,11 +77,11 @@ namespace 随机抽取学号.Views
         private void UpdateCheckedStudentsCount()
         {
             UpdateCheckedStudents();
-            Numbers.Minimum = 1;
-            if (StudentManager.CheckedStudents.Count > 0)//重新设置最大抽取人数
-            {
-                Numbers.Maximum = StudentManager.CheckedStudents.Count;
-            }
+            //Numbers.Minimum = 1;
+            //if (StudentManager.CheckedStudents.Count > 0)//重新设置最大抽取人数
+            //{
+            //    Numbers.Maximum = StudentManager.CheckedStudents.Count;
+            //}
             //重新判断是否全选
             if (StudentManager.CheckedStudents.Count == StudentManager.StudentList.Count && StudentManager.StudentList.Count > 0)
             {
@@ -215,17 +215,17 @@ namespace 随机抽取学号.Views
         {
             if (segmented.SelectedIndex == 0)//单人模式
             {
-                Numbers.IsEnabled = false;//Nnmbers:选择抽取人数
-                peopleCount = (int)Numbers.Value;
-                Numbers.Text = "1";
+                //Numbers.IsEnabled = false;//Nnmbers:选择抽取人数
+                //peopleCount = (int)Numbers.Value;
+                //Numbers.Text = "1";
                 FrequencySelectorButton.IsEnabled = true;
                 SingleModeGrid.Visibility = Visibility.Visible;
                 MultipleModeGrid.Visibility = Visibility.Collapsed;
             }
             else//多人模式
             {
-                Numbers.IsEnabled = true;
-                Numbers.Text = peopleCount.ToString();
+                //Numbers.IsEnabled = true;
+                //Numbers.Text = peopleCount.ToString();
                 FrequencySelectorButton.IsEnabled = false;
                 SingleModeGrid.Visibility = Visibility.Collapsed;
                 MultipleModeGrid.Visibility = Visibility.Visible;
@@ -307,41 +307,41 @@ namespace 随机抽取学号.Views
             StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
             if (StudentManager.StudentList.Count > 0)
             {
-                if (int.TryParse(Numbers.Text, out int a))
-                {
-                    // 转换成功
-                    if (a <= StudentManager.CheckedStudents.Count)
-                    {
-                        //将CheckedStudents打乱顺序
-                        Random random = new Random();
-                        StudentManager.CheckedStudents = StudentManager.CheckedStudents.OrderBy(x => random.Next()).ToList();
-                        // 取前几位数字
-                        List<int> Result = StudentManager.CheckedStudents.Take(a).ToList();
-                        selectedStudentList.Clear();
-                        for (int i = 0; i < Result.Count; i++)
-                        {
-                            var result = Result[i];
-                            var student = StudentManager.StudentList[result];
-                            selectedStudentList.Add(student);
-                            //if (NoReturnToggleSwitch.IsOn == true)//抽完不放回
-                            //{
-                            //    CheckBoxListView.SelectedItems.Remove(student);
-                            //}
-                        }
-                    }
-                    else
-                    {
-                        PopupNotice popupNotice = new PopupNotice("抽取人数不能大于能抽到的人数，请更改左侧勾选框后重试");
-                        popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
-                        popupNotice.ShowPopup();
-                    }
+                //if (int.TryParse(Numbers.Text, out int a))
+                //{
+                //    // 转换成功
+                //    if (a <= StudentManager.CheckedStudents.Count)
+                //    {
+                //        //将CheckedStudents打乱顺序
+                //        Random random = new Random();
+                //        StudentManager.CheckedStudents = StudentManager.CheckedStudents.OrderBy(x => random.Next()).ToList();
+                //        // 取前几位数字
+                //        List<int> Result = StudentManager.CheckedStudents.Take(a).ToList();
+                //        selectedStudentList.Clear();
+                //        for (int i = 0; i < Result.Count; i++)
+                //        {
+                //            var result = Result[i];
+                //            var student = StudentManager.StudentList[result];
+                //            selectedStudentList.Add(student);
+                //            //if (NoReturnToggleSwitch.IsOn == true)//抽完不放回
+                //            //{
+                //            //    CheckBoxListView.SelectedItems.Remove(student);
+                //            //}
+                //        }
+                //    }
+                //    else
+                //    {
+                //        PopupNotice popupNotice = new PopupNotice("抽取人数不能大于能抽到的人数，请更改左侧勾选框后重试");
+                //        popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                //        popupNotice.ShowPopup();
+                //    }
 
-                }
-                else
-                {
-                    // 转换失败，NumberBox中的值不是有效的整数
-                    Numbers.Text = "1";
-                }
+                //}
+                //else
+                //{
+                //    // 转换失败，NumberBox中的值不是有效的整数
+                //    Numbers.Text = "1";
+                //}
             }
             else
             {

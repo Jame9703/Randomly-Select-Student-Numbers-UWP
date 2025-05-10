@@ -5,11 +5,9 @@
     xmlns:animations="using:CommunityToolkit.WinUI.Animations"
     xmlns:classes="using:随机抽取学号.Classes"
     xmlns:communitytoolkitcontrols="using:CommunityToolkit.WinUI.Controls"
-    xmlns:controls="using:随机抽取学号.Controls"
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:随机抽取学号.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    xmlns:muxc="using:Microsoft.UI.Xaml.Controls"
     Loaded="Page_Loaded"
     NavigationCacheMode="Enabled"
     mc:Ignorable="d">
@@ -374,7 +372,7 @@
                     MinWidth="150"
                     MaxWidth="500" />
             </Grid.ColumnDefinitions>
-            <muxc:NumberBox
+            <!--<NumberBox
                 x:Name="Numbers"
                 Width="Auto"
                 Height="32"
@@ -387,14 +385,18 @@
                 SmallChange="1"
                 SpinButtonPlacementMode="Inline"
                 Value="1">
-                <ToolTipService.ToolTip>
-                    <ToolTip
-                        Content="设置抽取人数"
-                        FontFamily="{StaticResource HarmonyOSSans}"
-                        FontSize="14"
-                        Placement="Mouse" />
-                </ToolTipService.ToolTip>
-            </muxc:NumberBox>
+            -->
+            <!--<ToolTipService.ToolTip>
+                        <ToolTip
+                            Content="设置抽取人数"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="14"
+                            Placement="Mouse" />
+                    </ToolTipService.ToolTip>-->
+            <!--
+
+
+            </NumberBox>-->
             <TextBlock
                 Margin="150,45,0,0"
                 HorizontalAlignment="Left"
@@ -481,7 +483,7 @@
                                         <ColumnDefinition Width="Auto" />
                                         <ColumnDefinition Width="Auto" />
                                     </Grid.ColumnDefinitions>
-                                    <muxc:InfoBar
+                                    <InfoBar
                                         Title="提示"
                                         Grid.ColumnSpan="2"
                                         FontFamily="{StaticResource HarmonyOSSans}"
@@ -497,7 +499,7 @@
                                         Margin="0,95,0,0"
                                         FontFamily="{StaticResource HarmonyOSSans}"
                                         Text="结束值：" />
-                                    <muxc:NumberBox
+                                    <NumberBox
                                         x:Name="BeginNumberBox"
                                         MinWidth="110"
                                         Margin="55,50,0,0"
@@ -508,7 +510,7 @@
                                         SmallChange="1"
                                         SpinButtonPlacementMode="Compact"
                                         Value="1" />
-                                    <muxc:NumberBox
+                                    <NumberBox
                                         x:Name="EndNumberBox"
                                         Grid.Row="2"
                                         MinWidth="110"
@@ -722,7 +724,7 @@
             </communitytoolkitcontrols:GridSplitter.RenderTransform>-->
             </communitytoolkitcontrols:GridSplitter>
         </Grid>
-        <muxc:ProgressRing
+        <ProgressRing
             x:Name="LoadProgressRing"
             Width="100"
             Height="100"
