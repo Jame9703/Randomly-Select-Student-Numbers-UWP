@@ -237,9 +237,6 @@
                 <EntranceThemeTransition FromVerticalOffset="100" IsStaggeringEnabled="True" />
             </TransitionCollection>
         </Grid.ChildrenTransitions>
-        <Grid.Background>
-            <AcrylicBrush TintColor="White" TintOpacity="0.2" />
-        </Grid.Background>
         <Grid x:Name="AppTitleBar">
             <Grid.RowDefinitions>
                 <RowDefinition Height="40" />

@@ -24,22 +24,12 @@
                     <ResourceDictionary.ThemeDictionaries>
                         <ResourceDictionary x:Key="Light">
                             <!--  定义浅色主题资源  -->
-                            <SolidColorBrush x:Key="MyBrush" Color="Yellow" />
-                            <SolidColorBrush
-                                x:Key="GridBackground"
-                                Opacity="0.3"
-                                Color="White" />
                             <SolidColorBrush x:Key="LineNumberForeground" Color="#E42B91AF" />
                             <Color x:Key="ButtonForegroundColor">Green</Color>
 
                         </ResourceDictionary>
                         <ResourceDictionary x:Key="Dark">
                             <!--  定义深色主题资源  -->
-                            <SolidColorBrush x:Key="MyBrush" Color="Green" />
-                            <SolidColorBrush
-                                x:Key="GridBackground"
-                                Opacity="0.2"
-                                Color="Black" />
                             <SolidColorBrush x:Key="LineNumberForeground" Color="#E4858585" />
                             <Color x:Key="ButtonForegroundColor">yellow</Color>
                         </ResourceDictionary>

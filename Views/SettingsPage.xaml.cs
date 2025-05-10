@@ -113,35 +113,31 @@ namespace 随机抽取学号.Views
                 if (BackgroundRadioButtons.SelectedIndex == 0)// 无背景
                 {
                     // 创建一个新的纯色笔刷来设置MainPage的背景
-                    var newBrush = new SolidColorBrush()
+                    mainPage.Background = new SolidColorBrush()
                     {
-                        Color = Colors.White,
+                        Color = (Color)Application.Current.Resources["SystemBaseHighColor"],
                         Opacity = BackgroundOpacitySlider.Value / 100
-
                     };
-                    mainPage.Background = newBrush;
                     localSettings.Values["MainPageBackground"] = 0;
                 }
                 else if (BackgroundRadioButtons.SelectedIndex == 1)// 亚克力背景
                 {
-                    var acrylicBrush = new AcrylicBrush
+                    mainPage.Background = new AcrylicBrush
                     {
                         BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
                         Opacity = BackgroundOpacitySlider.Value / 100,
                         TintOpacity = 0.6,
                         TintColor = Colors.Transparent
                     };
-                    mainPage.Background = acrylicBrush;
                     localSettings.Values["MainPageBackground"] = 1;
                 }
                 else if (BackgroundRadioButtons.SelectedIndex == 2)// 云母背景
                 {
-                    var backdropMicaBrush = new BackdropMicaBrush
+                    mainPage.Background = new BackdropMicaBrush
                     {
                         BackgroundSource = BackgroundSource.WallpaperBackdrop,
                         Opacity = BackgroundOpacitySlider.Value / 100,
                     };
-                    mainPage.Background = backdropMicaBrush;
                     localSettings.Values["MainPageBackground"] = 2;
                 }
             }
@@ -221,35 +217,31 @@ namespace 随机抽取学号.Views
                 if (PageBackgroundRadioButtons.SelectedIndex == 0)// 无背景
                 {
                     // 创建一个新的纯色笔刷来设置MainPage的背景
-                    var newBrush = new SolidColorBrush()
+                    mainPage.ContentFrame.Background = new SolidColorBrush()
                     {
                         Color = Colors.White,
                         Opacity = BackgroundOpacitySlider.Value / 100
-
                     };
-                    mainPage.ContentFrame.Background = newBrush;
                     localSettings.Values["ContentFrameBackground"] = 0;
                 }
                 else if (PageBackgroundRadioButtons.SelectedIndex == 1)// 亚克力背景
                 {
-                    var acrylicBrush = new AcrylicBrush
+                    mainPage.ContentFrame.Background = new AcrylicBrush
                     {
                         BackgroundSource = AcrylicBackgroundSource.Backdrop,
                         Opacity = BackgroundOpacitySlider.Value / 100,
                         TintOpacity = 0.6,
                         TintColor = Colors.Transparent
                     };
-                    mainPage.ContentFrame.Background = acrylicBrush;
                     localSettings.Values["ContentFrameBackground"] = 1;
                 }
                 else if (PageBackgroundRadioButtons.SelectedIndex == 2)// 云母背景
                 {
-                    var backdropMicaBrush = new BackdropMicaBrush
+                    mainPage.ContentFrame.Background = new BackdropMicaBrush
                     {
                         BackgroundSource = BackgroundSource.Backdrop,
                         Opacity = BackgroundOpacitySlider.Value / 100,
                     };
-                    mainPage.ContentFrame.Background = backdropMicaBrush;
                     localSettings.Values["ContentFrameBackground"] = 2;
                 }
             }

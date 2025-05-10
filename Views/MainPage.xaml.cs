@@ -106,15 +106,22 @@ namespace 随机抽取学号
             var backdropMicaBrush = new BackdropMicaBrush
             {
                 BackgroundSource = BackgroundSource.WallpaperBackdrop,
+                Opacity = 0.5
             };
             this.Background = backdropMicaBrush;
+            var brush = new SolidColorBrush
+            {
+                Color = Colors.White,
+                Opacity = 0.5
+            };
+            ContentFrame.Background = brush;
             WelcomeContentDialog welcomeDialog = new WelcomeContentDialog();
             await welcomeDialog.ShowAsync();
             CurrentClassNameTextBox.Text = "我的班级";
             localSettings.Values["Theme"] = 2;//设置默认主题
             localSettings.Values["MainPageBackground"] = 2;//设置默认MainPage背景
             localSettings.Values["MainPageBackgroundOpacity"] = 0.5;//设置默认MainPage背景不透明度
-            localSettings.Values["'ContentFrameBackground"] = 2;//设置默认ContentFrame背景
+            localSettings.Values["ContentFrameBackground"] = 0;//设置默认ContentFrame背景
             localSettings.Values["ContentFrameBackgroundOpacity"] = 0.5;//设置默认ContentFrame背景不透明度
             localSettings.Values["CurrentClassName"] = "我的班级";//默认班级名称
             localSettings.Values["IsFirstRun"] = false;//设置不是第一次运行
@@ -144,37 +151,41 @@ namespace 随机抽取学号
                 {
                     if ((int)localSettings.Values["MainPageBackground"] == 0)
                     {
-                        this.Background = new SolidColorBrush(Colors.White);
+                        this.Background = new SolidColorBrush
+                        {
+                            Color = Colors.White,
+                            Opacity = (double)localSettings.Values["MainPageBackgroundOpacity"]
+                        };
                     }
                     else if ((int)localSettings.Values["MainPageBackground"] == 1)
                     {
-                        var acrylicBrush = new AcrylicBrush
+                        this.Background = new AcrylicBrush
                         {
                             BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
                             TintOpacity = 0.6,
-                            TintColor = Colors.Transparent
+                            TintColor = Colors.Transparent,
+                            Opacity = (double)localSettings.Values["MainPageBackgroundOpacity"]
                         };
-                        this.Background = acrylicBrush;
                     }
                     else if ((int)localSettings.Values["MainPageBackground"] == 2)
                     {
-                        var backdropMicaBrush = new BackdropMicaBrush
+                        this.Background = new BackdropMicaBrush
                         {
                             BackgroundSource = BackgroundSource.WallpaperBackdrop,
+                            Opacity = (double)localSettings.Values["MainPageBackgroundOpacity"]
                         };
-                        this.Background = backdropMicaBrush;
                     }
                 }
                 else
                 {
-                    var backdropMicaBrush = new BackdropMicaBrush
+                    this.Background = new BackdropMicaBrush
                     {
                         BackgroundSource = BackgroundSource.WallpaperBackdrop,
+                        Opacity = 0.5
                     };
-                    this.Background = backdropMicaBrush;
                     localSettings.Values["MainPageBackground"] = 2;//设置默认MainPage背景
+                    localSettings.Values["MainPageBackgroundOpacity"] = 0.5;//设置默认MainPage背景不透明度
                 }
-                this.Background.Opacity = (double)localSettings.Values["MainPageBackgroundOpacity"];
                 if (localSettings.Values["CurrentClassName"] != null)
                 {
                     CurrentClassNameTextBox.Text = (string)localSettings.Values["CurrentClassName"] as string;
@@ -188,27 +199,40 @@ namespace 随机抽取学号
                 {
                     if ((int)localSettings.Values["ContentFrameBackground"] == 0)
                     {
-                        ContentFrame.Background = new SolidColorBrush(Colors.White);
+                        ContentFrame.Background = new SolidColorBrush
+                        {
+                            Color = Colors.White,
+                            Opacity = (double)localSettings.Values["ContentFrameBackgroundOpacity"]
+                        };
                     }
                     else if ((int)localSettings.Values["ContentFrameBackground"] == 1)
                     {
-                        var acrylicBrush = new AcrylicBrush
+                        ContentFrame.Background = new AcrylicBrush
                         {
                             BackgroundSource = AcrylicBackgroundSource.Backdrop,
                             TintOpacity = 0.6,
-                            TintColor = Colors.Transparent
+                            TintColor = Colors.Transparent,
+                            Opacity = (double)localSettings.Values["ContentFrameBackgroundOpacity"]
                         };
-                        ContentFrame.Background = acrylicBrush;
                     }
                     else if ((int)localSettings.Values["ContentFrameBackground"] == 2)
                     {
-                        var backdropMicaBrush = new BackdropMicaBrush
+                        ContentFrame.Background = new BackdropMicaBrush
                         {
                             BackgroundSource = BackgroundSource.Backdrop,
+                            Opacity = (double)localSettings.Values["ContentFrameBackgroundOpacity"]
                         };
-                        ContentFrame.Background = backdropMicaBrush;
                     }
-                    ContentFrame.Background.Opacity = (double)localSettings.Values["ContentFrameBackgroundOpacity"];
+                }
+                else
+                {
+                    ContentFrame.Background = new SolidColorBrush
+                    {
+                        Color = Colors.White,
+                        Opacity = 0.5
+                    };
+                    localSettings.Values["ContentFrameBackground"] = 0;//设置默认ContentFrame背景
+                    localSettings.Values["ContentFrameBackgroundOpacity"] = 0.5;//设置默认ContentFrame背景不透明度
                 }
             }
         }

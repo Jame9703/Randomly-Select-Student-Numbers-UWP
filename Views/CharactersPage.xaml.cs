@@ -1,10 +1,9 @@
 ﻿using System;
+using System.Threading.Tasks;
+using Windows.Media.SpeechSynthesis;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Navigation;
-using Windows.Media.SpeechSynthesis;
-using System.Threading.Tasks;
-using Windows.UI.Xaml.Hosting;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 

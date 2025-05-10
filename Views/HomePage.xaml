@@ -29,11 +29,7 @@
                     From="0,24,0"
                     To="0"
                     Duration="0:0:0.4" />
-                <animations:OpacityAnimation
-                    EasingMode="EaseOut"
-                    From="0"
-                    To="1"
-                    Duration="0:0:0.2" />
+                <animations:OpacityAnimation From="0" To="1" EasingMode="EaseOut" Duration="0:0:0.2" />
             </animations:ImplicitAnimationSet>
             <animations:ImplicitAnimationSet x:Name="HideTransitions">
                 <animations:OffsetAnimation
@@ -41,11 +37,7 @@
                     From="0"
                     To="0,24,0"
                     Duration="0:0:0.2" />
-                <animations:OpacityAnimation
-                    EasingMode="EaseOut"
-                    From="1"
-                    To="0"
-                    Duration="0:0:0.1" />
+                <animations:OpacityAnimation From="1" To="0" EasingMode="EaseOut" Duration="0:0:0.1" />
             </animations:ImplicitAnimationSet>
 
             <Style TargetType="AppBarButton">
@@ -362,7 +354,6 @@
                 </Grid>
             </DataTemplate>
         </ResourceDictionary>
-
     </Page.Resources>
     <Grid>
         <Grid x:Name="ContentGrid" Visibility="Collapsed">
@@ -411,12 +402,12 @@
                 SelectionMode="Single">
                 <communitytoolkitcontrols:SegmentedItem Content="单人模式" FontFamily="{StaticResource HarmonyOSSans}">
                     <communitytoolkitcontrols:SegmentedItem.Icon>
-                        <SymbolIcon Symbol="Contact" />
+                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE77B;" />
                     </communitytoolkitcontrols:SegmentedItem.Icon>
                 </communitytoolkitcontrols:SegmentedItem>
                 <communitytoolkitcontrols:SegmentedItem Content="多人模式" FontFamily="{StaticResource HarmonyOSSans}">
                     <communitytoolkitcontrols:SegmentedItem.Icon>
-                        <SymbolIcon Symbol="People" />
+                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE716;" />
                     </communitytoolkitcontrols:SegmentedItem.Icon>
                 </communitytoolkitcontrols:SegmentedItem>
             </communitytoolkitcontrols:Segmented>
@@ -618,10 +609,11 @@
                     CornerRadius="20,20,20,20"
                     Style="{StaticResource StartorStopButtonStyle}">
                     <StackPanel Orientation="Horizontal">
-                        <SymbolIcon
+                        <FontIcon
                             x:Name="StartorStopButtonIcon"
-                            Foreground="Black"
-                            Symbol="Play" />
+                            FontFamily="{StaticResource SegoeFluentIcons}"
+                            Foreground="Green"
+                            Glyph="&#xF5B0;" />
                         <TextBlock
                             x:Name="StartorStopButtonContent"
                             Margin="5,0,0,0"
@@ -700,7 +692,10 @@
                     CornerRadius="20,20,20,20"
                     Style="{StaticResource StartorStopButtonStyle}">
                     <StackPanel Orientation="Horizontal">
-                        <SymbolIcon Foreground="Black" Symbol="Download" />
+                        <FontIcon
+                            FontFamily="{StaticResource SegoeFluentIcons}"
+                            Foreground="Green"
+                            Glyph="&#xE896;" />
                         <TextBlock
                             Margin="5,0,0,0"
                             FontFamily="{StaticResource HarmonyOSSans}"
