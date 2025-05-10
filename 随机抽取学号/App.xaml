@@ -8,6 +8,7 @@
         <ResourceDictionary>
             <ResourceDictionary.MergedDictionaries>
                 <ResourceDictionary>
+                    <x:Double x:Key="ControlCornerRadius">8</x:Double>
                     <Style TargetType="NumberBox">
                         <Setter Property="Foreground" Value="{ThemeResource SystemBaseHighColor}" />
                     </Style>

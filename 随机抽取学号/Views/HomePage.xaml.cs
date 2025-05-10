@@ -16,6 +16,7 @@ using 随机抽取学号.Classes;
 using Windows.UI;
 using Microsoft.UI.Composition;
 using Microsoft.UI.Xaml.Controls.Primitives;
+using Microsoft.UI;
 
 namespace 随机抽取学号.Views
 {
@@ -130,7 +131,8 @@ namespace 随机抽取学号.Views
                     isRandomizing = true;
                     timer.Start();
                     StartorStopButtonContent.Text = "停止";
-                    StartorStopButtonIcon.Symbol = Symbol.Pause;
+                    StartorStopButtonIcon.Glyph = "\uE62E";
+                    StartorStopButtonIcon.Foreground = new SolidColorBrush(Colors.Yellow);
                     StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 236, G = 179, B = 1 });
                     //根据SelectedRanges更新CheckedStudents
                     UpdateCheckedStudents();
@@ -151,7 +153,8 @@ namespace 随机抽取学号.Views
                     timer.Stop();
                     isRandomizing = false;
                     StartorStopButtonContent.Text = "开始";
-                    StartorStopButtonIcon.Symbol = Symbol.Play;
+                    StartorStopButtonIcon.Glyph = "\uF5B0";
+                    StartorStopButtonIcon.Foreground = new SolidColorBrush(Colors.Green);
                     StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
                     //if (NoReturnToggleSwitch.IsOn == true)//抽完不放回
                     //{
@@ -205,7 +208,8 @@ namespace 随机抽取学号.Views
                 ((DispatcherTimer)sender).Stop();
                 isRandomizing = false;
                 StartorStopButtonContent.Text = "开始";
-                StartorStopButtonIcon.Symbol = Symbol.Play;
+                StartorStopButtonIcon.Glyph = "\uF5B0";
+                StartorStopButtonIcon.Foreground = new SolidColorBrush(Colors.Green);
                 StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
             }
 
@@ -303,7 +307,8 @@ namespace 随机抽取学号.Views
             timer.Stop();
             isRandomizing = false;
             StartorStopButtonContent.Text = "开始";
-            StartorStopButtonIcon.Symbol = Symbol.Play;
+            StartorStopButtonIcon.Glyph = "\uF5B0";
+            StartorStopButtonIcon.Foreground = new SolidColorBrush(Colors.Green);
             StartorStopButton.Background = new SolidColorBrush(new Color() { A = 100, R = 108, G = 229, B = 89 });
             if (StudentManager.StudentList.Count > 0)
             {

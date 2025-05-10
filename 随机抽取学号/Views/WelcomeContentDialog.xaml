@@ -6,7 +6,6 @@
     xmlns:d="http://schemas.microsoft.com/expression/blend/2008"
     xmlns:local="using:随机抽取学号.Views"
     xmlns:mc="http://schemas.openxmlformats.org/markup-compatibility/2006"
-    Style="{StaticResource DefaultContentDialogStyle}"
     mc:Ignorable="d">
 
     <StackPanel>
@@ -44,9 +43,8 @@
             Text="欢迎使用随机抽取学号!"
             TextWrapping="Wrap" />
         <communitytoolkitcontrols:Segmented x:Name="segmented" SelectionChanged="Segmented_SelectionChanged">
-            <communitytoolkitcontrols:SegmentedItem Content="简介" FontFamily="{StaticResource HarmonyOSSans}" />
+            <communitytoolkitcontrols:SegmentedItem  Content="简介" FontFamily="{StaticResource HarmonyOSSans}"/>
             <communitytoolkitcontrols:SegmentedItem Content="开源许可" FontFamily="{StaticResource HarmonyOSSans}" />
-
         </communitytoolkitcontrols:Segmented>
         <ScrollViewer Height="250" VerticalScrollBarVisibility="Auto">
             <Grid>

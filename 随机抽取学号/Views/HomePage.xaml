@@ -413,12 +413,12 @@
                 SelectionMode="Single">
                 <communitytoolkitcontrols:SegmentedItem Content="单人模式" FontFamily="{StaticResource HarmonyOSSans}">
                     <communitytoolkitcontrols:SegmentedItem.Icon>
-                        <SymbolIcon Symbol="Contact" />
+                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE77B;" />
                     </communitytoolkitcontrols:SegmentedItem.Icon>
                 </communitytoolkitcontrols:SegmentedItem>
                 <communitytoolkitcontrols:SegmentedItem Content="多人模式" FontFamily="{StaticResource HarmonyOSSans}">
                     <communitytoolkitcontrols:SegmentedItem.Icon>
-                        <SymbolIcon Symbol="People" />
+                        <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE716;" />
                     </communitytoolkitcontrols:SegmentedItem.Icon>
                 </communitytoolkitcontrols:SegmentedItem>
             </communitytoolkitcontrols:Segmented>
@@ -620,10 +620,11 @@
                     CornerRadius="20,20,20,20"
                     Style="{StaticResource StartorStopButtonStyle}">
                     <StackPanel Orientation="Horizontal">
-                        <SymbolIcon
+                        <FontIcon
                             x:Name="StartorStopButtonIcon"
-                            Foreground="Black"
-                            Symbol="Play" />
+                            FontFamily="{StaticResource SegoeFluentIcons}"
+                            Foreground="Green"
+                            Glyph="&#xF5B0;" />
                         <TextBlock
                             x:Name="StartorStopButtonContent"
                             Margin="5,0,0,0"

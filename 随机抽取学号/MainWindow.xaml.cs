@@ -50,7 +50,7 @@ namespace 随机抽取学号
             //将标题栏右上角的3个按钮改为透明
             //ApplicationViewTitleBar formattableTitleBar = ApplicationView.GetForCurrentView().TitleBar;
             //formattableTitleBar.ButtonBackgroundColor = Colors.Transparent;
-            ContentFrame.Navigate(typeof(HomePage));
+            //ContentFrame.Navigate(typeof(HomePage));
             HomePageButton.IsChecked = true;
             this.SizeChanged += MainWindow_SizeChanged;
             _lastSelectedButton = HomePageButton;//确保开始时_lastSelectedButton不为null
@@ -106,10 +106,10 @@ namespace 随机抽取学号
         private async void FirstRun()
         {
             //设置默认应用主题
-            (Window.Current.Content as Frame).RequestedTheme = ElementTheme.Default;
+            MainGrid.RequestedTheme = ElementTheme.Default;
             //获取当前视图并设置标题栏为透明
-            var view = ApplicationView.GetForCurrentView();
-            view.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
+            //var view = ApplicationView.GetForCurrentView();
+            //view.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
             //设置默认MainPage背景
             //var backdropMicaBrush = new BackdropMicaBrush
             //{
