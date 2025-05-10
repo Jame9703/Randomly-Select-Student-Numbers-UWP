@@ -31,53 +31,25 @@
             ItemsSource="{x:Bind classes:StudentManager.ClassList}"
             ScrollViewer.HorizontalScrollMode="Disabled"
             ScrollViewer.VerticalScrollMode="Enabled"
-            SelectionMode="Multiple" />
-        <StackPanel VerticalAlignment="Bottom" Orientation="Horizontal">
-            <Button x:Name="AddClassButton">
-                <StackPanel Orientation="Horizontal">
-                    <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE710;" />
-                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="添加" />
-                </StackPanel>
-                <Button.Flyout>
-                    <Flyout>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox x:Name="ClassNameTextBox" FontFamily="{StaticResource HarmonyOSSans}" />
-                            <Button
-                                Click="AddClassButton_Click"
-                                Content="确定"
-                                FontFamily="{StaticResource HarmonyOSSans}" />
-                        </StackPanel>
-                    </Flyout>
-                </Button.Flyout>
-            </Button>
-            <Button x:Name="DeleteClassButton" Click="DeleteClassButton_Click">
-                <StackPanel Orientation="Horizontal">
-                    <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE74D;" />
-                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="删除" />
-                </StackPanel>
-            </Button>
-            <Button x:Name="RenameClassButton">
-                <StackPanel Orientation="Horizontal">
-                    <FontIcon FontFamily="{StaticResource SegoeFluentIcons}" Glyph="&#xE8AC;" />
-                    <TextBlock FontFamily="{StaticResource HarmonyOSSans}" Text="重命名" />
-                </StackPanel>
-                <Button.Flyout>
-                    <Flyout>
-                        <StackPanel Orientation="Horizontal">
-                            <TextBox x:Name="RenameClassNameTextBox" FontFamily="{StaticResource HarmonyOSSans}" />
-                            <Button
-                                Click="RenameClassButton_Click"
-                                Content="确定"
-                                FontFamily="{StaticResource HarmonyOSSans}" />
-                        </StackPanel>
-                    </Flyout>
-                </Button.Flyout>
-            </Button>
-        </StackPanel>
+            SelectionMode="Multiple">
+            <GridView.ItemContainerTransitions>
+                <TransitionCollection>
+                    <EntranceThemeTransition IsStaggeringEnabled="True" />
+                </TransitionCollection>
+            </GridView.ItemContainerTransitions>
+        </GridView>
         <Button
             x:Name="CloseButton"
-            Click="CloseButton_Click"
-            Content="退出"
-            FontFamily="{StaticResource HarmonyOSSans}" />
+            HorizontalAlignment="Right"
+            VerticalAlignment="Top"
+            Width="40"
+            Height="40"
+            Click="CloseButton_Click">
+            <FontIcon
+                HorizontalAlignment="Center"
+                VerticalAlignment="Center"
+                FontFamily="{StaticResource SegoeFluentIcons}"
+                Glyph="&#xE894;" />
+        </Button>
     </Grid>
 </ContentDialog>

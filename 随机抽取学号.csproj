@@ -139,9 +139,6 @@
     </Compile>
     <Compile Include="Media\BackdropMicaBrush.cs" />
     <Compile Include="Media\BackgroundSource.cs" />
-    <Compile Include="Views\ClassManagerContentDialog.xaml.cs">
-      <DependentUpon>ClassManagerContentDialog.xaml</DependentUpon>
-    </Compile>
     <Compile Include="Views\MainPage.xaml.cs">
       <DependentUpon>MainPage.xaml</DependentUpon>
     </Compile>
@@ -245,10 +242,6 @@
       <SubType>Designer</SubType>
     </ApplicationDefinition>
     <Page Include="Controls\PopupMessage.xaml">
-      <SubType>Designer</SubType>
-      <Generator>MSBuild:Compile</Generator>
-    </Page>
-    <Page Include="Views\ClassManagerContentDialog.xaml">
       <SubType>Designer</SubType>
       <Generator>MSBuild:Compile</Generator>
     </Page>
