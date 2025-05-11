@@ -150,18 +150,7 @@ namespace 随机抽取学号.Views
         }
         public void Editor_TextChanged(object sender, TextChangedEventArgs e)
         {
-            try
-            {
-                localSettings.Values["Names"] = Editor.Text;
-            }
-            catch (Exception)
-            {
-                PopupNotice popupNotice = new PopupNotice("保存失败，请删除部分名字后重试");
-                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
-                popupNotice.ShowPopup();
-            }
             UpdateLineNumbers();
-
         }
 
         private void Editor_Loaded(object sender, RoutedEventArgs e)
