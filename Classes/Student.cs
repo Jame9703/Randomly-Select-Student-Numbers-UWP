@@ -117,6 +117,7 @@ namespace 随机抽取学号.Classes
     public static class StudentManager
     {
         #region 变量声明
+        public static Class CurrentClass;// 记录当前班级
         public static StorageFolder CurrentClassFolder;// 记录当前班级对应文件夹
         public static string ClassDataBasePath;// 记录班级信息数据库路径
         public static string StudentDataBasePath;// 记录学生信息数据库路径

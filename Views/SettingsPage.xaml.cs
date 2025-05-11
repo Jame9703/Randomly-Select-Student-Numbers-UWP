@@ -1,4 +1,5 @@
-﻿using System;
+﻿using Microsoft.UI.Xaml.Controls;
+using System;
 using Windows.Storage;
 using Windows.System;
 using Windows.UI;
@@ -6,10 +7,9 @@ using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
-using Windows.UI.Xaml.Hosting;
-using Windows.UI.Xaml.Input;
 using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
+using 随机抽取学号.Classes;
 using 随机抽取学号.Media;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
@@ -22,39 +22,23 @@ namespace 随机抽取学号.Views
     public sealed partial class SettingsPage : Page
     {
         private MainPage mainPage = ((Frame)Window.Current.Content).Content as MainPage;
+        ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         public SettingsPage()
         {
             this.InitializeComponent();
-            //MainPage加载时已判断localSettings项是否存在
-            AppearanceRadioButtons.SelectedIndex = (int)ApplicationData.Current.LocalSettings.Values["Theme"];
-            BackgroundRadioButtons.SelectedIndex = (int)ApplicationData.Current.LocalSettings.Values["MainPageBackground"];
-            BackgroundOpacitySlider.Value = (double)ApplicationData.Current.LocalSettings.Values["MainPageBackgroundOpacity"] * 100;
-            PageBackgroundRadioButtons.SelectedIndex = (int)ApplicationData.Current.LocalSettings.Values["ContentFrameBackground"];
-            PageBackgroundOpacitySlider.Value = (double)ApplicationData.Current.LocalSettings.Values["ContentFrameBackgroundOpacity"] * 100;
+            //将设置项加载到控件
+            AppearanceRadioButtons.SelectedIndex = SettingsHelper.Theme;
+            BackgroundRadioButtons.SelectedIndex = SettingsHelper.MainPageBackground;
+            BackgroundOpacitySlider.Value = SettingsHelper.MainPageBackgroundOpacity * 100;
+            PageBackgroundRadioButtons.SelectedIndex = SettingsHelper.ContentFrameBackground;
+            PageBackgroundOpacitySlider.Value = SettingsHelper.ContentFrameBackgroundOpacity * 100;
             BackgroundOpacityTextBlock.Text = BackgroundOpacitySlider.Value.ToString() + "%";
             PageBackgroundOpacityTextBlock.Text = BackgroundOpacitySlider.Value.ToString() + "%";
-            //ColorPaletteResources co = new ColorPaletteResources();
-            //co.Accent = Colors.Red;
-            if (localSettings.Values.ContainsKey("NoReturn")
-&& localSettings.Values.ContainsKey("AutoStop")
-&& localSettings.Values.ContainsKey("Optimize")
-&& localSettings.Values.ContainsKey("SaveRange")
-&& localSettings.Values.ContainsKey("SaveHistory"))
-            {
-                NoReturnToggleSwitch.IsOn = (bool)localSettings.Values["NoReturn"];
-                AutoStopToggleSwitch.IsOn = (bool)localSettings.Values["AutoStop"];
-                OptimizeToggleSwitch.IsOn = (bool)localSettings.Values["Optimize"];
-                SaveRangeToggleSwitch.IsOn = (bool)localSettings.Values["SaveRange"];
-                SaveHistoryToggleSwitch.IsOn = (bool)localSettings.Values["SaveHistory"];
-            }
-            else
-            {
-                localSettings.Values["NoReturn"] = false;
-                localSettings.Values["AutoStop"] = false;
-                localSettings.Values["Optimize"] = false;
-                localSettings.Values["SaveRange"] = false;
-                localSettings.Values["SaveHistory"] = false;
-            }
+            NoReturnToggleSwitch.IsOn = SettingsHelper.NoReturn;
+            AutoStopToggleSwitch.IsOn = SettingsHelper.AutoStop;
+            OptimizeToggleSwitch.IsOn = SettingsHelper.Optimize;
+            SaveRangeToggleSwitch.IsOn = SettingsHelper.SaveRange;
+            SaveHistoryToggleSwitch.IsOn = SettingsHelper.SaveHistory;
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -64,20 +48,15 @@ namespace 随机抽取学号.Views
         {
             GC.Collect();
         }
-        ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
 
         private void AppearanceRadioButtons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
-            //SelectedIndex Theme
-
-            //         0           Light
-
-            //         1           Dark
-
-            //         2           Default(Use system settings)
-
-            ApplicationData.Current.LocalSettings.Values["Theme"] = AppearanceRadioButtons.SelectedIndex;
-            (Window.Current.Content as Frame).RequestedTheme = AppearanceRadioButtons.SelectedIndex switch
+            //SelectedIndex   Theme
+            //         0                Light
+            //         1                Dark
+            //         2                Default(Use system settings)
+            SettingsHelper.Theme = AppearanceRadioButtons.SelectedIndex;
+            (Window.Current.Content as Frame).RequestedTheme = SettingsHelper.Theme switch
             {
                 0 => ElementTheme.Light,
                 1 => ElementTheme.Dark,
@@ -85,11 +64,11 @@ namespace 随机抽取学号.Views
             };
 
             var view = ApplicationView.GetForCurrentView();
-            if (AppearanceRadioButtons.SelectedIndex == 0)
+            if (SettingsHelper.Theme == 0)
             {
                 view.TitleBar.ButtonForegroundColor = ((Color)Application.Current.Resources["SystemAccentColor"]);
             }
-            else if (AppearanceRadioButtons.SelectedIndex == 1)
+            else if (SettingsHelper.Theme == 1)
             {
                 view.TitleBar.ButtonForegroundColor = Colors.White;
             }
@@ -110,40 +89,39 @@ namespace 随机抽取学号.Views
         {
             if (mainPage != null)
             {
-                if (BackgroundRadioButtons.SelectedIndex == 0)// 无背景
+                SettingsHelper.MainPageBackground = BackgroundRadioButtons.SelectedIndex;
+                switch (SettingsHelper.MainPageBackground)
                 {
-                    // 创建一个新的纯色笔刷来设置MainPage的背景
-                    mainPage.Background = new SolidColorBrush()
-                    {
-                        Color = (Color)Application.Current.Resources["SystemBaseHighColor"],
-                        Opacity = BackgroundOpacitySlider.Value / 100
-                    };
-                    localSettings.Values["MainPageBackground"] = 0;
-                }
-                else if (BackgroundRadioButtons.SelectedIndex == 1)// 亚克力背景
-                {
-                    mainPage.Background = new AcrylicBrush
-                    {
-                        BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
-                        Opacity = BackgroundOpacitySlider.Value / 100,
-                        TintOpacity = 0.6,
-                        TintColor = Colors.Transparent
-                    };
-                    localSettings.Values["MainPageBackground"] = 1;
-                }
-                else if (BackgroundRadioButtons.SelectedIndex == 2)// 云母背景
-                {
-                    mainPage.Background = new BackdropMicaBrush
-                    {
-                        BackgroundSource = BackgroundSource.WallpaperBackdrop,
-                        Opacity = BackgroundOpacitySlider.Value / 100,
-                    };
-                    localSettings.Values["MainPageBackground"] = 2;
+                    case 0://无背景
+                        mainPage.Background = new SolidColorBrush()
+                        {
+                            Color = (Color)Application.Current.Resources["SystemBaseHighColor"],
+                            Opacity = SettingsHelper.MainPageBackgroundOpacity
+                        };
+                        break;
+                    case 1://亚克力背景
+                        mainPage.Background = new AcrylicBrush
+                        {
+                            BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                            Opacity = SettingsHelper.MainPageBackgroundOpacity,
+                            TintOpacity = 0.6,
+                            TintColor = Colors.Transparent
+                        };
+                        break;
+                    case 2://云母背景
+                        mainPage.Background = new BackdropMicaBrush
+                        {
+                            BackgroundSource = BackgroundSource.WallpaperBackdrop,
+                            Opacity = SettingsHelper.MainPageBackgroundOpacity
+                        };
+                        break;
                 }
             }
             else
             {
-                //PopupMessage.ShowPopupMessage("更改背景失败");
+                PopupNotice popupNotice = new PopupNotice("更改应用背景失败");
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.ShowPopup();
             }
         }
 
@@ -155,22 +133,19 @@ namespace 随机抽取学号.Views
             }
             catch (Exception)
             {
-
+                PopupNotice popupNotice = new PopupNotice("打开失败");
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.ShowPopup();
             }
-        }
-        private void ExpanderContent_PointerPressed(object sender, PointerRoutedEventArgs e)
-        {
-            // 阻止事件冒泡
-            e.Handled = true;
         }
 
         private void BackgroundOpacitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
+            SettingsHelper.MainPageBackgroundOpacity = BackgroundOpacitySlider.Value / 100;
             BackgroundOpacityTextBlock.Text = BackgroundOpacitySlider.Value.ToString() + "%";
             if (mainPage != null)
             {
-                mainPage.Background.Opacity = BackgroundOpacitySlider.Value / 100;
-                localSettings.Values["MainPageBackgroundOpacity"] = BackgroundOpacitySlider.Value / 100;
+                mainPage.Background.Opacity = SettingsHelper.MainPageBackgroundOpacity;
             }
         }
         #region ToggledEvents
@@ -202,11 +177,11 @@ namespace 随机抽取学号.Views
 
         private void PageBackgroundOpacitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
+            SettingsHelper.ContentFrameBackgroundOpacity = (double)PageBackgroundOpacitySlider.Value / 100;
             PageBackgroundOpacityTextBlock.Text = PageBackgroundOpacitySlider.Value.ToString() + "%";
             if (mainPage != null)
             {
-                mainPage.ContentFrame.Background.Opacity = PageBackgroundOpacitySlider.Value / 100;
-                localSettings.Values["ContentFrameBackgroundOpacity"] = PageBackgroundOpacitySlider.Value / 100;
+                mainPage.ContentFrame.Background.Opacity = SettingsHelper.ContentFrameBackgroundOpacity;
             }
         }
 
@@ -214,40 +189,39 @@ namespace 随机抽取学号.Views
         {
             if (mainPage != null)
             {
-                if (PageBackgroundRadioButtons.SelectedIndex == 0)// 无背景
+                SettingsHelper.ContentFrameBackground = PageBackgroundRadioButtons.SelectedIndex;
+                switch (SettingsHelper.ContentFrameBackground)
                 {
-                    // 创建一个新的纯色笔刷来设置MainPage的背景
-                    mainPage.ContentFrame.Background = new SolidColorBrush()
-                    {
-                        Color = Colors.White,
-                        Opacity = BackgroundOpacitySlider.Value / 100
-                    };
-                    localSettings.Values["ContentFrameBackground"] = 0;
-                }
-                else if (PageBackgroundRadioButtons.SelectedIndex == 1)// 亚克力背景
-                {
-                    mainPage.ContentFrame.Background = new AcrylicBrush
-                    {
-                        BackgroundSource = AcrylicBackgroundSource.Backdrop,
-                        Opacity = BackgroundOpacitySlider.Value / 100,
-                        TintOpacity = 0.6,
-                        TintColor = Colors.Transparent
-                    };
-                    localSettings.Values["ContentFrameBackground"] = 1;
-                }
-                else if (PageBackgroundRadioButtons.SelectedIndex == 2)// 云母背景
-                {
-                    mainPage.ContentFrame.Background = new BackdropMicaBrush
-                    {
-                        BackgroundSource = BackgroundSource.Backdrop,
-                        Opacity = BackgroundOpacitySlider.Value / 100,
-                    };
-                    localSettings.Values["ContentFrameBackground"] = 2;
+                    case 0:// 无背景
+                        mainPage.ContentFrame.Background = new SolidColorBrush()
+                        {
+                            Color = Colors.White,
+                            Opacity = SettingsHelper.ContentFrameBackgroundOpacity
+                        };
+                        break;
+                    case 1:// 亚克力背景
+                        mainPage.ContentFrame.Background = new AcrylicBrush
+                        {
+                            BackgroundSource = AcrylicBackgroundSource.Backdrop,
+                            Opacity = SettingsHelper.ContentFrameBackgroundOpacity,
+                            TintOpacity = 0.6,
+                            TintColor = Colors.Transparent
+                        };
+                        break;
+                    case 2:// 云母背景
+                        mainPage.ContentFrame.Background = new BackdropMicaBrush
+                        {
+                            BackgroundSource = BackgroundSource.Backdrop,
+                            Opacity = SettingsHelper.ContentFrameBackgroundOpacity,
+                        };
+                        break;
                 }
             }
             else
             {
-                //PopupMessage.ShowPopupMessage("更改背景失败");
+                PopupNotice popupNotice = new PopupNotice("更改页面背景失败");
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                popupNotice.ShowPopup();
             }
         }
     }

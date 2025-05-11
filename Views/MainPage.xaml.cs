@@ -14,7 +14,6 @@ using Windows.UI.Xaml.Controls;
 using Windows.UI.Xaml.Controls.Primitives;
 using Windows.UI.Xaml.Hosting;
 using Windows.UI.Xaml.Media;
-using Windows.UI.Xaml.Media.Animation;
 using Windows.UI.Xaml.Media.Imaging;
 using Windows.UI.Xaml.Navigation;
 using 随机抽取学号.Classes;
@@ -55,15 +54,14 @@ namespace 随机抽取学号
             HomePageButton.IsChecked = true;
             this.SizeChanged += MainPage_SizeChanged;
             _lastSelectedButton = HomePageButton;//确保开始时_lastSelectedButton不为null
-            if (localSettings.Values.ContainsKey("IsFirstRun"))//判断是否是第一次运行
+            //加载应用设置
+            LoadSettings();
+            if (SettingsHelper.IsFirstRun == true)//判断是否是第一次运行
             {
-                //不是第一次运行
-                NotFirstRun();
-            }
-            else
-            {
-                //第一次运行
-                FirstRun();
+                //第一次运行，显示欢迎界面
+                WelcomeContentDialog welcomeDialog = new WelcomeContentDialog();
+                await welcomeDialog.ShowAsync();
+                SettingsHelper.IsFirstRun = false;
             }
             //确保数据库正常加载
             await StudentManager.InitializeDatabase();
@@ -75,229 +73,84 @@ namespace 随机抽取学号
             //StorageFolder localFolder = ApplicationData.Current.LocalFolder;
             //StorageFolder imageFolder = await localFolder.CreateFolderAsync("ClassPictures", CreationCollisionOption.OpenIfExists);
             //IStorageItem item = await imageFolder.TryGetItemAsync("ClassEmblem.png");
-            //if (item != null && item is StorageFile imageFile)
-            //{
-            //    BitmapImage bitmapImage = new BitmapImage()
-            //    {
-            //        DecodePixelHeight = 72,
-            //        DecodePixelWidth = 72,
-            //        UriSource = new Uri(imageFile.Path)
-            //    };
-            //    SmallClassPicture.ProfilePicture = bitmapImage;
-            //    BigClassPicture.ProfilePicture = bitmapImage;
-            //}
-            //else
-            //{
-            //    //找不到值，第一次启动，显示欢迎界面
-
-            //}
             ContentGrid.Visibility = Visibility.Visible;
             LoadProgressRing.Visibility = Visibility.Collapsed;
         }
-
-        private async void FirstRun()
+        private void LoadSettings()
         {
-            //设置默认应用主题
-            (Window.Current.Content as Frame).RequestedTheme = ElementTheme.Default;
+            //设置应用主题
+            (Window.Current.Content as Frame).RequestedTheme = SettingsHelper.Theme switch
+            {
+                0 => ElementTheme.Light,
+                1 => ElementTheme.Dark,
+                _ => ElementTheme.Default
+            };
             //获取当前视图并设置标题栏为透明
             var view = ApplicationView.GetForCurrentView();
             view.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
-            //设置默认MainPage背景
-            var backdropMicaBrush = new BackdropMicaBrush
+            //设置系统标题栏按钮颜色(最小化、最大化、关闭)
+            if (SettingsHelper.Theme == 0)
             {
-                BackgroundSource = BackgroundSource.WallpaperBackdrop,
-                Opacity = 0.5
-            };
-            this.Background = backdropMicaBrush;
-            var brush = new SolidColorBrush
+                view.TitleBar.ButtonForegroundColor = ((Color)Application.Current.Resources["SystemAccentColor"]);
+            }
+            else if (SettingsHelper.Theme == 1)
             {
-                Color = Colors.White,
-                Opacity = 0.5
-            };
-            ContentFrame.Background = brush;
-            WelcomeContentDialog welcomeDialog = new WelcomeContentDialog();
-            await welcomeDialog.ShowAsync();
-            CurrentClassNameTextBox.Text = "我的班级";
-            localSettings.Values["Theme"] = 2;//设置默认主题
-            localSettings.Values["MainPageBackground"] = 2;//设置默认MainPage背景
-            localSettings.Values["MainPageBackgroundOpacity"] = 0.5;//设置默认MainPage背景不透明度
-            localSettings.Values["ContentFrameBackground"] = 0;//设置默认ContentFrame背景
-            localSettings.Values["ContentFrameBackgroundOpacity"] = 0.5;//设置默认ContentFrame背景不透明度
-            localSettings.Values["CurrentClassName"] = "我的班级";//默认班级名称
-            localSettings.Values["IsFirstRun"] = false;//设置不是第一次运行
-        }
-        private void NotFirstRun()
-        {
-            //获取当前视图并设置标题栏为透明
-            var view = ApplicationView.GetForCurrentView();
-            view.TitleBar.ButtonInactiveBackgroundColor = Colors.Transparent;
-            if (localSettings.Values["Theme"] != null)
+                view.TitleBar.ButtonForegroundColor = Colors.White;
+            }
+            //设置MainPage背景
+            if (SettingsHelper.MainPageBackground == 0)
             {
-                if ((int)localSettings.Values["Theme"] == 0)
+                this.Background = new SolidColorBrush
                 {
-                    view.TitleBar.ButtonForegroundColor = ((Color)Application.Current.Resources["SystemAccentColor"]);
-                }
-                else if ((int)localSettings.Values["Theme"] == 1)
-                {
-                    view.TitleBar.ButtonForegroundColor = Colors.White;
-                }
-                (Window.Current.Content as Frame).RequestedTheme = (int)localSettings.Values["Theme"] switch
-                {
-                    0 => ElementTheme.Light,
-                    1 => ElementTheme.Dark,
-                    _ => ElementTheme.Default
+                    Color = Colors.White,
+                    Opacity = SettingsHelper.MainPageBackgroundOpacity
                 };
-                if (localSettings.Values.ContainsKey("MainPageBackground") && localSettings.Values.ContainsKey("MainPageBackgroundOpacity"))
-                {
-                    if ((int)localSettings.Values["MainPageBackground"] == 0)
-                    {
-                        this.Background = new SolidColorBrush
-                        {
-                            Color = Colors.White,
-                            Opacity = (double)localSettings.Values["MainPageBackgroundOpacity"]
-                        };
-                    }
-                    else if ((int)localSettings.Values["MainPageBackground"] == 1)
-                    {
-                        this.Background = new AcrylicBrush
-                        {
-                            BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
-                            TintOpacity = 0.6,
-                            TintColor = Colors.Transparent,
-                            Opacity = (double)localSettings.Values["MainPageBackgroundOpacity"]
-                        };
-                    }
-                    else if ((int)localSettings.Values["MainPageBackground"] == 2)
-                    {
-                        this.Background = new BackdropMicaBrush
-                        {
-                            BackgroundSource = BackgroundSource.WallpaperBackdrop,
-                            Opacity = (double)localSettings.Values["MainPageBackgroundOpacity"]
-                        };
-                    }
-                }
-                else
-                {
-                    this.Background = new BackdropMicaBrush
-                    {
-                        BackgroundSource = BackgroundSource.WallpaperBackdrop,
-                        Opacity = 0.5
-                    };
-                    localSettings.Values["MainPageBackground"] = 2;//设置默认MainPage背景
-                    localSettings.Values["MainPageBackgroundOpacity"] = 0.5;//设置默认MainPage背景不透明度
-                }
-                if (localSettings.Values["CurrentClassName"] != null)
-                {
-                    CurrentClassNameTextBox.Text = (string)localSettings.Values["CurrentClassName"] as string;
-                }
-                else
-                {
-                    CurrentClassNameTextBox.Text = "我的班级";
-                    localSettings.Values["CurrentClassName"] = "我的班级";//默认班级名称
-                }
-                if (localSettings.Values.ContainsKey("ContentFrameBackground") && localSettings.Values.ContainsKey("ContentFrameBackgroundOpacity"))
-                {
-                    if ((int)localSettings.Values["ContentFrameBackground"] == 0)
-                    {
-                        ContentFrame.Background = new SolidColorBrush
-                        {
-                            Color = Colors.White,
-                            Opacity = (double)localSettings.Values["ContentFrameBackgroundOpacity"]
-                        };
-                    }
-                    else if ((int)localSettings.Values["ContentFrameBackground"] == 1)
-                    {
-                        ContentFrame.Background = new AcrylicBrush
-                        {
-                            BackgroundSource = AcrylicBackgroundSource.Backdrop,
-                            TintOpacity = 0.6,
-                            TintColor = Colors.Transparent,
-                            Opacity = (double)localSettings.Values["ContentFrameBackgroundOpacity"]
-                        };
-                    }
-                    else if ((int)localSettings.Values["ContentFrameBackground"] == 2)
-                    {
-                        ContentFrame.Background = new BackdropMicaBrush
-                        {
-                            BackgroundSource = BackgroundSource.Backdrop,
-                            Opacity = (double)localSettings.Values["ContentFrameBackgroundOpacity"]
-                        };
-                    }
-                }
-                else
-                {
-                    ContentFrame.Background = new SolidColorBrush
-                    {
-                        Color = Colors.White,
-                        Opacity = 0.5
-                    };
-                    localSettings.Values["ContentFrameBackground"] = 0;//设置默认ContentFrame背景
-                    localSettings.Values["ContentFrameBackgroundOpacity"] = 0.5;//设置默认ContentFrame背景不透明度
-                }
             }
-        }
-        private void LoadBackground()
-        {
-            // 创建线性渐变画刷
-            LinearGradientBrush gradientBrush = new LinearGradientBrush();
-            gradientBrush.StartPoint = new Windows.Foundation.Point(0.2, 0);
-            gradientBrush.EndPoint = new Windows.Foundation.Point(0.5, 1);
-            // 创建透明度动画
-            DoubleAnimation opacityAnimation = new DoubleAnimation();
-            opacityAnimation.From = 0;
-            opacityAnimation.Duration = new Duration(TimeSpan.FromSeconds(2.5));
-            opacityAnimation.EnableDependentAnimation = true;
-            var rootFrame = Window.Current.Content as Frame;
-            if (rootFrame.ActualTheme == ElementTheme.Dark)
+            else if (SettingsHelper.MainPageBackground == 1)
             {
-                // 当前是深色主题
-                opacityAnimation.To = 0.5;
-                GradientStop stop1 = new GradientStop();
-                stop1.Color = Color.FromArgb(255, 0, 0, 139); // 深蓝色
-                stop1.Offset = 1;
-                gradientBrush.GradientStops.Add(stop1);
-
-                GradientStop stop2 = new GradientStop();
-                stop2.Color = Color.FromArgb(255, 139, 0, 139); // 深紫色
-                stop2.Offset = 0;
-                gradientBrush.GradientStops.Add(stop2);
+                this.Background = new AcrylicBrush
+                {
+                    BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                    TintOpacity = 0.6,
+                    TintColor = Colors.Transparent,
+                    Opacity = SettingsHelper.MainPageBackgroundOpacity
+                };
             }
-            else if (rootFrame.ActualTheme == ElementTheme.Light)
+            else if (SettingsHelper.MainPageBackground == 2)
             {
-                // 当前是浅色主题
-                opacityAnimation.To = 0.6;
-                // 添加渐变停止点：浅绿色
-                GradientStop lightGreenStop = new GradientStop();
-                lightGreenStop.Color = Color.FromArgb(255, 144, 238, 144);
-                lightGreenStop.Offset = 0;
-                gradientBrush.GradientStops.Add(lightGreenStop);
-
-                // 添加渐变停止点：浅蓝绿色
-                GradientStop lightBlueGreenStop = new GradientStop();
-                lightBlueGreenStop.Color = Color.FromArgb(255, 173, 216, 230);
-                lightBlueGreenStop.Offset = 0.5;
-                gradientBrush.GradientStops.Add(lightBlueGreenStop);
-
-                // 添加渐变停止点：浅蓝色
-                GradientStop lightBlueStop = new GradientStop();
-                lightBlueStop.Color = Color.FromArgb(255, 135, 206, 250);
-                lightBlueStop.Offset = 1;
-                gradientBrush.GradientStops.Add(lightBlueStop);
+                this.Background = new BackdropMicaBrush
+                {
+                    BackgroundSource = BackgroundSource.WallpaperBackdrop,
+                    Opacity = SettingsHelper.MainPageBackgroundOpacity
+                };
             }
-            // 初始设置背景透明度为 0
-            gradientBrush.Opacity = 0;
-            this.Background = gradientBrush;
-
-
-
-            // 创建故事板
-            Storyboard storyboard = new Storyboard();
-            Storyboard.SetTarget(opacityAnimation, gradientBrush);
-            Storyboard.SetTargetProperty(opacityAnimation, "Opacity");
-            storyboard.Children.Add(opacityAnimation);
-
-            // 开始动画
-            storyboard.Begin();
+            //设置ContentFrame背景
+            if (SettingsHelper.ContentFrameBackground == 0)
+            {
+                ContentFrame.Background = new SolidColorBrush
+                {
+                    Color = Colors.White,
+                    Opacity = SettingsHelper.ContentFrameBackgroundOpacity
+                };
+            }
+            else if (SettingsHelper.ContentFrameBackground == 1)
+            {
+                ContentFrame.Background = new AcrylicBrush
+                {
+                    BackgroundSource = AcrylicBackgroundSource.Backdrop,
+                    TintOpacity = 0.6,
+                    TintColor = Colors.Transparent,
+                    Opacity = SettingsHelper.ContentFrameBackgroundOpacity
+                };
+            }
+            else if (SettingsHelper.ContentFrameBackground == 2)
+            {
+                ContentFrame.Background = new BackdropMicaBrush
+                {
+                    BackgroundSource = BackgroundSource.Backdrop,
+                    Opacity = SettingsHelper.ContentFrameBackgroundOpacity
+                };
+            }
         }
         private void ContentFrame_NavigationFailed(object sender, NavigationFailedEventArgs e)
         {
@@ -331,7 +184,6 @@ namespace 随机抽取学号
             }
             ClassIcon.Glyph = "\uEA8C";
         }
-
         private void NumbersPage_Click(object sender, RoutedEventArgs e)
         {
             var button = sender as ToggleButton;
@@ -367,6 +219,19 @@ namespace 随机抽取学号
             {
                 StartAnimation(button);
                 ContentFrame.Navigate(typeof(HelpPage));
+            }
+            else
+            {
+                button.IsChecked = true;//上次点击的按钮和本次一样，保持选中状态
+            }
+        }
+        private void MorePage_Click(object sender, RoutedEventArgs e)
+        {
+            var button = sender as ToggleButton;
+            if (_lastSelectedButton != button)
+            {
+                StartAnimation(button);
+                ContentFrame.Navigate(typeof(MorePage));
             }
             else
             {
@@ -502,21 +367,6 @@ namespace 随机抽取学号
             localSettings.Values["CurrentClassName"] = CurrentClassNameTextBox.Text;
         }
 
-
-        private void MorePage_Click(object sender, RoutedEventArgs e)
-        {
-            var button = sender as ToggleButton;
-            if (_lastSelectedButton != button)
-            {
-                StartAnimation(button);
-                ContentFrame.Navigate(typeof(MorePage));
-            }
-            else
-            {
-                button.IsChecked = true;//上次点击的按钮和本次一样，保持选中状态
-            }
-        }
-
         private async void SwitchClassButton_Click(object sender, RoutedEventArgs e)
         {
             SwitchClassContentDialog switchClassContentDialog = new SwitchClassContentDialog();
@@ -527,7 +377,6 @@ namespace 随机抽取学号
         {
             if (ContentFrame.Content != null)
             {
-                //_compositor = ElementCompositionPreview.GetElementVisual(ContentFrame).Compositor;
                 _oldPageVisual = ElementCompositionPreview.GetElementVisual(ContentFrame.Content as Page);
 
                 // 旧页面的透明度动画

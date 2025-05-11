@@ -13,8 +13,11 @@
     mc:Ignorable="d">
     <ContentDialog.Resources>
         <DataTemplate x:Key="ClassGridViewItemTemplate" x:DataType="classes:Class">
-            <StackPanel Width="110" Height="130">
-                <PersonPicture Margin="0,5,0,0" ProfilePicture="{x:Bind ClassEmblemPath, Mode=OneWay}" />
+            <StackPanel Width="110" Height="100">
+                <PersonPicture
+                    Height="60"
+                    Margin="0,5,0,0"
+                    ProfilePicture="{x:Bind ClassEmblemPath, Mode=OneWay}" />
                 <TextBlock
                     HorizontalAlignment="Center"
                     VerticalAlignment="Center"
@@ -27,10 +30,12 @@
     <Grid>
         <GridView
             x:Name="ClassGridView"
+            Margin="0,40,0,0"
             ItemTemplate="{StaticResource ClassGridViewItemTemplate}"
             ItemsSource="{x:Bind classes:StudentManager.ClassList}"
             ScrollViewer.HorizontalScrollMode="Disabled"
             ScrollViewer.VerticalScrollMode="Enabled"
+            SelectionChanged="ClassGridView_SelectionChanged"
             SelectionMode="Multiple">
             <GridView.ItemContainerTransitions>
                 <TransitionCollection>
@@ -38,18 +43,30 @@
                 </TransitionCollection>
             </GridView.ItemContainerTransitions>
         </GridView>
-        <Button
-            x:Name="CloseButton"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top"
-            Width="40"
-            Height="40"
-            Click="CloseButton_Click">
-            <FontIcon
-                HorizontalAlignment="Center"
+        <Grid Height="40" VerticalAlignment="Top">
+            <TextBlock
                 VerticalAlignment="Center"
-                FontFamily="{StaticResource SegoeFluentIcons}"
-                Glyph="&#xE894;" />
-        </Button>
+                FontFamily="{StaticResource HarmonyOSSans}"
+                Text="选择多个班级" />
+            <ToggleSwitch
+                x:Name="MultiSelectToggleSwitch"
+                Margin="100,0,0,0"
+                VerticalAlignment="Top"
+                FontFamily="{StaticResource HarmonyOSSans}"
+                Toggled="MultiSelectToggleSwitch_Toggled" />
+            <Button
+                x:Name="CloseButton"
+                Width="40"
+                Height="40"
+                HorizontalAlignment="Right"
+                Click="CloseButton_Click">
+                <FontIcon
+                    HorizontalAlignment="Center"
+                    VerticalAlignment="Center"
+                    FontFamily="{StaticResource SegoeFluentIcons}"
+                    Glyph="&#xE894;" />
+            </Button>
+        </Grid>
+
     </Grid>
 </ContentDialog>

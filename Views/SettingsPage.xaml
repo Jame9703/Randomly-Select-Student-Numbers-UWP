@@ -85,8 +85,7 @@
                             Description="选择要显示的应用主题"
                             FontFamily="{StaticResource HarmonyOSSans}"
                             Header="应用程序主题"
-                            IsTabStop="True"
-                            PointerPressed="ExpanderContent_PointerPressed">
+                            IsTabStop="True">
                             <communitytoolkitcontrols:SettingsExpander.HeaderIcon>
                                 <FontIcon Glyph="&#xE790;" />
                             </communitytoolkitcontrols:SettingsExpander.HeaderIcon>
