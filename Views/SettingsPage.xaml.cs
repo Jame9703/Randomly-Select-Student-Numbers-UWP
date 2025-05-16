@@ -95,7 +95,7 @@ namespace 随机抽取学号.Views
                     case 0://无背景
                         mainPage.Background = new SolidColorBrush()
                         {
-                            Color = (Color)Application.Current.Resources["SystemBaseHighColor"],
+                            Color = (Color)Application.Current.Resources["SystemAltMediumColor"],
                             Opacity = SettingsHelper.MainPageBackgroundOpacity
                         };
                         break;

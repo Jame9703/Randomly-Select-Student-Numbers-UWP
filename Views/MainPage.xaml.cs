@@ -70,12 +70,17 @@ namespace 随机抽取学号
             StudentManager.SelectedRanges = await StudentManager.LoadCheckedStudentsAsync();
             //加载所有班级信息
             StudentManager.ClassList = await StudentManager.LoadClassesAsync();
-            //StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-            //StorageFolder imageFolder = await localFolder.CreateFolderAsync("ClassPictures", CreationCollisionOption.OpenIfExists);
-            //IStorageItem item = await imageFolder.TryGetItemAsync("ClassEmblem.png");
+            (Window.Current.Content as Frame).ActualThemeChanged += Frame_ActualThemeChanged;
             ContentGrid.Visibility = Visibility.Visible;
             LoadProgressRing.Visibility = Visibility.Collapsed;
         }
+
+        private void Frame_ActualThemeChanged(FrameworkElement sender, object args)
+        {
+            // 主题改变时重新加载
+
+        }
+
         private void LoadSettings()
         {
             //设置应用主题

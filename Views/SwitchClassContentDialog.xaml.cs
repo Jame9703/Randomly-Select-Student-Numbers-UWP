@@ -1,5 +1,6 @@
 ﻿using CommunityToolkit.WinUI;
 using System.Linq;
+using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
 using 随机抽取学号.Classes;
 
@@ -21,6 +22,22 @@ namespace 随机抽取学号.Views
         private async void CloseButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
         {
             await StudentManager.SaveClassesAsync(StudentManager.ClassList);
+            SettingsHelper.CurrentClassName = ((Class)ClassGridView.SelectedItem).ClassName;
+            await StudentManager.InitializeDatabase();
+            StudentManager.StudentList = await StudentManager.LoadStudentsAsync();
+            var mainPage = (Window.Current.Content as Frame).Content as MainPage;
+            if(mainPage!= null)
+            {
+                var currentPage = mainPage.ContentFrame.Content as Page;
+                if(currentPage is HomePage homePage)
+                {
+                    homePage.UpdateUI();
+                }
+                if(currentPage is ClassPage classPage)
+                {
+                    classPage.UpdateUI();
+                }
+            }
             this.Hide();
         }
 

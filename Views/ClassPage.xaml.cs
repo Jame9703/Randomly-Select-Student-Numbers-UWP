@@ -38,7 +38,10 @@ namespace 随机抽取学号.Views
             FileEditSegmented.SelectedIndex = 0;
             AddModeSegmented.SelectedIndex = 0;
         }
-
+        public void UpdateUI()
+        {
+                StudentListView.ItemsSource = StudentManager.StudentList;
+        }
         private async void StudentList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
             UpdateStudentId();

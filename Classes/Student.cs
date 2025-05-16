@@ -134,22 +134,19 @@ namespace 随机抽取学号.Classes
         public static async Task InitializeDatabase()
         {
             StorageFolder localFolder = ApplicationData.Current.LocalFolder;
-            if (ApplicationData.Current.LocalSettings.Values.ContainsKey("CurrentClassName"))
-            {
-                //创建班级信息数据库，若已存在则打开
-                StorageFile ClassDBFile = await localFolder.CreateFileAsync("classes.db", CreationCollisionOption.OpenIfExists);
-                ClassDataBasePath = ClassDBFile.Path;
-                //获取当前班级对应文件夹
-                string CurrentClassName = ApplicationData.Current.LocalSettings.Values["CurrentClassName"].ToString();
-                CurrentClassFolder = await localFolder.CreateFolderAsync(CurrentClassName, CreationCollisionOption.OpenIfExists);
-                //创建学生信息数据库，若已存在则打开
-                StorageFile StudentDBFile = await CurrentClassFolder.CreateFileAsync("students.db", CreationCollisionOption.OpenIfExists);
-                StudentDataBasePath = StudentDBFile.Path;
-                //创建抽取范围中的学生信息数据库，若已存在则打开
-                StorageFile CheckedStudentDBFile = await CurrentClassFolder.CreateFileAsync("checkedstudents.db", CreationCollisionOption.OpenIfExists);
-                CheckedStudentDataBasePath = CheckedStudentDBFile.Path;
-                await CreateTablesAsync();
-            }
+            //创建班级信息数据库，若已存在则打开
+            StorageFile ClassDBFile = await localFolder.CreateFileAsync("classes.db", CreationCollisionOption.OpenIfExists);
+            ClassDataBasePath = ClassDBFile.Path;
+            //获取当前班级对应文件夹
+            string CurrentClassName = SettingsHelper.CurrentClassName;
+            CurrentClassFolder = await localFolder.CreateFolderAsync(CurrentClassName, CreationCollisionOption.OpenIfExists);
+            //创建学生信息数据库，若已存在则打开
+            StorageFile StudentDBFile = await CurrentClassFolder.CreateFileAsync("students.db", CreationCollisionOption.OpenIfExists);
+            StudentDataBasePath = StudentDBFile.Path;
+            //创建抽取范围中的学生信息数据库，若已存在则打开
+            StorageFile CheckedStudentDBFile = await CurrentClassFolder.CreateFileAsync("checkedstudents.db", CreationCollisionOption.OpenIfExists);
+            CheckedStudentDataBasePath = CheckedStudentDBFile.Path;
+            await CreateTablesAsync();
         }
         private static async Task CreateTablesAsync()
         {
