@@ -78,7 +78,78 @@ namespace 随机抽取学号
         private void Frame_ActualThemeChanged(FrameworkElement sender, object args)
         {
             // 主题改变时重新加载
-
+            if (ContentFrame.ActualTheme == ElementTheme.Light)
+            {
+                switch (SettingsHelper.MainPageBackground)
+                {
+                    case 0://无背景
+                        Background = new SolidColorBrush()
+                        {
+                            Color = (Color)Application.Current.Resources["SystemAltMediumColor"],
+                            Opacity = SettingsHelper.MainPageNoBackgroundOpacity
+                        };
+                        break;
+                    case 1://亚克力背景
+                        Background = new AcrylicBrush
+                        {
+                            BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                            Opacity = SettingsHelper.MainPageAcrylicBackgroundOpacity,
+                            TintOpacity = 0.6,
+                            TintColor = Colors.Transparent
+                        };
+                        break;
+                    case 2://云母背景
+                        Background = new BackdropMicaBrush
+                        {
+                            BackgroundSource = BackgroundSource.WallpaperBackdrop,
+                            Opacity = SettingsHelper.MainPageMicaBackgroundOpacity
+                        };
+                        break;
+                    case 3://图片背景
+                        Background = new ImageBrush
+                        {
+                            Opacity = SettingsHelper.MainPageImageBackgroundOpacity
+                        } ;
+                        break;
+                }
+            }
+            else if (ContentFrame.ActualTheme == ElementTheme.Dark)
+            {
+                switch (SettingsHelper.MainPageBackground)
+                {
+                    case 0://无背景
+                        Background = new SolidColorBrush()
+                        {
+                            Color = (Color)Application.Current.Resources["SystemAltMediumColor"],
+                            Opacity = SettingsHelper.MainPageNoBackgroundOpacity
+                        };
+                        break;
+                    case 1://亚克力背景
+                        Background = new AcrylicBrush
+                        {
+                            BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
+                            Opacity = SettingsHelper.MainPageAcrylicBackgroundOpacity,
+                            TintOpacity = 0.6,
+                            TintColor = Colors.Transparent
+                        };
+                        break;
+                    case 2://云母背景
+                        Background = new BackdropMicaBrush
+                        {
+                            BackgroundSource = BackgroundSource.WallpaperBackdrop,
+                            Opacity = SettingsHelper.MainPageMicaBackgroundOpacity,
+                            TintColor = Colors.Black,
+                            LuminosityOpacity = 0.5
+                        };
+                        break;
+                    case 3://图片背景
+                        Background = new ImageBrush
+                        {
+                            Opacity = SettingsHelper.MainPageImageBackgroundOpacity
+                        };
+                        break;
+                }
+            }
         }
 
         private void LoadSettings()
@@ -108,7 +179,7 @@ namespace 随机抽取学号
                 this.Background = new SolidColorBrush
                 {
                     Color = Colors.White,
-                    Opacity = SettingsHelper.MainPageBackgroundOpacity
+                    Opacity = SettingsHelper.MainPageNoBackgroundOpacity
                 };
             }
             else if (SettingsHelper.MainPageBackground == 1)
@@ -118,7 +189,7 @@ namespace 随机抽取学号
                     BackgroundSource = AcrylicBackgroundSource.HostBackdrop,
                     TintOpacity = 0.6,
                     TintColor = Colors.Transparent,
-                    Opacity = SettingsHelper.MainPageBackgroundOpacity
+                    Opacity = SettingsHelper.MainPageAcrylicBackgroundOpacity
                 };
             }
             else if (SettingsHelper.MainPageBackground == 2)
@@ -126,7 +197,14 @@ namespace 随机抽取学号
                 this.Background = new BackdropMicaBrush
                 {
                     BackgroundSource = BackgroundSource.WallpaperBackdrop,
-                    Opacity = SettingsHelper.MainPageBackgroundOpacity
+                    Opacity = SettingsHelper.MainPageMicaBackgroundOpacity
+                };
+            }
+            else if (SettingsHelper.MainPageBackground == 3)
+            {
+                this.Background = new ImageBrush
+                {
+                    Opacity = SettingsHelper.MainPageImageBackgroundOpacity
                 };
             }
             //设置ContentFrame背景

@@ -10,8 +10,7 @@ namespace 随机抽取学号.Classes
         private static readonly ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         private static bool isFirstRun;
         private static int theme;
-        private static int mainPageBackground;
-        private static double mainPageBackgroundOpacity;
+
         private static int contentFrameBackground;
         private static double contentFrameBackgroundOpacity;
         private static string currentClassName;
@@ -20,7 +19,11 @@ namespace 随机抽取学号.Classes
         private static bool optimize;
         private static bool saveRange;
         private static bool saveHistory;
-
+        private static int mainPageBackground;
+        private static double mainPageNoBackgroundOpacity;
+        private static double mainPageAcrylicBackgroundOpacity;
+        private static double mainPageMicaBackgroundOpacity;
+        private static double mainPageImageBackgroundOpacity;
 
         static SettingsHelper()
         {
@@ -28,7 +31,7 @@ namespace 随机抽取学号.Classes
             isFirstRun = GetSetting(nameof(IsFirstRun), true);
             theme = GetSetting(nameof(Theme), 0);
             mainPageBackground = GetSetting(nameof(MainPageBackground), 2);
-            mainPageBackgroundOpacity = GetSetting(nameof(MainPageBackgroundOpacity), 0.5);
+            mainPageNoBackgroundOpacity = GetSetting(nameof(MainPageNoBackgroundOpacity), 0.5);
             contentFrameBackground = GetSetting(nameof(ContentFrameBackground), 0);
             contentFrameBackgroundOpacity = GetSetting(nameof(ContentFrameBackgroundOpacity), 0.5);
             currentClassName = GetSetting(nameof(CurrentClassName), "我的班级");
@@ -104,7 +107,9 @@ namespace 随机抽取学号.Classes
                 }
             }
         }
-
+        /// <summary>
+        /// 获取或设置MainPage的背景，0：纯色，1：Acrylic，2：Mica，3：图片
+        /// </summary>
         public static int MainPageBackground
         {
             get => mainPageBackground;
@@ -117,20 +122,66 @@ namespace 随机抽取学号.Classes
                 }
             }
         }
-
-        public static double MainPageBackgroundOpacity
+        /// <summary>
+        /// 获取或设置MainPage的纯色背景透明度
+        /// </summary>
+        public static double MainPageNoBackgroundOpacity
         {
-            get => mainPageBackgroundOpacity;
+            get => mainPageNoBackgroundOpacity;
             set
             {
-                if (mainPageBackgroundOpacity != value)
+                if (mainPageNoBackgroundOpacity != value)
                 {
-                    mainPageBackgroundOpacity = value;
-                    localSettings.Values[nameof(mainPageBackgroundOpacity)] = value;
+                    mainPageNoBackgroundOpacity = value;
+                    localSettings.Values[nameof(mainPageNoBackgroundOpacity)] = value;
                 }
             }
         }
-
+        /// <summary>
+        /// 获取或设置MainPage的Acrylic背景透明度
+        /// </summary>
+        public static double MainPageAcrylicBackgroundOpacity
+        {
+            get => mainPageAcrylicBackgroundOpacity;
+            set
+            {
+                if (mainPageAcrylicBackgroundOpacity != value)
+                {
+                    mainPageAcrylicBackgroundOpacity = value;
+                    localSettings.Values[nameof(mainPageAcrylicBackgroundOpacity)] = value;
+                }
+            }
+        }
+        /// <summary>
+        /// 获取或设置MainPage的Mica背景透明度
+        /// </summary>
+        public static double MainPageMicaBackgroundOpacity
+        {
+            get => mainPageMicaBackgroundOpacity;
+            set
+            {
+                if (mainPageMicaBackgroundOpacity != value)
+                {
+                    mainPageMicaBackgroundOpacity = value;
+                    localSettings.Values[nameof(mainPageMicaBackgroundOpacity)] = value;
+                }
+            }
+        }
+        /// <summary>
+        /// 获取或设置MainPage的图片背景透明度
+        /// </summary>
+        public static double MainPageImageBackgroundOpacity
+        {
+            get => mainPageImageBackgroundOpacity;
+            set
+            {
+                if (mainPageImageBackgroundOpacity != value)
+                {
+                    mainPageImageBackgroundOpacity = value;
+                    localSettings.Values[nameof(mainPageImageBackgroundOpacity)] = value;
+                }
+            }
+        }
         public static int ContentFrameBackground
         {
             get => contentFrameBackground;

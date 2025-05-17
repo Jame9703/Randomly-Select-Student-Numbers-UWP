@@ -19,12 +19,13 @@ namespace 随机抽取学号.Views
         {
         }
 
-        private async void CloseButton_Click(object sender, Windows.UI.Xaml.RoutedEventArgs e)
+        private async void CloseButton_Click(object sender, RoutedEventArgs e)
         {
             await StudentManager.SaveClassesAsync(StudentManager.ClassList);
             SettingsHelper.CurrentClassName = ((Class)ClassGridView.SelectedItem).ClassName;
             await StudentManager.InitializeDatabase();
             StudentManager.StudentList = await StudentManager.LoadStudentsAsync();
+            StudentManager.SelectedRanges = await StudentManager.LoadCheckedStudentsAsync();
             var mainPage = (Window.Current.Content as Frame).Content as MainPage;
             if(mainPage!= null)
             {

@@ -115,35 +115,142 @@
                                     <StackPanel Margin="-12,0,0,0" Orientation="Vertical">
                                         <muxc:RadioButtons
                                             x:Name="BackgroundRadioButtons"
-                                            MaxColumns="3"
+                                            MaxColumns="4"
                                             SelectionChanged="BackgroundRadioButtons_SelectionChanged">
-                                            <RadioButton Content="无背景" FontFamily="{StaticResource HarmonyOSSans}" />
-                                            <RadioButton Content="Acrylic" FontFamily="{StaticResource HarmonyOSSans}" />
-                                            <RadioButton Content="Mica" FontFamily="{StaticResource HarmonyOSSans}" />
+                                            <RadioButton
+                                                Content="无背景"
+                                                FontFamily="{StaticResource HarmonyOSSans}"
+                                                Tag="NoBackground" />
+                                            <RadioButton
+                                                Content="Acrylic"
+                                                FontFamily="{StaticResource HarmonyOSSans}"
+                                                Tag="AcrylicBackground" />
+                                            <RadioButton
+                                                Content="Mica"
+                                                FontFamily="{StaticResource HarmonyOSSans}"
+                                                Tag="MicaBackground" />
+                                            <RadioButton
+                                                Content="图片填充"
+                                                FontFamily="{StaticResource HarmonyOSSans}"
+                                                Tag="ImageBackground" />
                                         </muxc:RadioButtons>
                                     </StackPanel>
                                 </communitytoolkitcontrols:SettingsCard>
                                 <communitytoolkitcontrols:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
-                                    <StackPanel
-                                        Margin="-12,0,0,0"
-                                        Orientation="Horizontal"
-                                        Spacing="10">
-
-                                        <Slider
-                                            x:Name="BackgroundOpacitySlider"
-                                            Width="250"
-                                            ValueChanged="BackgroundOpacitySlider_ValueChanged" />
-                                        <TextBlock
-                                            VerticalAlignment="Center"
-                                            FontFamily="{StaticResource HarmonyOSSans}"
-                                            Text="透明度" />
-                                        <TextBlock
-                                            x:Name="BackgroundOpacityTextBlock"
-                                            VerticalAlignment="Center"
-                                            FontFamily="{StaticResource HarmonyOSSans}" />
-                                    </StackPanel>
+                                    <communitytoolkitcontrols:SwitchPresenter Value="{Binding SelectedItem.Tag, ElementName=BackgroundRadioButtons}">
+                                        <communitytoolkitcontrols:Case Value="NoBackground">
+                                            <StackPanel animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+                                                <StackPanel
+                                                    Margin="-12,0,0,0"
+                                                    Orientation="Horizontal"
+                                                    Spacing="10">
+                                                    <Slider
+                                                        x:Name="NoBackgroundOpacitySlider"
+                                                        Width="250"
+                                                        Maximum="1"
+                                                        StepFrequency="0.01"
+                                                        ValueChanged="NoBackgroundOpacitySlider_ValueChanged" />
+                                                    <TextBlock
+                                                        VerticalAlignment="Center"
+                                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                                        Text="透明度" />
+                                                    <TextBlock
+                                                        VerticalAlignment="Center"
+                                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                                        Text="{x:Bind NoBackgroundOpacitySlider.Value, Mode=OneWay}" />
+                                                </StackPanel>
+                                                <StackPanel
+                                                    Margin="-12,0,0,0"
+                                                    Orientation="Horizontal"
+                                                    Spacing="10">
+                                                    <TextBlock
+                                                        VerticalAlignment="Center"
+                                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                                        Text="TintColor" />
+                                                    <communitytoolkitcontrols:ColorPickerButton>
+                                                        <communitytoolkitcontrols:ColorPickerButton.ColorPickerStyle>
+                                                            <Style TargetType="communitytoolkitcontrols:ColorPicker">
+                                                                <Setter Property="ColorSpectrumShape" Value="Ring" />
+                                                                <Setter Property="IsAlphaEnabled" Value="True" />
+                                                            </Style>
+                                                        </communitytoolkitcontrols:ColorPickerButton.ColorPickerStyle>
+                                                    </communitytoolkitcontrols:ColorPickerButton>
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </communitytoolkitcontrols:Case>
+                                        <communitytoolkitcontrols:Case Value="AcrylicBackground">
+                                            <StackPanel animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+                                                <StackPanel
+                                                    Margin="-12,0,0,0"
+                                                    Orientation="Horizontal"
+                                                    Spacing="10">
+                                                    <Slider
+                                                        x:Name="AcrylicBackgroundOpacitySlider"
+                                                        Width="250"
+                                                        Maximum="1"
+                                                        StepFrequency="0.01"
+                                                        ValueChanged="AcrylicBackgroundOpacitySlider_ValueChanged" />
+                                                    <TextBlock
+                                                        VerticalAlignment="Center"
+                                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                                        Text="透明度" />
+                                                    <TextBlock
+                                                        VerticalAlignment="Center"
+                                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                                        Text="{x:Bind AcrylicBackgroundOpacitySlider.Value, Mode=OneWay}" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </communitytoolkitcontrols:Case>
+                                        <communitytoolkitcontrols:Case Value="MicaBackground">
+                                            <StackPanel animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+                                                <StackPanel
+                                                    Margin="-12,0,0,0"
+                                                    Orientation="Horizontal"
+                                                    Spacing="10">
+                                                    <Slider
+                                                        x:Name="MicaBackgroundOpacitySlider"
+                                                        Width="250"
+                                                        Maximum="1"
+                                                        StepFrequency="0.01"
+                                                        ValueChanged="MicaBackgroundOpacitySlider_ValueChanged" />
+                                                    <TextBlock
+                                                        VerticalAlignment="Center"
+                                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                                        Text="透明度" />
+                                                    <TextBlock
+                                                        Text="{x:Bind MicaBackgroundOpacitySlider.Value, Mode=OneWay}" 
+                                                        VerticalAlignment="Center"
+                                                        FontFamily="{StaticResource HarmonyOSSans}" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </communitytoolkitcontrols:Case>
+                                        <communitytoolkitcontrols:Case Value="ImageBackground">
+                                            <StackPanel animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+                                                <StackPanel
+                                                    Margin="-12,0,0,0"
+                                                    Orientation="Horizontal"
+                                                    Spacing="10">
+                                                    <Slider
+                                                        x:Name="ImageBackgroundOpacitySlider"
+                                                        Width="250"
+                                                        Maximum="1"
+                                                        StepFrequency="0.01"
+                                                        ValueChanged="ImageBackgroundOpacitySlider_ValueChanged" />
+                                                    <TextBlock
+                                                        VerticalAlignment="Center"
+                                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                                        Text="透明度" />
+                                                    <TextBlock
+                                                        Text="{x:Bind ImageBackgroundOpacitySlider.Value, Mode=OneWay}" 
+                                                        VerticalAlignment="Center"
+                                                        FontFamily="{StaticResource HarmonyOSSans}" />
+                                                </StackPanel>
+                                            </StackPanel>
+                                        </communitytoolkitcontrols:Case>
+                                    </communitytoolkitcontrols:SwitchPresenter>
                                 </communitytoolkitcontrols:SettingsCard>
                             </communitytoolkitcontrols:SettingsExpander.Items>
+
                         </communitytoolkitcontrols:SettingsExpander>
                         <communitytoolkitcontrols:SettingsExpander
                             Margin="10,0,20,0"
@@ -160,7 +267,7 @@
                                     <StackPanel Margin="-12,0,0,0" Orientation="Vertical">
                                         <muxc:RadioButtons
                                             x:Name="PageBackgroundRadioButtons"
-                                            MaxColumns="3"
+                                            MaxColumns="4"
                                             SelectionChanged="PageBackgroundRadioButtons_SelectionChanged">
                                             <RadioButton Content="无背景" FontFamily="{StaticResource HarmonyOSSans}" />
                                             <RadioButton Content="Acrylic" FontFamily="{StaticResource HarmonyOSSans}" />
@@ -293,7 +400,7 @@
                             <TextBlock
                                 FontFamily="{StaticResource HarmonyOSSans}"
                                 Foreground="{ThemeResource TextFillColorSecondaryBrush}"
-                                Text="Version 1.1.0   2025/4/26" />
+                                Text="Version 1.1.0   2025/5/18" />
                         </communitytoolkitcontrols:SettingsExpander>
                         <communitytoolkitcontrols:SettingsExpander
                             Margin="10,0,20,0"
