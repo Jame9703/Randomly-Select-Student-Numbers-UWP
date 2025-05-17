@@ -27,16 +27,8 @@ namespace 随机抽取学号.Views
         {
             this.InitializeComponent();
             //将设置项加载到控件
-            AppearanceRadioButtons.SelectedIndex = SettingsHelper.Theme;
-            BackgroundRadioButtons.SelectedIndex = SettingsHelper.MainPageBackground;
-            NoBackgroundOpacitySlider.Value = SettingsHelper.MainPageNoBackgroundOpacity;
             PageBackgroundRadioButtons.SelectedIndex = SettingsHelper.ContentFrameBackground;
             PageBackgroundOpacitySlider.Value = SettingsHelper.ContentFrameBackgroundOpacity;
-            NoReturnToggleSwitch.IsOn = SettingsHelper.NoReturn;
-            AutoStopToggleSwitch.IsOn = SettingsHelper.AutoStop;
-            OptimizeToggleSwitch.IsOn = SettingsHelper.Optimize;
-            SaveRangeToggleSwitch.IsOn = SettingsHelper.SaveRange;
-            SaveHistoryToggleSwitch.IsOn = SettingsHelper.SaveHistory;
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -53,7 +45,6 @@ namespace 随机抽取学号.Views
             //         0                Light
             //         1                Dark
             //         2                Default(Use system settings)
-            SettingsHelper.Theme = AppearanceRadioButtons.SelectedIndex;
             (Window.Current.Content as Frame).RequestedTheme = SettingsHelper.Theme switch
             {
                 0 => ElementTheme.Light,
@@ -87,7 +78,6 @@ namespace 随机抽取学号.Views
         {
             if (mainPage != null)
             {
-                SettingsHelper.MainPageBackground = BackgroundRadioButtons.SelectedIndex;
                 switch (SettingsHelper.MainPageBackground)
                 {
                     case 0://无背景
@@ -133,7 +123,7 @@ namespace 随机抽取学号.Views
         {
             try
             {
-                await Launcher.LaunchUriAsync(new Uri("https://github.com/Jame9703/Randomly-Select-Student-Numbers-UWP"));
+                await Launcher.LaunchUriAsync(new Uri("https://github.com/Jame9703/Randomly-Select-Student-Numbers"));
             }
             catch (Exception)
             {
@@ -145,42 +135,14 @@ namespace 随机抽取学号.Views
 
         private void NoBackgroundOpacitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            SettingsHelper.MainPageNoBackgroundOpacity = NoBackgroundOpacitySlider.Value;
             if (mainPage != null)
             {
                 mainPage.Background.Opacity = SettingsHelper.MainPageNoBackgroundOpacity;
             }
         }
-        #region ToggledEvents
-        private void NoReturnToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        {
-            localSettings.Values["NoReturn"] = NoReturnToggleSwitch.IsOn;
-        }
-
-        private void AutoStopToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        {
-            localSettings.Values["AutoStop"] = AutoStopToggleSwitch.IsOn;
-        }
-
-        private void OptimizeToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        {
-            localSettings.Values["Optimize"] = OptimizeToggleSwitch.IsOn;
-        }
-
-        private void SaveRangeToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        {
-            localSettings.Values["SaveRange"] = SaveRangeToggleSwitch.IsOn;
-        }
-
-        private void SaveHistoryToggleSwitch_Toggled(object sender, RoutedEventArgs e)
-        {
-            localSettings.Values["SaveHistory"] = SaveHistoryToggleSwitch.IsOn;
-        }
-        #endregion
 
         private void PageBackgroundOpacitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            SettingsHelper.ContentFrameBackgroundOpacity = PageBackgroundOpacitySlider.Value;
             if (mainPage != null)
             {
                 mainPage.ContentFrame.Background.Opacity = SettingsHelper.ContentFrameBackgroundOpacity;
@@ -191,7 +153,6 @@ namespace 随机抽取学号.Views
         {
             if (mainPage != null)
             {
-                SettingsHelper.ContentFrameBackground = PageBackgroundRadioButtons.SelectedIndex;
                 switch (SettingsHelper.ContentFrameBackground)
                 {
                     case 0:// 无背景
@@ -229,7 +190,6 @@ namespace 随机抽取学号.Views
 
         private void AcrylicBackgroundOpacitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            SettingsHelper.MainPageAcrylicBackgroundOpacity = AcrylicBackgroundOpacitySlider.Value;
             if (mainPage != null)
             {
                 mainPage.Background.Opacity = SettingsHelper.MainPageAcrylicBackgroundOpacity;
@@ -238,7 +198,6 @@ namespace 随机抽取学号.Views
 
         private void MicaBackgroundOpacitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            SettingsHelper.MainPageMicaBackgroundOpacity = MicaBackgroundOpacitySlider.Value;
             if (mainPage != null)
             {
                 mainPage.Background.Opacity = SettingsHelper.MainPageMicaBackgroundOpacity;
@@ -247,7 +206,6 @@ namespace 随机抽取学号.Views
 
         private void ImageBackgroundOpacitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
-            SettingsHelper.MainPageImageBackgroundOpacity = ImageBackgroundOpacitySlider.Value;
             if (mainPage != null)
             {
                 mainPage.Background.Opacity = SettingsHelper.MainPageImageBackgroundOpacity;

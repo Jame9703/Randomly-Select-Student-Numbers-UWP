@@ -232,40 +232,40 @@
                 <EntranceThemeTransition FromVerticalOffset="100" IsStaggeringEnabled="True" />
             </TransitionCollection>
         </Grid.ChildrenTransitions>
-        <Grid x:Name="AppTitleBar">
+        <Grid>
             <Grid.RowDefinitions>
-                <RowDefinition Height="40" />
+                <RowDefinition Height="35" />
             </Grid.RowDefinitions>
-            <Grid Background="Transparent">
+            <Grid x:Name="AppTitleBar" Background="Transparent">
                 <Grid.ColumnDefinitions>
                     <ColumnDefinition Width="Auto" />
                     <ColumnDefinition Width="*" />
                 </Grid.ColumnDefinitions>
                 <Image
-                    Width="26"
-                    Height="26"
-                    Margin="7,7,0,7"
+                    Width="25"
+                    Height="25"
+                    Margin="5,5,0,5"
                     HorizontalAlignment="Left"
                     Source="ms-appx:///Assets/RSSN_Logos/Square44x44Logo.altform-lightunplated_targetsize-48.png" />
                 <TextBlock
                     x:Name="AppTitleTextBlock_1"
-                    Margin="40,5,0,0"
+                    Margin="34,4,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     FontFamily="{StaticResource HarmonyOSSans}"
-                    FontSize="14"
+                    FontSize="13"
                     Style="{StaticResource CaptionTextBlockStyle}"
                     Text="随机抽取学号 2025" />
                 <TextBlock
                     x:Name="AppTitleTextBlock_2"
                     Grid.ColumnSpan="2"
                     Width="136"
-                    Height="17"
-                    Margin="40,25,0,0"
+                    Height="12"
+                    Margin="34,20,0,0"
                     HorizontalAlignment="Left"
                     VerticalAlignment="Top"
                     FontFamily="{StaticResource HarmonyOSSans}"
-                    FontSize="8"
+                    FontSize="7"
                     Style="{StaticResource CaptionTextBlockStyle}"
                     Text="Randomly Select Student Numbers" />
             </Grid>
@@ -280,9 +280,9 @@
             </Grid.ColumnDefinitions>
             <Button
                 Grid.Column="1"
-                Height="40"
+                Height="30"
                 Padding="2"
-                CornerRadius="16"
+                CornerRadius="15"
                 Style="{StaticResource ClassButtonStyle}">
                 <ToolTipService.ToolTip>
                     <ToolTip
@@ -294,8 +294,9 @@
                 <StackPanel Orientation="Horizontal">
                     <PersonPicture
                         x:Name="SmallClassPicture"
-                        Width="32"
-                        Height="32"
+                        Width="24"
+                        Height="24"
+
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center" />
                     <TextBlock
@@ -379,7 +380,7 @@
             <Frame
                 x:Name="ContentFrame"
                 Grid.Row="0"
-                Margin="65,40,0,0"
+                Margin="65,35,0,0"
                 x:FieldModifier="public"
                 BorderBrush="Transparent"
                 BorderThickness="0"
@@ -395,27 +396,11 @@
                     </TransitionCollection>
                 </Frame.ContentTransitions>
             </Frame>
-            <!--<ScrollViewer
-           Margin="0,45,0,0"
-           HorizontalAlignment="Right"
-           HorizontalScrollBarVisibility="Hidden"
-           VerticalScrollBarVisibility="Auto">
-           <StackPanel
-               x:Name="PopupContainer"
-               HorizontalAlignment="Right"
-               VerticalAlignment="Bottom"
-               Orientation="Vertical"
-               Spacing="10">
-               <controls:PopupMessage VerticalAlignment="Bottom" />
-           </StackPanel>
-
-       </ScrollViewer>-->
-
 
             <StackPanel
                 x:Name="Canvas"
                 Width="65"
-                Margin="0,40,0,0"
+                Margin="0,35,0,0"
                 HorizontalAlignment="Left">
                 <StackPanel.ChildrenTransitions>
                     <TransitionCollection>

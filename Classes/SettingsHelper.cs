@@ -32,6 +32,9 @@ namespace 随机抽取学号.Classes
             theme = GetSetting(nameof(Theme), 0);
             mainPageBackground = GetSetting(nameof(MainPageBackground), 2);
             mainPageNoBackgroundOpacity = GetSetting(nameof(MainPageNoBackgroundOpacity), 0.5);
+            mainPageAcrylicBackgroundOpacity = GetSetting(nameof(MainPageAcrylicBackgroundOpacity), 0.5);
+            mainPageMicaBackgroundOpacity = GetSetting(nameof(MainPageMicaBackgroundOpacity), 0.5);
+            mainPageImageBackgroundOpacity = GetSetting(nameof(MainPageImageBackgroundOpacity), 0.5);
             contentFrameBackground = GetSetting(nameof(ContentFrameBackground), 0);
             contentFrameBackgroundOpacity = GetSetting(nameof(ContentFrameBackgroundOpacity), 0.5);
             currentClassName = GetSetting(nameof(CurrentClassName), "我的班级");

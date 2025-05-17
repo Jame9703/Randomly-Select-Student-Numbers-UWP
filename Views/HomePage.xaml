@@ -500,7 +500,7 @@
                                 SelectionMode="Multiple">
                                 <ListView.ItemContainerTransitions>
                                     <TransitionCollection>
-                                        <EntranceThemeTransition FromHorizontalOffset="100" IsStaggeringEnabled="True" />
+                                        <EntranceThemeTransition FromVerticalOffset="100" IsStaggeringEnabled="True" />
                                     </TransitionCollection>
                                 </ListView.ItemContainerTransitions>
                             </ListView>
