@@ -1,5 +1,6 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using System;
+using System.ComponentModel;
 using Windows.Storage;
 using 随机抽取学号.Views;
 
@@ -24,10 +25,9 @@ namespace 随机抽取学号.Classes
         private static double mainPageAcrylicBackgroundOpacity;
         private static double mainPageMicaBackgroundOpacity;
         private static double mainPageImageBackgroundOpacity;
-
         static SettingsHelper()
         {
-            // 初始化所有设置值
+            // 初始化所有设置值  
             isFirstRun = GetSetting(nameof(IsFirstRun), true);
             theme = GetSetting(nameof(Theme), 0);
             mainPageBackground = GetSetting(nameof(MainPageBackground), 2);
@@ -44,9 +44,9 @@ namespace 随机抽取学号.Classes
             saveRange = GetSetting(nameof(SaveRange), true);
             saveHistory = GetSetting(nameof(SaveHistory), true);
         }
-        /// <summary>
-        /// 从本地设置中获取指定键的值，如果不存在则返回默认值
-        /// </summary>
+        /// <summary>  
+        /// 从本地设置中获取指定键的值，如果不存在则返回默认值  
+        /// </summary>  
         private static T GetSetting<T>(string key, T defaultValue)
         {
             if (localSettings.Values.TryGetValue(key, out object value))
@@ -65,9 +65,9 @@ namespace 随机抽取学号.Classes
             localSettings.Values[key] = defaultValue;
             return defaultValue;
         }
-        /// <summary>
-        /// 将单个设置项重置为默认值
-        /// </summary>
+        /// <summary>  
+        /// 将单个设置项重置为默认值  
+        /// </summary>  
         public static void ResetToDefault(string key)
         {
             switch (key)
@@ -79,9 +79,9 @@ namespace 随机抽取学号.Classes
             }
         }
 
-        /// <summary>
-        /// 将所有设置项重置为默认值
-        /// </summary>
+        /// <summary>  
+        /// 将所有设置项重置为默认值  
+        /// </summary>  
         public static void ResetAll()
         {
 
@@ -110,9 +110,9 @@ namespace 随机抽取学号.Classes
                 }
             }
         }
-        /// <summary>
-        /// 获取或设置MainPage的背景，0：纯色，1：Acrylic，2：Mica，3：图片
-        /// </summary>
+        /// <summary>  
+        /// 获取或设置MainPage的背景，0：纯色，1：Acrylic，2：Mica，3：图片  
+        /// </summary>  
         public static int MainPageBackground
         {
             get => mainPageBackground;
@@ -125,9 +125,9 @@ namespace 随机抽取学号.Classes
                 }
             }
         }
-        /// <summary>
-        /// 获取或设置MainPage的纯色背景透明度
-        /// </summary>
+        /// <summary>  
+        /// 获取或设置MainPage的纯色背景透明度  
+        /// </summary>  
         public static double MainPageNoBackgroundOpacity
         {
             get => mainPageNoBackgroundOpacity;
@@ -140,9 +140,9 @@ namespace 随机抽取学号.Classes
                 }
             }
         }
-        /// <summary>
-        /// 获取或设置MainPage的Acrylic背景透明度
-        /// </summary>
+        /// <summary>  
+        /// 获取或设置MainPage的Acrylic背景透明度  
+        /// </summary>  
         public static double MainPageAcrylicBackgroundOpacity
         {
             get => mainPageAcrylicBackgroundOpacity;
@@ -155,9 +155,9 @@ namespace 随机抽取学号.Classes
                 }
             }
         }
-        /// <summary>
-        /// 获取或设置MainPage的Mica背景透明度
-        /// </summary>
+        /// <summary>  
+        /// 获取或设置MainPage的Mica背景透明度  
+        /// </summary>  
         public static double MainPageMicaBackgroundOpacity
         {
             get => mainPageMicaBackgroundOpacity;
@@ -170,9 +170,9 @@ namespace 随机抽取学号.Classes
                 }
             }
         }
-        /// <summary>
-        /// 获取或设置MainPage的图片背景透明度
-        /// </summary>
+        /// <summary>  
+        /// 获取或设置MainPage的图片背景透明度  
+        /// </summary>  
         public static double MainPageImageBackgroundOpacity
         {
             get => mainPageImageBackgroundOpacity;

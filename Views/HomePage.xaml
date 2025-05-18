@@ -369,9 +369,12 @@
                 x:Name="ViewPanel"
                 DisplayMode="Inline"
                 IsPaneOpen="True"
+                OpenPaneLength="200"
                 PaneBackground="Transparent">
                 <SplitView.Pane>
-                    <Grid x:Name="CheckBoxGrid" HorizontalAlignment="Stretch">
+                    <Grid
+                        x:Name="CheckBoxGrid"
+                        HorizontalAlignment="Stretch">
                         <Grid x:Name="CheckBoxGridContent">
                             <Button
                                 x:Name="FoldButton"
@@ -517,8 +520,9 @@
                         HorizontalAlignment="Left"
                         Binding="{x:Bind ViewPanel.OpenPaneLength, Mode=TwoWay}"
                         Cursor="Hand"
-                        Maximum="440"
-                        Minimum="52"
+                        Maximum="500"
+                        Minimum="150"
+                        Width="12"
                         Visibility="{x:Bind ViewPanel.IsPaneOpen, Mode=OneWay}" />
                     <Grid Grid.Column="1">
                         <muxc:NumberBox

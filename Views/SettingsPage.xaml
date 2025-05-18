@@ -295,7 +295,6 @@
                                         Margin="-12,0,0,0"
                                         Orientation="Horizontal"
                                         Spacing="10">
-
                                         <Slider
                                             x:Name="PageBackgroundOpacitySlider"
                                             Width="250"
@@ -310,7 +309,8 @@
                                         <TextBlock
                                             x:Name="PageBackgroundOpacityTextBlock"
                                             VerticalAlignment="Center"
-                                            FontFamily="{StaticResource HarmonyOSSans}" />
+                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                            Text="{x:Bind PageBackgroundOpacitySlider.Value, Mode=OneWay}" />
                                     </StackPanel>
                                 </communitytoolkitcontrols:SettingsCard>
                             </communitytoolkitcontrols:SettingsExpander.Items>
@@ -336,21 +336,36 @@
                             Header="抽完不放回">
                             <ToggleSwitch
                                 x:Name="NoReturnToggleSwitch"
-                                Margin="0,-10,0,0"
                                 FontFamily="{StaticResource HarmonyOSSans}"
                                 IsOn="{x:Bind classes:SettingsHelper.NoReturn, Mode=TwoWay}" />
                         </communitytoolkitcontrols:SettingsCard>
-                        <communitytoolkitcontrols:SettingsCard
+                        <communitytoolkitcontrols:SettingsExpander
                             Margin="10,0,20,0"
+                            VerticalContentAlignment="Center"
                             Description="开始抽取后过一段时间自动停止"
                             FontFamily="{StaticResource HarmonyOSSans}"
                             Header="自动停止">
                             <ToggleSwitch
                                 x:Name="AutoStopToggleSwitch"
-                                Margin="0,-10,0,0"
                                 FontFamily="{StaticResource HarmonyOSSans}"
                                 IsOn="{x:Bind classes:SettingsHelper.AutoStop, Mode=TwoWay}" />
-                        </communitytoolkitcontrols:SettingsCard>
+                            <communitytoolkitcontrols:SettingsExpander.Items>
+                                <communitytoolkitcontrols:SettingsCard HorizontalContentAlignment="Left" ContentAlignment="Left">
+                                    <StackPanel
+                                        Margin="-12,0,0,0"
+                                        HorizontalAlignment="Left"
+                                        Orientation="Horizontal"
+                                        Spacing="10">
+                                        <TextBlock VerticalAlignment="Center" Text="自动停止时间(秒):" />
+                                        <muxc:NumberBox
+                                            x:Name="AutoStopTimeNumberBox"
+                                            FontFamily="{StaticResource HarmonyOSSans}"
+                                            Maximum="5"
+                                            Minimum="1" />
+                                    </StackPanel>
+                                </communitytoolkitcontrols:SettingsCard>
+                            </communitytoolkitcontrols:SettingsExpander.Items>
+                        </communitytoolkitcontrols:SettingsExpander>
                         <communitytoolkitcontrols:SettingsCard
                             Margin="10,0,20,0"
                             Description="先将抽取范围中的学生打乱再按顺序输出，这可能会提高性能"
@@ -358,7 +373,6 @@
                             Header="优化抽取性能">
                             <ToggleSwitch
                                 x:Name="OptimizeToggleSwitch"
-                                Margin="0,-10,0,0"
                                 FontFamily="{StaticResource HarmonyOSSans}"
                                 IsOn="{x:Bind classes:SettingsHelper.Optimize, Mode=TwoWay}" />
                         </communitytoolkitcontrols:SettingsCard>
@@ -369,7 +383,6 @@
                             Header="保存抽取范围">
                             <ToggleSwitch
                                 x:Name="SaveRangeToggleSwitch"
-                                Margin="0,-10,0,0"
                                 FontFamily="{StaticResource HarmonyOSSans}"
                                 IsOn="{x:Bind classes:SettingsHelper.SaveRange, Mode=TwoWay}" />
                         </communitytoolkitcontrols:SettingsCard>
@@ -380,7 +393,6 @@
                             Header="保存历史记录">
                             <ToggleSwitch
                                 x:Name="SaveHistoryToggleSwitch"
-                                Margin="0,-10,0,0"
                                 FontFamily="{StaticResource HarmonyOSSans}"
                                 IsOn="{x:Bind classes:SettingsHelper.SaveHistory, Mode=TwoWay}" />
                         </communitytoolkitcontrols:SettingsCard>
