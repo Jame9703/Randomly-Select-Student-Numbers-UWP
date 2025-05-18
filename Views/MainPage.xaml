@@ -237,10 +237,6 @@
                 <RowDefinition Height="35" />
             </Grid.RowDefinitions>
             <Grid x:Name="AppTitleBar" Background="Transparent">
-                <Grid.ColumnDefinitions>
-                    <ColumnDefinition Width="Auto" />
-                    <ColumnDefinition Width="*" />
-                </Grid.ColumnDefinitions>
                 <Image
                     Width="25"
                     Height="25"
@@ -258,7 +254,6 @@
                     Text="随机抽取学号 2025" />
                 <TextBlock
                     x:Name="AppTitleTextBlock_2"
-                    Grid.ColumnSpan="2"
                     Width="136"
                     Height="12"
                     Margin="34,20,0,0"
@@ -269,21 +264,13 @@
                     Style="{StaticResource CaptionTextBlockStyle}"
                     Text="Randomly Select Student Numbers" />
             </Grid>
-        </Grid>
-        <Grid
-            Margin="180,0,150,0"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Top">
-            <Grid.ColumnDefinitions>
-                <ColumnDefinition Width="Auto" />
-                <ColumnDefinition Width="*" />
-            </Grid.ColumnDefinitions>
             <Button
-                Grid.Column="1"
+                Margin="0,1,150,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top"
                 Height="30"
                 Padding="2"
-                CornerRadius="15"
-                Style="{StaticResource ClassButtonStyle}">
+                CornerRadius="15">
                 <ToolTipService.ToolTip>
                     <ToolTip
                         Content="更改或切换班级"
@@ -296,10 +283,10 @@
                         x:Name="SmallClassPicture"
                         Width="24"
                         Height="24"
-
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center" />
                     <TextBlock
+                        x:Name="CurrentClassNameTextBlock"
                         MaxWidth="100"
                         Margin="0,0,0,0"
                         HorizontalAlignment="Stretch"
@@ -374,7 +361,17 @@
                     </Flyout>
                 </Button.Flyout>
             </Button>
+            <Grid
+                Margin="180,0,150,0"
+                HorizontalAlignment="Right"
+                VerticalAlignment="Top">
+                <Grid.ColumnDefinitions>
+                    <ColumnDefinition Width="Auto" />
+                    <ColumnDefinition Width="*" />
+                </Grid.ColumnDefinitions>
 
+
+            </Grid>
         </Grid>
         <Grid x:Name="ContentGrid" Visibility="Collapsed">
             <Frame
@@ -639,7 +636,7 @@
                 x:Name="MovingRectangle"
                 Width="6"
                 Height="30"
-                Margin="0,55,0,0"
+                Margin="0,50,0,0"
                 HorizontalAlignment="Left"
                 VerticalAlignment="Top"
                 Fill="{ThemeResource ToggleButtonBackgroundChecked}"

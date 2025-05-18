@@ -18,7 +18,11 @@
                 From="0,24,0"
                 To="0"
                 Duration="0:0:0.4" />
-            <animations:OpacityAnimation EasingMode="EaseOut" Duration="0:0:0.2" />
+            <animations:OpacityAnimation
+                EasingMode="EaseOut"
+                From="0"
+                To="1"
+                Duration="0:0:0.2" />
         </animations:ImplicitAnimationSet>
         <animations:ImplicitAnimationSet x:Name="HideTransitions">
             <animations:OffsetAnimation
@@ -26,7 +30,11 @@
                 From="0"
                 To="0,24,0"
                 Duration="0:0:0.2" />
-            <animations:OpacityAnimation EasingMode="EaseOut" Duration="0:0:0.1" />
+            <animations:OpacityAnimation
+                EasingMode="EaseOut"
+                From="1"
+                To="0"
+                Duration="0:0:0.1" />
         </animations:ImplicitAnimationSet>
 
     </Page.Resources>
@@ -46,214 +54,415 @@
                 FontFamily="{StaticResource HarmonyOSSans}"
                 Tag="FloatMode" />
         </controls:Segmented>
-        <controls:SwitchPresenter Margin="195,180,0,0" Value="{Binding SelectedItem.Tag, ElementName=segmented}">
-            <controls:Case Value="GridMode">
-                <StackPanel animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}" />
-            </controls:Case>
-            <controls:Case Value="ListMode">
-                <StackPanel animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}" />
-            </controls:Case>
-            <controls:Case Value="TextMode">
-                <StackPanel animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}" />
-            </controls:Case>
-        </controls:SwitchPresenter>
-        <muxc:NumberBox
-            x:Name="RangeFromNumberBox"
-            Width="100"
-            Margin="-2,110,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            CornerRadius="4,4,4,4"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            FontSize="16"
-            Text="" />
-        <TextBlock
-            Width="67"
-            Margin="-2,85,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            FontSize="16"
-            Text="开始值："
-            TextWrapping="Wrap" />
-        <TextBlock
-            Margin="-2,155,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            FontSize="16"
-            Text="结束值："
-            TextWrapping="Wrap" />
-        <muxc:NumberBox
-            x:Name="RangeToNumberBox"
-            Width="100"
-            Margin="-2,180,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            CornerRadius="4,4,4,4"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            FontSize="16"
-            Text="" />
-        <TextBlock
-            Margin="-2,231,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            FontSize="16"
-            Text="选取个数："
-            TextWrapping="Wrap" />
-        <Button
-            Width="75"
-            Margin="10,295,0,0"
-            VerticalAlignment="Top"
-            Click="StartButton_Click"
-            Content="生成"
-            CornerRadius="4,4,4,4"
-            FontFamily="{StaticResource HarmonyOSSans}" />
-
-        <Button
-            Margin="135,98,0,0"
-            VerticalAlignment="Top"
-            Click="ClearResult_Click"
-            Content="清空结果"
-            CornerRadius="4,4,4,4"
-            FontFamily="{StaticResource HarmonyOSSans}" />
-        <Button
-            Margin="249,83,0,0"
-            VerticalAlignment="Top"
-            Click="ResetAll_Click"
-            Content="全部重置"
-            CornerRadius="4,4,4,4"
-            FontFamily="{StaticResource HarmonyOSSans}" />
-        <muxc:NumberBox
-            x:Name="SelectCountNumberBox"
-            Width="100"
-            Margin="-2,256,0,0"
-            HorizontalAlignment="Left"
-            VerticalAlignment="Top"
-            FontFamily="{StaticResource HarmonyOSSans}"
-            FontSize="16"
-            Maximum="10000"
-            Minimum="0" />
-        <controls:Segmented
-            x:Name="segmented"
-            HorizontalAlignment="Right"
-            VerticalAlignment="Bottom"
-            SelectedIndex="0"
-            SelectionMode="Single">
-            <controls:SegmentedItem Tag="GridMode">
-                <FontIcon
-                    FontFamily="{StaticResource SegoeFluentIcons}"
-                    FontSize="24"
-                    Glyph="&#xE8A9;" />
-            </controls:SegmentedItem>
-            <controls:SegmentedItem Tag="ListMode">
-                <FontIcon
-                    FontFamily="{StaticResource SegoeFluentIcons}"
-                    FontSize="24"
-                    Glyph="&#xEA37;" />
-            </controls:SegmentedItem>
-            <controls:SegmentedItem Tag="TextMode">
-                <FontIcon
-                    FontFamily="{StaticResource SegoeFluentIcons}"
-                    FontSize="23"
-                    Glyph="&#xE8A5;" />
-            </controls:SegmentedItem>
-        </controls:Segmented>
-        <controls:SwitchPresenter Margin="195,180,0,0" Value="{Binding SelectedItem.Tag, ElementName=segmented}">
-            <controls:Case Value="GridMode">
-                <StackPanel animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
-                    <GridView x:Name="RandomNumbersGridView" ItemsSource="{x:Bind RandomNumbersList}">
-                        <GridView.ItemTemplate>
-                            <DataTemplate x:DataType="x:Int32">
-                                <Border
-                                    HorizontalAlignment="Stretch"
-                                    BorderBrush="{ThemeResource SystemAccentColor}"
-                                    BorderThickness="2">
-                                    <TextBlock
-                                        Padding="10"
-                                        HorizontalAlignment="Stretch"
-                                        FontFamily="{StaticResource HarmonyOSSans}"
-                                        FontSize="24"
-                                        Text="{x:Bind}" />
-                                </Border>
-                            </DataTemplate>
-                        </GridView.ItemTemplate>
-                    </GridView>
-                </StackPanel>
-            </controls:Case>
-            <controls:Case Value="ListMode">
-                <StackPanel animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
-                    <ListView
-                        x:Name="RandomNumbersListView"
-                        Width="Auto"
-                        Height="Auto"
-                        HorizontalAlignment="Left"
-                        VerticalAlignment="Top"
-                        Visibility="Collapsed">
-                        <ListView.ItemTemplate>
-                            <DataTemplate>
-                                <TextBlock
-                                    FontFamily="{StaticResource HarmonyOSSans}"
-                                    FontSize="16"
-                                    Text="{Binding}" />
-                            </DataTemplate>
-                        </ListView.ItemTemplate>
-                    </ListView>
-                </StackPanel>
-            </controls:Case>
-            <controls:Case Value="TextMode">
-                <StackPanel animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
-                    <Grid
-                        x:Name="RandomNumbersTextBoxGrid"
-                        Width="Auto"
-                        Height="Auto"
-                        Visibility="Collapsed">
+        <controls:SwitchPresenter Margin="0,40,0,0" Value="{Binding SelectedItem.Tag, ElementName=ModeSegmented}">
+            <controls:Case Value="IntMode">
+                <Grid animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+                    <Grid.ColumnDefinitions>
+                        <ColumnDefinition Width="Auto" />
+                        <ColumnDefinition Width="*" />
+                    </Grid.ColumnDefinitions>
+                    <StackPanel Spacing="5">
                         <TextBlock
-                            x:Name="ResultTextBlock"
-                            Width="Auto"
-                            Margin="50,50,0,0"
-                            FontFamily="{StaticResource HarmonyOSSans}"
-                            IsTextSelectionEnabled="True"
-                            Text=""
-                            TextWrapping="Wrap" />
-                        <Slider
-                            x:Name="slider"
-                            Width="30"
-                            Height="200"
-                            Margin="0,50,0,0"
+                            Width="67"
+                            Margin="0,0,0,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
-                            Minimum="4"
-                            Orientation="Vertical"
-                            TickFrequency="10"
-                            TickPlacement="Outside"
-                            ValueChanged="Slider_ValueChanged"
-                            Value="20" />
-                        <ComboBox
-                            x:Name="SpanModeComboBox"
-                            Width="147"
-                            Margin="80,1,0,0"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            Text="开始值："
+                            TextWrapping="Wrap" />
+                        <muxc:NumberBox
+                            x:Name="IntModeRangeFromNumberBox"
+                            Width="100"
+                            Margin="-2,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
                             CornerRadius="4,4,4,4"
                             FontFamily="{StaticResource HarmonyOSSans}"
-                            IsEditable="True"
-                            SelectedIndex="0">
-                            <x:String>-- --</x:String>
-                            <x:String>“ ”</x:String>
-                            <x:String>‘ ’</x:String>
-                            <x:String>空格</x:String>
-                            <x:String>换行</x:String>
-                        </ComboBox>
+                            Text="" />
                         <TextBlock
-                            Margin="10,6,0,0"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            Text="结束值："
+                            TextWrapping="Wrap" />
+                        <muxc:NumberBox
+                            x:Name="IntModeRangeToNumberBox"
+                            Width="100"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            CornerRadius="4,4,4,4"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            Text="" />
+                        <TextBlock
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            Text="选取个数："
+                            TextWrapping="Wrap" />
+                        <muxc:NumberBox
+                            x:Name="IntModeSelectCountNumberBox"
+                            Width="100"
+                            Margin="0,0,0,0"
                             HorizontalAlignment="Left"
                             VerticalAlignment="Top"
                             FontFamily="{StaticResource HarmonyOSSans}"
                             FontSize="16"
-                            Text="分隔符:"
+                            Maximum="10000"
+                            Minimum="0" />
+                        <Button
+                            Width="75"
+                            Margin="0,0,0,0"
+                            VerticalAlignment="Top"
+                            Click="StartButton_Click"
+                            Content="生成"
+                            CornerRadius="4,4,4,4"
+                            FontFamily="{StaticResource HarmonyOSSans}" />
+                        <Button
+                            Margin="0,0,0,0"
+                            VerticalAlignment="Top"
+                            Click="IntModeClearResult_Click"
+                            Content="清空结果"
+                            CornerRadius="4,4,4,4"
+                            FontFamily="{StaticResource HarmonyOSSans}" />
+                        <Button
+                            Margin="0,0,0,0"
+                            VerticalAlignment="Top"
+                            Click="IntModeResetAll_Click"
+                            Content="全部重置"
+                            CornerRadius="4,4,4,4"
+                            FontFamily="{StaticResource HarmonyOSSans}" />
+
+                    </StackPanel>
+                    <controls:Segmented
+                        x:Name="segmented"
+                        Grid.Column="2"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        SelectedIndex="0"
+                        SelectionMode="Single">
+                        <controls:SegmentedItem Tag="GridMode">
+                            <FontIcon
+                                FontFamily="{StaticResource SegoeFluentIcons}"
+                                FontSize="24"
+                                Glyph="&#xE8A9;" />
+                        </controls:SegmentedItem>
+                        <controls:SegmentedItem Tag="ListMode">
+                            <FontIcon
+                                FontFamily="{StaticResource SegoeFluentIcons}"
+                                FontSize="24"
+                                Glyph="&#xEA37;" />
+                        </controls:SegmentedItem>
+                        <controls:SegmentedItem Tag="TextMode">
+                            <FontIcon
+                                FontFamily="{StaticResource SegoeFluentIcons}"
+                                FontSize="23"
+                                Glyph="&#xE8A5;" />
+                        </controls:SegmentedItem>
+                    </controls:Segmented>
+                    <controls:SwitchPresenter
+                        Grid.Column="2"
+                        Margin="20,0,0,0"
+                        Value="{Binding SelectedItem.Tag, ElementName=segmented}">
+                        <controls:Case Value="GridMode">
+                            <StackPanel animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+                                <GridView x:Name="IntModeRandomNumbersGridView" ItemsSource="{x:Bind RandomNumbersList}">
+                                    <GridView.ItemTemplate>
+                                        <DataTemplate x:DataType="x:Int32">
+                                            <Border
+                                                HorizontalAlignment="Stretch"
+                                                BorderBrush="{ThemeResource SystemAccentColor}"
+                                                BorderThickness="2">
+                                                <TextBlock
+                                                    Padding="10"
+                                                    HorizontalAlignment="Stretch"
+                                                    FontFamily="{StaticResource HarmonyOSSans}"
+                                                    FontSize="24"
+                                                    Text="{x:Bind}" />
+                                            </Border>
+                                        </DataTemplate>
+                                    </GridView.ItemTemplate>
+                                </GridView>
+                            </StackPanel>
+                        </controls:Case>
+                        <controls:Case Value="ListMode">
+                            <StackPanel animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+                                <ListView
+                                    x:Name="IntModeRandomNumbersListView"
+                                    Width="Auto"
+                                    Height="Auto"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    Visibility="Collapsed">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                FontFamily="{StaticResource HarmonyOSSans}"
+                                                FontSize="16"
+                                                Text="{Binding}" />
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </StackPanel>
+                        </controls:Case>
+                        <controls:Case Value="TextMode">
+                            <StackPanel animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+                                <Grid
+                                    x:Name="IntModeRandomNumbersTextBoxGrid"
+                                    Width="Auto"
+                                    Height="Auto"
+                                    Visibility="Collapsed">
+                                    <TextBlock
+                                        x:Name="IntModeResultTextBlock"
+                                        Width="Auto"
+                                        Margin="50,50,0,0"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        IsTextSelectionEnabled="True"
+                                        Text=""
+                                        TextWrapping="Wrap" />
+                                    <Slider
+                                        x:Name="IntModeFontSizeSlider"
+                                        Width="30"
+                                        Height="200"
+                                        Margin="0,50,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        Minimum="4"
+                                        Orientation="Vertical"
+                                        TickFrequency="10"
+                                        TickPlacement="Outside"
+                                        ValueChanged="Slider_ValueChanged"
+                                        Value="20" />
+                                    <ComboBox
+                                        x:Name="IntModeSpanModeComboBox"
+                                        Width="147"
+                                        Margin="80,1,0,0"
+                                        CornerRadius="4,4,4,4"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        IsEditable="True"
+                                        SelectedIndex="0">
+                                        <x:String>-- --</x:String>
+                                        <x:String>“ ”</x:String>
+                                        <x:String>‘ ’</x:String>
+                                        <x:String>空格</x:String>
+                                        <x:String>换行</x:String>
+                                    </ComboBox>
+                                    <TextBlock
+                                        Margin="10,6,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        Text="分隔符:"
+                                        TextWrapping="Wrap" />
+                                </Grid>
+                            </StackPanel>
+                        </controls:Case>
+                    </controls:SwitchPresenter>
+                </Grid>
+            </controls:Case>
+            <controls:Case Value="FloatMode">
+                <Grid animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+                    <StackPanel Spacing="5">
+                        <TextBlock
+                            Width="67"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            Text="开始值："
                             TextWrapping="Wrap" />
-                    </Grid>
-                </StackPanel>
+                        <muxc:NumberBox
+                            x:Name="FloatModeRangeFromNumberBox"
+                            Width="100"
+                            Margin="-2,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            CornerRadius="4,4,4,4"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            Text="" />
+                        <TextBlock
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            Text="结束值："
+                            TextWrapping="Wrap" />
+                        <muxc:NumberBox
+                            x:Name="FloatModeRangeToNumberBox"
+                            Width="100"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            CornerRadius="4,4,4,4"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            Text="" />
+                        <TextBlock
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            Text="选取个数："
+                            TextWrapping="Wrap" />
+                        <muxc:NumberBox
+                            x:Name="FloatModeSelectCountNumberBox"
+                            Width="100"
+                            Margin="0,0,0,0"
+                            HorizontalAlignment="Left"
+                            VerticalAlignment="Top"
+                            FontFamily="{StaticResource HarmonyOSSans}"
+                            FontSize="16"
+                            Maximum="10000"
+                            Minimum="0" />
+                        <Button
+                            Width="75"
+                            Margin="0,0,0,0"
+                            VerticalAlignment="Top"
+                            Click="StartButton_Click"
+                            Content="生成"
+                            CornerRadius="4,4,4,4"
+                            FontFamily="{StaticResource HarmonyOSSans}" />
+                        <Button
+                            Margin="0,0,0,0"
+                            VerticalAlignment="Top"
+                            Click="IntModeClearResult_Click"
+                            Content="清空结果"
+                            CornerRadius="4,4,4,4"
+                            FontFamily="{StaticResource HarmonyOSSans}" />
+                        <Button
+                            Margin="0,0,0,0"
+                            VerticalAlignment="Top"
+                            Click="IntModeResetAll_Click"
+                            Content="全部重置"
+                            CornerRadius="4,4,4,4"
+                            FontFamily="{StaticResource HarmonyOSSans}" />
+
+                    </StackPanel>
+                    <controls:Segmented
+                        x:Name="FloatModeSegmented"
+                        HorizontalAlignment="Right"
+                        VerticalAlignment="Bottom"
+                        SelectedIndex="0"
+                        SelectionMode="Single">
+                        <controls:SegmentedItem Tag="GridMode">
+                            <FontIcon
+                                FontFamily="{StaticResource SegoeFluentIcons}"
+                                FontSize="24"
+                                Glyph="&#xE8A9;" />
+                        </controls:SegmentedItem>
+                        <controls:SegmentedItem Tag="ListMode">
+                            <FontIcon
+                                FontFamily="{StaticResource SegoeFluentIcons}"
+                                FontSize="24"
+                                Glyph="&#xEA37;" />
+                        </controls:SegmentedItem>
+                        <controls:SegmentedItem Tag="TextMode">
+                            <FontIcon
+                                FontFamily="{StaticResource SegoeFluentIcons}"
+                                FontSize="23"
+                                Glyph="&#xE8A5;" />
+                        </controls:SegmentedItem>
+                    </controls:Segmented>
+                    <controls:SwitchPresenter
+                        Grid.Column="2"
+                        Margin="20,0,0,0"
+                        Value="{Binding SelectedItem.Tag, ElementName=segmented}">
+                        <controls:Case Value="GridMode">
+                            <StackPanel animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+                                <GridView x:Name="FloatModeRandomNumbersGridView" ItemsSource="{x:Bind RandomNumbersList}">
+                                    <GridView.ItemTemplate>
+                                        <DataTemplate x:DataType="x:Int32">
+                                            <Border
+                                                HorizontalAlignment="Stretch"
+                                                BorderBrush="{ThemeResource SystemAccentColor}"
+                                                BorderThickness="2">
+                                                <TextBlock
+                                                    Padding="10"
+                                                    HorizontalAlignment="Stretch"
+                                                    FontFamily="{StaticResource HarmonyOSSans}"
+                                                    FontSize="24"
+                                                    Text="{x:Bind}" />
+                                            </Border>
+                                        </DataTemplate>
+                                    </GridView.ItemTemplate>
+                                </GridView>
+                            </StackPanel>
+                        </controls:Case>
+                        <controls:Case Value="ListMode">
+                            <StackPanel animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+                                <ListView
+                                    x:Name="FloatModeRandomNumbersListView"
+                                    Width="Auto"
+                                    Height="Auto"
+                                    HorizontalAlignment="Left"
+                                    VerticalAlignment="Top"
+                                    Visibility="Collapsed">
+                                    <ListView.ItemTemplate>
+                                        <DataTemplate>
+                                            <TextBlock
+                                                FontFamily="{StaticResource HarmonyOSSans}"
+                                                FontSize="16"
+                                                Text="{Binding}" />
+                                        </DataTemplate>
+                                    </ListView.ItemTemplate>
+                                </ListView>
+                            </StackPanel>
+                        </controls:Case>
+                        <controls:Case Value="TextMode">
+                            <StackPanel animations:Implicit.HideAnimations="{StaticResource HideTransitions}" animations:Implicit.ShowAnimations="{StaticResource ShowTransitions}">
+                                <Grid
+                                    x:Name="FloatModeRandomNumbersTextBoxGrid"
+                                    Width="Auto"
+                                    Height="Auto"
+                                    Visibility="Collapsed">
+                                    <TextBlock
+                                        x:Name="FloatModeResultTextBlock"
+                                        Width="Auto"
+                                        Margin="50,50,0,0"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        IsTextSelectionEnabled="True"
+                                        Text=""
+                                        TextWrapping="Wrap" />
+                                    <Slider
+                                        x:Name="FloatModeFontSizeSlider"
+                                        Width="30"
+                                        Height="200"
+                                        Margin="0,50,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        Minimum="4"
+                                        Orientation="Vertical"
+                                        TickFrequency="10"
+                                        TickPlacement="Outside"
+                                        ValueChanged="Slider_ValueChanged"
+                                        Value="20" />
+                                    <ComboBox
+                                        x:Name="FloatModeSpanModeComboBox"
+                                        Width="147"
+                                        Margin="80,1,0,0"
+                                        CornerRadius="4,4,4,4"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        IsEditable="True"
+                                        SelectedIndex="0">
+                                        <x:String>-- --</x:String>
+                                        <x:String>“ ”</x:String>
+                                        <x:String>‘ ’</x:String>
+                                        <x:String>空格</x:String>
+                                        <x:String>换行</x:String>
+                                    </ComboBox>
+                                    <TextBlock
+                                        Margin="10,6,0,0"
+                                        HorizontalAlignment="Left"
+                                        VerticalAlignment="Top"
+                                        FontFamily="{StaticResource HarmonyOSSans}"
+                                        Text="分隔符:"
+                                        TextWrapping="Wrap" />
+                                </Grid>
+                            </StackPanel>
+                        </controls:Case>
+                    </controls:SwitchPresenter>
+                </Grid>
             </controls:Case>
         </controls:SwitchPresenter>
 

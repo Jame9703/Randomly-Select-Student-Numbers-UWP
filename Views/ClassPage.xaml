@@ -491,6 +491,7 @@
                         HorizontalAlignment="Left"
                         VerticalAlignment="Center"
                         FontFamily="{StaticResource HarmonyOSSans}"
+                        IsOn="True"
                         OffContent="自动保存:关"
                         OnContent="自动保存:开" />
                 </StackPanel>

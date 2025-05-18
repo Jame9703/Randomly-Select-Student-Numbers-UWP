@@ -40,7 +40,7 @@ namespace 随机抽取学号.Views
         }
         public void UpdateUI()
         {
-                StudentListView.ItemsSource = StudentManager.StudentList;
+            StudentListView.ItemsSource = StudentManager.StudentList;
         }
         private async void StudentList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
@@ -49,7 +49,10 @@ namespace 随机抽取学号.Views
         }
         private async void ClassList_CollectionChanged(object sender, NotifyCollectionChangedEventArgs e)
         {
-            await UpdateSaveButton();
+            if (AutoSaveToggleSwitch.IsOn == true)
+            {
+                await UpdateSaveButton();
+            }
         }
 
         private void Page_Loaded(object sender, RoutedEventArgs e)
@@ -59,8 +62,12 @@ namespace 随机抽取学号.Views
         {
             base.OnNavigatedTo(e);
         }
-        protected override void OnNavigatedFrom(NavigationEventArgs e)
+        protected override async void OnNavigatedFrom(NavigationEventArgs e)
         {
+            if (AutoSaveToggleSwitch.IsOn == true)
+            {
+                await UpdateSaveButton();
+            }
             base.OnNavigatedFrom(e);
             GC.Collect();
         }
@@ -689,7 +696,7 @@ namespace 随机抽取学号.Views
                 ClassName = "新班级",
                 ClassEmblemPath = "_"
             };
-            StudentManager .ClassList.Add(_class);
+            StudentManager.ClassList.Add(_class);
         }
     }
 }
