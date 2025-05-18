@@ -1,6 +1,5 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using System;
-using System.ComponentModel;
 using Windows.Storage;
 using 随机抽取学号.Views;
 
