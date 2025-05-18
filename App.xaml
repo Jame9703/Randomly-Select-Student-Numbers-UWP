@@ -9,6 +9,9 @@
             <controls:XamlControlsResources.MergedDictionaries>
                 <!--  Other app resources here  -->
                 <ResourceDictionary>
+                    <Style TargetType="TextBlock">
+                        <Setter Property="FontFamily" Value="{StaticResource HarmonyOSSans}" />
+                    </Style>
                     <Style TargetType="controls:NumberBox">
                         <Setter Property="Foreground" Value="{ThemeResource SystemBaseHighColor}" />
                     </Style>

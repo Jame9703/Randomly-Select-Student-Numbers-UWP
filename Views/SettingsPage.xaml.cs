@@ -1,5 +1,6 @@
 ﻿using Microsoft.UI.Xaml.Controls;
 using System;
+using Windows.Storage.Pickers;
 using Windows.Storage;
 using Windows.System;
 using Windows.UI;
@@ -11,6 +12,7 @@ using Windows.UI.Xaml.Media;
 using Windows.UI.Xaml.Navigation;
 using 随机抽取学号.Classes;
 using 随机抽取学号.Media;
+using Windows.UI.Xaml.Media.Imaging;
 
 // https://go.microsoft.com/fwlink/?LinkId=234238 上介绍了“空白页”项模板
 
@@ -22,13 +24,11 @@ namespace 随机抽取学号.Views
     public sealed partial class SettingsPage : Page
     {
         private MainPage mainPage = ((Frame)Window.Current.Content).Content as MainPage;
-        ApplicationDataContainer localSettings = ApplicationData.Current.LocalSettings;
         public SettingsPage()
         {
             this.InitializeComponent();
-            //将设置项加载到控件
-            PageBackgroundRadioButtons.SelectedIndex = SettingsHelper.ContentFrameBackground;
-            PageBackgroundOpacitySlider.Value = SettingsHelper.ContentFrameBackgroundOpacity;
+            var a = SettingsHelper.MainPageMicaBackgroundOpacity;
+            var b = mainPage.Background.Opacity;
         }
         protected override void OnNavigatedTo(NavigationEventArgs e)
         {
@@ -74,7 +74,7 @@ namespace 随机抽取学号.Views
             }
         }
 
-        private void BackgroundRadioButtons_SelectionChanged(object sender, SelectionChangedEventArgs e)
+        private async void BackgroundRadioButtons_SelectionChanged(object sender, SelectionChangedEventArgs e)
         {
             if (mainPage != null)
             {
@@ -104,10 +104,17 @@ namespace 随机抽取学号.Views
                         };
                         break;
                     case 3://图片背景
-                        mainPage.Background = new ImageBrush
+                        StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+                        var file = await localFolder.TryGetItemAsync("Background.png");
+                        var imagebrush = new ImageBrush
                         {
                             Opacity = SettingsHelper.MainPageImageBackgroundOpacity
                         };
+                        if (file != null)
+                        {
+                            imagebrush.ImageSource = new BitmapImage(new Uri(file.Path));
+                        }
+                        mainPage.Background = imagebrush;
                         break;
                 }
             }
@@ -130,14 +137,6 @@ namespace 随机抽取学号.Views
                 PopupNotice popupNotice = new PopupNotice("打开失败");
                 popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
                 popupNotice.ShowPopup();
-            }
-        }
-
-        private void NoBackgroundOpacitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
-        {
-            if (mainPage != null)
-            {
-                mainPage.Background.Opacity = SettingsHelper.MainPageNoBackgroundOpacity;
             }
         }
 
@@ -188,6 +187,13 @@ namespace 随机抽取学号.Views
             }
         }
 
+        private void NoBackgroundOpacitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
+        {
+            if (mainPage != null)
+            {
+                mainPage.Background.Opacity = SettingsHelper.MainPageNoBackgroundOpacity;
+            }
+        }
         private void AcrylicBackgroundOpacitySlider_ValueChanged(object sender, RangeBaseValueChangedEventArgs e)
         {
             if (mainPage != null)
@@ -209,6 +215,64 @@ namespace 随机抽取学号.Views
             if (mainPage != null)
             {
                 mainPage.Background.Opacity = SettingsHelper.MainPageImageBackgroundOpacity;
+            }
+        }
+
+        private async void SelectImageButton_Click(object sender, RoutedEventArgs e)
+        {
+            // 创建文件选择器
+            FileOpenPicker openPicker = new FileOpenPicker();
+            openPicker.ViewMode = PickerViewMode.Thumbnail;
+            openPicker.SuggestedStartLocation = PickerLocationId.PicturesLibrary;
+
+            // 添加允许选择的图片文件类型
+            openPicker.FileTypeFilter.Add(".jpg");
+            openPicker.FileTypeFilter.Add(".jpeg");
+            openPicker.FileTypeFilter.Add(".png");
+            openPicker.FileTypeFilter.Add(".bmp");
+
+            // 显示文件选择对话框
+            StorageFile selectedFile = await openPicker.PickSingleFileAsync();
+
+            if (selectedFile != null)
+            {
+                try
+                {
+                    // 获取应用的 LocalFolder 目录
+                    StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+
+                    var oldfile = await localFolder.TryGetItemAsync("Background.png");
+                    if (oldfile != null)
+                    {
+                        await oldfile.DeleteAsync();//删除同名文件
+                    }
+                    // 复制选中的图片到 LocalFolder，并命名为 Background.png
+                    var file = await selectedFile.CopyAsync(localFolder, "Background.png");
+                    //更新MainPage背景
+                    mainPage.Background = new ImageBrush
+                    {
+                        ImageSource = new BitmapImage(new Uri(file.Path)),
+                        Opacity = SettingsHelper.MainPageImageBackgroundOpacity
+                    };
+                    // 显示成功消息
+                    PopupNotice popupNotice = new PopupNotice("打开成功");
+                    popupNotice.PopupContent.Severity = InfoBarSeverity.Success;
+                    popupNotice.ShowPopup();
+                }
+                catch (Exception ex)
+                {
+                    // 处理异常
+                    PopupNotice popupNotice = new PopupNotice("打开图片失败" + ex.Message);
+                    popupNotice.PopupContent.Severity = InfoBarSeverity.Error;
+                    popupNotice.ShowPopup();
+                }
+            }
+            else
+            {
+                // 用户取消了选择
+                PopupNotice popupNotice = new PopupNotice("已取消选择");
+                popupNotice.PopupContent.Severity = InfoBarSeverity.Informational;
+                popupNotice.ShowPopup();
             }
         }
     }

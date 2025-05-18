@@ -1,9 +1,9 @@
 ﻿using System;
+using System.Diagnostics;
 using System.Reflection;
 using Windows.ApplicationModel;
 using Windows.ApplicationModel.Activation;
 using Windows.Foundation;
-using Windows.UI;
 using Windows.UI.ViewManagement;
 using Windows.UI.Xaml;
 using Windows.UI.Xaml.Controls;
@@ -23,6 +23,13 @@ namespace 随机抽取学号
         {
             this.InitializeComponent();
             this.Suspending += OnSuspending;
+            this.UnhandledException += App_UnhandledException;
+        }
+        private void App_UnhandledException(object sender, Windows.UI.Xaml.UnhandledExceptionEventArgs e)
+        {
+            // 记录异常信息
+            Debug.WriteLine($"Unhandled Exception: {e.Message}");
+            e.Handled = true; // 防止应用崩溃
         }
         public static TEnum GetEnum<TEnum>(string text) where TEnum : struct
         {

@@ -152,7 +152,7 @@ namespace 随机抽取学号
             }
         }
 
-        private void LoadSettings()
+        private async void LoadSettings()
         {
             //设置应用主题
             (Window.Current.Content as Frame).RequestedTheme = SettingsHelper.Theme switch
@@ -202,10 +202,17 @@ namespace 随机抽取学号
             }
             else if (SettingsHelper.MainPageBackground == 3)
             {
-                this.Background = new ImageBrush
+                StorageFolder localFolder = ApplicationData.Current.LocalFolder;
+                var file = await localFolder.TryGetItemAsync("Background.png");
+                var imagebrush = new ImageBrush
                 {
                     Opacity = SettingsHelper.MainPageImageBackgroundOpacity
                 };
+                if (file != null)
+                {
+                    imagebrush.ImageSource = new BitmapImage(new Uri(file.Path));
+                }
+                this.Background = imagebrush;
             }
             //设置ContentFrame背景
             if (SettingsHelper.ContentFrameBackground == 0)
